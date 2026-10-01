@@ -3,6 +3,8 @@
 Tudo o que o código faz sem depender de aparelho ou de contas já está coberto por testes (`npm run check`).
 Este roteiro lista o que **só dá para confirmar no celular**. Marque cada item e anote o que fugiu do esperado.
 
+Usuário de teste (50 mil moedas, tudo desbloqueado, 90 dias de histórico): Ajustes › Carregar usuário de teste. Veja `docs/MANUAL-CONFIGURACAO.md`, seção 3.
+
 Preparação: `npx expo run:android` com o aparelho conectado. Em Ajustes, toque 7 vezes na versão para liberar as ferramentas de teste e ative “Copos de 1 minuto”.
 
 ## 1. Sensor de virar o celular (o item de maior risco)

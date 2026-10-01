@@ -1,7 +1,8 @@
 # Lançamento
 
 O que o código já resolve está em `npm run check` (typecheck, lint e testes) e no CI (`.github/workflows/ci.yml`).
-O que falta depende de contas, chaves e aparelho:
+O que falta depende de contas, chaves e aparelho. **O passo a passo completo, com cada conta e credencial, está em `docs/MANUAL-CONFIGURACAO.md`.**
+
 
 1. **Validar no aparelho:** siga `docs/VALIDATION.md`.
 2. **Contas e backup (opcional):** siga `docs/FIREBASE.md` (projeto Firebase, logins, SHA-1 do Google, regras do Firestore) e preencha o `.env`. Publique também a página de exclusão de conta (`docs/ACCOUNT-DELETION.md`).

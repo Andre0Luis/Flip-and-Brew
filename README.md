@@ -70,7 +70,7 @@ O app funciona 100% offline e sem conta. Com as chaves do Firebase no `.env`, ap
 - **Backup na nuvem** (Firestore) do progresso, automático depois de cada copo, com restauração em outro aparelho. Se os dois lados têm dados diferentes, a pessoa escolhe qual manter.
 - **Excluir conta**: apaga a conta e o backup, depois de confirmar com a senha ou o Google.
 
-Passo a passo para criar o projeto e preencher o `.env`: `docs/FIREBASE.md`. Para ver as telas sem chaves, em desenvolvimento use `EXPO_PUBLIC_AUTH_MODE=mock`.
+**Manual completo de contas, acessos e credenciais (Expo, Firebase, Google, Play, RevenueCat): `docs/MANUAL-CONFIGURACAO.md`.** Detalhes do Firebase: `docs/FIREBASE.md`. Usuário de teste: `teste@flipandbrew.app` / `Teste@12345` com `EXPO_PUBLIC_AUTH_MODE=mock`, ou `npm run seed:test-user` no Firebase de desenvolvimento. Para ver as telas sem chaves, em desenvolvimento use `EXPO_PUBLIC_AUTH_MODE=mock`.
 
 ## Aviso de copo pronto
 
