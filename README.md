@@ -21,8 +21,8 @@ Telas: Início (frase do dia, cafeteira, copo), Guia (loja), Bem-estar (equilíb
 ```bash
 npm install
 npx expo run:android      # build de desenvolvimento
-npm test                  # lógica de moedas, sequência e estatísticas
-npm run typecheck
+npm run check             # typecheck, lint e testes (o CI roda o mesmo)
+npm test                  # só os testes
 ```
 
 O app roda também na web (`npm run web`) para ver as telas, mas o sensor de virar o celular só existe no aparelho.
@@ -42,20 +42,38 @@ src/art/          ilustrações em SVG (xícaras, canecas, cafeteiras, moeda)
 src/components/   ui, ícones, gráficos, animações do copo
 src/data/         catálogo, frases, artigos e práticas (parte neutra; o texto fica em data/content/<idioma>.ts)
 src/i18n/         dicionários pt, en e es, plural, datas e números por idioma
-src/engine/       sensor de pose e o motor do copo (iniciar, encerrar, retomar)
-src/lib/          regras puras (moedas, qualidade, estatísticas) e seus testes
+src/engine/       sensor de pose e o motor do copo (liga sensor, relógio e navegação)
+modules/          módulo nativo de uso do sistema (Android)
+docs/             privacidade, loja, validação no aparelho e lançamento
+src/lib/          regras puras (moedas, qualidade, estatísticas, decisões do motor) e seus testes
 src/store/        estado (Zustand) persistido com MMKV
 src/theme/        cores (claro e torra escura), fontes e ThemeProvider
 ```
 
 As cores e fontes seguem o style board da fase de design: Young Serif para frases, Figtree para interface e DM Mono para números.
 
-## O que ainda não existe
+## Primeira abertura e privacidade
 
-- **Desbloqueios e tempo de tela do sistema.** O Bem-estar mede só o que o app registra (copos, interrupções, humor). Ler as estatísticas de uso do Android pede um módulo nativo com a permissão `PACKAGE_USAGE_STATS`; o módulo antigo está no histórico.
-- **Compra de moedas.** O código usa RevenueCat, mas só liga quando existirem `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` (e `..._IOS_KEY`) no build, com produtos cujo identificador termine no número de moedas, como `coins_500`. Sem as chaves, a loja explica que a compra não está ativa.
-- **Aviso ao encher o copo.** O copo é contado ao pegar o celular. Notificações foram deixadas de fora de propósito para não interromper quem está offline.
-- **Mais idiomas.** Hoje são português, inglês e espanhol. Para acrescentar um, veja "Traduções" abaixo.
+- Na primeira abertura o app mostra uma introdução de quatro passos, com escolha de idioma e calibração do sensor. Em Ajustes dá para rever.
+- Tudo fica no aparelho: sem conta, sem servidor, sem análise. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
+- Ajustes › toque 7 vezes na versão libera as ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) em qualquer build.
+
+## Uso do sistema (Android)
+
+`modules/usage-stats` é um módulo nativo que lê desbloqueios (`KEYGUARD_HIDDEN`) e tempo de tela do dia. O Bem-estar mostra esses números depois que a pessoa autoriza o “Acesso ao uso”; sem a permissão, o cartão explica e pede. O Android guarda poucos dias de eventos. Só compila no build nativo (`expo run:android`).
+
+## Aviso de copo pronto
+
+Opcional, desligado por padrão: uma notificação local e silenciosa quando o copo enche. Fica em Ajustes.
+
+## O que depende de aparelho, conta ou chave
+
+O código está pronto; falta confirmar fora do ambiente de desenvolvimento. O roteiro está em `docs/VALIDATION.md` e o caminho de lançamento em `docs/RELEASE.md`.
+
+- **Sensor de virar o celular, segundo plano e tela apagada:** só no aparelho.
+- **Módulo de uso do sistema e notificação:** só no aparelho, depois de compilar.
+- **Compra de moedas:** liga com `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` (e `..._IOS_KEY`) no build, com produtos cujo identificador termine no número de moedas, como `coins_500`. Sem as chaves, a loja explica que a compra não está ativa.
+- **Loja:** textos prontos em `docs/store/`; faltam capturas de tela, hospedar a política de privacidade e o formulário de Segurança dos dados.
 
 ## Traduções
 
