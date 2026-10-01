@@ -4,30 +4,22 @@ import { StyleSheet, View, Text, Pressable, Dimensions, AppState, Platform, Aler
 import { Image } from 'expo-image';
 import { GlassView } from 'expo-glass-effect';
 import Svg, { Defs, LinearGradient, Stop, Rect, Ellipse } from 'react-native-svg';
-import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withRepeat,
   withTiming,
   withSequence,
   withSpring,
-  Easing,
 } from 'react-native-reanimated';
 
 import { useFocusStore } from '@/store/useFocusStore';
 import { useTheme } from '@/hooks/use-theme';
-import { PlantRenderer } from '@/components/art/PlantRenderer';
-import { Pot, type PotVariant } from '@/components/art/Pot';
-import { Steam } from '@/components/art/Steam';
 import { BrewerSvg } from '@/components/art/BrewerSvg';
 import { CupSvg } from '@/components/art/CupSvg';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { DebugTimeWheel } from '@/components/ui/DebugTimeWheel';
 import { CoinPurchaseModal } from '@/components/ui/CoinPurchaseModal';
-import { hasUsageStatsPermission, requestUsageStatsPermission, getDailyUnlockCount, isUsageStatsAvailable } from '../../modules/usage-stats';
-import { BREWER_IMAGES, CUP_IMAGES } from '@/constants/assets';
-import { WindowView } from '@/components/ui/WindowView';
+import { hasUsageStatsPermission, requestUsageStatsPermission, isUsageStatsAvailable } from '../../modules/usage-stats';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,9 +32,6 @@ function formatTime(ms: number) {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
-
-const POT_SIZE = Math.min(width * 0.35, 140);
-const PLANT_SIZE = POT_SIZE * 1.6;
 
 const STOIC_QUOTES = [
   "\"A riqueza consiste não em ter grandes posses, mas em ter poucas necessidades.\" — Epicteto",
@@ -59,19 +48,10 @@ export default function HomeScreen() {
     isFocusing,
     startTime,
     accumulatedTime,
-    plantStage,
-    health,
-    selectedPot,
     selectedCup,
     selectedBrewer,
     coins,
-    flipOpens,
-    flipCloses,
     syncBackgroundTime,
-    syncDailyFlips,
-    harvestCoffee,
-    waterPlant,
-    selectedSeed,
     checkDailyLogin,
   } = useFocusStore();
   const theme = useTheme();
@@ -94,7 +74,6 @@ export default function HomeScreen() {
         if (Platform.OS === 'android') {
           if (hasUsageStatsPermission()) {
             setHasPermission(true);
-            syncDailyFlips(getDailyUnlockCount());
           } else {
             setHasPermission(false);
           }
@@ -108,48 +87,8 @@ export default function HomeScreen() {
   }, []);
 
   // Animações
-  const sway = useSharedValue(0);
-  const growth = useSharedValue(1);
   const coinPulse = useSharedValue(1);
-  const steamY = useSharedValue(0);
-  const steamOpacity = useSharedValue(0);
   const prevCoins = useRef(coins);
-
-  // Balanço orgânico da planta — pivô na base do vaso
-  useEffect(() => {
-    const amplitude = isFocusing ? 2.4 : 1.4;
-    const duration = isFocusing ? 2200 : 3200;
-    sway.value = withRepeat(
-      withSequence(
-        withTiming(-amplitude, { duration, easing: Easing.inOut(Easing.ease) }),
-        withTiming(amplitude, { duration, easing: Easing.inOut(Easing.ease) }),
-      ),
-      -1,
-      true,
-    );
-  }, [isFocusing]);
-
-  // "Brota" um pop quando o estágio da planta muda
-  useEffect(() => {
-    growth.value = withSequence(
-      withTiming(1.12, { duration: 200, easing: Easing.out(Easing.ease) }),
-      withSpring(1, { damping: 6, stiffness: 120 }),
-    );
-  }, [plantStage]);
-
-  // Vapor só durante o foco (sinal de "cultivando")
-  useEffect(() => {
-    if (isFocusing) {
-      steamY.value = withRepeat(withTiming(-22, { duration: 2800, easing: Easing.linear }), -1, false);
-      steamOpacity.value = withRepeat(
-        withSequence(withTiming(0.8, { duration: 1400 }), withTiming(0, { duration: 1400 })),
-        -1,
-        false,
-      );
-    } else {
-      steamOpacity.value = withTiming(0, { duration: 400 });
-    }
-  }, [isFocusing]);
 
   // Pulso ao ganhar moedas
   useEffect(() => {
@@ -169,19 +108,11 @@ export default function HomeScreen() {
     return () => clearInterval(interval);
   }, [isFocusing, startTime, accumulatedTime]);
 
-  const plantStyle = useAnimatedStyle(() => ({
-    transformOrigin: 'bottom center',
-    transform: [{ rotate: `${sway.value}deg` }, { scale: growth.value }],
-  }));
   const coinStyle = useAnimatedStyle(() => ({ transform: [{ scale: coinPulse.value }] }));
-  const steamStyle = useAnimatedStyle(() => ({
-    opacity: steamOpacity.value,
-    transform: [{ translateY: steamY.value }],
-  }));
 
   return (
     <GestureHandlerRootView style={[styles.root, { backgroundColor: theme.bg }]}>
-      {/* Fundo: gradiente quente + spotlight atrás da planta */}
+      {/* Fundo: gradiente quente + spotlight atrás da cafeteira */}
       <Svg style={StyleSheet.absoluteFill} width={width} height={height}>
         <Defs>
           <LinearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
@@ -196,7 +127,7 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: theme.textPrimary }]}>Estufa</Text>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>Flip & Brew</Text>
           <Animated.View style={coinStyle}>
             <Pressable onPress={() => setCoinModalVisible(true)}>
               <GlassView style={[styles.coinBadge, { borderColor: theme.accent, backgroundColor: theme.surfaceGlass }]}>
@@ -207,44 +138,8 @@ export default function HomeScreen() {
           </Animated.View>
         </View>
 
-        {/* HERO: prateleiras (estufa) */}
+        {/* HERO: cafeteira e xícara na prateleira */}
         <View style={styles.heroArea}>
-          {/* Prateleira Superior (Vaso e Planta) */}
-          <View style={styles.topShelf}>
-            <View style={styles.heroStack}>
-              <WindowView />
-
-              <Animated.View style={[styles.steam, steamStyle]} pointerEvents="none">
-                <Steam size={POT_SIZE * 0.32} />
-              </Animated.View>
-
-              <View style={styles.potWrap}>
-                <Pot variant={selectedPot as PotVariant} size={POT_SIZE} />
-              </View>
-
-              <Animated.View style={[styles.plantWrap, plantStyle]}>
-                <Pressable onPress={() => {
-                  if (plantStage === 'harvestable') {
-                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                    if (selectedSeed === 'coffee') {
-                      harvestCoffee();
-                    } else {
-                      waterPlant();
-                    }
-                  } else if (plantStage === 'wilting') {
-                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                    waterPlant();
-                  }
-                }}>
-                  <PlantRenderer seed={selectedSeed} stage={plantStage} health={health} size={PLANT_SIZE} />
-                </Pressable>
-              </Animated.View>
-            </View>
-            <View style={styles.shelfBoard} />
-            <View style={styles.shelfShadow} />
-          </View>
-
-          {/* Prateleira Inferior (Cafeteira e Xícara) */}
           <View style={styles.bottomShelf}>
             <View style={styles.bottomShelfItems}>
               {selectedBrewer && (
@@ -271,7 +166,7 @@ export default function HomeScreen() {
               style={[styles.permissionBanner, { backgroundColor: theme.surfaceGlass, borderColor: theme.border }]}
             >
               <Text style={[styles.permissionText, { color: theme.textPrimary }]}>
-                Permita o Acesso ao Uso para contarmos seus flips diários nativamente. Toque aqui para autorizar.
+                Permita o Acesso ao Uso para contarmos seus desbloqueios diários. Toque aqui para autorizar.
               </Text>
             </Pressable>
           )}
@@ -282,7 +177,7 @@ export default function HomeScreen() {
           <GlassView style={[styles.timerGlass, { borderColor: theme.border, backgroundColor: theme.surfaceGlass }]}>
             <Text style={[styles.timerText, { color: theme.textPrimary }]}>{formatTime(displayTime)}</Text>
             <Text style={[styles.timerSub, { color: theme.textSecondary }]}>
-              Tempo Cultivado
+              Tempo offline
             </Text>
           </GlassView>
         </View>
@@ -318,8 +213,7 @@ const styles = StyleSheet.create({
   coinIcon: { width: 20, height: 20, marginRight: 8 },
   coinText: { fontWeight: 'bold', fontSize: 16 },
 
-  heroArea: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 },
-  topShelf: { alignItems: 'center', marginBottom: -80, zIndex: 2 },
+  heroArea: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   bottomShelf: { alignItems: 'center', width: '100%', zIndex: 1 },
   bottomShelfItems: {
     flexDirection: 'row',
@@ -344,15 +238,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  heroStack: {
-    width: POT_SIZE * 1.6,
-    height: PLANT_SIZE * 1.25,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  potWrap: { position: 'absolute', bottom: 0, alignItems: 'center' },
-  plantWrap: { position: 'absolute', bottom: POT_SIZE * 0.5, alignItems: 'center' },
-  steam: { position: 'absolute', bottom: POT_SIZE * 0.55, zIndex: -1 },
   brewerImage: { width: 170, height: 220, opacity: 0.9, justifyContent: 'flex-end', alignItems: 'center', transform: [{ translateY: -2 }] },
   cupImage: { width: 120, height: 120, justifyContent: 'flex-end', alignItems: 'center', transform: [{ translateY: 12 }] },
 

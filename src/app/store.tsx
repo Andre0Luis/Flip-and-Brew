@@ -9,14 +9,8 @@ import { CoinPurchaseModal } from '@/components/ui/CoinPurchaseModal';
 import { BrewerSvg } from '@/components/art/BrewerSvg';
 import { CupSvg } from '@/components/art/CupSvg';
 import { Pot } from '@/components/art/Pot';
-import { PlantRenderer } from '@/components/art/PlantRenderer';
 
 const SHOP_ITEMS = {
-  seed: [
-    { id: 'coffee', name: 'Semente Arábica', desc: 'Produz grãos de café recicláveis.', price: 100 },
-    { id: 'sunflower', name: 'Semente de Girassol', desc: 'Flor amarela (requer rega).', price: 150 },
-    { id: 'tulip', name: 'Bulbo de Tulipa', desc: 'Flor delicada (requer rega).', price: 200 }
-  ],
   pots: [
     { id: 'clay', name: 'Vaso de Argila', price: 0 },
     { id: 'glass', name: 'Vaso de Vidro', price: 15 },
@@ -56,7 +50,7 @@ const SHOP_ITEMS = {
 };
 
 export default function ShopScreen() {
-  const { coins, unlockedBrewers, unlockedPots, unlockedCups, unlockedSeeds, buyItem, buyCoins } = useFocusStore();
+  const { coins, unlockedBrewers, unlockedPots, unlockedCups, buyItem, buyCoins } = useFocusStore();
   const [isCoinModalVisible, setCoinModalVisible] = useState(false);
   const [offerings, setOfferings] = useState<any[]>([]);
   const [isLoadingOffers, setIsLoadingOffers] = useState(true);
@@ -79,7 +73,7 @@ export default function ShopScreen() {
     setIsLoadingOffers(false);
   };
 
-  const handleBuy = (type: 'seed'|'brewer'|'pot'|'cup', id: string, price: number, name: string) => {
+  const handleBuy = (type: 'brewer'|'pot'|'cup', id: string, price: number, name: string) => {
     if (coins < price) {
       Alert.alert("Saldo Insuficiente", `Você precisa de ${price} moedas para comprar ${name}.`);
       return;
@@ -117,10 +111,9 @@ export default function ShopScreen() {
     }
   };
 
-  const renderItemCard = (type: 'brewer'|'pot'|'cup'|'seed', item: any) => {
+  const renderItemCard = (type: 'brewer'|'pot'|'cup', item: any) => {
     const isUnlocked = type === 'brewer' ? unlockedBrewers.includes(item.id) 
                      : type === 'pot' ? unlockedPots.includes(item.id) 
-                     : type === 'seed' ? false // Sementes são consumíveis
                      : unlockedCups.includes(item.id);
 
     return (
@@ -138,7 +131,6 @@ export default function ShopScreen() {
             {type === 'brewer' && <BrewerSvg variant={item.id} size={50} />}
             {type === 'cup' && <CupSvg variant={item.id} size={40} />}
             {type === 'pot' && <Pot variant={item.id as any} size={50} />}
-            {type === 'seed' && <PlantRenderer seed={item.id} stage="seedling_emergence" health={100} size={50} />}
           </View>
           <View style={styles.itemInfo}>
             <Text style={styles.itemName}>{item.name}</Text>
@@ -177,11 +169,6 @@ export default function ShopScreen() {
         <View style={styles.header}>
           <Text style={styles.title}>A Lojinha</Text>
           <Text style={styles.subtitle}>Gaste seu tempo investido aqui.</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Sementes</Text>
-          {SHOP_ITEMS.seed.map(item => renderItemCard('seed', item))}
         </View>
 
         <View style={styles.section}>

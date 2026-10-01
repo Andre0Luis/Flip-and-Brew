@@ -8,9 +8,8 @@ import { useTheme } from '@/hooks/use-theme';
 import { Pot } from '@/components/art/Pot';
 import { BrewerSvg } from '@/components/art/BrewerSvg';
 import { CupSvg } from '@/components/art/CupSvg';
-import { PlantRenderer } from '@/components/art/PlantRenderer';
 
-type ItemType = 'seed' | 'pot' | 'brewer' | 'cup';
+type ItemType = 'pot' | 'brewer' | 'cup';
 interface CatalogItem {
   id: string;
   name: string;
@@ -19,11 +18,6 @@ interface CatalogItem {
 }
 
 const CATALOG: Record<ItemType, CatalogItem[]> = {
-  seed: [
-    { id: 'coffee', name: 'Arábica', price: 0 },
-    { id: 'sunflower', name: 'Girassol', price: 0 },
-    { id: 'tulip', name: 'Tulipa', price: 0 },
-  ],
   pot: [
     { id: 'clay', name: 'Barro', price: 0 },
     { id: 'glass', name: 'Vidro', price: 600 },
@@ -63,7 +57,6 @@ const CATALOG: Record<ItemType, CatalogItem[]> = {
 };
 
 const SECTIONS: { type: ItemType; label: string }[] = [
-  { type: 'seed', label: 'Sementes' },
   { type: 'pot', label: 'Vasos' },
   { type: 'brewer', label: 'Cafeteiras' },
   { type: 'cup', label: 'Xícaras' },
@@ -72,12 +65,12 @@ const SECTIONS: { type: ItemType; label: string }[] = [
 export default function CollectionScreen() {
   const theme = useTheme();
   const store = useFocusStore();
-  const { coins, unlockedPots, unlockedBrewers, unlockedCups, unlockedSeeds, selectedPot, selectedBrewer, selectedCup, selectedSeed, buyItem, selectItem } = store;
+  const { coins, unlockedPots, unlockedBrewers, unlockedCups, selectedPot, selectedBrewer, selectedCup, buyItem, selectItem } = store;
 
   const unlockedFor = (type: ItemType) =>
-    type === 'pot' ? unlockedPots : type === 'brewer' ? unlockedBrewers : type === 'seed' ? unlockedSeeds : unlockedCups;
+    type === 'pot' ? unlockedPots : type === 'brewer' ? unlockedBrewers : unlockedCups;
   const selectedFor = (type: ItemType) =>
-    type === 'pot' ? selectedPot : type === 'brewer' ? selectedBrewer : type === 'seed' ? selectedSeed : selectedCup;
+    type === 'pot' ? selectedPot : type === 'brewer' ? selectedBrewer : selectedCup;
 
   const onTap = (type: ItemType, item: CatalogItem) => {
     Haptics.selectionAsync();
@@ -112,7 +105,6 @@ export default function CollectionScreen() {
                         ]}
                       >
                         <View style={styles.preview}>
-                          {type === 'seed' && <PlantRenderer seed={item.id} stage="seedling_emergence" health={100} size={50} />}
                           {type === 'pot' && <Pot variant={item.id as any} size={72} />}
                           {type === 'brewer' && <BrewerSvg variant={item.id} size={50} />}
                           {type === 'cup' && <CupSvg variant={item.id} size={40} />}

@@ -33,7 +33,6 @@ export const Colors = {
     accentSoft: '#E2A765',
     leaf: '#5E8B4C', // verde-folha
     terracotta: '#B5613C',
-    seedBrown: '#7A5236',
     cream: '#F2E3CC',
     danger: '#C2452D',
     border: 'rgba(42, 30, 22, 0.12)',
@@ -57,7 +56,6 @@ export const Colors = {
     accentSoft: '#C8843A',
     leaf: '#7CA86A', // verde-folha clareado p/ contraste
     terracotta: '#CC744C',
-    seedBrown: '#9A6E48',
     cream: '#EAD7B8',
     danger: '#E0664B',
     border: 'rgba(243, 233, 218, 0.14)',
@@ -68,7 +66,7 @@ export const Colors = {
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 /**
- * Paleta de ARTE — consumida pelos SVGs (CoffeePlant, Pot, Steam).
+ * Paleta de ARTE — consumida pelos SVGs (Pot, Steam).
  * Separada dos tokens de UI para dar liberdade ao traço artesanal.
  */
 export const ArtColors = {
