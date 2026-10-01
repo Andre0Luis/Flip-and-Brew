@@ -19,10 +19,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.andre0luis.FlipAndBrew",
-      "permissions": [
-        "android.permission.PACKAGE_USAGE_STATS"
-      ]
+      "package": "com.andre0luis.FlipAndBrew"
     },
     "web": {
       "output": "static",
