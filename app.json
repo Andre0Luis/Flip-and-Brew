@@ -40,24 +40,7 @@
           }
         }
       ],
-      "expo-localization",
-      [
-        "react-native-android-widget",
-        {
-          "widgets": [
-            {
-              "name": "Coffee",
-              "label": "Flip & Brew",
-              "description": "Sua árvore de café na tela externa",
-              "minWidth": "110dp",
-              "minHeight": "110dp",
-              "targetCellWidth": 2,
-              "targetCellHeight": 2,
-              "resizeMode": "none"
-            }
-          ]
-        }
-      ]
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

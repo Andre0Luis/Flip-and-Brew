@@ -5,6 +5,7 @@ import { GlassView } from 'expo-glass-effect';
 import { Image } from 'expo-image';
 import { useFocusStore } from '@/store/useFocusStore';
 import { STOIC_QUOTES } from '@/data/quotes';
+import { getDailyUnlockCount, hasUsageStatsPermission, isUsageStatsAvailable } from '../../modules/usage-stats';
 
 function formatTotalTime(ms: number) {
   const totalSeconds = Math.floor(ms / 1000);
@@ -18,7 +19,8 @@ function formatTotalTime(ms: number) {
 }
 
 export default function StatsScreen() {
-  const { accumulatedTime, plantStage, flipOpens, flipCloses } = useFocusStore();
+  const { accumulatedTime } = useFocusStore();
+  const unlocksToday = isUsageStatsAvailable && hasUsageStatsPermission() ? getDailyUnlockCount() : null;
 
   const totalTimeStr = formatTotalTime(accumulatedTime);
   
@@ -36,7 +38,6 @@ export default function StatsScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <View style={styles.background}>
-        <Image source={require('../../assets/plant_growing.png')} style={styles.bgImage1} blurRadius={80} />
         <Image source={require('../../assets/cup_4.png')} style={styles.bgImage2} blurRadius={80} />
       </View>
       
@@ -86,11 +87,6 @@ export default function StatsScreen() {
           {/* Grid Metrics */}
           <View style={styles.grid}>
             <GlassView style={styles.gridCard}>
-              <Text style={styles.cardTitle}>Estágio da Planta</Text>
-              <Text style={styles.gridValue}>{plantStage.toUpperCase()}</Text>
-            </GlassView>
-
-            <GlassView style={styles.gridCard}>
               <Text style={styles.cardTitle}>Status Mental</Text>
               <Text style={[styles.gridValue, { color: levelColor, fontSize: 16 }]}>
                 {antifragilityLevel}
@@ -98,21 +94,15 @@ export default function StatsScreen() {
             </GlassView>
           </View>
           
-          {/* Z Flip — disciplina física */}
+          {/* Desbloqueios — disciplina física */}
           <GlassView style={styles.mainCard}>
-            <Text style={styles.cardTitle}>Concha do Z Flip</Text>
-            <View style={styles.flipStatsRow}>
-              <View style={styles.flipStat}>
-                <Text style={styles.flipStatValue}>{flipCloses}</Text>
-                <Text style={styles.flipStatLabel}>Fechamentos</Text>
-              </View>
-              <View style={styles.flipDivider} />
-              <View style={styles.flipStat}>
-                <Text style={styles.flipStatValue}>{flipOpens}</Text>
-                <Text style={styles.flipStatLabel}>Aberturas</Text>
-              </View>
-            </View>
-            <Text style={styles.cardDesc}>Cada fechamento é um exercício de abstenção voluntária.</Text>
+            <Text style={styles.cardTitle}>Desbloqueios hoje</Text>
+            <Text style={styles.mainValue}>{unlocksToday ?? '—'}</Text>
+            <Text style={styles.cardDesc}>
+              {unlocksToday === null
+                ? 'Autorize o Acesso ao Uso na tela inicial para ver quantas vezes você pegou o celular.'
+                : 'Cada vez que você deixa o celular de lado é um exercício de abstenção voluntária.'}
+            </Text>
           </GlassView>
         </View>
       </ScrollView>
@@ -132,14 +122,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#0F1115',
-  },
-  bgImage1: {
-    position: 'absolute',
-    top: -50,
-    left: -50,
-    width: 500,
-    height: 500,
-    opacity: 0.1,
   },
   bgImage2: {
     position: 'absolute',
@@ -214,32 +196,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: '#FFFFFF',
-  },
-  flipStatsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  flipStat: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  flipStatValue: {
-    fontSize: 40,
-    fontWeight: '300',
-    color: '#FFFFFF',
-  },
-  flipStatLabel: {
-    fontSize: 12,
-    color: '#8A8D93',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginTop: 4,
-  },
-  flipDivider: {
-    width: 1,
-    height: 48,
-    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   philosophyContainer: {
     marginTop: 16,

@@ -36,7 +36,6 @@ export function DebugTimeWheel() {
   const handleReset = () => {
     useFocusStore.setState({
       accumulatedTime: 0,
-      plantStage: 'seed_soil',
       coins: 0,
     });
     rotation.value = 0;
