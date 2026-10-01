@@ -46,7 +46,20 @@ Preparação: `npx expo run:android` com o aparelho conectado. Em Ajustes, toque
 - [ ] Ajustes › Apagar todos os dados zera tudo e **não** repete a introdução.
 - [ ] “Rever a introdução” reabre a introdução e, ao concluir, volta às abas.
 
-## 7. Depende de conta ou chave (fica para o lançamento)
+## 7. Conta, login com Google e backup (precisa do Firebase configurado: `docs/FIREBASE.md`)
+- [ ] Com o `.env` preenchido, Ajustes mostra o cartão “Conta e backup”. Sem as chaves, ele não aparece e o app funciona normal.
+- [ ] Criar conta com e-mail e senha: entra, mostra o e-mail e faz o primeiro backup.
+- [ ] Sair e entrar de novo funciona; senha errada mostra “E-mail ou senha incorretos”.
+- [ ] “Esqueci a senha” envia o e-mail de redefinição (confira a caixa de entrada).
+- [ ] “Continuar com o Google” abre o seletor de contas e entra. Se der `DEVELOPER_ERROR`, confira o SHA-1 e o pacote no cliente OAuth Android.
+- [ ] Segundo aparelho (ou apagar os dados do app): entrar com a mesma conta restaura moedas, itens e histórico.
+- [ ] Dados diferentes dos dois lados: aparece a escolha “Encontramos um backup” e as duas opções funcionam.
+- [ ] Depois de um copo, o backup acontece sozinho em poucos segundos (veja “Último backup” na tela de Conta).
+- [ ] Sem internet: o app segue funcionando e o backup só falha em silêncio; ao voltar a conexão, o próximo copo envia.
+- [ ] Excluir conta: pede senha (ou o Google), apaga, volta ao formulário de entrada e a conta não entra mais. No Firebase, o documento `users/{uid}` e o usuário somem.
+- [ ] Regras do Firestore publicadas: uma conta não consegue ler o documento de outra.
+
+## 8. Depende de conta ou chave (fica para o lançamento)
 - [ ] Chaves do RevenueCat e produtos `coins_100`, `coins_500`… criados no Play Console; compra de teste conclui e soma as moedas.
 - [ ] Build de produção (`eas build --profile production`) e envio para a faixa de teste interno.
 - [ ] URL da política de privacidade hospedada (a partir de `docs/PRIVACY.*.md`) e formulário de Segurança dos dados.

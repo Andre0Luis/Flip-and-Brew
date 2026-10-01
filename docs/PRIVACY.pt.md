@@ -2,7 +2,7 @@
 
 ## Seus dados ficam no aparelho
 
-Copos, moedas, itens, humor e preferências são guardados só no seu celular. O Flip & Brew não tem conta, servidor nem ferramenta de análise.
+O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor e preferências ficam só no seu celular, sem servidor nem ferramenta de análise.
 
 ## Acesso ao uso (opcional)
 
@@ -23,3 +23,11 @@ Quando a compra de moedas estiver ativa, o pagamento é processado pela loja de 
 ## Apagar tudo
 
 Em Ajustes, “Apagar todos os dados” remove tudo o que o app guardou. Desinstalar o app também apaga tudo.
+
+## Conta e backup (opcional)
+
+Você pode criar uma conta com e-mail e senha ou entrar com o Google. Se criar, guardamos o seu e-mail e uma cópia do seu progresso (copos, moedas, itens, humor e preferências) no Firebase, serviço do Google, para você recuperar em outro aparelho. Só você acessa essa cópia. O login com o Google compartilha apenas o seu nome e e-mail do perfil.
+
+## Excluir a conta
+
+Em Conta › Excluir conta, apagamos a sua conta e o backup na nuvem. Os dados do aparelho continuam até você apagá-los em Ajustes.
