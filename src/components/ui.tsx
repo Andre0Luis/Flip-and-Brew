@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View, type StyleProp, type TextProps, type ViewStyle } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type TextProps, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -100,6 +100,7 @@ export function Button({
           paddingVertical: 15,
           paddingHorizontal: 24,
           alignItems: 'center',
+          justifyContent: 'center',
           opacity: disabled ? 0.45 : pressed ? 0.85 : 1,
         },
         tone === 'quiet' && { borderWidth: 1, borderColor: c.line },
@@ -202,6 +203,36 @@ export function Insight({ children, tag }: { children: React.ReactNode; tag: str
       <Txt v="label" color="muted">
         {tag}
       </Txt>
+    </View>
+  );
+}
+
+/** Campo de texto com rótulo. O rótulo fica fora do campo para continuar legível com texto digitado e com fonte grande. */
+export function Field({ label, error, ...input }: TextInputProps & { label: string; error?: boolean }) {
+  const { c, f, r } = useTheme();
+  return (
+    <View style={{ gap: 6 }}>
+      <Txt v="label" color="muted">
+        {label}
+      </Txt>
+      <TextInput
+        accessibilityLabel={label}
+        placeholderTextColor={c.muted}
+        autoCapitalize="none"
+        autoCorrect={false}
+        {...input}
+        style={{
+          fontFamily: f.body,
+          fontSize: 16,
+          color: c.fg,
+          backgroundColor: c.surface,
+          borderWidth: 1,
+          borderColor: error ? c.bad : c.line,
+          borderRadius: r.md,
+          paddingHorizontal: 14,
+          paddingVertical: 13,
+        }}
+      />
     </View>
   );
 }
