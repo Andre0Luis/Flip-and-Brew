@@ -9,6 +9,7 @@ import { AuthError, getBackend, isValidEmail, MIN_PASSWORD, toAuthError } from '
 import { backupNow, localData, resolveChoice, restoreNow } from '@/lib/cloud/sync';
 import { useAuth } from '@/store/useAuth';
 import { useNow } from '@/hooks/useNow';
+import { TEST_EMAIL, TEST_PASSWORD } from '@/lib/testUser';
 import { useTheme } from '@/theme/ThemeProvider';
 
 type Mode = 'in' | 'up';
@@ -63,6 +64,7 @@ function ErrorLine({ error }: { error: AuthError | string | null }) {
 
 function SignedOut() {
   const router = useRouter();
+  const { c } = useTheme();
   const { t } = useI18n();
   const backend = getBackend();
   const [mode, setMode] = useState<Mode>('in');
@@ -112,6 +114,20 @@ function SignedOut() {
       <Txt v="body" color="muted">
         {t('account.optional')}
       </Txt>
+      {backend?.kind === 'mock' && (
+        <Card style={{ gap: 8, backgroundColor: c.soft }}>
+          <Txt v="small">{t('auth.testHint', { email: TEST_EMAIL, password: TEST_PASSWORD })}</Txt>
+          <Button
+            label={t('auth.testFill')}
+            tone="quiet"
+            onPress={() => {
+              setMode('in');
+              setEmail(TEST_EMAIL);
+              setPassword(TEST_PASSWORD);
+            }}
+          />
+        </Card>
+      )}
       <Segmented<Mode>
         value={mode}
         onChange={(m) => {

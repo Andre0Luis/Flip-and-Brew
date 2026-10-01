@@ -277,6 +277,11 @@ export const pt = {
   'privacy.h8': 'Excluir a conta',
   'privacy.p8': 'Em Conta › Excluir conta, apagamos a sua conta e o backup na nuvem. Os dados do aparelho continuam até você apagá-los em Ajustes.',
 
+  'set.testUser': 'Carregar usuário de teste (50 mil moedas, tudo desbloqueado)',
+  'set.plus10k': 'Ganhar 10.000 moedas',
+  'auth.testHint': 'Servidor de teste ativo. Já existe uma conta pronta: {email} · senha {password}',
+  'auth.testFill': 'Preencher conta de teste',
+
   'learn.title': 'Aprender',
   'learn.all': 'Tudo',
   'cat.antifragile': 'Antifrágil',

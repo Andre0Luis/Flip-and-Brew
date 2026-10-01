@@ -38,6 +38,7 @@ export default function Ajustes() {
   const set = useApp((s) => s.setSettings);
   const addCoins = useApp((s) => s.addCoins);
   const loadDemo = useApp((s) => s.loadDemo);
+  const loadTestUser = useApp((s) => s.loadTestUser);
   const resetAll = useApp((s) => s.resetAll);
   const { run: calibrate, busy: calibrating, message: cal, available } = useCalibrate();
   const [confirmReset, setConfirmReset] = useState(false);
@@ -137,7 +138,9 @@ export default function Ajustes() {
         <Txt v="title">{t('set.testTools')}</Txt>
         <Row title={t('set.quick')} hint={t('set.quickHint')} value={settings.quickBrew} onChange={(v) => set({ quickBrew: v })} />
         <Button label={t('set.demo')} tone="quiet" onPress={loadDemo} />
+        <Button label={t('set.testUser')} tone="quiet" onPress={loadTestUser} />
         <Button label={t('set.plus500')} tone="quiet" onPress={() => addCoins(500)} />
+        <Button label={t('set.plus10k')} tone="quiet" onPress={() => addCoins(10_000)} />
         {confirmReset ? (
           <View style={{ gap: 8 }}>
             <Txt v="small" color="bad">
