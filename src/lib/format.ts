@@ -15,19 +15,3 @@ export function minutesLabel(min: number): string {
   const r = m % 60;
   return r === 0 ? `${h}h` : `${h}h ${String(r).padStart(2, '0')}`;
 }
-
-export function number(n: number): string {
-  return n.toLocaleString('pt-BR');
-}
-
-const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-const WEEKDAYS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
-
-export function dateLong(d: Date): string {
-  return `${WEEKDAYS[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]}`;
-}
-
-export function dateShort(ts: number): string {
-  const d = new Date(ts);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]}`;
-}

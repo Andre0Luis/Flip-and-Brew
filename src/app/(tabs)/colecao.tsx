@@ -3,7 +3,9 @@ import { Pressable, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
 import { Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
-import { CATALOG, brewers, byId, cups, type CatalogItem } from '@/data/catalog';
+import { CATALOG, brewers, byId, cups, localize, type CatalogItem } from '@/data/catalog';
+import { ARTICLE_COUNT } from '@/data/articles';
+import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
@@ -11,9 +13,10 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 type Tab = 'cup' | 'brewer' | 'feitos';
 
-function Shelf({ items, owned, selected, onSelect }: { items: CatalogItem[]; owned: string[]; selected: string; onSelect: (id: string) => void }) {
+function Shelf({ items, owned, selected, onSelect }: { items: (CatalogItem & { name: string })[]; owned: string[]; selected: string; onSelect: (id: string) => void }) {
   const { c, r } = useTheme();
-  const rows: CatalogItem[][] = [];
+  const { t } = useI18n();
+  const rows: (CatalogItem & { name: string })[][] = [];
   for (let i = 0; i < items.length; i += 3) rows.push(items.slice(i, i + 3));
   return (
     <View style={{ gap: 14 }}>
@@ -26,7 +29,7 @@ function Shelf({ items, owned, selected, onSelect }: { items: CatalogItem[]; own
               <Pressable
                 key={it.id}
                 accessibilityRole="button"
-                accessibilityLabel={`${it.name}. ${has ? 'Na prateleira' : 'Ainda não conquistada'}`}
+                accessibilityLabel={`${it.name}. ${has ? t('col.a11yOn') : t('col.a11yOff')}`}
                 onPress={() => onSelect(it.id)}
                 style={{ flex: 1, alignItems: 'center', borderRadius: r.md, backgroundColor: sel ? c.soft : 'transparent', paddingTop: 4 }}
               >
@@ -45,6 +48,7 @@ function Shelf({ items, owned, selected, onSelect }: { items: CatalogItem[]; own
 
 export default function Colecao() {
   const { c } = useTheme();
+  const { lang, t } = useI18n();
   const { owned, brewerId, cupId, sessions, articlesRead, practicesDone } = useApp();
   const equip = useApp((s) => s.equip);
   const [tab, setTab] = useState<Tab>('cup');
@@ -54,32 +58,33 @@ export default function Colecao() {
   const have = owned.filter((id) => byId(id)).length;
   const finished = sessions.filter((s) => s.status === 'done').length;
 
-  const detail = tab === 'cup' ? byId(sel.cup) : tab === 'brewer' ? byId(sel.brewer) : undefined;
+  const detailBase = tab === 'cup' ? byId(sel.cup) : tab === 'brewer' ? byId(sel.brewer) : undefined;
+  const detail = detailBase ? localize(lang, detailBase) : undefined;
   const equipped = detail && (detail.kind === 'cup' ? cupId : brewerId) === detail.id;
   const hasDetail = detail && owned.includes(detail.id);
 
   const totalMin = sessions.reduce((a, s) => a + s.elapsedMs / 60_000, 0);
   const best = Math.max(0, ...sessions.map((s) => s.elapsedMs / 60_000));
   const stats: [string, string][] = [
-    ['Copos terminados', String(finished)],
-    ['Tempo offline total', minutesLabel(totalMin)],
-    ['Maior sessão', best ? minutesLabel(best) : '—'],
-    ['Sequência atual', `${streak(sessions)} dias`],
-    ['Copos encorpados', String(sessions.filter((s) => s.quality === 'encorpado').length)],
-    ['Artigos lidos', `${articlesRead.length} de 9`],
-    ['Práticas feitas', String(practicesDone.length)],
+    [t('col.statCups'), String(finished)],
+    [t('col.statTotal'), minutesLabel(totalMin)],
+    [t('col.statBest'), best ? minutesLabel(best) : '—'],
+    [t('col.statStreak'), `${streak(sessions)} ${t('unit.day', { n: streak(sessions) })}`],
+    [t('col.statFull'), String(sessions.filter((s) => s.quality === 'encorpado').length)],
+    [t('col.statArticles'), t('col.statArticlesValue', { n: articlesRead.length, total: ARTICLE_COUNT })],
+    [t('col.statPractices'), String(practicesDone.length)],
   ];
 
   return (
     <Screen>
-      <Header title="Coleção" right={<Txt v="label" color="muted">{have} de {total}</Txt>} />
+      <Header title={t('col.title')} right={<Txt v="label" color="muted">{t('col.count', { a: have, b: total })}</Txt>} />
       <Segmented<Tab>
         value={tab}
         onChange={setTab}
         options={[
-          { value: 'cup', label: 'Prateleira' },
-          { value: 'brewer', label: 'Cafeteiras' },
-          { value: 'feitos', label: 'Conquistas' },
+          { value: 'cup', label: t('col.tabShelf') },
+          { value: 'brewer', label: t('col.tabBrewers') },
+          { value: 'feitos', label: t('col.tabAchievements') },
         ]}
       />
 
@@ -99,7 +104,7 @@ export default function Colecao() {
       ) : (
         <>
           <Shelf
-            items={tab === 'cup' ? cups() : brewers()}
+            items={(tab === 'cup' ? cups() : brewers()).map((i) => localize(lang, i))}
             owned={owned}
             selected={tab === 'cup' ? sel.cup : sel.brewer}
             onSelect={(id) => {
@@ -113,16 +118,16 @@ export default function Colecao() {
               <View style={{ flex: 1, gap: 4, minWidth: 0 }}>
                 <Txt v="title">{detail.name}</Txt>
                 <Txt v="small" color="muted">
-                  {hasDetail ? detail.blurb : detail.streakUnlock ? `Libera com ${detail.streakUnlock} dias de sequência.` : `Disponível no Guia por ${detail.price} moedas.`}
+                  {hasDetail ? detail.blurb : detail.streakUnlock ? t('col.unlockStreak', { n: detail.streakUnlock }) : t('col.availableGuide', { n: detail.price })}
                 </Txt>
                 {hasDetail && (
-                  <Button label={equipped ? 'Em uso' : 'Usar'} disabled={!!equipped} tone="dark" onPress={() => equip(detail.id)} style={{ paddingVertical: 9, marginTop: 6 }} />
+                  <Button label={equipped ? t('col.inUse') : t('col.use')} disabled={!!equipped} tone="dark" onPress={() => equip(detail.id)} style={{ paddingVertical: 9, marginTop: 6 }} />
                 )}
               </View>
             </Card>
           )}
           <Txt v="small" color="muted">
-            {finished} {finished === 1 ? 'copo terminado' : 'copos terminados'}. Itens conquistados aparecem na prateleira, os outros ficam em silhueta.
+            {t('col.footer', { n: finished })}
           </Txt>
         </>
       )}

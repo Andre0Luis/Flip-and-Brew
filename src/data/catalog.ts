@@ -1,10 +1,12 @@
+import { CONTENT, type ItemText } from './content';
+import type { Lang } from '@/i18n';
+
 export type ItemKind = 'brewer' | 'cup';
 
+// Parte neutra do catálogo. Nome e descrição vêm de data/content/<idioma>.ts.
 export type CatalogItem = {
   id: string;
   kind: ItemKind;
-  name: string;
-  blurb: string;
   /** moedas; 0 = já vem com o app */
   price: number;
   /** sequência (dias) necessária no lugar de moedas */
@@ -14,18 +16,23 @@ export type CatalogItem = {
 };
 
 export const CATALOG: CatalogItem[] = [
-  { id: 'v60', kind: 'brewer', name: 'Coado V60', blurb: 'Limpo e leve. Enche o copo em 45 minutos.', price: 0, brewMinutes: 45 },
-  { id: 'press', kind: 'brewer', name: 'Prensa francesa', blurb: 'Corpo cheio. Pede uma hora inteira.', price: 300, brewMinutes: 60 },
-  { id: 'moka', kind: 'brewer', name: 'Moka italiana', blurb: 'Forte e rápida. 30 minutos.', price: 600, brewMinutes: 30 },
-  { id: 'chemex', kind: 'brewer', name: 'Chemex', blurb: 'Para quem aguenta 75 minutos.', price: 0, streakUnlock: 30, brewMinutes: 75 },
-  { id: 'cup', kind: 'cup', name: 'Xícara de porcelana', blurb: 'A primeira da prateleira.', price: 0 },
-  { id: 'tiny', kind: 'cup', name: 'Xícara de espresso', blurb: 'Pequena, para o café curto.', price: 200 },
-  { id: 'mug', kind: 'cup', name: 'Caneca âmbar', blurb: 'Esmaltada, cor de caramelo.', price: 150 },
-  { id: 'mugb', kind: 'cup', name: 'Caneca petróleo', blurb: 'Azul esverdeado, bem fria na mão.', price: 150 },
-  { id: 'glass', kind: 'cup', name: 'Copo de latte', blurb: 'Vidro com camadas de leite.', price: 250 },
+  { id: 'v60', kind: 'brewer', price: 0, brewMinutes: 45 },
+  { id: 'press', kind: 'brewer', price: 300, brewMinutes: 60 },
+  { id: 'moka', kind: 'brewer', price: 600, brewMinutes: 30 },
+  { id: 'chemex', kind: 'brewer', price: 0, streakUnlock: 30, brewMinutes: 75 },
+  { id: 'cup', kind: 'cup', price: 0 },
+  { id: 'tiny', kind: 'cup', price: 200 },
+  { id: 'mug', kind: 'cup', price: 150 },
+  { id: 'mugb', kind: 'cup', price: 150 },
+  { id: 'glass', kind: 'cup', price: 250 },
 ];
+
+export type LocalizedItem = CatalogItem & ItemText;
 
 export const byId = (id: string) => CATALOG.find((i) => i.id === id);
 export const brewers = () => CATALOG.filter((i) => i.kind === 'brewer');
 export const cups = () => CATALOG.filter((i) => i.kind === 'cup');
 export const STARTER_IDS = CATALOG.filter((i) => i.price === 0 && !i.streakUnlock).map((i) => i.id);
+
+export const itemText = (lang: Lang, id: string): ItemText => CONTENT[lang].items[id] ?? CONTENT.pt.items[id] ?? { name: id, blurb: '' };
+export const localize = (lang: Lang, item: CatalogItem): LocalizedItem => ({ ...item, ...itemText(lang, item.id) });

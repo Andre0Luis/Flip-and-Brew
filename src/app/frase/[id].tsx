@@ -2,36 +2,40 @@ import React from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Block, Bullets, Callout, QuoteBlock, Reading } from '@/components/Reading';
 import { Button, Txt } from '@/components/ui';
-import { QUOTES, quoteById } from '@/data/quotes';
-import { ARTICLES } from '@/data/articles';
+import { getQuotes, quoteById } from '@/data/quotes';
+import { ARTICLE_BASE, articleById } from '@/data/articles';
+import { useI18n } from '@/i18n';
 
 export default function Frase() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const q = quoteById(String(id));
+  const { lang, t } = useI18n();
+  const q = quoteById(lang, String(id));
   if (!q) {
     return (
-      <Reading eyebrow="Frase">
-        <Txt v="body">Não encontramos esta frase.</Txt>
-        <Button label="Voltar" onPress={() => router.replace('/')} />
+      <Reading eyebrow={t('quote.eyebrow')}>
+        <Txt v="body">{t('quote.notFound')}</Txt>
+        <Button label={t('common.back')} onPress={() => router.replace('/')} />
       </Reading>
     );
   }
-  const article = ARTICLES.find((a) => a.quoteId === q.id);
-  const next = QUOTES[(QUOTES.findIndex((x) => x.id === q.id) + 1) % QUOTES.length];
+  const articleBase = ARTICLE_BASE.find((a) => a.quoteId === q.id);
+  const article = articleBase ? articleById(lang, articleBase.id) : undefined;
+  const quotes = getQuotes(lang);
+  const next = quotes[(quotes.findIndex((x) => x.id === q.id) + 1) % quotes.length];
 
   return (
-    <Reading eyebrow="Frase do dia">
+    <Reading eyebrow={t('quote.eyebrow')}>
       <QuoteBlock text={q.text} by={`${q.author} · ${q.source}`} />
-      <Block label="Contexto">
+      <Block label={t('quote.context')}>
         <Txt v="body">{q.context}</Txt>
       </Block>
-      <Block label="Tente hoje">
+      <Block label={t('article.tryToday')}>
         <Bullets items={q.tryToday} />
       </Block>
-      <Callout label="Tradução livre">As frases são traduções livres feitas para o app. Confira a obra original para citar.</Callout>
-      {article && <Button tone="dark" label={`Ler: ${article.title}`} onPress={() => router.push({ pathname: '/artigo/[id]', params: { id: article.id } })} />}
-      <Button tone="quiet" label="Próxima frase" onPress={() => router.replace({ pathname: '/frase/[id]', params: { id: next.id } })} />
+      <Callout label={t('quote.freeTranslation')}>{t('quote.freeTranslationNote')}</Callout>
+      {article && <Button tone="dark" label={t('quote.readArticle', { title: article.title })} onPress={() => router.push({ pathname: '/artigo/[id]', params: { id: article.id } })} />}
+      <Button tone="quiet" label={t('quote.next')} onPress={() => router.replace({ pathname: '/frase/[id]', params: { id: next.id } })} />
     </Reading>
   );
 }

@@ -26,4 +26,3 @@ export function outcomeOf(startedAt: number, targetMs: number, now: number): Bre
   return { elapsedMs, status, coins: coinsFor(elapsedMs, targetMs), quality: qualityOf(elapsedMs / targetMs) };
 }
 
-export const QUALITY_LABEL: Record<Quality, string> = { ralo: 'Ralo', equilibrado: 'Equilibrado', encorpado: 'Encorpado' };

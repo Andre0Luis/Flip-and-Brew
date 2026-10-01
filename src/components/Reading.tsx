@@ -4,17 +4,19 @@ import { useRouter } from 'expo-router';
 import { Icon } from './Icon';
 import { Card, Screen, Txt } from './ui';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useI18n } from '@/i18n';
 
 export function Reading({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
   const router = useRouter();
   const { c } = useTheme();
+  const { t } = useI18n();
   return (
     <Screen edges={['top', 'bottom']}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
-        <Pressable accessibilityRole="button" accessibilityLabel="Voltar" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} hitSlop={12} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('common.back')} onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} hitSlop={12} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <Icon name="back" color={c.muted} />
           <Txt v="label" color="muted">
-            Voltar
+            {t('common.back')}
           </Txt>
         </Pressable>
         <Txt v="label" color="muted">

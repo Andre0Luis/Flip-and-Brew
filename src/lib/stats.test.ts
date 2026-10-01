@@ -89,13 +89,13 @@ test('leitura antifrágil compara o dia seguinte a uma falha com a média', () =
 
 test('gatilhos contados e ordenados', () => {
   const s = [
-    session(1, 8, 10, { trigger: 'Trabalho' }),
-    session(2, 8, 10, { trigger: 'Tédio' }),
-    session(3, 8, 10, { trigger: 'Trabalho' }),
+    session(1, 8, 10, { trigger: 'work' }),
+    session(2, 8, 10, { trigger: 'boredom' }),
+    session(3, 8, 10, { trigger: 'work' }),
     session(4, 8, 50),
   ];
   assert.deepEqual(triggerCounts(s, 30, NOW), [
-    { trigger: 'Trabalho', count: 2 },
-    { trigger: 'Tédio', count: 1 },
+    { trigger: 'work', count: 2 },
+    { trigger: 'boredom', count: 1 },
   ]);
 });

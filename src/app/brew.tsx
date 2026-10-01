@@ -5,12 +5,13 @@ import * as Haptics from 'expo-haptics';
 import { FillingCup, Ring } from '@/components/BrewViz';
 import { Button, Insight, Screen, Txt } from '@/components/ui';
 import { Coin } from '@/art/Art';
-import { byId } from '@/data/catalog';
-import { QUOTES } from '@/data/quotes';
+import { itemText } from '@/data/catalog';
+import { getQuotes } from '@/data/quotes';
+import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { useNow } from '@/hooks/useNow';
 import { clock, minutesLabel } from '@/lib/format';
-import { coinsFor, qualityOf, QUALITY_LABEL, type Quality } from '@/lib/brew';
+import { coinsFor, qualityOf, type Quality } from '@/lib/brew';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const GRADES: Quality[] = ['ralo', 'equilibrado', 'encorpado'];
@@ -18,6 +19,7 @@ const GRADES: Quality[] = ['ralo', 'equilibrado', 'encorpado'];
 export default function Brew() {
   const router = useRouter();
   const { c, r, f } = useTheme();
+  const { lang, t } = useI18n();
   const active = useApp((s) => s.active);
   const now = useNow(1000);
 
@@ -33,8 +35,8 @@ export default function Brew() {
   const elapsed = Math.max(0, Math.min(now - active.startedAt, active.targetMs));
   const progress = elapsed / active.targetMs;
   const quality = qualityOf(progress);
-  const brewer = byId(active.brewerId);
-  const quote = QUOTES[Math.floor(active.startedAt / 600_000) % QUOTES.length];
+  const quotes = getQuotes(lang);
+  const quote = quotes[Math.floor(active.startedAt / 600_000) % quotes.length];
 
   const stop = () => {
     const id = useApp.getState().finish(Date.now());
@@ -47,7 +49,7 @@ export default function Brew() {
     <Screen edges={['top', 'bottom']}>
       <View style={{ alignItems: 'center', gap: 20, paddingTop: 12 }}>
         <Txt v="label" color="muted">
-          Extraindo · {brewer?.name}
+          {t('brew.extracting', { name: itemText(lang, active.brewerId).name })}
         </Txt>
 
         <Ring progress={progress} size={250}>
@@ -55,11 +57,11 @@ export default function Brew() {
         </Ring>
 
         <View style={{ alignItems: 'center', gap: 6 }}>
-          <Txt v="numBig" accessibilityLabel={`Tempo offline ${clock(elapsed)}`}>
+          <Txt v="numBig" accessibilityLabel={t('brew.timeA11y', { time: clock(elapsed) })}>
             {clock(elapsed)}
           </Txt>
           <Txt v="label" color="muted">
-            de {minutesLabel(active.targetMs / 60_000)} para um copo cheio
+            {t('brew.ofFull', { time: minutesLabel(active.targetMs / 60_000) })}
           </Txt>
         </View>
 
@@ -69,7 +71,7 @@ export default function Brew() {
             return (
               <View key={g} style={{ paddingHorizontal: 12, paddingVertical: 5, borderRadius: r.pill, backgroundColor: on ? c.accent : c.soft }}>
                 <Txt v="label" style={{ color: on ? c.accentFg : c.muted, fontFamily: f.monoMedium }}>
-                  {QUALITY_LABEL[g]}
+                  {t(`quality.${g}`)}
                 </Txt>
               </View>
             );
@@ -79,18 +81,18 @@ export default function Brew() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Coin size={20} />
           <Txt v="small" color="muted">
-            Se parar agora: <Txt v="small" style={{ fontFamily: f.bodyBold }}>+{coinsFor(elapsed, active.targetMs)} moedas</Txt>
+            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs) })}
           </Txt>
         </View>
 
         <Txt v="body" color="muted" style={{ textAlign: 'center', maxWidth: 320 }}>
-          Vire o celular para baixo. O copo continua enchendo com a tela apagada, e pegar o celular encerra o copo.
+          {t('brew.hint')}
         </Txt>
       </View>
 
       <Insight tag={`${quote.author} · ${quote.source}`}>{quote.text}</Insight>
 
-      <Button label="Terminar agora" tone="quiet" onPress={stop} />
+      <Button label={t('brew.stop')} tone="quiet" onPress={stop} />
     </Screen>
   );
 }

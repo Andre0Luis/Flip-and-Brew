@@ -10,15 +10,17 @@ export type Session = {
   status: 'done' | 'interrupted';
   coins: number;
   quality: Quality;
-  trigger?: string;
+  trigger?: string; // chave neutra: notification, boredom, work, habit ou other
   mood?: number;
 };
 
 export type ActiveBrew = { brewerId: string; cupId: string; startedAt: number; targetMs: number };
 
 export type ThemeMode = 'system' | 'light' | 'dark';
+export type Language = 'pt' | 'en' | 'es';
 
 export type Settings = {
+  language: Language;
   goalMin: number;
   themeMode: ThemeMode;
   /** iniciar o copo ao virar o celular para baixo na tela Início */

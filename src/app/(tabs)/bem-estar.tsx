@@ -7,9 +7,11 @@ import { useApp } from '@/store/useApp';
 import {
   afterMissInsight, balanceScore, calendar, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
 } from '@/lib/stats';
-import { dateShort, minutesLabel } from '@/lib/format';
+import { minutesLabel } from '@/lib/format';
+import { formatDateShort, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
+import type { Key } from '@/i18n';
 
 type Tab = 'resumo' | 'padroes';
 
@@ -49,6 +51,8 @@ function Meter({ label, value, pct }: { label: string; value: string; pct: numbe
 
 export default function BemEstar() {
   const { c } = useTheme();
+  const { lang, t } = useI18n();
+  const dec = (n: number) => n.toFixed(1).replace('.', t('number.locale') === 'en-US' ? '.' : ',');
   const { sessions, settings } = useApp();
   const loadDemo = useApp((s) => s.loadDemo);
   const [tab, setTab] = useState<Tab>('resumo');
@@ -67,25 +71,25 @@ export default function BemEstar() {
 
   return (
     <Screen>
-      <Header title="Bem-estar" right={<Txt v="label" color="muted">Meta {minutesLabel(goal)}/dia</Txt>} />
+      <Header title={t('wb.title')} right={<Txt v="label" color="muted">{t('wb.goalHeader', { time: minutesLabel(goal) })}</Txt>} />
       <Segmented<Tab>
         value={tab}
         onChange={setTab}
         options={[
-          { value: 'resumo', label: 'Resumo' },
-          { value: 'padroes', label: 'Padrões' },
+          { value: 'resumo', label: t('wb.tabSummary') },
+          { value: 'padroes', label: t('wb.tabPatterns') },
         ]}
       />
 
       {empty ? (
         <Card style={{ gap: 12 }}>
-          <Txt v="title">Ainda não há copos por aqui</Txt>
+          <Txt v="title">{t('wb.emptyTitle')}</Txt>
           <Txt v="body" color="muted">
-            Termine um copo na tela Início e este painel mostra seu tempo offline, os horários em que você consegue largar o celular e o que costuma te interromper.
+            {t('wb.emptyBody')}
           </Txt>
-          <Button label="Ver com dados de exemplo" tone="quiet" onPress={loadDemo} />
+          <Button label={t('wb.demo')} tone="quiet" onPress={loadDemo} />
           <Txt v="small" color="muted">
-            Os dados de exemplo são fictícios e podem ser apagados em Ajustes.
+            {t('wb.demoNote')}
           </Txt>
         </Card>
       ) : tab === 'resumo' ? (
@@ -94,38 +98,38 @@ export default function BemEstar() {
             {score ? (
               <>
                 <Ring progress={score.value / 100} size={96} stroke={9}>
-                  <Txt v="num" style={{ fontSize: 26, lineHeight: 30 }} accessibilityLabel={`Equilíbrio ${score.value} de 100`}>
+                  <Txt v="num" style={{ fontSize: 26, lineHeight: 30 }} accessibilityLabel={t('wb.scoreA11y', { n: score.value })}>
                     {score.value}
                   </Txt>
                 </Ring>
                 <View style={{ flex: 1, gap: 10, minWidth: 0 }}>
-                  <Meter label="Meta diária (7 dias)" value={`${Math.round(score.goalPct * 100)}%`} pct={score.goalPct} />
-                  <Meter label="Copos terminados" value={`${Math.round(score.completionPct * 100)}%`} pct={score.completionPct} />
-                  <Meter label="Sequência" value={`${days} ${days === 1 ? 'dia' : 'dias'}`} pct={score.streakPct} />
+                  <Meter label={t('wb.meterGoal')} value={`${Math.round(score.goalPct * 100)}%`} pct={score.goalPct} />
+                  <Meter label={t('wb.meterDone')} value={`${Math.round(score.completionPct * 100)}%`} pct={score.completionPct} />
+                  <Meter label={t('wb.meterStreak')} value={`${days} ${t('unit.day', { n: days })}`} pct={score.streakPct} />
                 </View>
               </>
             ) : (
               <Txt v="body" color="muted">
-                Sem copos nos últimos 7 dias. Termine um para ver seu equilíbrio.
+                {t('wb.noWeek')}
               </Txt>
             )}
           </Card>
           <Txt v="small" color="muted" style={{ marginTop: -6 }}>
-            Equilíbrio: 50% meta diária, 30% copos terminados e 20% sequência (14 dias enche a barra).
+            {t('wb.scoreNote')}
           </Txt>
 
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Kpi label="Offline na semana" value={minutesLabel(wk.minutes)} note={`${wk.deltaMinutes >= 0 ? '+' : '−'}${minutesLabel(Math.abs(wk.deltaMinutes))} vs. anterior`} good={wk.deltaMinutes >= 0} />
-            <Kpi label="Maior sessão" value={best ? minutesLabel(best.elapsedMs / 60_000) : '—'} note={best ? dateShort(best.startedAt) : undefined} />
+            <Kpi label={t('wb.kpiOffline')} value={minutesLabel(wk.minutes)} note={t('wb.vsPrev', { sign: wk.deltaMinutes >= 0 ? '+' : '−', time: minutesLabel(Math.abs(wk.deltaMinutes)) })} good={wk.deltaMinutes >= 0} />
+            <Kpi label={t('wb.kpiBest')} value={best ? minutesLabel(best.elapsedMs / 60_000) : '—'} note={best ? formatDateShort(lang, best.startedAt) : undefined} />
           </View>
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Kpi label="Copos cheios" value={String(wk.cups)} note={`de ${wk.sessions} iniciados`} />
-            <Kpi label="Interrompidos" value={String(wk.interrupted)} note="você pegou o celular antes do fim" />
+            <Kpi label={t('wb.kpiCups')} value={String(wk.cups)} note={t('wb.ofStarted', { n: wk.sessions })} />
+            <Kpi label={t('wb.kpiInterrupted')} value={String(wk.interrupted)} note={t('wb.pickedEarly')} />
           </View>
 
           <Card style={{ gap: 8 }}>
             <Txt v="label" color="muted">
-              Minutos offline por dia
+              {t('wb.chartWeek')}
             </Txt>
             <WeekBars days={week} />
           </Card>
@@ -133,10 +137,10 @@ export default function BemEstar() {
           <Card style={{ gap: 8 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Txt v="label" color="muted">
-                Últimas 4 semanas
+                {t('wb.last4')}
               </Txt>
               <Txt v="label" color="muted">
-                {calendar(sessions, goal).filter((x) => x.missed).length} sem copo
+                {t('wb.noCup', { n: calendar(sessions, goal).filter((x) => x.missed).length })}
               </Txt>
             </View>
             <CalendarGrid cells={calendar(sessions, goal)} />
@@ -144,64 +148,62 @@ export default function BemEstar() {
 
           {miss ? (
             miss.percent >= 0 ? (
-              <Insight tag="Antifrágil · Taleb">
-                Depois de um dia sem copo, você passou {miss.percent}% mais tempo offline que o seu normal. A falha te deixou mais forte.
-              </Insight>
+              <Insight tag={t('wb.tagAntifragile')}>{t('wb.insightMore', { n: miss.percent })}</Insight>
             ) : (
-              <Insight tag="Antifrágil · Taleb">
-                Depois de um dia sem copo, você passou {Math.abs(miss.percent)}% menos tempo offline que o seu normal. Um copo curto no dia seguinte costuma ajudar a retomar.
-              </Insight>
+              <Insight tag={t('wb.tagAntifragile')}>{t('wb.insightLess', { n: Math.abs(miss.percent) })}</Insight>
             )
           ) : (
-            <Insight tag="Antifrágil · Taleb">Um dia perdido não apaga o que você acumulou. Registrar o motivo mostra onde reforçar.</Insight>
+            <Insight tag={t('wb.tagAntifragile')}>{t('wb.insightDefault')}</Insight>
           )}
         </>
       ) : (
         <>
           <Card style={{ gap: 8 }}>
             <Txt v="label" color="muted">
-              Quando você fica offline · 30 dias
+              {t('wb.hourTitle')}
             </Txt>
             <HourBars hours={hrs} />
             {hrs.some((h) => h > 0) && (
               <Txt v="small" color="muted">
-                Seus horários mais fortes: {[...hrs.map((m, h) => ({ m, h }))].sort((a, b) => b.m - a.m).slice(0, 3).map((x) => `${x.h}h`).sort((a, b) => parseInt(a) - parseInt(b)).join(', ')}.
+                {t('wb.strongest', { list: [...hrs.map((m, h) => ({ m, h }))].sort((a, b) => b.m - a.m).slice(0, 3).map((x) => x.h).sort((a, b) => a - b).map((h) => `${h}h`).join(', ') })}
               </Txt>
             )}
           </Card>
 
           <Card style={{ gap: 10 }}>
             <Txt v="label" color="muted">
-              O que interrompe seus copos
+              {t('wb.triggersTitle')}
             </Txt>
             {trig.length ? (
               <>
-                {trig.map((t) => (
-                  <View key={t.trigger} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                    <Txt v="small" style={{ width: 88 }}>
-                      {t.trigger}
+                {trig.map((tr) => (
+                  <View key={tr.trigger} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Txt v="small" style={{ width: 96 }}>
+                      {t(`trigger.${tr.trigger}` as Key)}
                     </Txt>
                     <View style={{ flex: 1 }}>
-                      <Bar pct={t.count / trig[0].count} color="cupFill" height={8} />
+                      <Bar pct={tr.count / trig[0].count} color="cupFill" height={8} />
                     </View>
                     <Txt v="small" color="muted" style={{ width: 28, textAlign: 'right' }}>
-                      {t.count}×
+                      {tr.count}×
                     </Txt>
                   </View>
                 ))}
                 <Txt v="small" color="muted">
-                  {trig[0].trigger === 'Notificação'
-                    ? 'Notificações lideram. Desligue as que não pedem resposta.'
-                    : trig[0].trigger === 'Tédio'
-                      ? 'O tédio aparece mais. Ele passa em alguns minutos se você esperar.'
-                      : trig[0].trigger === 'Trabalho'
-                        ? 'O trabalho interrompe mais. Combine horários fixos para os copos.'
-                        : 'Observe quando isso acontece e escolha um horário mais fácil.'}
+                  {t(
+                    trig[0].trigger === 'notification'
+                      ? 'wb.trigNote.notification'
+                      : trig[0].trigger === 'boredom'
+                        ? 'wb.trigNote.boredom'
+                        : trig[0].trigger === 'work'
+                          ? 'wb.trigNote.work'
+                          : 'wb.trigNote.other',
+                  )}
                 </Txt>
               </>
             ) : (
               <Txt v="small" color="muted">
-                Quando você parar um copo cedo, a tela de resultado pergunta o motivo. Os registros aparecem aqui.
+                {t('wb.trigEmpty')}
               </Txt>
             )}
           </Card>
@@ -209,11 +211,11 @@ export default function BemEstar() {
           <Card style={{ gap: 10 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Txt v="label" color="muted">
-                Como você se sentiu depois do copo
+                {t('wb.moodTitle')}
               </Txt>
               {mood && (
                 <Txt v="label" color="muted">
-                  média {mood.average.toFixed(1).replace('.', ',')}
+                  {t('wb.moodAvg', { n: dec(mood.average) })}
                 </Txt>
               )}
             </View>
@@ -226,18 +228,18 @@ export default function BemEstar() {
                 </View>
                 {mood.high !== null && mood.low !== null && (
                   <Txt v="small" color="muted">
-                    Em dias com mais de {minutesLabel(Math.min(goal, 120))} offline, o humor médio foi {mood.high.toFixed(1).replace('.', ',')}. Nos outros, {mood.low.toFixed(1).replace('.', ',')}.
+                    {t('wb.moodCompare', { time: minutesLabel(Math.min(goal, 120)), a: dec(mood.high), b: dec(mood.low) })}
                   </Txt>
                 )}
               </>
             ) : (
               <Txt v="small" color="muted">
-                Responda “Como você se sente agora?” ao fim dos copos para ver a relação com o tempo offline.
+                {t('wb.moodEmpty')}
               </Txt>
             )}
           </Card>
 
-          <Insight tag="Estoicismo · Epicteto">Observe o padrão sem se julgar. O que você vê aqui é o que depende de você ajustar.</Insight>
+          <Insight tag={t('wb.tagStoic')}>{t('wb.observe')}</Insight>
         </>
       )}
     </Screen>

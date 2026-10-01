@@ -34,9 +34,8 @@ export function todayStats(sessions: Session[], now = Date.now()) {
   };
 }
 
-const INITIALS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-
-export type DayBar = { key: string; label: string; minutes: number; isToday: boolean };
+/** weekday: 0 (domingo) a 6 (sábado). O nome ou a inicial vem do idioma. */
+export type DayBar = { key: string; weekday: number; minutes: number; isToday: boolean };
 
 export function lastDays(sessions: Session[], n: number, now = Date.now()): DayBar[] {
   const by = minutesByDay(sessions);
@@ -45,12 +44,12 @@ export function lastDays(sessions: Session[], n: number, now = Date.now()): DayB
   for (let i = n - 1; i >= 0; i--) {
     const ts = t0 - i * DAY;
     const k = dayKey(ts);
-    out.push({ key: k, label: INITIALS[new Date(ts).getDay()], minutes: by[k] ?? 0, isToday: i === 0 });
+    out.push({ key: k, weekday: new Date(ts).getDay(), minutes: by[k] ?? 0, isToday: i === 0 });
   }
   return out;
 }
 
-export type Cell = { key: string; level: 0 | 1 | 2 | 3; missed: boolean; isToday: boolean; label: string };
+export type Cell = { key: string; level: 0 | 1 | 2 | 3; missed: boolean; isToday: boolean; weekday: number };
 
 /** Calendário de 4 semanas terminando hoje. Nível 3 = meta batida. "missed" = dia sem nada depois do primeiro uso. */
 export function calendar(sessions: Session[], goalMin: number, days = 28, now = Date.now()): Cell[] {
@@ -64,7 +63,7 @@ export function calendar(sessions: Session[], goalMin: number, days = 28, now = 
     const m = by[k] ?? 0;
     const ratio = goalMin > 0 ? m / goalMin : 0;
     const level: Cell['level'] = m < 1 ? 0 : ratio >= 1 ? 3 : ratio >= 0.5 ? 2 : 1;
-    out.push({ key: k, level, missed: m < 1 && ts >= first && i !== 0, isToday: i === 0, label: INITIALS[new Date(ts).getDay()] });
+    out.push({ key: k, level, missed: m < 1 && ts >= first && i !== 0, isToday: i === 0, weekday: new Date(ts).getDay() });
   }
   return out;
 }
@@ -104,7 +103,7 @@ export function hourly(sessions: Session[], days = 30, now = Date.now()): number
   return out;
 }
 
-export const TRIGGERS = ['Notificação', 'Tédio', 'Trabalho', 'Hábito', 'Outro'] as const;
+export const TRIGGERS = ['notification', 'boredom', 'work', 'habit', 'other'] as const;
 export type Trigger = (typeof TRIGGERS)[number];
 
 export function triggerCounts(sessions: Session[], days = 30, now = Date.now()): { trigger: string; count: number }[] {

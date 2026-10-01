@@ -5,17 +5,19 @@ import { Art } from '@/art/Art';
 import { CalibrateCard } from '@/components/CalibrateCard';
 import { Icon } from '@/components/Icon';
 import { Button, Card, Chip, CoinBadge, Screen, Txt } from '@/components/ui';
-import { QUOTES, quoteOfDay } from '@/data/quotes';
-import { brewers, byId } from '@/data/catalog';
+import { getQuotes, quoteOfDay } from '@/data/quotes';
+import { brewers, byId, itemText } from '@/data/catalog';
+import { formatDateLong, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { streak, todayStats } from '@/lib/stats';
-import { dateLong, minutesLabel } from '@/lib/format';
+import { minutesLabel } from '@/lib/format';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 
 export default function Inicio() {
   const router = useRouter();
   const { c } = useTheme();
+  const { lang, t } = useI18n();
   const { coins, owned, brewerId, sessions, active, settings } = useApp();
   const equip = useApp((s) => s.equip);
   const start = useApp((s) => s.start);
@@ -29,9 +31,9 @@ export default function Inicio() {
 
   // A frase do dia vem primeiro e as outras seguem no carrossel.
   const quotes = useMemo(() => {
-    const first = quoteOfDay();
-    return [first, ...QUOTES.filter((q) => q.id !== first.id).slice(0, 4)];
-  }, []);
+    const first = quoteOfDay(lang);
+    return [first, ...getQuotes(lang).filter((q) => q.id !== first.id).slice(0, 4)];
+  }, [lang]);
   const [w, setW] = useState(0);
   const [page, setPage] = useState(0);
   // Todas as frases ganham a altura da mais alta, para o carrossel não deixar vazio embaixo.
@@ -54,9 +56,9 @@ export default function Inicio() {
         <CoinBadge coins={coins} onPress={() => router.push('/guia')} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <Txt v="small" color="muted">
-            sequência <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{days} {days === 1 ? 'dia' : 'dias'}</Txt>
+            {t('home.streak')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{days} {t('unit.day', { n: days })}</Txt>
           </Txt>
-          <Pressable accessibilityRole="button" accessibilityLabel="Ajustes" onPress={() => router.push('/ajustes')} hitSlop={10}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.settingsA11y')} onPress={() => router.push('/ajustes')} hitSlop={10}>
             <Icon name="gear" color={c.muted} />
           </Pressable>
         </View>
@@ -75,10 +77,10 @@ export default function Inicio() {
             getItemLayout={(_, i) => ({ length: w, offset: w * i, index: i })}
             onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / w))}
             renderItem={({ item, index }) => (
-              <Pressable accessibilityRole="button" accessibilityLabel={`Ler contexto: ${item.text}`} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => setCardH((h) => Math.max(h, Math.ceil(e.nativeEvent.layout.height)))} style={{ width: w }}>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('home.readContext', { text: item.text })} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => setCardH((h) => Math.max(h, Math.ceil(e.nativeEvent.layout.height)))} style={{ width: w }}>
                 <Card inverse style={{ gap: 12, minHeight: cardH, justifyContent: 'space-between' }}>
                   <Txt v="label" color="bg" style={{ opacity: 0.7 }}>
-                    {index === 0 ? `Frase do dia · ${dateLong(new Date())}` : 'Mais uma para hoje'}
+                    {index === 0 ? t('home.quoteOfDay', { date: formatDateLong(lang, new Date()) }) : t('home.moreToday')}
                   </Txt>
                   <Txt v="quote" color="bg">
                     {item.text}
@@ -101,27 +103,27 @@ export default function Inicio() {
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
         <Art id={brewerId} size={230} />
         <Txt v="small" color="muted">
-          {brewer?.name} · enche em {minutes} min
+          {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
         </Txt>
       </View>
 
       <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-        hoje <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} offline</Txt> · {today.cups} {today.cups === 1 ? 'copo' : 'copos'}
+        {t('home.todayPrefix')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} {t('home.offlineSuffix')}</Txt> · {today.cups} {t('unit.cup', { n: today.cups })}
       </Txt>
 
       {ownedBrewers.length > 1 && (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
           {ownedBrewers.map((b) => (
-            <Chip key={b.id} label={b.name} on={b.id === brewerId} onPress={() => equip(b.id)} />
+            <Chip key={b.id} label={itemText(lang, b.id).name} on={b.id === brewerId} onPress={() => equip(b.id)} />
           ))}
         </View>
       )}
 
       <View style={{ gap: 8 }}>
-        <Button label={active ? 'Voltar ao copo em andamento' : 'Começar a passar'} onPress={begin} />
+        <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />
         {settings.autoStart && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-            Ou só vire o celular para baixo
+            {t('home.flipHint')}
           </Txt>
         )}
       </View>

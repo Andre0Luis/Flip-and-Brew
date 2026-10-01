@@ -6,20 +6,22 @@ import * as Haptics from 'expo-haptics';
 import { Icon, type IconName } from '@/components/Icon';
 import { Txt } from '@/components/ui';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useI18n, type Key } from '@/i18n';
 
 type TabBarProps = Parameters<NonNullable<React.ComponentProps<typeof Tabs>['tabBar']>>[0];
 
-const ITEMS: Record<string, { label: string; icon: IconName }> = {
-  index: { label: 'Início', icon: 'home' },
-  guia: { label: 'Guia', icon: 'bag' },
-  'bem-estar': { label: 'Bem-estar', icon: 'heart' },
-  aprender: { label: 'Aprender', icon: 'book' },
-  colecao: { label: 'Coleção', icon: 'shelf' },
+const ITEMS: Record<string, { label: Key; icon: IconName }> = {
+  index: { label: 'tab.home', icon: 'home' },
+  guia: { label: 'tab.guide', icon: 'bag' },
+  'bem-estar': { label: 'tab.wellbeing', icon: 'heart' },
+  aprender: { label: 'tab.learn', icon: 'book' },
+  colecao: { label: 'tab.collection', icon: 'shelf' },
 };
 
 function TabBar({ state, navigation }: TabBarProps) {
   const { c } = useTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useI18n();
   return (
     <View style={{ flexDirection: 'row', backgroundColor: c.surface, borderTopWidth: 1, borderTopColor: c.line, paddingTop: 8, paddingBottom: Math.max(insets.bottom, 8) }}>
       {state.routes.map((route, i) => {
@@ -31,7 +33,7 @@ function TabBar({ state, navigation }: TabBarProps) {
           <Pressable
             key={route.key}
             accessibilityRole="tab"
-            accessibilityLabel={item.label}
+            accessibilityLabel={t(item.label)}
             accessibilityState={{ selected: focused }}
             onPress={() => {
               const e = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
@@ -44,7 +46,7 @@ function TabBar({ state, navigation }: TabBarProps) {
           >
             <Icon name={item.icon} color={color} />
             <Txt v="small" style={{ fontSize: 11, lineHeight: 14, color }}>
-              {item.label}
+              {t(item.label)}
             </Txt>
             <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: focused ? c.accent : 'transparent' }} />
           </Pressable>

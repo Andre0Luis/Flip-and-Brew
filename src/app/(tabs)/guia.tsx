@@ -4,10 +4,10 @@ import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
 import { Icon } from '@/components/Icon';
 import { Bar, Button, Card, CoinBadge, Header, Screen, Segmented, Txt } from '@/components/ui';
-import { brewers, cups, type CatalogItem } from '@/data/catalog';
+import { brewers, cups, localize, type LocalizedItem } from '@/data/catalog';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
-import { number } from '@/lib/format';
+import { formatNumber, useI18n } from '@/i18n';
 import { buyCoinPack, loadCoinPacks, purchasesConfigured, type CoinPack } from '@/lib/purchases';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
@@ -16,12 +16,14 @@ type Tab = 'brewer' | 'cup';
 
 export default function Guia() {
   const { c, r } = useTheme();
+  const { lang, t } = useI18n();
+  const num = (n: number) => formatNumber(lang, n);
   const { coins, owned, brewerId, cupId, sessions } = useApp();
   const buy = useApp((s) => s.buy);
   const equip = useApp((s) => s.equip);
   const addCoins = useApp((s) => s.addCoins);
   const [tab, setTab] = useState<Tab>('brewer');
-  const [pending, setPending] = useState<CatalogItem | null>(null);
+  const [pending, setPending] = useState<LocalizedItem | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [packs, setPacks] = useState<CoinPack[]>([]);
   const days = streak(sessions);
@@ -30,10 +32,10 @@ export default function Guia() {
     if (purchasesConfigured) loadCoinPacks().then(setPacks);
   }, []);
 
-  const items = tab === 'brewer' ? brewers() : cups();
+  const items = (tab === 'brewer' ? brewers() : cups()).map((i) => localize(lang, i));
   const equipped = tab === 'brewer' ? brewerId : cupId;
 
-  const onItem = (item: CatalogItem) => {
+  const onItem = (item: LocalizedItem) => {
     setMessage(null);
     if (owned.includes(item.id)) {
       equip(item.id);
@@ -48,17 +50,17 @@ export default function Guia() {
     if (res === 'ok') {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
       equip(pending.id);
-      setMessage(`${pending.name} está na sua prateleira e já em uso.`);
+      setMessage(t('guide.bought', { name: pending.name }));
     } else if (res === 'poor') {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-      setMessage(`Faltam ${number(pending.price - coins)} moedas para ${pending.name}.`);
+      setMessage(t('guide.missing', { n: num(pending.price - coins), name: pending.name }));
     }
     setPending(null);
   };
 
   return (
     <Screen>
-      <Header title="Guia" right={<CoinBadge coins={coins} />} />
+      <Header title={t('guide.title')} right={<CoinBadge coins={coins} />} />
       <Segmented<Tab>
         value={tab}
         onChange={(t) => {
@@ -66,28 +68,28 @@ export default function Guia() {
           setPending(null);
         }}
         options={[
-          { value: 'brewer', label: 'Cafeteiras' },
-          { value: 'cup', label: 'Xícaras' },
+          { value: 'brewer', label: t('guide.brewers') },
+          { value: 'cup', label: t('guide.cups') },
         ]}
       />
 
       {pending && (
         <Card inverse style={{ gap: 10 }}>
           <Txt v="title" color="bg">
-            Comprar {pending.name}?
+            {t('guide.buyQ', { name: pending.name })}
           </Txt>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Coin size={22} />
             <Txt v="num" color="bg">
-              {number(pending.price)}
+              {num(pending.price)}
             </Txt>
             <Txt v="small" color="bg" style={{ opacity: 0.7 }}>
-              você tem {number(coins)}
+              {t('guide.haveCoins', { n: num(coins) })}
             </Txt>
           </View>
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Button label="Comprar" onPress={confirm} style={{ flex: 1 }} />
-            <Button label="Cancelar" tone="quietOnDark" onPress={() => setPending(null)} style={{ flex: 1 }} />
+            <Button label={t('guide.buy')} onPress={confirm} style={{ flex: 1 }} />
+            <Button label={t('guide.cancel')} tone="quietOnDark" onPress={() => setPending(null)} style={{ flex: 1 }} />
           </View>
         </Card>
       )}
@@ -106,7 +108,7 @@ export default function Guia() {
             <Pressable
               key={item.id}
               accessibilityRole="button"
-              accessibilityLabel={`${item.name}. ${inUse ? 'Em uso' : has ? 'Sua, toque para usar' : locked ? `Libera com ${item.streakUnlock} dias de sequência` : `${item.price} moedas`}`}
+              accessibilityLabel={`${item.name}. ${inUse ? t('guide.a11yInUse') : has ? t('guide.a11yOwned') : locked ? t('guide.a11yLocked', { n: item.streakUnlock ?? 0 }) : t('guide.a11yPrice', { n: num(item.price) })}`}
               onPress={() => onItem(item)}
               style={{ width: '47.5%', flexGrow: 1, backgroundColor: c.surface, borderRadius: r.lg, borderWidth: inUse ? 2 : 1, borderColor: inUse ? c.accent : c.line, padding: 10, gap: 8 }}
             >
@@ -124,24 +126,24 @@ export default function Guia() {
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                     <Icon name="lock" size={14} color={c.muted} />
                     <Txt v="label" color="muted">
-                      {days}/{item.streakUnlock} dias
+                      {t('guide.streakProgress', { d: days, n: item.streakUnlock ?? 0 })}
                     </Txt>
                   </View>
                   <Bar pct={days / (item.streakUnlock ?? 1)} />
                 </View>
               ) : inUse ? (
                 <Txt v="label" color="accent">
-                  Em uso
+                  {t('guide.inUse')}
                 </Txt>
               ) : has ? (
                 <Txt v="label" color="muted">
-                  Sua · usar
+                  {t('guide.ownedUse')}
                 </Txt>
               ) : (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Coin size={18} />
                   <Txt v="num" style={{ fontSize: 15 }}>
-                    {number(item.price)}
+                    {num(item.price)}
                   </Txt>
                 </View>
               )}
@@ -151,7 +153,7 @@ export default function Guia() {
       </View>
 
       <Card style={{ gap: 8 }}>
-        <Txt v="title">Moedas</Txt>
+        <Txt v="title">{t('guide.coinsTitle')}</Txt>
         {purchasesConfigured ? (
           packs.length ? (
             <View style={{ gap: 8 }}>
@@ -159,25 +161,25 @@ export default function Guia() {
                 <Button
                   key={p.id}
                   tone="quiet"
-                  label={`${number(p.coins)} moedas · ${p.price}`}
+                  label={t('guide.packLine', { n: num(p.coins), price: p.price })}
                   onPress={async () => {
                     const got = await buyCoinPack(p);
                     if (got) {
                       addCoins(got);
-                      setMessage(`${number(got)} moedas adicionadas.`);
-                    } else setMessage('A compra foi cancelada ou não foi concluída.');
+                      setMessage(t('guide.packAdded', { n: num(got) }));
+                    } else setMessage(t('guide.packCancel'));
                   }}
                 />
               ))}
             </View>
           ) : (
             <Txt v="small" color="muted">
-              Não foi possível carregar os pacotes agora. Tente de novo mais tarde.
+              {t('guide.packsFail')}
             </Txt>
           )
         ) : (
           <Txt v="small" color="muted">
-            Você ganha moedas ficando offline: uma por minuto, mais um bônus de 20% quando o copo enche. A compra de moedas ainda não está ativa nesta versão.
+            {t('guide.coinsInfo')}
           </Txt>
         )}
       </Card>

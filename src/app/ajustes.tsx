@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router';
 import { Button, Card, Chip, Screen, Segmented, Txt } from '@/components/ui';
 import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
-import type { ThemeMode } from '@/store/types';
+import type { Language, ThemeMode } from '@/store/types';
+import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const GOALS = [60, 90, 120, 180, 240];
@@ -21,13 +22,14 @@ function Row({ title, hint, value, onChange }: { title: string; hint: string; va
           {hint}
         </Txt>
       </View>
-      <Switch value={value} onValueChange={onChange} trackColor={{ true: c.accent, false: c.line }} accessibilityLabel={title} />
+      <Switch value={value} onValueChange={onChange} trackColor={{ true: c.accent, false: c.line }} thumbColor={c.surface} accessibilityLabel={title} />
     </View>
   );
 }
 
 export default function Ajustes() {
   const router = useRouter();
+  const { t } = useI18n();
   const { settings } = useApp();
   const set = useApp((s) => s.setSettings);
   const addCoins = useApp((s) => s.addCoins);
@@ -39,42 +41,51 @@ export default function Ajustes() {
   return (
     <Screen edges={['top', 'bottom']}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8 }}>
-        <Txt v="display">Ajustes</Txt>
-        <Button label="Fechar" tone="quiet" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} style={{ paddingVertical: 8, paddingHorizontal: 16 }} />
+        <Txt v="display">{t('set.title')}</Txt>
+        <Button label={t('common.close')} tone="quiet" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} style={{ paddingVertical: 8, paddingHorizontal: 16 }} />
       </View>
 
       <Card style={{ gap: 12 }}>
-        <Txt v="title">Meta diária offline</Txt>
+        <Txt v="title">{t('set.goal')}</Txt>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {GOALS.map((g) => (
-            <Chip key={g} label={g >= 60 ? `${g / 60 === Math.floor(g / 60) ? g / 60 : (g / 60).toFixed(1).replace('.', ',')} h` : `${g} min`} on={settings.goalMin === g} onPress={() => set({ goalMin: g })} />
+            <Chip key={g} label={`${(g / 60).toFixed(g % 60 === 0 ? 0 : 1).replace('.', t('number.locale') === 'en-US' ? '.' : ',')} h`} on={settings.goalMin === g} onPress={() => set({ goalMin: g })} />
           ))}
         </View>
       </Card>
 
       <Card style={{ gap: 12 }}>
-        <Txt v="title">Aparência</Txt>
+        <Txt v="title">{t('set.look')}</Txt>
         <Segmented<ThemeMode>
           value={settings.themeMode}
           onChange={(v) => set({ themeMode: v })}
           options={[
-            { value: 'system', label: 'Sistema' },
-            { value: 'light', label: 'Claro' },
-            { value: 'dark', label: 'Torra escura' },
+            { value: 'system', label: t('theme.system') },
+            { value: 'light', label: t('theme.light') },
+            { value: 'dark', label: t('theme.dark') },
           ]}
         />
       </Card>
 
+      <Card style={{ gap: 12 }}>
+        <Txt v="title">{t('set.language')}</Txt>
+        <Segmented<Language>
+          value={settings.language}
+          onChange={(v) => set({ language: v })}
+          options={LANGS.map((l) => ({ value: l, label: dictionaries[l]['lang.name'] }))}
+        />
+      </Card>
+
       <Card style={{ gap: 14 }}>
-        <Row title="Iniciar ao virar o celular" hint="Na tela Início, virar o celular para baixo por 2 segundos começa um copo." value={settings.autoStart} onChange={(v) => set({ autoStart: v })} />
+        <Row title={t('set.autoTitle')} hint={t('set.autoHint')} value={settings.autoStart} onChange={(v) => set({ autoStart: v })} />
         <View style={{ gap: 8 }}>
           <Txt v="small" color="muted">
-            Se virar o celular não inicia ou encerra o copo como esperado, calibre o sensor.
+            {t('set.calibrateHelp')}
           </Txt>
-          <Button label={calibrating ? 'Calibrando…' : 'Calibrar sensor'} tone="quiet" disabled={calibrating || !available} onPress={calibrate} />
+          <Button label={calibrating ? t('calib.busy') : t('set.calibrate')} tone="quiet" disabled={calibrating || !available} onPress={calibrate} />
           {!available && (
             <Txt v="small" color="muted">
-              Este aparelho (ou o navegador) não expõe o acelerômetro.
+              {t('set.noSensor')}
             </Txt>
           )}
           {cal && (
@@ -86,27 +97,27 @@ export default function Ajustes() {
       </Card>
 
       <Card style={{ gap: 14 }}>
-        <Txt v="title">Ferramentas de teste</Txt>
-        <Row title="Copos de 1 minuto" hint="Para testar o fluxo inteiro sem esperar. Vale para os próximos copos." value={settings.quickBrew} onChange={(v) => set({ quickBrew: v })} />
-        <Button label="Carregar 4 semanas de dados de exemplo" tone="quiet" onPress={loadDemo} />
-        <Button label="Ganhar 500 moedas" tone="quiet" onPress={() => addCoins(500)} />
+        <Txt v="title">{t('set.testTools')}</Txt>
+        <Row title={t('set.quick')} hint={t('set.quickHint')} value={settings.quickBrew} onChange={(v) => set({ quickBrew: v })} />
+        <Button label={t('set.demo')} tone="quiet" onPress={loadDemo} />
+        <Button label={t('set.plus500')} tone="quiet" onPress={() => addCoins(500)} />
         {confirmReset ? (
           <View style={{ gap: 8 }}>
             <Txt v="small" color="bad">
-              Isso apaga copos, moedas e itens. Não dá para desfazer.
+              {t('set.resetWarn')}
             </Txt>
             <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button label="Apagar tudo" tone="dark" style={{ flex: 1 }} onPress={() => { resetAll(); setConfirmReset(false); }} />
-              <Button label="Cancelar" tone="quiet" style={{ flex: 1 }} onPress={() => setConfirmReset(false)} />
+              <Button label={t('set.resetDo')} tone="dark" style={{ flex: 1 }} onPress={() => { resetAll(); setConfirmReset(false); }} />
+              <Button label={t('guide.cancel')} tone="quiet" style={{ flex: 1 }} onPress={() => setConfirmReset(false)} />
             </View>
           </View>
         ) : (
-          <Button label="Apagar todos os dados" tone="quiet" onPress={() => setConfirmReset(true)} />
+          <Button label={t('set.reset')} tone="quiet" onPress={() => setConfirmReset(true)} />
         )}
       </Card>
 
       <Txt v="small" color="muted">
-        Flip & Brew mede só o tempo que o app registra. Desbloqueios e tempo de tela do sistema ainda não entram nas contas.
+        {t('set.footer')}
       </Txt>
     </Screen>
   );

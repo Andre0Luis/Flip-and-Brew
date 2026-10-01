@@ -7,7 +7,7 @@ import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
 import { makeDemoSessions } from '@/lib/demo';
 
-export const DEFAULT_SETTINGS: Settings = { goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -160,8 +160,21 @@ export const useApp = create<State>()(
     }),
     {
       name: 'flip-and-brew-v2',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => appStorage),
+      // v1 guardava o gatilho como texto em português e não tinha idioma.
+      migrate: (persisted) => {
+        const p = (persisted ?? {}) as Record<string, any>;
+        const legacy: Record<string, string> = { Notificação: 'notification', Tédio: 'boredom', Trabalho: 'work', Hábito: 'habit', Outro: 'other' };
+        if (Array.isArray(p.sessions)) p.sessions = p.sessions.map((s: any) => (s.trigger && legacy[s.trigger] ? { ...s, trigger: legacy[s.trigger] } : s));
+        p.settings = { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) };
+        return p as State;
+      },
+      // O idioma e as demais configurações novas entram por cima do que já estava salvo.
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<State>;
+        return { ...current, ...p, settings: { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) } };
+      },
       partialize: (s) => ({
         coins: s.coins,
         owned: s.owned,

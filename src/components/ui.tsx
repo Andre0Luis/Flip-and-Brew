@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Coin } from '@/art/Art';
-import { number } from '@/lib/format';
+import { formatNumber, useI18n } from '@/i18n';
 
 type Variant = 'hero' | 'display' | 'quote' | 'title' | 'body' | 'small' | 'label' | 'num' | 'numBig';
 type ColorKey = 'fg' | 'muted' | 'accent' | 'good' | 'bad' | 'bg' | 'accentFg';
@@ -153,16 +153,17 @@ export function Chip({ label, on, onPress }: { label: string; on?: boolean; onPr
 
 export function CoinBadge({ coins, onPress }: { coins: number; onPress?: () => void }) {
   const { c, r } = useTheme();
+  const { lang, t } = useI18n();
   return (
     <Pressable
-      accessibilityLabel={`${coins} moedas`}
+      accessibilityLabel={t('common.coinsA11y', { n: coins })}
       onPress={onPress}
       disabled={!onPress}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, borderRadius: r.pill, paddingVertical: 5, paddingLeft: 6, paddingRight: 12 }}
     >
       <Coin size={22} />
       <Txt v="num" style={{ fontSize: 15 }}>
-        {number(coins)}
+        {formatNumber(lang, coins)}
       </Txt>
     </Pressable>
   );

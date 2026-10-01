@@ -5,10 +5,10 @@ import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
 import { Button, Card, Chip, Screen, Txt } from '@/components/ui';
 import { useApp } from '@/store/useApp';
-import { byId } from '@/data/catalog';
+import { itemText } from '@/data/catalog';
+import { useI18n } from '@/i18n';
 import { streak, TRIGGERS } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
-import { QUALITY_LABEL } from '@/lib/brew';
 import { useTheme } from '@/theme/ThemeProvider';
 
 function useCountUp(target: number, ms = 900) {
@@ -26,11 +26,12 @@ function useCountUp(target: number, ms = 900) {
   return v;
 }
 
-const MOODS = ['Mal', 'Meh', 'Ok', 'Bem', 'Ótimo'];
+const MOODS = [1, 2, 3, 4, 5] as const;
 
 export default function Resultado() {
   const router = useRouter();
   const { c, r, f } = useTheme();
+  const { lang, t } = useI18n();
   const sessions = useApp((s) => s.sessions);
   const lastId = useApp((s) => s.lastResultId);
   const setResult = useApp((s) => s.setResult);
@@ -45,68 +46,69 @@ export default function Resultado() {
 
   const done = session.status === 'done';
   const days = streak(sessions);
-  const cup = byId(session.cupId);
+  const cupName = itemText(lang, session.cupId).name;
 
   return (
     <Screen edges={['top', 'bottom']}>
       <View style={{ alignItems: 'center', gap: 10, paddingTop: 16 }}>
         <Txt v="label" color={done ? 'good' : 'muted'}>
-          {done ? 'Copo pronto' : 'Você parou cedo'}
+          {done ? t('result.done') : t('result.early')}
         </Txt>
         <Art id={session.cupId} size={170} />
         <Txt v="display" style={{ textAlign: 'center' }}>
-          {done ? 'Hora de saborear.' : 'O que foi feito conta.'}
+          {done ? t('result.doneTitle') : t('result.earlyTitle')}
         </Txt>
         <Txt v="body" color="muted" style={{ textAlign: 'center' }}>
-          {minutesLabel(session.elapsedMs / 60_000)} offline · {QUALITY_LABEL[session.quality]} · {cup?.name}
+          {t('result.line', { time: minutesLabel(session.elapsedMs / 60_000), quality: t(`quality.${session.quality}`), cup: cupName })}
         </Txt>
       </View>
 
       <Card style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
           <Coin size={30} />
-          <Txt v="numBig" style={{ fontSize: 32 }} accessibilityLabel={`Mais ${session.coins} moedas`}>
+          <Txt v="numBig" style={{ fontSize: 32 }} accessibilityLabel={t('result.plusA11y', { n: session.coins })}>
             +{coins}
           </Txt>
         </View>
         <Txt v="small" color="muted">
-          sequência {days} {days === 1 ? 'dia' : 'dias'}
+          {t('result.streak', { n: days, unit: t('unit.day', { n: days }) })}
         </Txt>
       </Card>
 
       {!done && (
         <View style={{ gap: 10 }}>
-          <Txt v="title">O que te tirou daqui?</Txt>
+          <Txt v="title">{t('result.whatTook')}</Txt>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {TRIGGERS.map((t) => (
-              <Chip key={t} label={t} on={session.trigger === t} onPress={() => setResult(session.id, { trigger: t })} />
+            {TRIGGERS.map((k) => (
+              <Chip key={k} label={t(`trigger.${k}`)} on={session.trigger === k} onPress={() => setResult(session.id, { trigger: k })} />
             ))}
           </View>
           <Txt v="small" color="muted">
-            Parar cedo também ensina. Anotar o motivo mostra onde reforçar.
+            {t('result.earlyNote')}
           </Txt>
         </View>
       )}
 
       <View style={{ gap: 10 }}>
-        <Txt v="title">Como você se sente agora?</Txt>
+        <Txt v="title">{t('result.how')}</Txt>
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          {MOODS.map((label, i) => {
-            const on = session.mood === i + 1;
+          {MOODS.map((n) => {
+            const label = t(`mood.${n}`);
+            const on = session.mood === n;
             return (
               <Pressable
-                key={label}
+                key={n}
                 accessibilityRole="button"
-                accessibilityLabel={`${label}, ${i + 1} de 5`}
+                accessibilityLabel={t('mood.a11y', { label, n })}
                 accessibilityState={{ selected: on }}
                 onPress={() => {
                   Haptics.selectionAsync().catch(() => {});
-                  setResult(session.id, { mood: i + 1 });
+                  setResult(session.id, { mood: n });
                 }}
                 style={{ flex: 1, alignItems: 'center', gap: 6, paddingVertical: 12, borderRadius: r.md, backgroundColor: on ? c.accent : c.surface, borderWidth: 1, borderColor: on ? c.accent : c.line }}
               >
                 <Txt v="num" style={{ color: on ? c.accentFg : c.fg }}>
-                  {i + 1}
+                  {n}
                 </Txt>
                 <Txt v="small" style={{ fontSize: 11, color: on ? c.accentFg : c.muted, fontFamily: f.bodyMedium }}>
                   {label}
@@ -117,7 +119,7 @@ export default function Resultado() {
         </View>
       </View>
 
-      <Button label="Concluir" onPress={() => router.dismissTo('/')} />
+      <Button label={t('result.finish')} onPress={() => router.dismissTo('/')} />
     </Screen>
   );
 }

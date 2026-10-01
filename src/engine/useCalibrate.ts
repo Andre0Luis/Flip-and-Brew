@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApp } from '@/store/useApp';
 import { calibrateFaceUp, sensorAvailable } from './sensor';
+import { useI18n, type Key } from '@/i18n';
 
 const COUNTDOWN_S = 4;
 
 /** Calibra o sentido do eixo z. Dá alguns segundos para a pessoa apoiar o celular na mesa, tela para cima. */
 export function useCalibrate() {
   const set = useApp((s) => s.setSettings);
+  const { t } = useI18n();
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  // Guardamos a chave e o contador, não o texto, para a mensagem acompanhar a troca de idioma.
+  const [msg, setMsg] = useState<{ key: Key; n?: number } | null>(null);
   const [available, setAvailable] = useState(false);
   const alive = useRef(true);
 
@@ -25,7 +28,7 @@ export function useCalibrate() {
     setBusy(true);
     for (let i = COUNTDOWN_S; i > 0; i--) {
       if (!alive.current) return;
-      setMessage(`Apoie o celular numa mesa, com a tela para cima. Lendo em ${i}…`);
+      setMsg({ key: 'calib.countdown', n: i });
       await new Promise((r) => setTimeout(r, 1000));
     }
     const res = await calibrateFaceUp();
@@ -33,10 +36,11 @@ export function useCalibrate() {
     setBusy(false);
     if ('sign' in res) {
       set({ faceUpSign: res.sign });
-      setMessage('Pronto. Agora virar o celular para baixo inicia o copo, e pegá-lo encerra.');
-    } else if (res.error === 'not-flat') setMessage('O celular não estava deitado e parado. Apoie-o numa mesa, com a tela para cima, e tente de novo.');
-    else setMessage('Este aparelho não tem acelerômetro disponível.');
+      setMsg({ key: 'calib.ok' });
+    } else if (res.error === 'not-flat') setMsg({ key: 'calib.notFlat' });
+    else setMsg({ key: 'calib.unavailable' });
   }, [busy, set]);
 
+  const message = msg ? t(msg.key, msg.n !== undefined ? { n: msg.n } : undefined) : null;
   return { run, busy, message, available };
 }
