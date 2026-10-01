@@ -12,6 +12,7 @@
     "expo-font": "~56.0.5",
     "expo-haptics": "~56.0.3",
     "expo-linking": "~56.0.13",
+    "expo-notifications": "~56.0.26",
     "expo-router": "~56.2.8",
     "expo-sensors": "~56.0.6",
     "expo-splash-screen": "~56.0.10",
@@ -33,6 +34,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "^56.0.4",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3"
   },
@@ -41,9 +44,11 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint",
+    "lint": "eslint .",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && npm test",
+    "docs:privacy": "tsx scripts/gen-privacy.ts"
   },
   "private": true
 }

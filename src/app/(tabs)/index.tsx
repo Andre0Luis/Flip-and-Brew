@@ -3,6 +3,8 @@ import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native'
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Art } from '@/art/Art';
 import { CalibrateCard } from '@/components/CalibrateCard';
+import { useSystemUsage } from '@/hooks/useSystemUsage';
+import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
 import { Button, Card, Chip, CoinBadge, Screen, Txt } from '@/components/ui';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
@@ -41,6 +43,8 @@ export default function Inicio() {
   const list = useRef<FlatList>(null);
 
   const today = todayStats(sessions);
+  const usage = useSystemUsage(1);
+  const unlocksToday = usage.permitted ? summarizeUsage(usage.days).today?.unlocks : undefined;
   const days = streak(sessions);
   const brewer = byId(brewerId);
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
@@ -108,7 +112,7 @@ export default function Inicio() {
       </View>
 
       <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-        {t('home.todayPrefix')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} {t('home.offlineSuffix')}</Txt> · {today.cups} {t('unit.cup', { n: today.cups })}
+        {t('home.todayPrefix')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} {t('home.offlineSuffix')}</Txt> · {today.cups} {t('unit.cup', { n: today.cups })}{unlocksToday !== undefined ? ` · ${unlocksToday} ${t('unit.unlock', { n: unlocksToday })}` : ''}
       </Txt>
 
       {ownedBrewers.length > 1 && (

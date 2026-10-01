@@ -206,5 +206,8 @@ export const en: Content = {
     mug: { name: 'Amber mug', blurb: 'Enameled, caramel-colored.' },
     mugb: { name: 'Teal mug', blurb: 'Blue-green, nice and cool in the hand.' },
     glass: { name: 'Latte glass', blurb: 'Glass with layers of milk.' },
+    'stoic-ep': { name: 'Epictetus cup', blurb: 'Moss green, to remind you: some things are up to us.' },
+    'stoic-sq': { name: 'Seneca cup', blurb: 'Burgundy, to remind you: while we postpone, life passes by.' },
+    'stoic-ma': { name: 'Marcus Aurelius cup', blurb: 'Navy blue, to remind you: what stands in the way becomes the way.' },
   },
 };

@@ -1,7 +1,9 @@
 import { Platform } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 
-export type Pose = 'up' | 'down' | 'other';
+import { poseFromAccel, type Pose } from '@/lib/engine';
+
+export type { Pose };
 
 /**
  * No Android o eixo z do acelerômetro fica em +1 g com a tela para cima. No iOS é o contrário.
@@ -10,10 +12,7 @@ export type Pose = 'up' | 'down' | 'other';
 export const defaultFaceUpSign = (): 1 | -1 => (Platform.OS === 'ios' ? -1 : 1);
 
 export function poseOf(x: number, y: number, z: number, faceUpSign: -1 | 0 | 1): Pose {
-  const flat = Math.abs(x) < 0.4 && Math.abs(y) < 0.4 && Math.abs(z) > 0.8;
-  if (!flat) return 'other';
-  const sign = faceUpSign === 0 ? defaultFaceUpSign() : faceUpSign;
-  return Math.sign(z) === sign ? 'up' : 'down';
+  return poseFromAccel(x, y, z, faceUpSign === 0 ? defaultFaceUpSign() : faceUpSign);
 }
 
 export async function sensorAvailable(): Promise<boolean> {

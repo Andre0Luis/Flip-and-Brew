@@ -6,6 +6,7 @@ import { Button, Card, Chip, CoinBadge, Header, Screen, Txt } from '@/components
 import { CATEGORIES, getArticles, practiceOfDay, type Category } from '@/data/articles';
 import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
+import { useNow } from '@/hooks/useNow';
 import { dayKey } from '@/lib/stats';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -19,10 +20,11 @@ export default function Aprender() {
   const [cat, setCat] = useState<Category | 'all'>('all');
 
   const practice = practiceOfDay(lang);
-  const key = dayKey(Date.now());
+  const now = useNow(60_000);
+  const key = dayKey(now);
   const accepted = practiceAccepted === key;
   const done = practicesDone.includes(key);
-  const weekDone = practicesDone.filter((k) => Date.now() - new Date(`${k}T12:00:00`).getTime() < 7 * 86_400_000).length;
+  const weekDone = practicesDone.filter((k) => now - new Date(`${k}T12:00:00`).getTime() < 7 * 86_400_000).length;
   const list = getArticles(lang).filter((a) => cat === 'all' || a.category === cat);
 
   return (

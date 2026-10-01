@@ -7,7 +7,7 @@ import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
 import { makeDemoSessions } from '@/lib/demo';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -21,11 +21,14 @@ type State = {
   practicesDone: string[]; // dayKeys
   articlesRead: string[];
   settings: Settings;
+  /** a introdução já foi vista */
+  onboarded: boolean;
   /** Início está na tela e em primeiro plano; usado para iniciar o copo ao virar o celular. */
   homeFocused: boolean;
   /** quando o último copo terminou, para não reiniciar sozinho */
   lastEndedAt: number;
 
+  setOnboarded: (v: boolean) => void;
   setHomeFocused: (v: boolean) => void;
   setSettings: (s: Partial<Settings>) => void;
   start: (now?: number) => boolean;
@@ -54,6 +57,7 @@ const initial = {
   practicesDone: [] as string[],
   articlesRead: [] as string[],
   settings: DEFAULT_SETTINGS,
+  onboarded: false,
   homeFocused: false,
   lastEndedAt: 0,
 };
@@ -63,6 +67,7 @@ export const useApp = create<State>()(
     (set, get) => ({
       ...initial,
 
+      setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s } })),
 
@@ -156,11 +161,11 @@ export const useApp = create<State>()(
           articlesRead: ['antifragil', 'controle'],
         })),
 
-      resetAll: () => set({ ...initial, settings: get().settings }),
+      resetAll: () => set({ ...initial, settings: get().settings, onboarded: true }),
     }),
     {
       name: 'flip-and-brew-v2',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => appStorage),
       // v1 guardava o gatilho como texto em português e não tinha idioma.
       migrate: (persisted) => {
@@ -168,6 +173,8 @@ export const useApp = create<State>()(
         const legacy: Record<string, string> = { Notificação: 'notification', Tédio: 'boredom', Trabalho: 'work', Hábito: 'habit', Outro: 'other' };
         if (Array.isArray(p.sessions)) p.sessions = p.sessions.map((s: any) => (s.trigger && legacy[s.trigger] ? { ...s, trigger: legacy[s.trigger] } : s));
         p.settings = { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) };
+        // Quem já usava o app não precisa da introdução.
+        if (p.onboarded === undefined) p.onboarded = Array.isArray(p.sessions) && p.sessions.length > 0;
         return p as State;
       },
       // O idioma e as demais configurações novas entram por cima do que já estava salvo.
@@ -187,6 +194,7 @@ export const useApp = create<State>()(
         practicesDone: s.practicesDone,
         articlesRead: s.articlesRead,
         settings: s.settings,
+        onboarded: s.onboarded,
       }),
     },
   ),

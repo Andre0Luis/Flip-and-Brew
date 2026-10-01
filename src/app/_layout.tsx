@@ -8,11 +8,16 @@ import { Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold, Figtree_700
 import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { BrewEngine } from '@/engine/BrewEngine';
+import { useApp } from '@/store/useApp';
+import { translate } from '@/i18n';
+import { light } from '@/theme/tokens';
+import { Pressable, Text, View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function Shell() {
   const { c, isDark } = useTheme();
+  const onboarded = useApp((s) => s.onboarded);
   const base = isDark ? DarkTheme : DefaultTheme;
   const navTheme = { ...base, colors: { ...base.colors, background: c.bg, card: c.surface, text: c.fg, border: c.line, primary: c.accent } };
   return (
@@ -20,12 +25,19 @@ function Shell() {
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <BrewEngine />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="brew" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
-        <Stack.Screen name="resultado" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
-        <Stack.Screen name="artigo/[id]" />
-        <Stack.Screen name="frase/[id]" />
-        <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
+        {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
+        <Stack.Protected guard={!onboarded}>
+          <Stack.Screen name="intro" options={{ animation: 'fade' }} />
+        </Stack.Protected>
+        <Stack.Protected guard={onboarded}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="brew" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+          <Stack.Screen name="resultado" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+          <Stack.Screen name="artigo/[id]" />
+          <Stack.Screen name="frase/[id]" />
+          <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="privacidade" />
+        </Stack.Protected>
       </Stack>
     </NavThemeProvider>
   );
@@ -52,5 +64,19 @@ export default function RootLayout() {
     <ThemeProvider>
       <Shell />
     </ThemeProvider>
+  );
+}
+
+/** Tela de erro do roteador. Fica fora do ThemeProvider, então usa a paleta clara e o idioma salvo direto do estado. */
+export function ErrorBoundary({ retry }: { error: Error; retry: () => void }) {
+  const lang = useApp.getState().settings.language;
+  return (
+    <View style={{ flex: 1, backgroundColor: light.bg, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 12 }}>
+      <Text style={{ fontFamily: 'YoungSerif_400Regular', fontSize: 28, color: light.fg, textAlign: 'center' }}>{translate(lang, 'error.title')}</Text>
+      <Text style={{ fontFamily: 'Figtree_400Regular', fontSize: 15, color: light.muted, textAlign: 'center' }}>{translate(lang, 'error.body')}</Text>
+      <Pressable accessibilityRole="button" onPress={retry} style={{ backgroundColor: light.accent, borderRadius: 999, paddingVertical: 14, paddingHorizontal: 28 }}>
+        <Text style={{ fontFamily: 'Figtree_600SemiBold', fontSize: 16, color: light.accentFg }}>{translate(lang, 'error.retry')}</Text>
+      </Pressable>
+    </View>
   );
 }

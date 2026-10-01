@@ -19,7 +19,10 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.andre0luis.FlipAndBrew"
+      "package": "com.andre0luis.FlipAndBrew",
+      "permissions": [
+        "android.permission.PACKAGE_USAGE_STATS"
+      ]
     },
     "web": {
       "output": "single",
@@ -37,6 +40,12 @@
             "backgroundColor": "#1B120D",
             "image": "./assets/images/splash-icon.png"
           }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#B8782E"
         }
       ]
     ],

@@ -58,6 +58,61 @@ export default function Guia() {
     setPending(null);
   };
 
+  const renderGrid = (list: LocalizedItem[]) => (
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+        {list.map((item) => {
+          const has = owned.includes(item.id);
+          const inUse = has && equipped === item.id;
+          const locked = !!item.streakUnlock && !has;
+          return (
+            <Pressable
+              key={item.id}
+              accessibilityRole="button"
+              accessibilityLabel={`${item.name}. ${inUse ? t('guide.a11yInUse') : has ? t('guide.a11yOwned') : locked ? t('guide.a11yLocked', { n: item.streakUnlock ?? 0 }) : t('guide.a11yPrice', { n: num(item.price) })}`}
+              onPress={() => onItem(item)}
+              style={{ width: '47.5%', backgroundColor: c.surface, borderRadius: r.lg, borderWidth: inUse ? 2 : 1, borderColor: inUse ? c.accent : c.line, padding: 10, gap: 8 }}
+            >
+              <View style={{ backgroundColor: c.soft, borderRadius: r.md, alignItems: 'center', paddingVertical: 6, opacity: locked ? 0.55 : 1 }}>
+                <Art id={item.id} size={96} />
+              </View>
+              <Txt v="title" style={{ fontSize: 15, lineHeight: 20 }} numberOfLines={1}>
+                {item.name}
+              </Txt>
+              <Txt v="small" color="muted" numberOfLines={3} style={{ minHeight: 54 }}>
+                {item.blurb}
+              </Txt>
+              {locked ? (
+                <View style={{ gap: 6 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Icon name="lock" size={14} color={c.muted} />
+                    <Txt v="label" color="muted">
+                      {t('guide.streakProgress', { d: days, n: item.streakUnlock ?? 0 })}
+                    </Txt>
+                  </View>
+                  <Bar pct={days / (item.streakUnlock ?? 1)} />
+                </View>
+              ) : inUse ? (
+                <Txt v="label" color="accent">
+                  {t('guide.inUse')}
+                </Txt>
+              ) : has ? (
+                <Txt v="label" color="muted">
+                  {t('guide.ownedUse')}
+                </Txt>
+              ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Coin size={18} />
+                  <Txt v="num" style={{ fontSize: 15 }}>
+                    {num(item.price)}
+                  </Txt>
+                </View>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
+  );
+
   return (
     <Screen>
       <Header title={t('guide.title')} right={<CoinBadge coins={coins} />} />
@@ -99,58 +154,19 @@ export default function Guia() {
         </Txt>
       )}
 
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-        {items.map((item) => {
-          const has = owned.includes(item.id);
-          const inUse = has && equipped === item.id;
-          const locked = !!item.streakUnlock && !has;
-          return (
-            <Pressable
-              key={item.id}
-              accessibilityRole="button"
-              accessibilityLabel={`${item.name}. ${inUse ? t('guide.a11yInUse') : has ? t('guide.a11yOwned') : locked ? t('guide.a11yLocked', { n: item.streakUnlock ?? 0 }) : t('guide.a11yPrice', { n: num(item.price) })}`}
-              onPress={() => onItem(item)}
-              style={{ width: '47.5%', flexGrow: 1, backgroundColor: c.surface, borderRadius: r.lg, borderWidth: inUse ? 2 : 1, borderColor: inUse ? c.accent : c.line, padding: 10, gap: 8 }}
-            >
-              <View style={{ backgroundColor: c.soft, borderRadius: r.md, alignItems: 'center', paddingVertical: 6, opacity: locked ? 0.55 : 1 }}>
-                <Art id={item.id} size={96} />
-              </View>
-              <Txt v="title" style={{ fontSize: 15, lineHeight: 20 }} numberOfLines={1}>
-                {item.name}
-              </Txt>
-              <Txt v="small" color="muted" numberOfLines={2} style={{ minHeight: 36 }}>
-                {item.blurb}
-              </Txt>
-              {locked ? (
-                <View style={{ gap: 6 }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Icon name="lock" size={14} color={c.muted} />
-                    <Txt v="label" color="muted">
-                      {t('guide.streakProgress', { d: days, n: item.streakUnlock ?? 0 })}
-                    </Txt>
-                  </View>
-                  <Bar pct={days / (item.streakUnlock ?? 1)} />
-                </View>
-              ) : inUse ? (
-                <Txt v="label" color="accent">
-                  {t('guide.inUse')}
-                </Txt>
-              ) : has ? (
-                <Txt v="label" color="muted">
-                  {t('guide.ownedUse')}
-                </Txt>
-              ) : (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Coin size={18} />
-                  <Txt v="num" style={{ fontSize: 15 }}>
-                    {num(item.price)}
-                  </Txt>
-                </View>
-              )}
-            </Pressable>
-          );
-        })}
-      </View>
+      {renderGrid(items.filter((i) => !i.collection))}
+
+      {items.some((i) => i.collection === 'stoic') && (
+        <View style={{ gap: 10 }}>
+          <View style={{ gap: 2 }}>
+            <Txt v="title">{t('guide.stoicTitle')}</Txt>
+            <Txt v="small" color="muted">
+              {t('guide.stoicBody')}
+            </Txt>
+          </View>
+          {renderGrid(items.filter((i) => i.collection === 'stoic'))}
+        </View>
+      )}
 
       <Card style={{ gap: 8 }}>
         <Txt v="title">{t('guide.coinsTitle')}</Txt>

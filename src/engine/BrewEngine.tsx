@@ -4,20 +4,18 @@ import { useRouter } from 'expo-router';
 import { Accelerometer } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
 import { useApp } from '@/store/useApp';
-import { GRACE_MS } from '@/lib/brew';
-import { poseOf, sensorAvailable, type Pose } from './sensor';
-
-const UP_HOLD_MS = 3_000; // tela para cima por este tempo conta como pegada
-const DOWN_HOLD_MS = 2_000; // virado para baixo por este tempo inicia o copo
-const RESTART_COOLDOWN_MS = 30_000;
+import { decide, onReopen, type Pose } from '@/lib/engine';
+import { cancelBrewDone, scheduleBrewDone } from '@/lib/notifications';
+import { poseOf, sensorAvailable } from './sensor';
 
 /**
- * Cuida do ciclo do copo: inicia ao virar o celular, encerra ao pegar ou ao encher.
+ * Cuida do ciclo do copo: inicia ao virar o celular, encerra ao pegar ou ao encher, retoma ao reabrir.
  * A contagem usa horários (startedAt), então continua certa com a tela apagada.
+ * As decisões ficam em lib/engine.ts, que tem testes; aqui só ligamos sensor, relógio e navegação.
  */
 export function BrewEngine() {
   const router = useRouter();
-  const pose = useRef<{ value: Pose; since: number }>({ value: 'other', since: Date.now() });
+  const pose = useRef<{ value: Pose; since: number }>({ value: 'other', since: 0 });
   // O acelerômetro só fica ligado quando há decisão a tomar: copo em andamento, ou Início aberto com início automático.
   const needSensor = useApp((s) => !!s.active || (s.settings.autoStart && s.homeFocused));
 
@@ -44,8 +42,27 @@ export function BrewEngine() {
     };
   }, [needSensor]);
 
+  // Aviso silencioso de copo pronto (opcional): agenda ao iniciar e cancela ao encerrar.
   useEffect(() => {
-    const finishAndLeave = (why: 'done' | 'pickup') => {
+    let lastStart: number | null = null;
+    const sync = () => {
+      const { active, settings } = useApp.getState();
+      if (active && settings.notifyOnDone) {
+        if (lastStart !== active.startedAt) {
+          lastStart = active.startedAt;
+          void scheduleBrewDone(active.startedAt + active.targetMs, settings.language);
+        }
+      } else if (lastStart !== null) {
+        lastStart = null;
+        void cancelBrewDone();
+      }
+    };
+    sync();
+    return useApp.subscribe(sync);
+  }, []);
+
+  useEffect(() => {
+    const finishAndLeave = () => {
       const id = useApp.getState().finish(Date.now());
       if (id) {
         const s = useApp.getState().sessions.find((x) => x.id === id);
@@ -55,16 +72,12 @@ export function BrewEngine() {
       } else {
         router.dismissTo('/');
       }
-      void why;
     };
 
     const resolveOnOpen = () => {
-      const { active } = useApp.getState();
-      if (!active) return;
-      const now = Date.now();
-      if (now >= active.startedAt + active.targetMs) finishAndLeave('done');
-      else if (now - active.startedAt > GRACE_MS) finishAndLeave('pickup');
-      else router.replace('/brew');
+      const action = onReopen(useApp.getState().active, Date.now());
+      if (action === 'finish') finishAndLeave();
+      else if (action === 'show') router.replace('/brew');
     };
 
     // Reabrir o app ou destravar a tela com um copo em andamento conta como pegar o celular.
@@ -74,28 +87,25 @@ export function BrewEngine() {
       resolveOnOpen();
     });
 
-    const startHydrated = () => resolveOnOpen();
-    if (useApp.persist.hasHydrated()) startHydrated();
-    const unsubHydration = useApp.persist.onFinishHydration(startHydrated);
+    if (useApp.persist.hasHydrated()) resolveOnOpen();
+    const unsubHydration = useApp.persist.onFinishHydration(resolveOnOpen);
 
     const tick = setInterval(() => {
       const st = useApp.getState();
       const now = Date.now();
-      const { active } = st;
-      const { value, since } = pose.current;
-      // Sem calibração o sentido do eixo z pode estar invertido. Nesse caso o sensor não decide nada
-      // e o copo só termina ao encher, ao pegar o celular (reabrir o app) ou pelo botão.
-      const calibrated = st.settings.faceUpSign !== 0;
-      if (active) {
-        if (now >= active.startedAt + active.targetMs) finishAndLeave('done');
-        else if (calibrated && now - active.startedAt > GRACE_MS && value === 'up' && now - since >= UP_HOLD_MS) finishAndLeave('pickup');
-        return;
-      }
-      if (calibrated && st.settings.autoStart && st.homeFocused && value === 'down' && now - since >= DOWN_HOLD_MS && now - st.lastEndedAt > RESTART_COOLDOWN_MS) {
-        if (st.start(now)) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-          router.push('/brew');
-        }
+      const action = decide({
+        now,
+        active: st.active,
+        calibrated: st.settings.faceUpSign !== 0,
+        autoStart: st.settings.autoStart,
+        homeFocused: st.homeFocused,
+        pose: pose.current,
+        lastEndedAt: st.lastEndedAt,
+      });
+      if (action === 'finish') finishAndLeave();
+      else if (action === 'start' && st.start(now)) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+        router.push('/brew');
       }
     }, 1000);
 
