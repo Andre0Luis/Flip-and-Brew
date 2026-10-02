@@ -6,6 +6,8 @@ import { Button, Card, Chip, Screen, Segmented, Txt } from '@/components/ui';
 import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
+import { cloudAvailable } from '@/lib/cloud';
+import { useAuth } from '@/store/useAuth';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -43,6 +45,7 @@ export default function Ajustes() {
   const taps = useRef(0);
   const showDev = __DEV__ || settings.devTools;
   const setOnboarded = useApp((s) => s.setOnboarded);
+  const authUser = useAuth((s) => s.user);
 
   // Sete toques na versão liberam as ferramentas de teste em qualquer build.
   const onVersionTap = () => {
@@ -149,6 +152,16 @@ export default function Ajustes() {
           <Button label={t('set.reset')} tone="quiet" onPress={() => setConfirmReset(true)} />
         )}
       </Card>
+      )}
+
+      {cloudAvailable() && (
+        <Card style={{ gap: 10 }}>
+          <Txt v="title">{t('account.cardTitle')}</Txt>
+          <Txt v="small" color="muted">
+            {authUser ? t('account.cardIn', { email: authUser.email ?? '' }) : t('account.cardOut')}
+          </Txt>
+          <Button label={t('account.open')} tone="quiet" onPress={() => router.push('/conta')} />
+        </Card>
       )}
 
       <Card style={{ gap: 10 }}>

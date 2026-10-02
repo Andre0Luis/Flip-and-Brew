@@ -6,7 +6,7 @@ import { Screen, Txt } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const SECTIONS = [1, 2, 3, 4, 5, 6] as const;
+const SECTIONS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
 
 export default function Privacidade() {
   const router = useRouter();

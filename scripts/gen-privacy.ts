@@ -6,7 +6,7 @@ import { dictionaries, LANGS, translate } from '../src/i18n';
 
 for (const lang of LANGS) {
   const lines = [`# Flip & Brew · ${translate(lang, 'privacy.title')}`, ''];
-  for (const n of [1, 2, 3, 4, 5, 6]) {
+  for (const n of [1, 2, 3, 4, 5, 6, 7, 8]) {
     lines.push(`## ${dictionaries[lang][`privacy.h${n}` as 'privacy.h1']}`, '', dictionaries[lang][`privacy.p${n}` as 'privacy.p1'], '');
   }
   writeFileSync(`docs/PRIVACY.${lang}.md`, lines.join('\n'));
