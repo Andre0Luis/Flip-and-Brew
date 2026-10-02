@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500"><defs>
+<linearGradient id="porc" x1="0" x2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#F1E8DB"/><stop offset="1" stop-color="#CDBDA6"/></linearGradient>
+<radialGradient id="crema" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#C48A52"/><stop offset="1" stop-color="#8A5A30"/></radialGradient>
+<radialGradient id="bg" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#3B2518"/><stop offset="1" stop-color="#22140D"/></radialGradient>
+</defs><rect width="1024" height="500" fill="url(#bg)"/>
+<g transform="translate(40 40) scale(.42)"><g><path d="M145.51987789349573 378.6121441029892 A390 390 0 0 1 878.4801221065043 378.61214410298925" fill="none" stroke="#E0B25E" stroke-width="30" stroke-linecap="round"/><path d="M894.2130486994851,421.838004659141 L840.8924172750679,392.29294983601596 L916.0678269379406,364.93133836996253Z" fill="#E0B25E" stroke="#E0B25E" stroke-width="10" stroke-linejoin="round"/><path d="M878.4801221065043 645.3878558970108 A390 390 0 0 1 145.51987789349573 645.3878558970109" fill="none" stroke="#E0B25E" stroke-width="30" stroke-linecap="round"/><path d="M129.78695130051497,602.1619953408591 L183.10758272493206,631.7070501639841 L107.9321730620594,659.0686616300377Z" fill="#E0B25E" stroke="#E0B25E" stroke-width="10" stroke-linejoin="round"/><g transform="translate(512 528) scale(.72) translate(-512 -528)">
+<ellipse cx="512" cy="684" rx="325" ry="62" fill="#C8B79F"/>
+<ellipse cx="512" cy="668" rx="325" ry="62" fill="url(#porc)"/>
+<ellipse cx="512" cy="660" rx="222" ry="40" fill="#DCCDB7"/>
+<path d="M730 430 C840 415 850 575 700 612" fill="none" stroke="#C8B79F" stroke-width="58" stroke-linecap="round"/>
+<path d="M730 430 C840 415 850 575 700 612" fill="none" stroke="#EFE5D3" stroke-width="36" stroke-linecap="round"/>
+<path d="M262 372 C262 565 382 668 512 668 C642 668 762 565 762 372Z" fill="url(#porc)"/>
+<ellipse cx="512" cy="366" rx="252" ry="68" fill="#FAF4E8" stroke="#CDBDA6" stroke-width="7"/>
+<ellipse cx="512" cy="374" rx="214" ry="50" fill="#4B2815"/>
+<ellipse cx="512" cy="372" rx="160" ry="32" fill="url(#crema)"/>
+<path d="M302 432 C322 540 382 600 432 624" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="16" stroke-linecap="round"/>
+<g fill="none" stroke="#E0B25E" stroke-width="20" stroke-linecap="round" opacity=".95">
+<path d="M450 290 C420 250 480 220 450 175"/><path d="M574 290 C544 250 604 220 574 175"/></g>
+</g></g></g>
+<text x="500" y="232" font-family="Georgia" font-weight="bold" font-size="78" fill="#F2E7D5">Flip &amp; Brew</text>
+<rect x="504" y="258" width="110" height="6" rx="3" fill="#E0B25E"/>
+<text x="502" y="312" font-family="Georgia" font-size="28" fill="#AD967F">Largue o celular e deixe</text>
+<text x="502" y="352" font-family="Georgia" font-size="28" fill="#AD967F">o café se fazer.</text></svg>
