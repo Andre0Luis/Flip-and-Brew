@@ -45,6 +45,7 @@ src/i18n/         dicionários pt, en e es, plural, datas e números por idioma
 src/engine/       sensor de pose e o motor do copo (liga sensor, relógio e navegação)
 modules/          módulo nativo de uso do sistema (Android)
 docs/             privacidade, loja, validação no aparelho e lançamento
+src/lib/cloud/    conta, backup e sincronização (Firebase, com servidor falso para desenvolvimento)
 src/lib/          regras puras (moedas, qualidade, estatísticas, decisões do motor) e seus testes
 src/store/        estado (Zustand) persistido com MMKV
 src/theme/        cores (claro e torra escura), fontes e ThemeProvider
@@ -55,12 +56,21 @@ As cores e fontes seguem o style board da fase de design: Young Serif para frase
 ## Primeira abertura e privacidade
 
 - Na primeira abertura o app mostra uma introdução de quatro passos, com escolha de idioma e calibração do sensor. Em Ajustes dá para rever.
-- Tudo fica no aparelho: sem conta, sem servidor, sem análise. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
+- Sem conta, tudo fica no aparelho, sem servidor nem análise. Com conta, o backup do progresso vai para o Firebase. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
 - Ajustes › toque 7 vezes na versão libera as ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) em qualquer build.
 
 ## Uso do sistema (Android)
 
 `modules/usage-stats` é um módulo nativo que lê desbloqueios (`KEYGUARD_HIDDEN`) e tempo de tela do dia. O Bem-estar mostra esses números depois que a pessoa autoriza o “Acesso ao uso”; sem a permissão, o cartão explica e pede. O Android guarda poucos dias de eventos. Só compila no build nativo (`expo run:android`).
+
+## Conta, login e backup (opcional)
+
+O app funciona 100% offline e sem conta. Com as chaves do Firebase no `.env`, aparece **Ajustes › Conta e backup**:
+- Cadastro e login com **e-mail e senha** ou com o **Google**, e “esqueci a senha”.
+- **Backup na nuvem** (Firestore) do progresso, automático depois de cada copo, com restauração em outro aparelho. Se os dois lados têm dados diferentes, a pessoa escolhe qual manter.
+- **Excluir conta**: apaga a conta e o backup, depois de confirmar com a senha ou o Google.
+
+**Manual completo de contas, acessos e credenciais (Expo, Firebase, Google, Play, RevenueCat): `docs/MANUAL-CONFIGURACAO.md`.** Detalhes do Firebase: `docs/FIREBASE.md`. Usuário de teste: `teste@flipandbrew.app` / `Teste@12345` com `EXPO_PUBLIC_AUTH_MODE=mock`, ou `npm run seed:test-user` no Firebase de desenvolvimento. Para ver as telas sem chaves, em desenvolvimento use `EXPO_PUBLIC_AUTH_MODE=mock`.
 
 ## Aviso de copo pronto
 
@@ -72,6 +82,7 @@ O código está pronto; falta confirmar fora do ambiente de desenvolvimento. O r
 
 - **Sensor de virar o celular, segundo plano e tela apagada:** só no aparelho.
 - **Módulo de uso do sistema e notificação:** só no aparelho, depois de compilar.
+- **Contas e backup:** ligam quando o `.env` tem as chaves do Firebase e do Google (`docs/FIREBASE.md`); o SHA-1 do build precisa estar cadastrado para o login com o Google.
 - **Compra de moedas:** liga com `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` (e `..._IOS_KEY`) no build, com produtos cujo identificador termine no número de moedas, como `coins_500`. Sem as chaves, a loja explica que a compra não está ativa.
 - **Loja:** textos prontos em `docs/store/`; faltam capturas de tela, hospedar a política de privacidade e o formulário de Segurança dos dados.
 

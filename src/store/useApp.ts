@@ -6,6 +6,7 @@ import { byId, CATALOG, STARTER_IDS } from '@/data/catalog';
 import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
 import { makeDemoSessions } from '@/lib/demo';
+import { makeTestData } from '@/lib/testUser';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -42,6 +43,8 @@ type State = {
   markRead: (id: string) => boolean;
   addCoins: (n: number) => void;
   loadDemo: () => void;
+  /** Progresso farto para testes: muitas moedas, todos os itens e 90 dias de histórico. */
+  loadTestUser: () => void;
   resetAll: () => void;
 };
 
@@ -160,6 +163,8 @@ export const useApp = create<State>()(
           practicesDone: [dayKey(Date.now() - 86_400_000), dayKey(Date.now() - 2 * 86_400_000), dayKey(Date.now() - 3 * 86_400_000)],
           articlesRead: ['antifragil', 'controle'],
         })),
+
+      loadTestUser: () => set({ ...makeTestData(), active: null, lastResultId: null, onboarded: true }),
 
       resetAll: () => set({ ...initial, settings: get().settings, onboarded: true }),
     }),

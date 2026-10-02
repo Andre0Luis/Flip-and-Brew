@@ -30,7 +30,7 @@ STUMBLING TEACHES TOO
 A bad day does not erase your progress. The shelf stays, the streak only pauses and the app shows what the day taught.
 
 YOUR DATA STAYS WITH YOU
-No account, no server, no ads. Everything is stored on your phone.
+The app works without an account and without ads, and everything is stored on your phone. If you like, create an account (email or Google) to keep a cloud backup of your progress and recover it on another device. You can delete the account and the backup anytime, inside the app.
 
 Available in Portuguese, English and Spanish.
 

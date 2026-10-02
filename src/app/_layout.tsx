@@ -8,6 +8,7 @@ import { Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold, Figtree_700
 import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { BrewEngine } from '@/engine/BrewEngine';
+import { CloudSync } from '@/engine/CloudSync';
 import { useApp } from '@/store/useApp';
 import { translate } from '@/i18n';
 import { light } from '@/theme/tokens';
@@ -24,6 +25,7 @@ function Shell() {
     <NavThemeProvider value={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <BrewEngine />
+      <CloudSync />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
         {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
         <Stack.Protected guard={!onboarded}>
@@ -37,6 +39,7 @@ function Shell() {
           <Stack.Screen name="frase/[id]" />
           <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
           <Stack.Screen name="privacidade" />
+          <Stack.Screen name="conta" />
         </Stack.Protected>
       </Stack>
     </NavThemeProvider>
