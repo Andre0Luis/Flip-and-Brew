@@ -16,6 +16,10 @@ Idiomas: português (padrão), inglês e espanhol. A troca fica em **Ajustes > I
 
 Telas: Início (frase do dia, cafeteira, copo), Guia (loja), Bem-estar (equilíbrio, semana, calendário, padrões), Aprender (prática do dia, artigos sobre antifragilidade, estoicismo, hábitos digitais e sono) e Coleção.
 
+## Decisões do projeto
+
+O **porquê** das escolhas (mecânica, sensor, visual, conta opcional, Firebase, idiomas, processo) está em `docs/adr/`, com o índice em `docs/adr/README.md`. A lista viva do que ainda falta é `docs/adr/0017-pendencias-e-riscos-conhecidos.md`.
+
 ## Rodar
 
 ```bash
