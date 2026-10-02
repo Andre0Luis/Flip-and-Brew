@@ -8,6 +8,8 @@ import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
 import { useAuth } from '@/store/useAuth';
+import { usePro } from '@/store/usePro';
+import { presentCustomerCenter, presentPaywall, purchasesConfigured } from '@/lib/purchases';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -47,6 +49,8 @@ export default function Ajustes() {
   const showDev = __DEV__ || settings.devTools;
   const setOnboarded = useApp((s) => s.setOnboarded);
   const authUser = useAuth((s) => s.user);
+  const pro = usePro();
+  const [proMsg, setProMsg] = useState<string | null>(null);
 
   // Sete toques na versão liberam as ferramentas de teste em qualquer build.
   const onVersionTap = () => {
@@ -155,6 +159,35 @@ export default function Ajustes() {
           <Button label={t('set.reset')} tone="quiet" onPress={() => setConfirmReset(true)} />
         )}
       </Card>
+      )}
+
+      {purchasesConfigured && (
+        <Card style={{ gap: 10 }}>
+          <Txt v="title">{t('pro.title')}</Txt>
+          <Txt v="small" color="muted">
+            {pro.active ? t('pro.on') : t('pro.off')}
+          </Txt>
+          {pro.active && (
+            <Txt v="small" color="muted">
+              {pro.expiresAt ? t('pro.until', { date: new Date(pro.expiresAt).toLocaleDateString() }) : t('pro.lifetime')}
+            </Txt>
+          )}
+          {pro.active ? (
+            <Button label={t('pro.manage')} tone="quiet" onPress={() => void presentCustomerCenter().then(() => pro.refresh())} />
+          ) : (
+            <Button label={t('pro.see')} onPress={() => void presentPaywall().then(() => pro.refresh())} />
+          )}
+          <Button
+            label={t('pro.restore')}
+            tone="quiet"
+            onPress={() => void pro.restore().then(() => setProMsg(t('pro.restored')))}
+          />
+          {proMsg && (
+            <Txt v="small" color="muted">
+              {proMsg}
+            </Txt>
+          )}
+        </Card>
       )}
 
       {cloudAvailable() && (
