@@ -97,7 +97,8 @@ O EAS gera o app instalável (APK para testar, AAB para a Play Store).
    eas build --platform android --profile preview
    ```
    Na primeira vez o EAS pergunta se pode gerar e guardar a **keystore** (chave de assinatura). Responda que sim: ele cuida disso e você pode baixar depois com `eas credentials`.
-5. **Variáveis de ambiente do build.** Tudo o que está no `.env` precisa existir também no EAS, porque o EAS não lê o seu `.env`:
+5. **Build automático no merge.** `.github/workflows/eas-build.yml` enfileira um APK `preview` e um AAB `production` a cada push na `main` (exceto mudança só em `docs/` ou `.md`). Crie um token em <https://expo.dev/settings/access-tokens> e salve como segredo `EXPO_TOKEN` em GitHub > Settings > Secrets and variables > Actions. O workflow também roda à mão pela aba Actions.
+6. **Variáveis de ambiente do build.** Tudo o que está no `.env` precisa existir também no EAS, porque o EAS não lê o seu `.env`:
    ```bash
    eas env:create --name EXPO_PUBLIC_FIREBASE_API_KEY --value "..." --environment preview --visibility plaintext
    ```
