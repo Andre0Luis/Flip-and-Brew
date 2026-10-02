@@ -2,6 +2,8 @@
 
 # Flip & Brew
 
+**Antes de mudar uma decisão de produto ou de arquitetura, leia `docs/adr/`.** Se a decisão mudar, escreva um ADR novo e marque o antigo como substituído; não apague. Atualize `docs/adr/0017-pendencias-e-riscos-conhecidos.md` quando resolver ou descobrir uma pendência.
+
 App Expo (SDK 56) em português. Leia o README para o funcionamento e a estrutura.
 
 - **Antes de codar:** `npm run check` (typecheck, lint e testes). Os testes cobrem `src/lib`, `src/store`, as traduções e o conteúdo.
