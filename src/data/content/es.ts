@@ -206,5 +206,8 @@ export const es: Content = {
     mug: { name: 'Taza ámbar', blurb: 'Esmaltada, color caramelo.' },
     mugb: { name: 'Taza petróleo', blurb: 'Azul verdoso, bien fresca en la mano.' },
     glass: { name: 'Vaso de latte', blurb: 'Vidrio con capas de leche.' },
+    'stoic-ep': { name: 'Taza Epicteto', blurb: 'Verde musgo, para recordar: algunas cosas dependen de nosotros.' },
+    'stoic-sq': { name: 'Taza Séneca', blurb: 'Burdeos, para recordar: mientras aplazamos, la vida pasa.' },
+    'stoic-ma': { name: 'Taza Marco Aurelio', blurb: 'Azul marino, para recordar: lo que está en el camino se convierte en el camino.' },
   },
 };

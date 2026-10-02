@@ -4,8 +4,10 @@
 
 App Expo (SDK 56) em português. Leia o README para o funcionamento e a estrutura.
 
-- **Antes de codar:** `npm run typecheck && npm test`. Os testes cobrem `src/lib` (moedas, qualidade, estatísticas).
+- **Antes de codar:** `npm run check` (typecheck, lint e testes). Os testes cobrem `src/lib`, `src/store`, as traduções e o conteúdo.
+- **React Compiler está ligado:** o lint barra `Date.now()` direto no render. Use `useNow()` ou um inicializador preguiçoso.
 - **Regras de negócio** ficam em `src/lib` como funções puras. Telas só montam e chamam. O estado vive em `src/store/useApp.ts`.
+- **Decisões do motor do copo** (iniciar, encerrar, retomar) ficam em `src/lib/engine.ts`, com testes; `src/engine/BrewEngine.tsx` só liga sensor, relógio e navegação.
 - **Contagem do copo** usa `startedAt` (horário), nunca um contador em memória, porque o app pode ficar em segundo plano.
 - **Tema:** use `useTheme()` (`c`, `f`, `r`); não escreva cores nem nomes de fonte soltos nos componentes. Em cartões invertidos (`Card inverse`) use `tone="quietOnDark"` nos botões secundários.
 - **Ilustrações:** `src/art/Art.tsx`. Cada instância prefixa os ids dos gradientes; mantenha isso, ou a web mistura gradientes entre SVGs.

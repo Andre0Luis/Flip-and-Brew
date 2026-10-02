@@ -97,6 +97,37 @@ function Cup() {
   );
 }
 
+function StoicCup({ band }: { band: string }) {
+  const u = useU();
+  const p = useContext(PrefixContext);
+  return (
+    <>
+      <Defs>
+        <ClipPath id={`${p}body`}>
+          <Path d="M26 50H94C94 78 82 91 60 91C38 91 26 78 26 50Z" />
+        </ClipPath>
+      </Defs>
+      <Ellipse cx={60} cy={100} rx={46} ry={8} fill={u('gShadow')} />
+      <Path d="M82 58C101 54 103 80 83 82" stroke="#B9A78F" strokeWidth={9} {...line} />
+      <Path d="M82 58C101 54 103 80 83 82" stroke={u('gPorc')} strokeWidth={6} {...line} />
+      <Ellipse cx={60} cy={93} rx={44} ry={9} fill="#C9B9A2" />
+      <Ellipse cx={60} cy={91} rx={44} ry={9} fill={u('gPorc')} />
+      <Ellipse cx={60} cy={90} rx={30} ry={5.5} fill="#D9CBB6" opacity={0.7} />
+      <Path d="M26 50H94C94 78 82 91 60 91C38 91 26 78 26 50Z" fill={u('gPorc')} />
+      <G clipPath={`url(#${p}body)`}>
+        <Rect x={20} y={61} width={80} height={9} fill={band} />
+        <Rect x={20} y={61} width={80} height={9} fill={u('gPorc')} opacity={0.18} />
+        <Rect x={20} y={59.5} width={80} height={1.6} fill="#D7A040" />
+        <Rect x={20} y={70} width={80} height={1.6} fill="#D7A040" />
+      </G>
+      <Path d="M32 56C33 71 40 81 49 85" stroke="#fff" strokeWidth={3} opacity={0.55} {...line} />
+      <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke="#D7A040" strokeWidth={1.4} />
+      <Ellipse cx={60} cy={51} rx={29} ry={7} fill={u('gCof')} />
+      <Ellipse cx={60} cy={51.5} rx={22} ry={4.6} fill={u('gCrema')} opacity={0.8} />
+    </>
+  );
+}
+
 function Mug({ grad, rim }: { grad: string; rim: string }) {
   const u = useU();
   const handleDark = grad === 'gMugA' ? '#6B3F1A' : '#243C3C';
@@ -229,6 +260,9 @@ export function Art({ id, size = 96 }: Props) {
   let body: React.ReactNode;
   switch (id) {
     case 'cup': body = <Cup />; break;
+    case 'stoic-ep': body = <StoicCup band="#3F5F4A" />; break;
+    case 'stoic-sq': body = <StoicCup band="#7A2E3A" />; break;
+    case 'stoic-ma': body = <StoicCup band="#2E4A6B" />; break;
     case 'mug': body = <Mug grad="gMugA" rim="#E7B67C" />; break;
     case 'mugb': body = <Mug grad="gMugB" rim="#9BB8B8" />; break;
     case 'glass': body = <Glass />; break;

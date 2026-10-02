@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Button, Bar, Card, Header, Insight, Screen, Segmented, Txt } from '@/components/ui';
 import { CalendarGrid, HourBars, WeekBars } from '@/components/Charts';
 import { Ring } from '@/components/BrewViz';
+import { UsageCard } from '@/components/UsageCard';
 import { useApp } from '@/store/useApp';
 import {
   afterMissInsight, balanceScore, calendar, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
@@ -10,6 +11,7 @@ import {
 import { minutesLabel } from '@/lib/format';
 import { formatDateShort, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useNow } from '@/hooks/useNow';
 import { fonts } from '@/theme/tokens';
 import type { Key } from '@/i18n';
 
@@ -54,6 +56,7 @@ export default function BemEstar() {
   const { lang, t } = useI18n();
   const dec = (n: number) => n.toFixed(1).replace('.', t('number.locale') === 'en-US' ? '.' : ',');
   const { sessions, settings } = useApp();
+  const now = useNow(60_000);
   const loadDemo = useApp((s) => s.loadDemo);
   const [tab, setTab] = useState<Tab>('resumo');
   const goal = settings.goalMin;
@@ -63,7 +66,7 @@ export default function BemEstar() {
   const wk = weekTotals(sessions);
   const week = lastDays(sessions, 7);
   const days = streak(sessions);
-  const best = longestSession(sessions, Date.now() - 7 * 86_400_000);
+  const best = longestSession(sessions, now - 7 * 86_400_000);
   const miss = afterMissInsight(sessions);
   const trig = triggerCounts(sessions);
   const mood = moodSummary(sessions, goal);
@@ -126,6 +129,8 @@ export default function BemEstar() {
             <Kpi label={t('wb.kpiCups')} value={String(wk.cups)} note={t('wb.ofStarted', { n: wk.sessions })} />
             <Kpi label={t('wb.kpiInterrupted')} value={String(wk.interrupted)} note={t('wb.pickedEarly')} />
           </View>
+
+          <UsageCard />
 
           <Card style={{ gap: 8 }}>
             <Txt v="label" color="muted">

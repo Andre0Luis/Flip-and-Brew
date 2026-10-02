@@ -297,6 +297,9 @@ export const pt: Content = {
       "name": "Caneca petróleo",
       "blurb": "Azul esverdeado, bem fria na mão."
     },
+    "stoic-ep": { "name": "Xícara Epicteto", "blurb": "Verde-musgo, para lembrar: algumas coisas dependem de nós." },
+    "stoic-sq": { "name": "Xícara Sêneca", "blurb": "Bordô, para lembrar: enquanto adiamos, a vida passa." },
+    "stoic-ma": { "name": "Xícara Marco Aurélio", "blurb": "Azul-marinho, para lembrar: o que está no caminho se torna o caminho." },
     "glass": {
       "name": "Copo de latte",
       "blurb": "Vidro com camadas de leite."

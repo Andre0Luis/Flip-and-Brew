@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { BackHandler, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { FillingCup, Ring } from '@/components/BrewViz';
@@ -25,6 +25,12 @@ export default function Brew() {
 
   // Se a tela abrir sem copo (link antigo, app reaberto), volta ao Início. Quando o copo termina com a tela aberta,
   // quem navega é o motor da extração; redirecionar aqui atropelaria a tela de resultado.
+  // O botão voltar do Android não sai do copo sem querer: para parar, há o botão "Terminar agora".
+  useEffect(() => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => true);
+    return () => sub.remove();
+  }, []);
+
   const hadActive = useRef(!!active);
   useEffect(() => {
     if (!active && !hadActive.current) router.dismissTo('/');

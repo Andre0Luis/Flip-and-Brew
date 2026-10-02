@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { BackHandler, Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
@@ -37,6 +37,15 @@ export default function Resultado() {
   const setResult = useApp((s) => s.setResult);
   const session = sessions.find((s) => s.id === lastId);
   const coins = useCountUp(session?.coins ?? 0);
+
+  // Voltar equivale a Concluir.
+  useEffect(() => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      router.dismissTo('/');
+      return true;
+    });
+    return () => sub.remove();
+  }, [router]);
 
   useEffect(() => {
     if (!session) router.dismissTo('/');

@@ -13,6 +13,8 @@ export type CatalogItem = {
   streakUnlock?: number;
   /** só cafeteiras: minutos offline para encher o copo */
   brewMinutes?: number;
+  /** itens de uma coleção temática, mostrados juntos no Guia */
+  collection?: 'stoic';
 };
 
 export const CATALOG: CatalogItem[] = [
@@ -25,6 +27,9 @@ export const CATALOG: CatalogItem[] = [
   { id: 'mug', kind: 'cup', price: 150 },
   { id: 'mugb', kind: 'cup', price: 150 },
   { id: 'glass', kind: 'cup', price: 250 },
+  { id: 'stoic-ep', kind: 'cup', price: 350, collection: 'stoic' },
+  { id: 'stoic-sq', kind: 'cup', price: 350, collection: 'stoic' },
+  { id: 'stoic-ma', kind: 'cup', price: 350, collection: 'stoic' },
 ];
 
 export type LocalizedItem = CatalogItem & ItemText;

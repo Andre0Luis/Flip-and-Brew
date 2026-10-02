@@ -6,7 +6,7 @@ import { useI18n, weekdayInitial } from '@/i18n';
 import type { Cell, DayBar } from '@/lib/stats';
 import { Txt } from './ui';
 
-export function WeekBars({ days }: { days: DayBar[] }) {
+export function WeekBars({ days, a11y }: { days: DayBar[]; a11y?: string }) {
   const { c, f } = useTheme();
   const { lang, t } = useI18n();
   const W = 260, H = 112, top = 8, base = 92;
@@ -17,7 +17,7 @@ export function WeekBars({ days }: { days: DayBar[] }) {
   const ticks = [0, max / 2, max];
   const label = (m: number) => `${Math.round((m / 60) * 10) / 10}h`.replace('.', t('number.locale') === 'en-US' ? '.' : ',');
   return (
-    <Svg width="100%" height={150} viewBox={`0 0 ${W} ${H}`} accessibilityRole="image" accessibilityLabel={t('wb.chartWeekA11y')}>
+    <Svg width="100%" height={150} viewBox={`0 0 ${W} ${H}`} accessibilityRole="image" accessibilityLabel={a11y ?? t('wb.chartWeekA11y')}>
       {ticks.map((t) => {
         const y = base - (t / max) * (base - top);
         return (
