@@ -1,5 +1,7 @@
 # Configurar contas, login com Google e backup
 
+> Para o guia completo (Expo, Google Play, RevenueCat e a ordem certa), veja `docs/MANUAL-CONFIGURACAO.md`. Este arquivo é o detalhe do Firebase.
+
 O app já traz tudo pronto. Falta só criar o projeto no Firebase e preencher o `.env` (modelo em `.env.example`).
 Sem essas chaves o app funciona normalmente, offline, e a opção de Conta não aparece.
 

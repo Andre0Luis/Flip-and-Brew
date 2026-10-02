@@ -277,6 +277,11 @@ export const es: Record<keyof typeof pt, string> = {
   'privacy.h8': 'Eliminar la cuenta',
   'privacy.p8': 'En Cuenta › Eliminar cuenta, borramos tu cuenta y la copia en la nube. Los datos del dispositivo se quedan hasta que los borres en Ajustes.',
 
+  'set.testUser': 'Cargar usuario de prueba (50 mil monedas, todo desbloqueado)',
+  'set.plus10k': 'Ganar 10.000 monedas',
+  'auth.testHint': 'Servidor de prueba activo. Ya hay una cuenta lista: {email} · contraseña {password}',
+  'auth.testFill': 'Rellenar cuenta de prueba',
+
   'learn.title': 'Aprender',
   'learn.all': 'Todo',
   'cat.antifragile': 'Antifrágil',

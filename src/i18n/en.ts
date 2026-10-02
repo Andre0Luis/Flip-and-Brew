@@ -277,6 +277,11 @@ export const en: Record<keyof typeof pt, string> = {
   'privacy.h8': 'Deleting the account',
   'privacy.p8': 'In Account › Delete account, we delete your account and the cloud backup. Data on the device stays until you erase it in Settings.',
 
+  'set.testUser': 'Load test user (50k coins, everything unlocked)',
+  'set.plus10k': 'Get 10,000 coins',
+  'auth.testHint': 'Test server active. A ready account exists: {email} · password {password}',
+  'auth.testFill': 'Fill in test account',
+
   'learn.title': 'Learn',
   'learn.all': 'All',
   'cat.antifragile': 'Antifragile',

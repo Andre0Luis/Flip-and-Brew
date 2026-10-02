@@ -1,5 +1,7 @@
 import { appStorage } from '@/store/storage';
-import { parseSnapshot } from './snapshot';
+import { makeTestData, TEST_EMAIL, TEST_PASSWORD } from '@/lib/testUser';
+import { DEFAULT_SETTINGS } from '@/store/useApp';
+import { buildSnapshot, parseSnapshot } from './snapshot';
 import { AuthError, type CloudBackend, type CloudUser, type Snapshot } from './types';
 
 // Servidor falso para desenvolvimento: guarda tudo no armazenamento local do aparelho ou do navegador.
@@ -17,7 +19,16 @@ function load(): Db {
   } catch {
     // começa vazio
   }
-  return { accounts: [], currentUid: null };
+  // Primeira vez: já existe uma conta de teste com progresso farto, pronta para entrar.
+  const now = Date.now();
+  const test: Account = {
+    uid: 'mock-teste',
+    email: TEST_EMAIL,
+    password: TEST_PASSWORD,
+    provider: 'password',
+    snapshot: buildSnapshot({ ...makeTestData(now), settings: { ...DEFAULT_SETTINGS } }, now),
+  };
+  return { accounts: [test], currentUid: null };
 }
 const save = (db: Db) => void appStorage.setItem(KEY, JSON.stringify(db));
 const view = (a: Account): CloudUser => ({ uid: a.uid, email: a.email, provider: a.provider, emailVerified: false });
