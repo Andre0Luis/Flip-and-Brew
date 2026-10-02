@@ -71,12 +71,16 @@ export default function RootLayout() {
 }
 
 /** Tela de erro do roteador. Fica fora do ThemeProvider, então usa a paleta clara e o idioma salvo direto do estado. */
-export function ErrorBoundary({ retry }: { error: Error; retry: () => void }) {
+export function ErrorBoundary({ error, retry }: { error: Error; retry: () => void }) {
   const lang = useApp.getState().settings.language;
   return (
     <View style={{ flex: 1, backgroundColor: light.bg, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 12 }}>
       <Text style={{ fontFamily: 'YoungSerif_400Regular', fontSize: 28, color: light.fg, textAlign: 'center' }}>{translate(lang, 'error.title')}</Text>
       <Text style={{ fontFamily: 'Figtree_400Regular', fontSize: 15, color: light.muted, textAlign: 'center' }}>{translate(lang, 'error.body')}</Text>
+      {/* Mensagem técnica, pequena, para a pessoa poder copiar e relatar o erro. */}
+      <Text selectable style={{ fontFamily: 'DMMono_400Regular', fontSize: 11, color: light.muted, textAlign: 'center' }}>
+        {String(error?.message ?? error).slice(0, 400)}
+      </Text>
       <Pressable accessibilityRole="button" onPress={retry} style={{ backgroundColor: light.accent, borderRadius: 999, paddingVertical: 14, paddingHorizontal: 28 }}>
         <Text style={{ fontFamily: 'Figtree_600SemiBold', fontSize: 16, color: light.accentFg }}>{translate(lang, 'error.retry')}</Text>
       </Pressable>
