@@ -1571,6 +1571,134 @@ export const pt: Content = {
         "Se falhar, volte um degrau, sem culpa."
       ]
     },
+    "dig-tela": {
+      "title": "Tempo de tela: quanto é demais?",
+      "summary": "O que importa mais do que o número de horas.",
+      "oneLine": "Menos importante que quanto tempo é o que você faz com ele e o que deixa de fazer.",
+      "inApp": "O Bem-estar mostra o seu tempo de tela e os desbloqueios no Android, para você olhar o número sem julgamento.",
+      "body": [
+        "Não existe um número mágico de horas de tela que sirva para todo mundo. O que as pesquisas apontam é que o que mais pesa é o tipo de uso e o que ele substitui. Usar a tela para falar com alguém querido ou aprender algo é diferente de rolar sem fim. E o problema maior costuma ser o que a tela tira: sono, movimento e conversas.",
+        "Sinais de que o uso passou do ponto: pegar o celular sem decidir, sentir ansiedade quando ele está longe, perder a hora, dormir pior, deixar de fazer coisas de que gosta. Sinais de uso saudável: você decide quando usar, e para quê, e consegue parar sem esforço.",
+        "Comece observando, sem se cobrar. Veja no Bem-estar quantas vezes você desbloqueia por dia e em que horário. Depois escolha uma pequena mudança, como deixar o celular fora do quarto à noite, e acompanhe o efeito. Mudanças pequenas e mantidas valem mais que grandes promessas."
+      ],
+      "tryToday": [
+        "Olhe o seu tempo de tela e os desbloqueios, sem julgar.",
+        "Escolha uma mudança pequena para esta semana.",
+        "Compare o número daqui a sete dias."
+      ]
+    },
+    "dig-rolagem": {
+      "title": "Rolagem infinita: por que é tão difícil parar",
+      "summary": "Como os feeds foram desenhados para não terem fim.",
+      "oneLine": "Um feed sem fim não dá o sinal de parar. É preciso criar o seu.",
+      "inApp": "O copo do app tem um fim visível: quando enche, acabou. É o oposto do feed.",
+      "body": [
+        "Muitos aplicativos são feitos para durar. Não há fim de página, o conteúdo novo aparece sozinho e as recompensas, como curtidas e novidades, chegam em intervalos imprevisíveis. Esse tipo de recompensa variável é conhecido por prender a atenção, e por isso é difícil parar mesmo quando você quer.",
+        "Parar não é questão de fraqueza. É resistir a algo desenhado para ser resistente. A saída é criar fricção e fins artificiais: definir um tempo antes de abrir, usar um temporizador, tirar o aplicativo da tela inicial, desligar o preenchimento automático e sair da conta quando terminar.",
+        "Outra estratégia é substituir: quando a vontade de rolar aparecer, tenha uma alternativa pronta, como beber um café, olhar pela janela ou ler duas páginas. A vontade passa em poucos minutos se você não a alimenta. Com a prática, o intervalo entre o impulso e a ação cresce."
+      ],
+      "tryToday": [
+        "Tire o aplicativo que mais rola da tela inicial.",
+        "Defina um temporizador antes de abrir.",
+        "Tenha uma alternativa pronta para a vontade."
+      ]
+    },
+    "dig-multitarefa": {
+      "title": "Multitarefa: o mito do cérebro que faz tudo",
+      "summary": "Por que alternar entre tarefas cobra um preço.",
+      "oneLine": "O cérebro não faz duas coisas exigentes ao mesmo tempo. Ele alterna, e cada troca custa.",
+      "inApp": "O copo do app é uma tarefa só: ficar offline. Uma coisa de cada vez.",
+      "body": [
+        "Quando achamos que estamos fazendo duas coisas ao mesmo tempo, quase sempre estamos alternando rapidamente entre elas. Cada troca gasta tempo e energia, e deixa um resíduo de atenção na tarefa anterior. Estudos mostram que a multitarefa em atividades exigentes aumenta os erros e demora mais do que fazer uma de cada vez.",
+        "As interrupções agravam isso. Depois de uma notificação, pode levar vários minutos para voltar ao nível de concentração anterior. Um dia de trabalho com dezenas de interrupções deixa pouco tempo de foco real, e a sensação de cansaço sem ter feito o importante.",
+        "Para mudar, agrupe as tarefas parecidas, deixe blocos sem interrupção, desligue notificações e feche o que não vai usar. Combine com café: um bloco de 40 minutos, uma tarefa, celular virado. E use a pausa para o que for urgente em vez de deixar as coisas invadirem o bloco."
+      ],
+      "tryToday": [
+        "Escolha uma tarefa só para o próximo bloco de 40 minutos.",
+        "Feche abas e desligue as notificações.",
+        "Resolva as mensagens só na pausa."
+      ]
+    },
+    "dig-fronteiras": {
+      "title": "Fronteiras digitais: onde o celular não entra",
+      "summary": "Criar lugares e horas sem tela, sem depender de força de vontade.",
+      "oneLine": "É mais fácil mudar o ambiente do que a si mesmo.",
+      "inApp": "O app foi feito para criar um horário sem celular. Combine com um lugar.",
+      "body": [
+        "Força de vontade cansa. O que funciona melhor é mudar o ambiente para que o comportamento certo fique mais fácil. Fronteiras digitais são regras simples de lugar e de hora: o celular não vai para a mesa de jantar, para a cama, para o banheiro, para a primeira hora da manhã.",
+        "Comece com uma só. A mais comum e eficaz é carregar o celular fora do quarto e usar um despertador comum. Outras: um cesto na entrada de casa para guardar o celular ao chegar, um horário fixo para as redes sociais, notificações só de pessoas.",
+        "Combine a regra com o seu café: o café da manhã e o da tarde sem celular. Conte às pessoas que convivem com você, para que o acordo seja de todos, e não só seu. Fronteiras duram mais quando os outros as respeitam também."
+      ],
+      "tryToday": [
+        "Escolha um lugar da casa sem celular.",
+        "Carregue o celular fora do quarto esta noite.",
+        "Combine a regra com quem mora com você."
+      ]
+    },
+    "dig-fome": {
+      "title": "Fome de novidade: o hábito de checar",
+      "summary": "Por que olhamos o celular sem querer nada.",
+      "oneLine": "Checar o celular costuma ser um pequeno alívio do tédio, e o tédio é o gatilho.",
+      "inApp": "O registro do que interrompe o copo, no Resultado, mostra quanto o tédio puxa.",
+      "body": [
+        "Muita gente pega o celular sem ter um motivo. É um gesto automático para preencher um instante vazio. O cérebro gosta de novidade, e cada checada tem a chance de trazer algo novo. Com o tempo, vira um hábito: um gatilho (tédio, espera, desconforto), uma ação (pegar o celular) e uma pequena recompensa.",
+        "Para mudar, o primeiro passo é notar o gatilho. Quando a mão for ao celular, pergunte: o que eu estou sentindo agora? Cansaço, tédio, ansiedade, solidão? Nomear ajuda a escolher. O segundo passo é ter uma resposta alternativa, como respirar fundo, esticar o corpo ou beber água.",
+        "O tédio, aliás, é útil: é o espaço onde a mente se organiza e onde surgem ideias. Aprender a ficar no tédio por um minuto, sem preencher, é um treino valioso. Um café sem tela é um bom lugar para isso. No Resultado do app, anote o que interrompeu o copo: é a pista do seu gatilho."
+      ],
+      "tryToday": [
+        "Perceba o que você sente antes de pegar o celular.",
+        "Tenha uma alternativa: respirar, esticar ou beber água.",
+        "Fique um minuto no tédio, sem preencher."
+      ]
+    },
+    "sleep-rotina": {
+      "title": "Rotina de sono: o que mais ajuda",
+      "summary": "Horário fixo, ambiente e hábitos simples que melhoram a noite.",
+      "oneLine": "O sono responde à regularidade mais do que a qualquer truque.",
+      "inApp": "O Bem-estar mostra o seu tempo offline à noite. Uma boa noite começa com a tela longe.",
+      "body": [
+        "O corpo funciona por ritmos. Dormir e acordar em horários parecidos todos os dias, inclusive nos fins de semana, é uma das medidas que mais ajudam o sono. O relógio interno aprende a hora de ficar com sono e a de acordar, e o sono fica mais profundo e contínuo.",
+        "Pequenos ajustes ajudam: quarto escuro, silencioso e fresco; cama só para dormir; luz mais fraca na última hora; evitar refeições pesadas, álcool e cafeína tarde; e deixar o celular fora do alcance. Uma rotina curta antes de deitar, como um banho, uma leitura leve e uma respiração lenta, avisa ao corpo que vai desacelerar.",
+        "Se você não pegar no sono em cerca de 20 minutos, levante, faça algo calmo com pouca luz e volte quando o sono vier. Insônia frequente, ronco forte ou cansaço constante podem ter causas que precisam de avaliação médica. Este texto é informativo e não substitui o cuidado profissional."
+      ],
+      "tryToday": [
+        "Defina um horário de dormir e de acordar para a semana.",
+        "Deixe o celular longe da cama esta noite.",
+        "Crie uma rotina curta de dez minutos antes de deitar."
+      ]
+    },
+    "sleep-luz": {
+      "title": "Luz: o relógio do corpo",
+      "summary": "Como a luz do dia e a da noite regulam o sono.",
+      "oneLine": "A luz é o principal sinal que o corpo usa para saber que horas são.",
+      "inApp": "Cada hora offline à noite poupa o seu sono da luz azul da tela.",
+      "body": [
+        "O corpo usa a luz para acertar o relógio interno. A luz forte da manhã avisa que o dia começou, e ajuda a dar sono na hora certa à noite. Por isso, cinco a quinze minutos ao ar livre perto de acordar são uma das medidas mais simples para melhorar o sono. Mesmo em dia nublado, a luz de fora é muito mais forte que a de dentro.",
+        "À noite acontece o contrário: a luz forte e azulada, como a das telas e de algumas lâmpadas, pode atrasar a liberação de melatonina e a sensação de sono. Reduzir a luz na última hora e usar luz quente e fraca no quarto ajuda. Telas com filtro ajudam um pouco, mas o conteúdo também mantém a mente ativa.",
+        "Um plano simples: sair para a luz natural de manhã, e à noite apagar as luzes fortes, deixar o celular de lado uma hora antes e dormir no escuro. Para quem trabalha à noite, o ajuste é mais difícil, e vale conversar com um profissional sobre o melhor jeito."
+      ],
+      "tryToday": [
+        "Fique 10 minutos ao ar livre nesta manhã.",
+        "Diminua as luzes da casa na última hora.",
+        "Deixe o celular de lado uma hora antes de dormir."
+      ]
+    },
+    "sleep-cochilo": {
+      "title": "Cochilo e café: o cochilo com cafeína",
+      "summary": "Quando um cochilo curto ajuda e o truque de tomar café antes dele.",
+      "oneLine": "Um cochilo curto, no horário certo, recarrega sem atrapalhar a noite.",
+      "inApp": "Se a tarde pesar, um cochilo e um café curto podem salvar o dia, sem passar das 15h.",
+      "body": [
+        "Um cochilo de 10 a 20 minutos no começo da tarde, em geral entre 13 e 15 horas, costuma melhorar o estado de alerta sem deixar aquela sensação pesada de quem dormiu demais. Cochilos longos, de mais de 30 minutos, podem causar inércia do sono: sonolência e confusão ao acordar. Cochilos tarde demais atrapalham o sono da noite.",
+        "Existe um truque conhecido como cochilo com cafeína: tomar um café curto logo antes de deitar para um cochilo de cerca de 20 minutos. A cafeína leva uns 20 a 30 minutos para fazer efeito, então ela começa a agir quando você acorda, somando-se ao descanso. Funciona para algumas pessoas, e não para outras.",
+        "Para cochilar bem: lugar escuro e silencioso, alarme tocando em 20 minutos, celular longe de ver. Se você precisa de cochilos longos todos os dias, ou sente sono demais mesmo dormindo bem, vale conversar com um profissional de saúde. Este texto é informativo e não substitui orientação médica."
+      ],
+      "tryToday": [
+        "Teste um cochilo de 20 minutos, com alarme.",
+        "Experimente tomar um café curto antes dele.",
+        "Evite cochilar depois das 15 horas."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {
