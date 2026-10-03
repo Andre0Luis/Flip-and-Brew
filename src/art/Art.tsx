@@ -588,7 +588,7 @@ function BeanBag({ body, label, accent, tier, seal }: { body: string; label: str
       <Path d="M34 28H86L87 36H33Z" fill={accent} opacity={0.9} />
       <Path d="M34 28L38 24L42 28L46 24L50 28L54 24L58 28L62 24L66 28L70 24L74 28L78 24L82 28L86 28" stroke={accent} strokeWidth={2.2} fill="none" />
       <Rect x={40} y={46} width={40} height={44} rx={4} fill={label} />
-      <Ellipse cx={60} cy={62} rx={8} ry={11} fill="#4B2815" transform="rotate(25 60 62)" />
+      <Path d="M56 51C67 53 70 66 64 73C53 71 50 58 56 51Z" fill="#4B2815" />
       <Path d="M56 52Q62 62 64 72" stroke={label} strokeWidth={1.6} fill="none" />
       {seal && <Circle cx={80} cy={50} r={8} fill="#D7A040" />}
       {seal && <Star x={80} y={50} s={0.9} />}

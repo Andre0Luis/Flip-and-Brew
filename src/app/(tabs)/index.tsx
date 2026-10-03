@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
 import { BrewerCarousel } from '@/components/BrewerCarousel';
 import { CalibrateCard } from '@/components/CalibrateCard';
@@ -58,8 +59,16 @@ export default function Inicio() {
   const combo = earnBonus(brewerId, cupId, packId);
   // A bancada usa a largura da tela: xícara e pacote maiores nos lados, cafeteira no centro.
   const [stageW, setStageW] = useState(0);
-  const side = Math.round(Math.min(116, Math.max(84, (stageW || 340) * 0.31)));
-  const center = Math.round(Math.min(200, Math.max(150, (stageW || 340) - 2 * side + 36)));
+  const side = Math.round(Math.min(100, Math.max(76, (stageW || 340) * 0.26)));
+  const center = Math.round(Math.min(250, Math.max(190, (stageW || 340) - 2 * side + 60)));
+  const brewerIds = ownedBrewers.map((b) => b.id);
+  const brewerIndex = Math.max(0, brewerIds.indexOf(brewerId));
+  const goBrewer = (to: number) => {
+    const id = brewerIds[to];
+    if (!id) return;
+    Haptics.selectionAsync().catch(() => {});
+    equip(id);
+  };
 
   const begin = () => {
     if (active || start()) router.push('/brew');
@@ -122,17 +131,29 @@ export default function Inicio() {
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
         {/* Bancada: a xícara de um lado, a cafeteira no centro e o pacote de café do outro. Tocar leva à Coleção. */}
         <View onLayout={(e) => setStageW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', alignSelf: 'stretch' }}>
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginRight: -10 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginRight: -14, marginBottom: -6 }}>
             <Art id={cupId} size={side} fill={1} />
           </Pressable>
           <BrewerCarousel ids={ownedBrewers.map((b) => b.id)} current={brewerId} size={center} onChange={equip} />
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginLeft: -10 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginLeft: -14, marginBottom: -6 }}>
             <Art id={packId} size={side} />
           </Pressable>
         </View>
-        <Txt v="small" color="muted">
-          {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
-        </Txt>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, alignSelf: 'stretch' }}>
+          {brewerIds.length > 1 ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t('home.brewerPrev')} onPress={() => goBrewer(brewerIndex - 1)} disabled={brewerIndex === 0} hitSlop={10} style={{ padding: 6, opacity: brewerIndex === 0 ? 0.25 : 1 }}>
+              <Icon name="back" color={c.fg} />
+            </Pressable>
+          ) : null}
+          <Txt v="small" color="muted" style={{ flexShrink: 1, textAlign: 'center' }}>
+            {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
+          </Txt>
+          {brewerIds.length > 1 ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t('home.brewerNext')} onPress={() => goBrewer(brewerIndex + 1)} disabled={brewerIndex === brewerIds.length - 1} hitSlop={10} style={{ padding: 6, opacity: brewerIndex === brewerIds.length - 1 ? 0.25 : 1, transform: [{ scaleX: -1 }] }}>
+              <Icon name="back" color={c.fg} />
+            </Pressable>
+          ) : null}
+        </View>
         {combo.total > 0 && (
           <Txt v="label" color="accent">
             {t('home.combo', { n: combo.total })}
