@@ -2,7 +2,7 @@
 
 ## Tus datos se quedan en el dispositivo
 
-Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo y preferencias se quedan solo en tu móvil, sin servidor ni herramienta de analítica.
+Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo, energía diaria y preferencias se quedan solo en tu móvil, sin servidor ni herramienta de analítica.
 
 ## Acceso al uso (opcional)
 
@@ -26,7 +26,7 @@ En Ajustes, “Borrar todos los datos” elimina todo lo que la app guardó. Des
 
 ## Cuenta y copia (opcional)
 
-Puedes crear una cuenta con correo y contraseña o entrar con Google. Si lo haces, guardamos tu correo y una copia de tu progreso (tazas, monedas, objetos, ánimo y preferencias) en Firebase, un servicio de Google, para que lo recuperes en otro dispositivo. Solo tú accedes a esa copia. El acceso con Google comparte solo tu nombre y correo del perfil.
+Puedes crear una cuenta con correo y contraseña o entrar con Google. Si lo haces, guardamos tu correo y una copia de tu progreso (tazas, monedas, objetos, ánimo, energía diaria y preferencias) en Firebase, un servicio de Google, para que lo recuperes en otro dispositivo. Solo tú accedes a esa copia. El acceso con Google comparte solo tu nombre y correo del perfil.
 
 ## Eliminar la cuenta
 

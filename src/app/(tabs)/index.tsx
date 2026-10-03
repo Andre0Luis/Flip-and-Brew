@@ -3,6 +3,7 @@ import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native'
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Art } from '@/art/Art';
 import { CalibrateCard } from '@/components/CalibrateCard';
+import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
@@ -135,6 +136,8 @@ export default function Inicio() {
           </Txt>
         )}
       </View>
+
+      <CheckinCard />
 
       <CalibrateCard />
     </Screen>

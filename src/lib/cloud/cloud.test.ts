@@ -13,6 +13,7 @@ const fresh = (): LocalData => ({
   brewerId: 'v60',
   cupId: 'cup',
   sessions: [],
+  checkins: [],
   practiceAccepted: null,
   practicesDone: [],
   articlesRead: [],
@@ -100,4 +101,19 @@ test('validação de e-mail e das chaves', () => {
   assert.equal(isValidEmail('sem arroba'), false);
   assert.equal(isFirebaseConfigured({ apiKey: '', authDomain: '', projectId: '', storageBucket: '', messagingSenderId: '', appId: '' }), false);
   assert.equal(isFirebaseConfigured({ apiKey: 'k', authDomain: '', projectId: 'p', storageBucket: '', messagingSenderId: '', appId: 'a' }), true);
+});
+
+test('o check-in de energia vai e volta pelo backup, e um backup antigo sem ele ainda vale', () => {
+  const withCheckin = { ...fresh(), checkins: [{ day: '2026-10-14', energy: 4, at: 1 }] };
+  const snap = buildSnapshot(withCheckin, 3);
+  assert.deepEqual(snap.data.checkins, [{ day: '2026-10-14', energy: 4, at: 1 }]);
+  assert.equal(hasMeaningfulData(withCheckin), true);
+  assert.notEqual(dataSignature(withCheckin), dataSignature(fresh()));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).checkins, withCheckin.checkins);
+
+  const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 4)));
+  delete old.data.checkins;
+  assert.ok(parseSnapshot(old));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).checkins, []);
+  assert.equal(parseSnapshot({ ...old, data: { ...old.data, checkins: 'x' } }), null);
 });

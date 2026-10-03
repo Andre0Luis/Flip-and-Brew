@@ -14,6 +14,9 @@ export type Session = {
   mood?: number;
 };
 
+/** Check-in diário: energia do dia em xícaras de café, de 1 (vazia) a 5 (cheia). Um por dia. */
+export type Checkin = { day: string; energy: number; at: number };
+
 export type ActiveBrew = { brewerId: string; cupId: string; startedAt: number; targetMs: number };
 
 export type ThemeMode = 'system' | 'light' | 'dark';

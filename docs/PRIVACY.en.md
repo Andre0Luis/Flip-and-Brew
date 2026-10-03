@@ -2,7 +2,7 @@
 
 ## Your data stays on the device
 
-Flip & Brew works without an account. Without one, cups, coins, items, mood and preferences stay only on your phone, with no server and no analytics tool.
+Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy and preferences stay only on your phone, with no server and no analytics tool.
 
 ## Usage access (optional)
 
@@ -26,7 +26,7 @@ In Settings, “Delete all data” removes everything the app stored. Uninstalli
 
 ## Account and backup (optional)
 
-You can create an account with email and password or sign in with Google. If you do, we store your email and a copy of your progress (cups, coins, items, mood and preferences) in Firebase, a Google service, so you can recover it on another device. Only you can access that copy. Google sign-in shares only your profile name and email.
+You can create an account with email and password or sign in with Google. If you do, we store your email and a copy of your progress (cups, coins, items, mood, daily energy and preferences) in Firebase, a Google service, so you can recover it on another device. Only you can access that copy. Google sign-in shares only your profile name and email.
 
 ## Deleting the account
 

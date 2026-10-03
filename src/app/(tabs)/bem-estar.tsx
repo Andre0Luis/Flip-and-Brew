@@ -8,6 +8,7 @@ import { useApp } from '@/store/useApp';
 import {
   afterMissInsight, balanceScore, calendar, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
 } from '@/lib/stats';
+import { energySummary } from '@/lib/checkin';
 import { minutesLabel } from '@/lib/format';
 import { formatDateShort, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -70,6 +71,8 @@ export default function BemEstar() {
   const miss = afterMissInsight(sessions);
   const trig = triggerCounts(sessions);
   const mood = moodSummary(sessions, goal);
+  const checkins = useApp((s) => s.checkins);
+  const energy = energySummary(checkins, sessions, goal);
   const hrs = hourly(sessions);
 
   return (
@@ -240,6 +243,37 @@ export default function BemEstar() {
             ) : (
               <Txt v="small" color="muted">
                 {t('wb.moodEmpty')}
+              </Txt>
+            )}
+          </Card>
+
+          <Card style={{ gap: 10 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Txt v="label" color="muted">
+                {t('wb.energyTitle')}
+              </Txt>
+              {energy && (
+                <Txt v="label" color="muted">
+                  {t('wb.energyAvg', { n: dec(energy.average) })}
+                </Txt>
+              )}
+            </View>
+            {energy ? (
+              <>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 52 }}>
+                  {energy.week.map((e, i) => (
+                    <View key={i} style={{ flex: 1, height: e === null ? 4 : e * 10, borderRadius: 3, backgroundColor: e !== null && e >= 5 ? c.accent : e === null ? c.line : c.cupFill, opacity: e !== null && e >= 5 ? 1 : 0.55 }} />
+                  ))}
+                </View>
+                {energy.high !== null && energy.low !== null && (
+                  <Txt v="small" color="muted">
+                    {t('wb.energyCompare', { time: minutesLabel(Math.min(goal, 120)), a: dec(energy.high), b: dec(energy.low) })}
+                  </Txt>
+                )}
+              </>
+            ) : (
+              <Txt v="small" color="muted">
+                {t('wb.energyEmpty')}
               </Txt>
             )}
           </Card>

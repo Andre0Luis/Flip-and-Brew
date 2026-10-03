@@ -14,6 +14,7 @@ export function localData(): LocalData {
     brewerId: s.brewerId,
     cupId: s.cupId,
     sessions: s.sessions,
+    checkins: s.checkins,
     practiceAccepted: s.practiceAccepted,
     practicesDone: s.practicesDone,
     articlesRead: s.articlesRead,

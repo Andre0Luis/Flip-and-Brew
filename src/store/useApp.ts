@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { appStorage } from './storage';
-import type { ActiveBrew, Session, Settings } from './types';
+import type { ActiveBrew, Checkin, Session, Settings } from './types';
 import { byId, CATALOG, STARTER_IDS } from '@/data/catalog';
 import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
-import { makeDemoSessions } from '@/lib/demo';
+import { makeDemoCheckins, makeDemoSessions } from '@/lib/demo';
 import { makeTestData } from '@/lib/testUser';
+import { withCheckin } from '@/lib/checkin';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -17,6 +18,8 @@ type State = {
   cupId: string;
   active: ActiveBrew | null;
   sessions: Session[];
+  /** energia diária em xícaras (1 a 5), um registro por dia */
+  checkins: Checkin[];
   lastResultId: string | null;
   practiceAccepted: string | null; // dayKey
   practicesDone: string[]; // dayKeys
@@ -35,6 +38,8 @@ type State = {
   start: (now?: number) => boolean;
   /** Encerra o copo ativo. Devolve o id da sessão registrada ou null se foi descartada. */
   finish: (now?: number) => string | null;
+  /** Registra (ou troca) a energia de hoje, de 1 a 5 xícaras. */
+  setCheckin: (energy: number, now?: number) => void;
   setResult: (id: string, patch: Partial<Pick<Session, 'trigger' | 'mood'>>) => void;
   buy: (id: string) => 'ok' | 'owned' | 'poor' | 'locked';
   equip: (id: string) => void;
@@ -55,6 +60,7 @@ const initial = {
   cupId: 'cup',
   active: null as ActiveBrew | null,
   sessions: [] as Session[],
+  checkins: [] as Checkin[],
   lastResultId: null as string | null,
   practiceAccepted: null as string | null,
   practicesDone: [] as string[],
@@ -72,6 +78,7 @@ export const useApp = create<State>()(
 
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
+      setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
       setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s } })),
 
       start: (now = Date.now()) => {
@@ -158,6 +165,7 @@ export const useApp = create<State>()(
       loadDemo: () =>
         set((st) => ({
           sessions: makeDemoSessions(),
+          checkins: makeDemoCheckins(),
           coins: Math.max(st.coins, 480),
           owned: Array.from(new Set([...st.owned, 'press', 'mug', 'glass', 'tiny'])),
           practicesDone: [dayKey(Date.now() - 86_400_000), dayKey(Date.now() - 2 * 86_400_000), dayKey(Date.now() - 3 * 86_400_000)],
@@ -194,6 +202,7 @@ export const useApp = create<State>()(
         cupId: s.cupId,
         active: s.active,
         sessions: s.sessions,
+        checkins: s.checkins,
         lastResultId: s.lastResultId,
         practiceAccepted: s.practiceAccepted,
         practicesDone: s.practicesDone,
