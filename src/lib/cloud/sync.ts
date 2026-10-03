@@ -15,6 +15,7 @@ export function localData(): LocalData {
     cupId: s.cupId,
     sessions: s.sessions,
     checkins: s.checkins,
+    profile: s.profile,
     practiceAccepted: s.practiceAccepted,
     practicesDone: s.practicesDone,
     articlesRead: s.articlesRead,

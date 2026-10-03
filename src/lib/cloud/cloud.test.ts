@@ -117,3 +117,22 @@ test('o check-in de energia vai e volta pelo backup, e um backup antigo sem ele 
   assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).checkins, []);
   assert.equal(parseSnapshot({ ...old, data: { ...old.data, checkins: 'x' } }), null);
 });
+
+test('o perfil vai e volta pelo backup, vazio não conta como dado e campo inválido é descartado', () => {
+  const profile = { name: 'Ana', phone: '(11) 91234-5678', age: 30, roast: 'dark', flavors: ['fruity'] };
+  const withProfile = { ...fresh(), profile };
+  const snap = buildSnapshot(withProfile, 3);
+  assert.deepEqual(snap.data.profile, profile);
+  assert.equal(hasMeaningfulData(withProfile), true);
+  assert.equal(hasMeaningfulData({ ...fresh(), profile: {} }), false);
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).profile, profile);
+  assert.notEqual(dataSignature(withProfile), dataSignature(fresh()));
+
+  const dirty = buildSnapshot({ ...fresh(), profile: { phone: 'abc', age: 5, grind: 'espuma' } as never }, 4);
+  assert.deepEqual(dirty.data.profile, {});
+  const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 5)));
+  delete old.data.profile;
+  assert.ok(parseSnapshot(old));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).profile, {});
+  assert.equal(parseSnapshot({ ...old, data: { ...old.data, profile: [] } }), null);
+});

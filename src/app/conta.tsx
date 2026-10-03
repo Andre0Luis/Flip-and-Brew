@@ -3,7 +3,8 @@ import { Pressable, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Icon } from '@/components/Icon';
-import { Button, Card, Field, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Chip, Field, Screen, Segmented, Txt } from '@/components/ui';
+import { ProfileForm } from '@/components/ProfileForm';
 import { formatDateShort, useI18n, type Key } from '@/i18n';
 import { AuthError, getBackend, isValidEmail, MIN_PASSWORD, toAuthError } from '@/lib/cloud';
 import { backupNow, localData, resolveChoice, restoreNow } from '@/lib/cloud/sync';
@@ -71,6 +72,7 @@ function SignedOut() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AuthError | string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -146,6 +148,20 @@ function SignedOut() {
         <Field label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry autoComplete={mode === 'up' ? 'new-password' : 'current-password'} textContentType={mode === 'up' ? 'newPassword' : 'password'} returnKeyType={mode === 'up' ? 'next' : 'done'} onSubmitEditing={mode === 'in' ? submit : undefined} />
         {mode === 'up' && <Field label={t('auth.confirm')} value={confirm} onChangeText={setConfirm} secureTextEntry autoComplete="new-password" textContentType="newPassword" returnKeyType="done" onSubmitEditing={submit} />}
       </View>
+
+      {mode === 'up' && (
+        <View style={{ gap: 12 }}>
+          <Chip label={t('profile.signupToggle')} on={showProfile} onPress={() => setShowProfile((v) => !v)} />
+          {showProfile && (
+            <>
+              <ProfileForm />
+              <Txt v="small" color="muted">
+                {t('profile.privacy')}
+              </Txt>
+            </>
+          )}
+        </View>
+      )}
 
       <ErrorLine error={error} />
       {info && (

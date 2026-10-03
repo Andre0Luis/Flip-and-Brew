@@ -17,6 +17,23 @@ export type Session = {
 /** Check-in diário: energia do dia em xícaras de café, de 1 (vazia) a 5 (cheia). Um por dia. */
 export type Checkin = { day: string; energy: number; at: number };
 
+/**
+ * Perfil opcional da pessoa. Tudo é facultativo; as preferências de café são chaves neutras (nunca texto traduzido).
+ * Fica no aparelho e, com conta, vai no backup junto com o progresso.
+ */
+export type Profile = {
+  name?: string;
+  phone?: string;
+  age?: number;
+  /** café favorito, em texto livre */
+  favorite?: string;
+  roast?: string;
+  grind?: string;
+  body?: string;
+  acidity?: string;
+  flavors?: string[];
+};
+
 export type ActiveBrew = { brewerId: string; cupId: string; startedAt: number; targetMs: number };
 
 export type ThemeMode = 'system' | 'light' | 'dark';

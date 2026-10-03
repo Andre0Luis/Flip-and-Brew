@@ -1,4 +1,4 @@
-import type { Checkin, Session } from '@/store/types';
+import type { Checkin, Profile, Session } from '@/store/types';
 
 export type Provider = 'password' | 'google';
 
@@ -38,6 +38,8 @@ export type SnapshotData = {
   sessions: Session[];
   /** Opcional: backups feitos antes do check-in de energia não têm este campo. */
   checkins?: Checkin[];
+  /** Opcional: nome, telefone, idade e preferências de café. Backups antigos não têm. */
+  profile?: Profile;
   practiceAccepted: string | null;
   practicesDone: string[];
   articlesRead: string[];

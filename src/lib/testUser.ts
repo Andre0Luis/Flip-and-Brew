@@ -23,6 +23,7 @@ export function makeTestData(now = Date.now()): Omit<LocalData, 'settings'> {
     cupId: 'stoic-ep',
     sessions,
     checkins: makeDemoCheckins(now, TEST_HISTORY_DAYS, sessions),
+    profile: { name: 'Pessoa de Teste', age: 32, favorite: 'Coado de café do Cerrado', roast: 'medium', grind: 'medium', body: 'medium', acidity: 'medium', flavors: ['chocolate', 'caramel'] },
     practiceAccepted: null,
     practicesDone,
     articlesRead: ARTICLE_BASE.slice(0, 6).map((a) => a.id),

@@ -7,6 +7,7 @@ import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
+import { hasProfile } from '@/lib/profile';
 import { useAuth } from '@/store/useAuth';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
@@ -46,6 +47,7 @@ export default function Ajustes() {
   const taps = useRef(0);
   const showDev = __DEV__ || settings.devTools;
   const setOnboarded = useApp((s) => s.setOnboarded);
+  const profile = useApp((s) => s.profile);
   const authUser = useAuth((s) => s.user);
 
   // Sete toques na versão liberam as ferramentas de teste em qualquer build.
@@ -166,6 +168,14 @@ export default function Ajustes() {
           <Button label={t('account.open')} tone="quiet" onPress={() => router.push('/conta')} />
         </Card>
       )}
+
+      <Card style={{ gap: 10 }}>
+        <Txt v="title">{t('profile.title')}</Txt>
+        <Txt v="small" color="muted">
+          {profile.name ? t('profile.cardFilled', { name: profile.name }) : hasProfile(profile) ? t('profile.cardFilledNoName') : t('profile.cardBody')}
+        </Txt>
+        <Button label={t('profile.open')} tone="quiet" onPress={() => router.push('/perfil')} />
+      </Card>
 
       <Card style={{ gap: 10 }}>
         <Button label={t('set.intro')} tone="quiet" onPress={() => setOnboarded(false)} />

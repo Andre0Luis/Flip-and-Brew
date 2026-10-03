@@ -40,6 +40,7 @@ function Shell() {
           <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
           <Stack.Screen name="privacidade" />
           <Stack.Screen name="conta" />
+          <Stack.Screen name="perfil" />
         </Stack.Protected>
       </Stack>
     </NavThemeProvider>

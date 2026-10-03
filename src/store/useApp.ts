@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { appStorage } from './storage';
-import type { ActiveBrew, Checkin, Session, Settings } from './types';
+import type { ActiveBrew, Checkin, Profile, Session, Settings } from './types';
 import { byId, CATALOG, STARTER_IDS } from '@/data/catalog';
 import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
 import { makeDemoCheckins, makeDemoSessions } from '@/lib/demo';
 import { makeTestData } from '@/lib/testUser';
 import { withCheckin } from '@/lib/checkin';
+import { cleanProfile } from '@/lib/profile';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -21,6 +22,8 @@ type State = {
   /** energia diária em xícaras (1 a 5), um registro por dia */
   checkins: Checkin[];
   lastResultId: string | null;
+  /** perfil opcional (dados pessoais e preferências de café) */
+  profile: Profile;
   practiceAccepted: string | null; // dayKey
   practicesDone: string[]; // dayKeys
   articlesRead: string[];
@@ -40,6 +43,9 @@ type State = {
   finish: (now?: number) => string | null;
   /** Registra (ou troca) a energia de hoje, de 1 a 5 xícaras. */
   setCheckin: (energy: number, now?: number) => void;
+  /** Atualiza o perfil. Passe undefined para limpar um campo. */
+  setProfile: (patch: Partial<Record<keyof Profile, unknown>>) => void;
+  clearProfile: () => void;
   setResult: (id: string, patch: Partial<Pick<Session, 'trigger' | 'mood'>>) => void;
   buy: (id: string) => 'ok' | 'owned' | 'poor' | 'locked';
   equip: (id: string) => void;
@@ -62,6 +68,7 @@ const initial = {
   sessions: [] as Session[],
   checkins: [] as Checkin[],
   lastResultId: null as string | null,
+  profile: {} as Profile,
   practiceAccepted: null as string | null,
   practicesDone: [] as string[],
   articlesRead: [] as string[],
@@ -79,6 +86,8 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
+      setProfile: (patch) => set((st) => ({ profile: cleanProfile({ ...st.profile, ...patch }) })),
+      clearProfile: () => set({ profile: {} }),
       setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s } })),
 
       start: (now = Date.now()) => {
@@ -204,6 +213,7 @@ export const useApp = create<State>()(
         sessions: s.sessions,
         checkins: s.checkins,
         lastResultId: s.lastResultId,
+        profile: s.profile,
         practiceAccepted: s.practiceAccepted,
         practicesDone: s.practicesDone,
         articlesRead: s.articlesRead,
