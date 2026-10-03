@@ -63,6 +63,8 @@ export default function Inicio() {
   const center = Math.round(Math.min(214, Math.max(168, (stageW || 340) - 2 * side + 44)));
   const brewerIds = ownedBrewers.map((b) => b.id);
   const brewerIndex = Math.max(0, brewerIds.indexOf(brewerId));
+  // O parâmetro t muda a cada toque, para a Coleção reagir mesmo quando já está aberta na mesma aba.
+  const openCollection = (tab: 'cup' | 'beans') => router.push({ pathname: '/colecao', params: { tab, t: String(Date.now()) } });
   const goBrewer = (to: number) => {
     const id = brewerIds[to];
     if (!id) return;
@@ -131,11 +133,11 @@ export default function Inicio() {
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
         {/* Bancada: a xícara de um lado, a cafeteira no centro e o pacote de café do outro. Tocar leva à Coleção. */}
         <View onLayout={(e) => setStageW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', alignSelf: 'stretch' }}>
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginRight: -14, marginBottom: -6 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => openCollection('cup')} hitSlop={8} style={{ width: side, marginRight: -14, marginBottom: -6 }}>
             <Art id={cupId} size={side} fill={1} />
           </Pressable>
           <BrewerCarousel ids={ownedBrewers.map((b) => b.id)} current={brewerId} size={center} onChange={equip} />
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginLeft: -14, marginBottom: -6 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => openCollection('beans')} hitSlop={8} style={{ width: side, marginLeft: -14, marginBottom: -6 }}>
             <Art id={packId} size={side} />
           </Pressable>
         </View>

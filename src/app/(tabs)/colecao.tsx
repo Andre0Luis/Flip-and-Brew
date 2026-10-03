@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
 import { Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
@@ -52,8 +53,22 @@ export default function Colecao() {
   const { lang, t } = useI18n();
   const { owned, brewerId, cupId, packId, sessions, articlesRead, practicesDone, missionsDone, missionBonusDays, missionsClaimed } = useApp();
   const equip = useApp((s) => s.equip);
-  const [tab, setTab] = useState<Tab>('cup');
+  const params = useLocalSearchParams<{ tab?: string; t?: string }>();
+  const [tab, setTab] = useState<Tab>(params.tab === 'beans' || params.tab === 'brewer' ? params.tab : 'cup');
   const [sel, setSel] = useState<{ cup: string; brewer: string; beans: string }>({ cup: cupId, brewer: brewerId, beans: packId });
+
+  // Vindo do Início (tocar na xícara ou no pacote), abre na aba certa com o item em uso selecionado.
+  // Ajusta o estado durante a renderização quando o pedido muda, em vez de usar um efeito.
+  const wanted = params.tab === 'cup' || params.tab === 'beans' || params.tab === 'brewer' ? params.tab : null;
+  const request = `${params.tab ?? ''}:${params.t ?? ''}`;
+  const [seenRequest, setSeenRequest] = useState(request);
+  if (seenRequest !== request) {
+    setSeenRequest(request);
+    if (wanted) {
+      setTab(wanted);
+      setSel({ cup: cupId, brewer: brewerId, beans: packId });
+    }
+  }
 
   const total = CATALOG.length;
   const have = owned.filter((id) => byId(id)).length;
