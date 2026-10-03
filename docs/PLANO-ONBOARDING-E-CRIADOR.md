@@ -6,7 +6,7 @@ Status: proposta, nada implementado. Base: o briefing do André (perfil, tom, ei
 
 Já existe uma introdução de 4 passos (`intro.tsx`): copo enchendo, moedas, "tropeçar também ensina" e calibração. Ela funciona, mas tem 4 telas de texto e a ação central (virar o celular) só aparece no último passo, como opcional. O briefing pede o oposto: segundos, não carrossel, e aprender fazendo.
 
-A proposta é **enxugar para 3 passos**, mover a ação central para o meio e deixar moedas e antifragilidade para dicas na primeira vez que a pessoa os encontra (Início e Resultado). Essa mudança mexe no que a introdução ensina hoje; vale um ADR curto (0018) ao implementar, marcando a introdução antiga como substituída, não apagada.
+A proposta é **enxugar para 3 passos**, mover a ação central para o meio e deixar moedas e antifragilidade para dicas na primeira vez que a pessoa os encontra (Início e Resultado). Essa mudança mexe no que a introdução ensina hoje; vale um ADR curto (0019) ao implementar, marcando a introdução antiga como substituída, não apagada.
 
 ## 2. Arquitetura do tutorial (3 passos, cerca de 15 segundos)
 
@@ -86,7 +86,7 @@ Notas de revisão:
 
 ## 5. Implementação (quando aprovado)
 
-1. ADR-0018 (nova introdução em 3 passos e seção do criador), ligando ao ADR-0006 (estoicismo/antifragilidade como produto) e ao ADR-0009 (nada exige conta). Atualizar o índice em `docs/adr/README.md`.
+1. ADR-0019 (nova introdução em 3 passos e seção do criador), ligando ao ADR-0006 (estoicismo/antifragilidade como produto) e ao ADR-0009 (nada exige conta). Atualizar o índice em `docs/adr/README.md`.
 2. `intro.tsx`: reduzir `STEPS` para 3, passo 2 usa `useCalibrate`, remover as chaves `intro.t1/b1/t2/b2` e criar as novas em `pt.ts`, `en.ts`, `es.ts`.
 3. Dicas de primeira vez: dois campos novos no store (`seenTips`), com migração, em `src/store/useApp.ts`, e teste.
 4. `src/app/criador.tsx` + conteúdo em `src/data/content/{pt,en,es}.ts` + cartão em `ajustes.tsx`.

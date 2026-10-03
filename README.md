@@ -10,7 +10,8 @@ O código anterior (planta, widget do Z Flip, loja antiga) está no histórico d
 2. **Tempo.** A contagem usa horários, então continua certa com a tela apagada. Pegar o celular (destravar a tela, reabrir o app ou deixá-lo de tela para cima por 3 segundos) encerra o copo. O sensor só decide depois de calibrado: o Início mostra um cartão de cinco segundos para isso, porque o sentido do eixo z muda de aparelho para aparelho.
 3. **Moedas.** Uma por minuto offline, mais 20% de bônus quando o copo enche. Parar cedo rende o proporcional, nunca zero. A qualidade do café vai de Ralo a Encorpado conforme o quanto encheu.
 4. **Resultado.** Ao fim, a pessoa registra o que a interrompeu (se parou cedo) e como se sente. Esses registros alimentam a tela Bem-estar.
-5. **Loja e coleção.** As moedas compram cafeteiras e xícaras. A Chemex abre com 30 dias de sequência.
+5. **Loja e coleção.** As moedas compram cafeteiras (V60, coador de pano, Melitta, prensa, turca, AeroPress, moka, sifão), xícaras e canecas, e duas séries especiais (Estoica e Montanha). A Chemex abre com 30 dias de sequência. Check-ins seguidos e tempo offline dão até 50% de desconto nas cafeteiras (ADR-0018).
+6. **Check-in e perfil.** O Início pergunta a energia do dia em xícaras de café (1 a 5); o Bem-estar mostra a semana. O perfil opcional (Ajustes ou cadastro) guarda nome, telefone, idade e gosto de café.
 
 Idiomas: português (padrão), inglês e espanhol. A troca fica em **Ajustes > Idioma** e vale para a interface, as frases, os artigos e as práticas.
 

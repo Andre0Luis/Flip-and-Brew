@@ -35,6 +35,10 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] Regras do Firestore **não rodaram no emulador**.
 - [ ] Contraste e acessibilidade checados só visualmente; falta TalkBack em aparelho.
 
+- [ ] Faixas do desconto (30% check-in + 20% offline) e os preços novos **não foram testados com pessoas** (ADR-0018).
+- [ ] Telefone e idade do perfil entram no formulário de Segurança dos dados da Play Store e na revisão da política de privacidade (ADR-0018).
+- [ ] Widget de tela inicial/bloqueio, dados do Health Connect e a seção de café em Aprender **foram pedidos e ainda não existem**.
+
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).
 - [ ] Testes de interface automatizados no aparelho não existem; só o roteiro manual.
