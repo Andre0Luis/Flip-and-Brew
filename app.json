@@ -189,7 +189,8 @@
             }
           ]
         }
-      ]
+      ],
+      "./plugins/withWorkRuntimeFix"
     ],
     "experiments": {
       "typedRoutes": true,
