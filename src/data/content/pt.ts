@@ -931,6 +931,326 @@ export const pt: Content = {
         "Compare dois cafés e escolha o mais doce."
       ]
     },
+    "taste-aroma": {
+      "title": "Aroma: o que o nariz sabe antes da boca",
+      "summary": "Por que cheirar o café faz parte de prová-lo.",
+      "oneLine": "Boa parte do que chamamos de sabor é, na verdade, cheiro.",
+      "inApp": "Cheire o pó antes de começar o copo do app. É uma pausa de dez segundos que muda o resto.",
+      "body": [
+        "Os receptores da língua sentem só o doce, o salgado, o ácido, o amargo e o umami. Todo o resto do que chamamos de sabor, como o de frutas, flores e chocolate, vem do olfato. Parte do cheiro chega pela frente, pelo nariz, e outra parte sobe por trás, da boca para o nariz, enquanto você bebe.",
+        "Por isso um resfriado deixa o café sem graça. Para treinar, cheire o pó seco, depois o pó molhado (o bloom) e por fim a bebida. Cada fase revela notas diferentes: o pó seco é mais doce e tostado, o molhado mais intenso, a bebida mais complexa.",
+        "Beba em pequenos goles, com um pouco de ar, para o aroma subir pelo fundo do nariz. E procure copos de boca mais larga, que concentram o cheiro. O tempo que você leva para sentir é o tempo que o café vale a pena."
+      ],
+      "tryToday": [
+        "Cheire o pó seco, o molhado e a bebida.",
+        "Descreva cada fase com uma palavra.",
+        "Beba em goles pequenos, com um pouco de ar."
+      ]
+    },
+    "taste-cupping": {
+      "title": "Cupping: a prova dos profissionais",
+      "summary": "Como se faz a degustação padronizada que dá nota ao café.",
+      "oneLine": "No cupping, todos os cafés recebem o mesmo tratamento, e a diferença está só no grão.",
+      "inApp": "Dá para fazer um cupping simples em casa, com xícaras iguais e três cafés. É um ótimo programa de uma tarde.",
+      "body": [
+        "O cupping é o método que provadores usam para avaliar cafés. Pesa-se a mesma dose de cada café, moída na mesma moagem, em xícaras iguais. Despeja-se a água quente sobre o pó, deixa-se de 3 a 5 minutos, quebra-se a crosta com uma colher, sente-se o aroma e remove-se a espuma.",
+        "Depois de uns 10 minutos, quando o café esfria um pouco, prova-se com uma colher, aspirando com força para espalhar o líquido pela boca. Avaliam-se o aroma, a doçura, a acidez, o corpo, o equilíbrio e o final, o que fica depois de engolir. Os cafés recebem notas, e os de 80 pontos ou mais são considerados especiais.",
+        "Em casa, você pode fazer algo parecido: três cafés diferentes, 12 g em cada xícara com 200 ml de água, tempo igual. Prove em silêncio, anote o que sentiu antes de ler o rótulo e só então descubra qual é qual. Dá para aprender muito sobre o próprio gosto."
+      ],
+      "tryToday": [
+        "Prepare três cafés em xícaras iguais, com a mesma receita.",
+        "Prove sem olhar o rótulo e anote notas.",
+        "Descubra qual é qual e compare com o que você escreveu."
+      ]
+    },
+    "taste-defeitos": {
+      "title": "Defeitos do café: o que dá errado",
+      "summary": "Os gostos estranhos que aparecem no café e o que eles querem dizer.",
+      "oneLine": "Nem todo café ruim é culpa de quem prepara. Alguns defeitos já vêm no grão.",
+      "inApp": "Se o copo do app saiu ruim, não foi falha sua: vale aprender a ler o que o café está dizendo.",
+      "body": [
+        "Defeitos são grãos que prejudicam o sabor. Os mais comuns são os grãos pretos, ardidos, verdes e quebrados, além de grãos mofados e fermentados. Eles aparecem por colheita fora do ponto, secagem mal feita ou armazenamento úmido. Um lote com muitos defeitos tem gosto de terra, mofo, remédio ou vinagre.",
+        "Alguns sabores estranhos aparecem na xícara: sabor de borracha ou fenol pode vir de fermentação; gosto de papel, de um café velho ou de filtro mal lavado; gosto de queimado, de torra muito forte; sabor de chá velho e rançoso, de café guardado há meses.",
+        "Para evitar, compre de quem informa a torra e a origem, prefira embalagens fechadas com válvula, guarde bem e use dentro de um mês. E lembre: se o café estiver sempre ruim, tente mudar de marca antes de mudar o preparo."
+      ],
+      "tryToday": [
+        "Procure a data de torra no pacote do seu café.",
+        "Aponte o gosto que mais o incomoda.",
+        "Experimente trocar de marca, mantendo o preparo."
+      ]
+    },
+    "taste-harmoniza": {
+      "title": "Café e comida: combinações que funcionam",
+      "summary": "O que combina com café e por quê.",
+      "oneLine": "Um café combina com o que ele contrasta ou com o que ele repete.",
+      "inApp": "Uma pausa com café e uma coisa pequena para comer é um ritual completo, sem tela e sem pressa.",
+      "body": [
+        "Há duas lógicas de combinação. A primeira é a do contraste: um café amargo e forte com algo doce, como bolo ou doce de leite, equilibra os dois. A segunda é a da semelhança: um café de notas de chocolate com um brownie, ou um café frutado com uma torta de frutas, reforça os mesmos sabores.",
+        "Cafés ácidos e brilhantes combinam com frutas, queijos frescos e pães com manteiga. Cafés encorpados e achocolatados combinam com chocolate, amêndoas, bolos de cenoura e pão de queijo. E um espresso curto cai bem depois de uma refeição, para fechar.",
+        "Evite comidas muito apimentadas ou muito azedas junto de um café delicado, porque elas cobrem os sabores. E prove em ordem: primeiro o café sozinho, depois com a comida, depois o café de novo. É o jeito de notar o que mudou."
+      ],
+      "tryToday": [
+        "Escolha um café e uma comida que contrastem.",
+        "Prove o café sozinho, com a comida e de novo sozinho.",
+        "Anote a combinação que mais funcionou."
+      ]
+    },
+    "taste-fresco": {
+      "title": "Café fresco: quanto dura e como guardar",
+      "summary": "Quando o café está no melhor momento e como não estragar.",
+      "oneLine": "O café perde o aroma em semanas. Guardar bem é metade do gosto.",
+      "inApp": "O pacote que você equipa no app é o seu café do dia. Na vida real, o frescor é o que mais conta.",
+      "body": [
+        "Depois da torra, o café passa por três fases. Nos primeiros dias, libera muito gás e ainda está meio verde no sabor. Entre uma e três semanas, chega ao melhor ponto: aromático, doce e equilibrado. Depois de mais ou menos um mês, começa a perder aroma e a ficar sem graça. Moído, isso acontece em minutos, e por isso moer na hora é o ideal.",
+        "Quatro inimigos do café: ar, luz, calor e umidade. Guarde em pote opaco e bem fechado, ou no próprio pacote com válvula, longe do fogão e da janela. A geladeira e o congelador trazem umidade e cheiros de outros alimentos, e não valem para o dia a dia. Se for congelar, divida em porções e use sem recongelar.",
+        "Compre em pequenas quantidades, que durem de duas a quatro semanas, e procure a data de torra, não só a de validade. Um bom sinal: o pó solta bastante aroma e dá bloom ao ser molhado. Café sem cheiro e sem espuma é café velho."
+      ],
+      "tryToday": [
+        "Procure a data de torra do seu pacote.",
+        "Troque o pote por um opaco e bem fechado.",
+        "Compre uma quantidade menor, para usar em três semanas."
+      ]
+    },
+    "taste-descritores": {
+      "title": "Palavras para descrever o seu café",
+      "summary": "Vocabulário simples para falar do que você sente.",
+      "oneLine": "Não precisa ser especialista: três palavras já dizem muito.",
+      "inApp": "No Perfil, marcar corpo, acidez e sabor é montar o seu vocabulário de café.",
+      "body": [
+        "Quem descreve o café costuma usar quatro eixos. O primeiro é o aroma: floral, frutado, tostado, achocolatado. O segundo é a acidez: baixa, média ou alta, brilhante ou suave. O terceiro é o corpo: leve como chá, médio ou cheio como leite. E o quarto é o final, o que fica na boca: curto e limpo, ou longo e doce.",
+        "Um jeito prático de começar é usar três palavras: uma de sabor, uma de corpo e uma de sensação. Por exemplo: 'chocolate, encorpado, macio'. Ou: 'cítrico, leve, brilhante'. Com o tempo, as palavras ficam mais específicas, e você começa a reconhecer padrões.",
+        "Escrever ajuda. Mantenha uma pequena nota com o nome do café, a receita e as suas três palavras. Em duas semanas, você vai notar do que gosta e do que não gosta, e saber o que comprar na próxima vez."
+      ],
+      "tryToday": [
+        "Descreva o seu café de hoje em três palavras.",
+        "Anote o nome do café e a receita.",
+        "Compare com o café de ontem."
+      ]
+    },
+    "health-cafeina": {
+      "title": "Cafeína: quanto é demais?",
+      "summary": "Quanta cafeína há em cada café e o limite considerado seguro.",
+      "oneLine": "A dose faz o efeito. Saber quanto você toma já resolve metade das dúvidas.",
+      "inApp": "Seu pacote de café e a cafeteira mudam o ritmo, mas a cafeína é a mesma conta: some o que bebeu no dia.",
+      "body": [
+        "A cafeína é uma substância estimulante. Uma xícara de café coado de 150 ml tem em geral entre 80 e 120 mg. Um espresso curto, de 30 ml, perto de 60 a 80 mg. O café robusta tem cerca do dobro da arábica. O cold brew concentrado e algumas bebidas energéticas podem ter bem mais, então vale ler os rótulos.",
+        "Autoridades de saúde costumam considerar seguro, para adultos saudáveis, até cerca de 400 mg de cafeína por dia, o que equivale a umas três a quatro xícaras de café coado, e doses únicas de até 200 mg. Esses limites são médias: pessoas diferem muito, e algumas sentem efeitos com bem menos.",
+        "Sinais de excesso incluem nervosismo, coração acelerado, tremor, insônia e desconforto no estômago. Este texto é informativo e não substitui orientação médica: se você tem uma condição de saúde, toma remédios ou tem dúvidas, converse com um profissional."
+      ],
+      "tryToday": [
+        "Some a cafeína aproximada do que bebeu hoje.",
+        "Repare como você se sente depois de cada xícara.",
+        "Anote o seu limite confortável."
+      ]
+    },
+    "health-meia-vida": {
+      "title": "Meia-vida da cafeína: por que o café da tarde atrapalha",
+      "summary": "O tempo que a cafeína leva para sair do corpo e o que isso muda no sono.",
+      "oneLine": "A cafeína não some quando o efeito passa. Ela continua no corpo por horas.",
+      "inApp": "O check-in de energia e o sono andam juntos: observe como seu dia muda conforme o horário do último café.",
+      "body": [
+        "A meia-vida da cafeína é o tempo que o corpo leva para eliminar metade dela. Em média, fica em torno de 5 horas, mas varia de cerca de 3 a 7 horas entre as pessoas. Gestantes, quem usa certos remédios e quem tem problemas de fígado costumam eliminá-la mais devagar. Fumantes, mais depressa.",
+        "Isso significa que um café às 16 horas ainda deixa metade da cafeína no corpo às 21 horas. Mesmo que você durma, o sono pode ficar mais leve e mais curto, sem você perceber. Muita gente acha que o café da tarde não atrapalha, mas medidas mostram que ele pode reduzir o sono profundo.",
+        "Uma regra prática é parar de tomar café de 6 a 8 horas antes de dormir. Se você acorda cansado e compensa com mais café, o ciclo se repete. Experimente por duas semanas deixar o último café para antes das 14 horas e observe o sono e a energia."
+      ],
+      "tryToday": [
+        "Anote o horário do seu último café por três dias.",
+        "Observe como foi o sono nessas noites.",
+        "Teste parar de tomar café depois das 14 horas."
+      ]
+    },
+    "health-ansiedade": {
+      "title": "Café e ansiedade: o que a ciência sugere",
+      "summary": "Por que o café pode acelerar a cabeça e como ajustar.",
+      "oneLine": "A cafeína imita o estado de alerta do corpo. Para quem já é ansioso, pode pesar.",
+      "inApp": "O check-in de energia ajuda a ver a relação entre café, sono e humor ao longo da semana.",
+      "body": [
+        "A cafeína bloqueia a adenosina, uma substância que dá sensação de cansaço, e faz o corpo liberar adrenalina. O resultado é mais alerta e energia, mas também coração mais rápido, mãos suadas e pensamentos acelerados em quem é sensível. Para quem tem transtorno de ansiedade, doses altas podem piorar os sintomas.",
+        "Isso não significa que todo mundo precise cortar o café. Muita gente tolera bem uma ou duas xícaras. Vale observar como o corpo reage: se a ansiedade aumenta, se o sono piora, se os sintomas aparecem logo depois do café. Reduzir a dose, tomar depois de comer e evitar o estômago vazio ajudam.",
+        "Se você suspeita que o café piora a sua ansiedade, experimente reduzir aos poucos por duas semanas, trocando por um descafeinado ou um chá, e anote como se sente. Este texto não substitui orientação profissional. Se a ansiedade atrapalha o seu dia a dia, procure um profissional de saúde."
+      ],
+      "tryToday": [
+        "Observe se a ansiedade aumenta após o café.",
+        "Experimente reduzir uma xícara por dia.",
+        "Anote o efeito no check-in de energia."
+      ]
+    },
+    "health-gestacao": {
+      "title": "Café na gestação e na amamentação",
+      "summary": "O que as recomendações costumam dizer e por que conversar com o médico.",
+      "oneLine": "Em gestação e amamentação, a conta da cafeína muda.",
+      "inApp": "Se você usa o app durante a gestação, ajuste o seu pacote e a sua dose do dia com o seu médico.",
+      "body": [
+        "Durante a gestação, o corpo elimina a cafeína mais devagar, e ela atravessa a placenta. Por isso, muitas autoridades de saúde recomendam limitar o consumo a cerca de 200 mg por dia, o que equivale a uma ou duas xícaras pequenas de café coado, somando todas as fontes: café, chás, refrigerantes e chocolate.",
+        "Na amamentação, uma pequena parte da cafeína passa para o leite. Doses moderadas costumam ser aceitas, mas bebês muito novos podem ficar mais agitados. Observar a reação do bebê e evitar o café perto das mamadas pode ajudar.",
+        "Estas são orientações gerais e variam de um país e de um profissional para outro. Este texto é informativo e não substitui o acompanhamento médico: converse com o seu obstetra ou pediatra sobre a quantidade certa para você."
+      ],
+      "tryToday": [
+        "Some a cafeína de todas as fontes do dia.",
+        "Troque uma xícara por um descafeinado.",
+        "Converse com o seu médico sobre a dose ideal."
+      ]
+    },
+    "health-hidratacao": {
+      "title": "Café e hidratação: o mito do desidratante",
+      "summary": "O café conta como líquido? O que os estudos mostram.",
+      "oneLine": "Café não desidrata. Mas a água continua sendo a base.",
+      "inApp": "Beba um copo de água enquanto o copo do app enche. É um hábito pequeno que cuida do resto.",
+      "body": [
+        "A cafeína tem um leve efeito diurético, e por isso muita gente acredita que o café desidrata. Estudos com consumo moderado mostram que o café contribui para a ingestão de líquidos de modo parecido com a água, mesmo em quem bebe todos os dias. O efeito diurético é maior em quem raramente toma café ou em doses altas.",
+        "Isso não quer dizer que o café substitua a água. Água pura não tem cafeína, açúcar nem calorias, e é o melhor jeito de matar a sede. Um bom costume é acompanhar cada xícara de um copo de água, principalmente em dias quentes ou de exercício.",
+        "Fique atento aos sinais: urina escura, boca seca, dor de cabeça e cansaço podem indicar pouca água. Se você toma bastante café e sente isso, aumente a água do dia. Pessoas com condições de saúde específicas devem seguir a orientação do seu médico."
+      ],
+      "tryToday": [
+        "Beba um copo de água junto com cada café.",
+        "Observe a cor da urina ao longo do dia.",
+        "Leve uma garrafa de água quando sair."
+      ]
+    },
+    "health-descafeinado": {
+      "title": "Descafeinado: como é feito e o que sobra",
+      "summary": "Os métodos que tiram a cafeína e se o sabor perde.",
+      "oneLine": "Descafeinado não é livre de cafeína, mas tem muito menos.",
+      "inApp": "À noite, um descafeinado deixa o ritual do café sem tirar o sono.",
+      "body": [
+        "O café descafeinado passa por um processo que remove a maior parte da cafeína dos grãos ainda verdes, em geral cerca de 97% ou mais. Os métodos mais comuns usam água, um solvente aprovado ou dióxido de carbono. O processo com água, às vezes chamado de Swiss Water, não usa solventes químicos.",
+        "Mesmo assim, sobra um pouco de cafeína: em geral de 2 a 15 mg por xícara, contra 80 a 120 mg de um café comum. Quem tem restrição rigorosa deve considerar isso. Para o sabor, os métodos modernos preservam bem o aroma, e a diferença para o café comum diminuiu bastante.",
+        "Para um bom descafeinado, procure grãos frescos e uma torra recente, como com qualquer café. Pode ser uma alternativa para a noite, para quem é sensível à cafeína, em gestação ou quando quer reduzir a quantidade sem abrir mão do ritual."
+      ],
+      "tryToday": [
+        "Prove um descafeinado fresco, bem preparado.",
+        "Compare com o café comum em uma prova às cegas.",
+        "Use um descafeinado no café da noite."
+      ]
+    },
+    "health-treino": {
+      "title": "Café e treino: ajuda ou atrapalha?",
+      "summary": "O que se sabe sobre cafeína antes do exercício.",
+      "oneLine": "Para muita gente, um café antes do treino ajuda. Para outras, só atrapalha.",
+      "inApp": "Combine o café com o seu dia: o check-in de energia mostra se ele ajuda no seu treino.",
+      "body": [
+        "A cafeína é uma das substâncias mais estudadas no esporte. Em doses de cerca de 3 a 6 mg por kg de peso, tomadas de 30 a 60 minutos antes do exercício, ela pode melhorar a resistência, reduzir a sensação de esforço e aumentar o desempenho, principalmente em atividades longas.",
+        "Mas as respostas variam muito. Algumas pessoas sentem tremor, coração acelerado ou desconforto no estômago, e para elas pode piorar o treino. Teste a dose em treinos leves, nunca em dia de prova ou de competição, e evite tomar tarde, para não atrapalhar o sono, que é a base da recuperação.",
+        "O café em si, com água, também é uma forma simples de obter cafeína. Se você treina cedo, uma xícara pequena antes costuma bastar. Este texto é informativo: pessoas com problemas cardíacos, hipertensão ou outras condições devem conversar com o médico antes."
+      ],
+      "tryToday": [
+        "Teste uma xícara pequena antes de um treino leve.",
+        "Compare com um treino sem café.",
+        "Anote como o seu estômago e o seu coração reagiram."
+      ]
+    },
+    "health-estomago": {
+      "title": "Café e estômago sensível",
+      "summary": "Por que o café incomoda algumas pessoas e o que pode ajudar.",
+      "oneLine": "O café pode estimular o estômago. Quem sente deve ouvir o corpo.",
+      "inApp": "O cold brew do app é a cafeteira da paciência, e costuma ser mais suave para o estômago.",
+      "body": [
+        "O café estimula a produção de ácido no estômago e pode relaxar a válvula entre o esôfago e o estômago, o que contribui para a azia e o refluxo em algumas pessoas. Também estimula o intestino, e muita gente percebe uma urgência depois do primeiro café da manhã.",
+        "Algumas estratégias que ajudam: tomar depois de comer em vez de em jejum, escolher torras médias a escuras e cafés de acidez baixa, preferir cold brew ou prensa, reduzir o tamanho da xícara e tomar devagar. Algumas pessoas toleram melhor o café com leite.",
+        "Se o desconforto é frequente, forte ou vem com dor, vômito ou perda de peso, procure um profissional de saúde. Este texto é informativo e não substitui o diagnóstico: o café pode ser só um gatilho de uma condição que precisa de tratamento."
+      ],
+      "tryToday": [
+        "Tome o café depois de comer, não em jejum.",
+        "Experimente um cold brew ou um café de torra escura.",
+        "Se o desconforto continuar, converse com um médico."
+      ]
+    },
+    "health-tolerancia": {
+      "title": "Tolerância e abstinência de cafeína",
+      "summary": "Por que o corpo se acostuma e como reduzir sem dor de cabeça.",
+      "oneLine": "Quem toma café todo dia precisa de mais para sentir o mesmo. Parar de uma vez cobra.",
+      "inApp": "Reduzir a cafeína é um bom desafio para o app: o ritual fica, a dose cai.",
+      "body": [
+        "Com o uso diário, o corpo se adapta à cafeína: cria mais receptores de adenosina e passa a precisar de uma dose maior para sentir o mesmo efeito. É a tolerância. Por isso o café que dava energia no começo vira, com o tempo, só o que traz de volta ao normal.",
+        "Parar de repente pode causar abstinência: dor de cabeça, cansaço, irritação e dificuldade de concentração, que costumam aparecer de 12 a 24 horas depois da última dose e durar de dois a nove dias. Não é perigoso para a maioria, mas incomoda e faz muita gente desistir.",
+        "Para reduzir com menos sintomas, corte aos poucos: 10% a 25% a cada semana, ou troque uma das xícaras por descafeinado. Mantenha o ritual, com água quente, chá ou um descafeinado. Beba água, durma bem e seja paciente com os primeiros dias."
+      ],
+      "tryToday": [
+        "Troque uma xícara do dia por descafeinado.",
+        "Anote como é o seu dia sem aquela xícara.",
+        "Reduza aos poucos, uma semana de cada vez."
+      ]
+    },
+    "health-quando": {
+      "title": "Qual é a melhor hora para o café?",
+      "summary": "O que se diz sobre o café logo ao acordar e o que pesa de verdade.",
+      "oneLine": "Não existe um horário mágico. Existe o horário que não atrapalha o seu sono.",
+      "inApp": "O check-in diário mostra como o seu dia anda: use-o para achar o seu melhor horário.",
+      "body": [
+        "Circula a ideia de que o melhor é esperar de uma a duas horas depois de acordar para tomar o café, por causa do cortisol, que sobe de manhã. A evidência para isso é limitada, e a diferença, se existe, é pequena. Se o café logo ao acordar funciona para você e não causa mal-estar, não há motivo forte para mudar.",
+        "O que pesa de verdade é a hora do último café, por causa da meia-vida da cafeína, e o que você sente. Tome quando o corpo agradece: depois de uma refeição leve, no meio da manhã, ou antes de uma atividade que exige foco. E evite tomar por hábito, sem notar.",
+        "Um bom plano é dois ou três cafés bem escolhidos, em horários espaçados, com o último antes do meio da tarde. Prestar atenção em cada um torna o ritual melhor do que tomar sem perceber ao longo do dia."
+      ],
+      "tryToday": [
+        "Teste tomar o primeiro café depois do café da manhã.",
+        "Defina o horário do seu último café.",
+        "Observe a energia no check-in por uma semana."
+      ]
+    },
+    "ritual-sem-celular": {
+      "title": "Um café sem celular",
+      "summary": "O que muda quando a xícara tem a sua atenção inteira.",
+      "oneLine": "O café é um dos poucos momentos em que dá para não fazer nada além de beber.",
+      "inApp": "É exatamente isso que o Flip & Brew propõe: virar o celular e deixar o café se fazer.",
+      "body": [
+        "Beber café olhando para a tela é uma forma de não estar nem no café, nem na tela. A atenção se divide, o sabor passa sem ser notado e a pausa não descansa. Um café sem celular dura pouco e devolve muito mais do que um café acompanhado de rolagem.",
+        "Para tentar, deixe o celular virado para baixo, longe da mão, ou em outra mesa. Prepare o café com calma, cheire, olhe a cor e beba em pequenos goles. Se a vontade de pegar o celular aparecer, perceba e deixe passar: ela costuma durar menos de um minuto.",
+        "Um café sem celular não precisa ser longo. Cinco minutos de atenção inteira valem mais que meia hora dividida. E quando acabar, você volta para o que precisa fazer com a cabeça um pouco mais arrumada."
+      ],
+      "tryToday": [
+        "Tome o próximo café com o celular virado para baixo.",
+        "Repare em três coisas: aroma, cor e primeiro gole.",
+        "Perceba a vontade de pegar o celular e deixe passar."
+      ]
+    },
+    "ritual-pausa": {
+      "title": "A pausa que recarrega",
+      "summary": "Por que pausas curtas, bem feitas, melhoram o foco.",
+      "oneLine": "Descansar não é perder tempo. É o que mantém o tempo bom.",
+      "inApp": "Cada copo no app é uma pausa de verdade. Os 5 a 10 minutos de um café também contam.",
+      "body": [
+        "Trabalhar sem parar parece produtivo, mas a atenção cai com o tempo. Pausas curtas e regulares ajudam o cérebro a se recuperar, e quem faz pausas costuma render melhor depois. O que importa é que a pausa realmente descanse, e olhar para outra tela não descansa.",
+        "Uma boa pausa tem três ingredientes: sair da tarefa, mexer um pouco o corpo e deixar a mente solta. Levantar, olhar pela janela, preparar um café e beber com calma reúne os três. Dez minutos a cada uma ou duas horas já fazem diferença.",
+        "Planeje a pausa antes de precisar dela. Um horário fixo para o café, longe da mesa, vira um ponto de referência no dia. E não a compense com trabalho depois: a pausa faz parte do trabalho, e não é um desvio dele."
+      ],
+      "tryToday": [
+        "Marque duas pausas de café no seu dia.",
+        "Faça cada uma longe da mesa e sem tela.",
+        "Observe a diferença no foco depois."
+      ]
+    },
+    "ritual-conversa": {
+      "title": "Conversar de verdade, com um café",
+      "summary": "Por que a mesa com café convida a ouvir.",
+      "oneLine": "Uma xícara na mão e o celular longe tornam uma conversa mais fácil.",
+      "inApp": "A comunidade do app vai nascer disso: gente que passa café e conversa de verdade.",
+      "body": [
+        "Estudos sobre conversas mostram que a simples presença de um celular na mesa, mesmo desligado, reduz a sensação de conexão e a qualidade do que é dito. Um café funciona ao contrário: dá às mãos o que fazer, dá um ritmo calmo e um motivo para ficar.",
+        "Para uma boa conversa de café, deixe os celulares fora da mesa, pergunte e escute sem preparar a resposta, e aceite os silêncios. Um café curto, de verdade, vale mais do que um jantar com todo mundo olhando para a tela.",
+        "Convide alguém de quem você gosta, e que você não vê há algum tempo. Combine um horário curto, de meia hora, e um lugar tranquilo. O simples gesto de chamar, sem pretexto, costuma ser o que a pessoa mais agradece."
+      ],
+      "tryToday": [
+        "Convide alguém para um café esta semana.",
+        "Deixem os celulares fora da mesa.",
+        "Faça uma pergunta e escute até o fim."
+      ]
+    },
+    "ritual-manha": {
+      "title": "A manhã do café: um ritual de começar",
+      "summary": "Como os primeiros minutos do dia mudam o resto.",
+      "oneLine": "Como você começa a manhã costuma dizer como ela vai ser.",
+      "inApp": "Se a primeira coisa da manhã é o café, e não o celular, o dia já começa do seu lado.",
+      "body": [
+        "Os primeiros minutos do dia têm um peso especial. Pegar o celular logo ao acordar enche a cabeça de notícias, mensagens e comparações antes mesmo de você acordar de verdade. Um ritual simples de manhã, como preparar o café, dá ao dia um começo escolhido por você.",
+        "Um bom ritual tem poucos passos e é fácil de repetir: acordar, beber um copo de água, abrir a janela, moer o café, esperar a água, preparar e beber sem tela. Em dez a quinze minutos você começa o dia com calma e já fez algo por você.",
+        "Se o celular costuma ser a primeira coisa que você pega, deixe-o carregando fora do quarto. E se o dia começa corrido, reduza o ritual a dois minutos, mas mantenha-o. O que importa é a repetição, não a duração."
+      ],
+      "tryToday": [
+        "Deixe o celular longe da cama esta noite.",
+        "Faça o café da manhã sem tela.",
+        "Anote como o dia começou."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {
