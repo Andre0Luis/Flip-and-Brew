@@ -115,6 +115,7 @@ export default function Ajustes() {
       </Card>
 
       <Card style={{ gap: 10 }}>
+        <Row title={t('set.dim')} hint={t('set.dimHint')} value={settings.dimDuringBrew} onChange={(v) => set({ dimDuringBrew: v })} />
         <Row title={t('set.notify')} hint={t('set.notifyHint')} value={settings.notifyOnDone} onChange={toggleNotify} />
         {notifyMsg && (
           <Txt v="small" color="bad" accessibilityLiveRegion="polite">

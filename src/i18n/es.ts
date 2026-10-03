@@ -361,6 +361,8 @@ export const es: Record<keyof typeof pt, string> = {
   'set.privacy': 'Política de privacidad',
   'set.version': 'Versión {v}',
   'set.devOn': 'Herramientas de prueba activadas (administrador).',
+  'set.dim': 'Atenuar la pantalla durante el vaso',
+  'set.dimHint': 'Baja el brillo mientras el vaso se llena y lo devuelve al terminar. En iPhone cambia el brillo del sistema. Desactivado por defecto.',
   'set.notify': 'Avisar cuando la taza se llene',
   'set.notifyHint': 'Una notificación silenciosa, sin sonido ni vibración. Desactivada por defecto para no sacarte de la desconexión.',
   'set.notifyDenied': 'Android bloqueó las notificaciones de la app. Permítelas en los ajustes del sistema.',

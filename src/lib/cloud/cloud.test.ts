@@ -17,7 +17,7 @@ const fresh = (): LocalData => ({
   practiceAccepted: null,
   practicesDone: [],
   articlesRead: [],
-  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, faceUpSign: 1, quickBrew: true },
+  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, dimDuringBrew: false, faceUpSign: 1, quickBrew: true },
 });
 const used = (): LocalData => ({ ...fresh(), coins: 340, sessions: [session(1), session(2)] });
 

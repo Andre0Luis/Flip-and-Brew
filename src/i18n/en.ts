@@ -361,6 +361,8 @@ export const en: Record<keyof typeof pt, string> = {
   'set.privacy': 'Privacy policy',
   'set.version': 'Version {v}',
   'set.devOn': 'Test tools enabled (admin).',
+  'set.dim': 'Dim the screen during a cup',
+  'set.dimHint': 'Lowers the brightness while the cup fills and restores it when done. On iPhone it changes the system brightness. Off by default.',
   'set.notify': 'Notify when the cup fills',
   'set.notifyHint': 'A silent notification, with no sound or vibration. Off by default so it does not pull you out of being offline.',
   'set.notifyDenied': 'Android blocked notifications for the app. Allow them in the system settings.',

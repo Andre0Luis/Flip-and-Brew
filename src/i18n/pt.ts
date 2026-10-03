@@ -361,6 +361,8 @@ export const pt = {
   'set.privacy': 'Política de privacidade',
   'set.version': 'Versão {v}',
   'set.devOn': 'Ferramentas de teste ativadas (administrador).',
+  'set.dim': 'Escurecer a tela durante o copo',
+  'set.dimHint': 'Baixa o brilho enquanto o copo enche e devolve ao terminar. No iPhone, muda o brilho do sistema. Desligado por padrão.',
   'set.notify': 'Avisar quando o copo encher',
   'set.notifyHint': 'Uma notificação silenciosa, sem som nem vibração. Desligado por padrão para não te tirar do offline.',
   'set.notifyDenied': 'O Android bloqueou as notificações do app. Libere em Configurações do sistema.',
