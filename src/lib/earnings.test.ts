@@ -7,7 +7,7 @@ import { CATALOG } from '@/data/catalog';
 const MIN = 60_000;
 
 test('o bônus é a soma da cafeteira, da xícara e de uma combinação que combina', () => {
-  assert.deepEqual(earnBonus('v60', 'cup'), { brewer: 0, cup: 0, pack: 0, synergy: 0, total: 0 });
+  assert.deepEqual(earnBonus('melitta', 'paper'), { brewer: 0, cup: 0, pack: 0, synergy: 0, total: 0 });
   assert.equal(earnBonus('moka', 'cupb').total, 25); // 20 + 5
   assert.deepEqual(earnBonus('turkish', 'mugk'), { brewer: 10, cup: 3, pack: 0, synergy: 5, total: 18 });
   assert.equal(earnBonus('inexistente', 'cup').total, 0);
@@ -37,7 +37,7 @@ test('as três primeiras cafeteiras e xícaras à venda são as mais baratas; as
 });
 
 test('o pacote de café muda as moedas: extraforte rende pouco, especial rende bem mais', () => {
-  const totals = ['pack-extraforte', 'pack-tradicional', 'pack-superior', 'pack-gourmet', 'pack-especial'].map((p) => earnBonus('v60', 'cup', p).total);
+  const totals = ['pack-extraforte', 'pack-tradicional', 'pack-superior', 'pack-gourmet', 'pack-especial'].map((p) => earnBonus('melitta', 'paper', p).total);
   assert.deepEqual(totals, [0, 4, 10, 20, 35]);
   assert.deepEqual([...totals].sort((a, b) => a - b), totals); // cada categoria rende mais que a anterior
 });

@@ -10,16 +10,19 @@ O humor só era registrado ao fim de um copo, então dias sem copo ficavam sem l
 - **Perfil opcional** (tela `perfil`, em Ajustes, e no cadastro): nome, telefone, idade e preferências de café (café favorito, torra, moagem, corpo, acidez, sabores). Tudo facultativo. As preferências são **chaves neutras**, não texto traduzido. Telefone e idade só são salvos quando válidos.
   - O telefone **não é usado para nada** (sem SMS, sem ligação, sem verificação); o texto da tela diz isso. É só um campo.
   - Fica no aparelho; com conta, vai no backup com o progresso (`checkins` e `profile` são campos opcionais do snapshot, então backups antigos continuam válidos). A política de privacidade e a página de exclusão de conta foram atualizadas.
-- **Cafeteiras novas:** coador de pano, Melitta, AeroPress, cafeteira turca e sifão.
-- **Mais xícaras e canecas:** três canecas (musgo, terracota, preta), três xícaras de porcelana (cobalto, oliva, ocre) e uma **série especial nova, Montanha** (caneca de acampamento, xícara Pico, caneca Cume).
-- **Preços** (moedas): cafeteiras 200 (pano), 300 (Melitta), 400 (prensa), 500 (turca), 600 (AeroPress), 800 (moka), 1500 (sifão); Chemex continua por 30 dias de sequência. Xícaras e canecas 150 a 280. **Séries especiais** (Estoica e Montanha) 700 e 900, mais caras que qualquer peça comum.
-- **Desconto nas cafeteiras** (`lib/pricing.ts`): até **30%** por dias seguidos de check-in (1% por dia) mais até **20%** pela fração dos últimos 14 dias completos em que o tempo offline bateu a meta diária. Máximo 50%. Vale só para cafeteiras; xícaras e séries especiais têm sempre o preço cheio. O Guia mostra o preço antigo riscado e a conta do desconto.
+- **Começo do jogo:** Melitta (a mais simples), copo de papel e café extraforte, os três a custo zero. A V60 e a xícara de porcelana passaram a ser compradas.
+- **Mais cafeteiras:** coador de pano, V60, prensa, turca, filtro phin, AeroPress, elétrica, cold brew, moka, cápsula, sifão e espresso (a Chemex segue por 30 dias de sequência).
+- **Mais copos e séries especiais:** xícaras, canecas e copos de vidro (inclusive o copo americano). Séries: Estoica, Botequim, Torcida (seis canecas de time, só com as cores, sem escudos), Noturna, Montanha, Ouro e Universo (a exclusiva).
+- **Pacotes de café** (extraforte, tradicional, superior, gourmet e especial): item de um terceiro tipo (`beans`), equipado ao lado da cafeteira e do copo. Quanto melhor a categoria, mais moedas.
+- **Bônus de moedas por combinação** (`lib/earnings.ts`, no ADR-0011 isso estava descartado): a cafeteira, o copo e o pacote em uso somam um bônus percentual sobre as moedas do copo, com +5% por combinação que combina (ex.: turca com caneca preta). Teto de 70%. A base continua 1 moeda por minuto, e o bônus de 20% do copo cheio.
+- **Preços** (moedas): as três primeiras peças à venda de cada tipo custam pouco, para chamar a atenção (cafeteiras 120, 150 e 250; copos 100); depois sobem. Séries especiais custam mais que qualquer peça comum (900 a 3000). Pacotes: 150, 450, 1000 e 2500.
 - A cafeteira do Início ganhou animação leve (flutuar e vapor), desligada com "reduzir movimento".
 
 ## Alternativas descartadas
 - **Notificação diária de lembrete do check-in:** vai contra o princípio do app.
 - **Exigir perfil ou telefone no cadastro:** o app nunca exige conta nem dados (ADR-0009). O perfil é opcional também no cadastro.
 - **Desconto em tudo:** tiraria o valor das séries especiais.
+- **Escudos dos clubes na série Torcida:** são marcas registradas. Usamos só as cores; publicar na loja pode exigir licença ou nomes neutros (ADR-0017).
 - **Guardar a idade como data de nascimento:** mais dado pessoal do que o necessário; guardamos só a idade.
 
 ## Consequências

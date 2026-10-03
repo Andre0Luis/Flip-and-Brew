@@ -22,9 +22,10 @@ export type CatalogItem = {
 export const CATALOG: CatalogItem[] = [
   // Cafeteiras. Têm desconto por check-in seguido e por tempo offline (lib/pricing.ts) e dão bônus de moedas (lib/earnings.ts).
   // As três primeiras à venda custam pouco, para chamar a atenção; as demais pedem constância.
-  { id: 'v60', kind: 'brewer', price: 0, brewMinutes: 45, earn: 0 },
+  // Começa-se com a Melitta, a mais simples, o papel e o café extraforte (os três a custo zero).
+  { id: 'melitta', kind: 'brewer', price: 0, brewMinutes: 40, earn: 0 },
   { id: 'cloth', kind: 'brewer', price: 120, brewMinutes: 55, earn: 5 },
-  { id: 'melitta', kind: 'brewer', price: 180, brewMinutes: 40, earn: 5 },
+  { id: 'v60', kind: 'brewer', price: 150, brewMinutes: 45, earn: 5 },
   { id: 'press', kind: 'brewer', price: 250, brewMinutes: 60, earn: 10 },
   { id: 'turkish', kind: 'brewer', price: 600, brewMinutes: 20, earn: 10 },
   { id: 'phin', kind: 'brewer', price: 700, brewMinutes: 50, earn: 12 },
@@ -37,10 +38,10 @@ export const CATALOG: CatalogItem[] = [
   { id: 'espresso', kind: 'brewer', price: 2500, brewMinutes: 25, earn: 32 },
   { id: 'chemex', kind: 'brewer', price: 0, streakUnlock: 30, brewMinutes: 75, earn: 25 },
   // Xícaras, canecas e copos, sempre pelo preço cheio. Também dão bônus, menor que o das cafeteiras.
-  { id: 'cup', kind: 'cup', price: 0, earn: 0 },
+  { id: 'paper', kind: 'cup', price: 0, earn: 0 },
+  { id: 'cup', kind: 'cup', price: 100, earn: 0 },
   { id: 'mug', kind: 'cup', price: 100, earn: 0 },
   { id: 'mugb', kind: 'cup', price: 100, earn: 0 },
-  { id: 'paper', kind: 'cup', price: 120, earn: 0 },
   { id: 'tiny', kind: 'cup', price: 150, earn: 2 },
   { id: 'americano', kind: 'cup', price: 200, earn: 3 },
   { id: 'mugg', kind: 'cup', price: 300, earn: 3 },

@@ -68,8 +68,8 @@ type State = {
 const initial = {
   coins: 100,
   owned: STARTER_IDS,
-  brewerId: 'v60',
-  cupId: 'cup',
+  brewerId: 'melitta',
+  cupId: 'paper',
   packId: 'pack-extraforte',
   active: null as ActiveBrew | null,
   sessions: [] as Session[],

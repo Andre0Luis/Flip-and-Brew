@@ -20,7 +20,7 @@ const fullSession = (daysAgo: number): Session => {
 test('iniciar usa o tempo da cafeteira, ou 1 minuto no modo de teste', () => {
   const t0 = 1_000_000;
   assert.equal(useApp.getState().start(t0), true);
-  assert.deepEqual(useApp.getState().active, { brewerId: 'v60', cupId: 'cup', packId: 'pack-extraforte', startedAt: t0, targetMs: 45 * MIN });
+  assert.deepEqual(useApp.getState().active, { brewerId: 'melitta', cupId: 'paper', packId: 'pack-extraforte', startedAt: t0, targetMs: 40 * MIN });
   assert.equal(useApp.getState().start(t0 + 1), false); // já há um copo em andamento
 
   useApp.setState({ active: null });
@@ -32,13 +32,13 @@ test('iniciar usa o tempo da cafeteira, ou 1 minuto no modo de teste', () => {
 test('encerrar um copo cheio registra a sessão e soma as moedas com bônus', () => {
   const t0 = 1_000_000;
   useApp.getState().start(t0);
-  const id = useApp.getState().finish(t0 + 45 * MIN + 5000);
+  const id = useApp.getState().finish(t0 + 40 * MIN + 5000);
   const st = useApp.getState();
   assert.ok(id);
   assert.equal(st.active, null);
   assert.equal(st.sessions.length, 1);
   assert.equal(st.sessions[0].status, 'done');
-  assert.equal(st.coins, 100 + 45 + 9);
+  assert.equal(st.coins, 100 + 40 + 8); // Melitta: 40 min + 20% de bônus do copo cheio
   assert.equal(st.lastResultId, id);
 });
 
@@ -95,13 +95,13 @@ test('o pacote de café equipado entra nas moedas do copo e equipar pacote exige
   assert.equal(useApp.getState().packId, 'pack-especial');
   const t0 = 2_000_000;
   assert.ok(useApp.getState().start(t0));
-  const id = useApp.getState().finish(t0 + 45 * MIN + 5000)!; // v60 + porcelana + pacote especial: +35%
-  assert.equal(useApp.getState().sessions.find((x) => x.id === id)!.coins, Math.round(54 * 1.35));
+  const id = useApp.getState().finish(t0 + 40 * MIN + 5000)!; // Melitta (40 min) + papel + pacote especial: +35%
+  assert.equal(useApp.getState().sessions.find((x) => x.id === id)!.coins, Math.round(48 * 1.35));
 });
 
 test('equipar só funciona com item que a pessoa tem', () => {
   useApp.getState().equip('moka');
-  assert.equal(useApp.getState().brewerId, 'v60');
+  assert.equal(useApp.getState().brewerId, 'melitta');
   useApp.getState().addCoins(1000);
   useApp.getState().buy('moka');
   useApp.getState().equip('moka');
