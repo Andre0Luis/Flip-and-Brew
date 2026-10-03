@@ -37,6 +37,26 @@ function Grads() {
         <Stop offset="0.85" stopColor="#C4BDB1" />
         <Stop offset="1" stopColor="#9A9387" />
       </LinearGradient>
+      <LinearGradient id={`${p}gMugC`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#9DB07A" />
+        <Stop offset="0.5" stopColor="#6B7F4A" />
+        <Stop offset="1" stopColor="#445530" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gMugD`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#E0957A" />
+        <Stop offset="0.5" stopColor="#BC5E3F" />
+        <Stop offset="1" stopColor="#85391F" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gMugE`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#4A4541" />
+        <Stop offset="0.5" stopColor="#2A2623" />
+        <Stop offset="1" stopColor="#151210" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gEnamel`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#FFFFFF" />
+        <Stop offset="0.6" stopColor="#EEF1F0" />
+        <Stop offset="1" stopColor="#C8CFCD" />
+      </LinearGradient>
       <LinearGradient id={`${p}gWood`} x1="0" x2="1" y1="0" y2="0">
         <Stop offset="0" stopColor="#A8703F" />
         <Stop offset="0.5" stopColor="#7A4A26" />
@@ -131,7 +151,7 @@ function Cup({ fill }: { fill?: number }) {
   );
 }
 
-function StoicCup({ band, fill }: { band: string; fill?: number }) {
+function StoicCup({ band, fill, plain, emblem }: { band: string; fill?: number; plain?: boolean; emblem?: boolean }) {
   const u = useU();
   const p = useContext(PrefixContext);
   return (
@@ -151,25 +171,40 @@ function StoicCup({ band, fill }: { band: string; fill?: number }) {
       <G clipPath={`url(#${p}body)`}>
         <Rect x={20} y={61} width={80} height={9} fill={band} />
         <Rect x={20} y={61} width={80} height={9} fill={u('gPorc')} opacity={0.18} />
-        <Rect x={20} y={59.5} width={80} height={1.6} fill="#D7A040" />
-        <Rect x={20} y={70} width={80} height={1.6} fill="#D7A040" />
+        {!plain && <Rect x={20} y={59.5} width={80} height={1.6} fill="#D7A040" />}
+        {!plain && <Rect x={20} y={70} width={80} height={1.6} fill="#D7A040" />}
       </G>
       <Path d="M32 56C33 71 40 81 49 85" stroke="#fff" strokeWidth={3} opacity={0.55} {...line} />
-      <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke="#D7A040" strokeWidth={1.4} />
+      {emblem && <Path d="M44 76L54 62L60 70L68 58L78 76Z" fill="#F1F5F8" opacity={0.92} />}
+      <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke={plain ? '#CDBDA6' : '#D7A040'} strokeWidth={plain ? 1 : 1.4} />
       <Surface cx={60} cy={51} rx={29} ry={7} crx={22} cry={4.6} fill={fill} />
     </>
   );
 }
 
-function Mug({ grad, rim, fill }: { grad: string; rim: string; fill?: number }) {
+function CampSpeckles() {
+  return (
+    <>
+      {[[40, 56], [52, 66], [64, 52], [74, 70], [46, 82], [68, 88], [58, 76], [78, 58]].map(([x, y], i) => (
+        <Circle key={i} cx={x} cy={y} r={1.1} fill="#2A3A4A" opacity={0.55} />
+      ))}
+    </>
+  );
+}
+
+function Peak({ x }: { x: number }) {
+  return <Path d={`M${40 + x} 88L${55 + x} 60L${63 + x} 74L${70 + x} 64L${80 + x} 88Z`} fill="#E8EEF2" opacity={0.9} />;
+}
+
+function Mug({ grad, rim, handle, fill, decor }: { grad: string; rim: string; handle: string; fill?: number; decor?: React.ReactNode }) {
   const u = useU();
-  const handleDark = grad === 'gMugA' ? '#6B3F1A' : '#243C3C';
   return (
     <>
       <Ellipse cx={58} cy={102} rx={40} ry={7} fill={u('gShadow')} />
-      <Path d="M86 52C108 50 108 84 86 84" stroke={handleDark} strokeWidth={9} {...line} />
+      <Path d="M86 52C108 50 108 84 86 84" stroke={handle} strokeWidth={9} {...line} />
       <Path d="M86 52C108 50 108 84 86 84" stroke={u(grad)} strokeWidth={6} {...line} />
       <Path d="M30 40H86V90C86 97 80 100 72 100H44C36 100 30 97 30 90Z" fill={u(grad)} />
+      {decor}
       <Rect x={36} y={48} width={5} height={44} rx={2.5} fill="#fff" opacity={0.3} />
       <Ellipse cx={58} cy={40} rx={28} ry={7} fill={rim} />
       <Surface cx={58} cy={41} rx={24} ry={5.2} crx={17} cry={3.2} fill={fill} />
@@ -401,8 +436,17 @@ export function Art({ id, size = 96, fill }: Props) {
     case 'stoic-ep': body = <StoicCup band="#3F5F4A" fill={fill} />; break;
     case 'stoic-sq': body = <StoicCup band="#7A2E3A" fill={fill} />; break;
     case 'stoic-ma': body = <StoicCup band="#2E4A6B" fill={fill} />; break;
-    case 'mug': body = <Mug grad="gMugA" rim="#E7B67C" fill={fill} />; break;
-    case 'mugb': body = <Mug grad="gMugB" rim="#9BB8B8" fill={fill} />; break;
+    case 'mug': body = <Mug grad="gMugA" rim="#E7B67C" handle="#6B3F1A" fill={fill} />; break;
+    case 'mugb': body = <Mug grad="gMugB" rim="#9BB8B8" handle="#243C3C" fill={fill} />; break;
+    case 'mugg': body = <Mug grad="gMugC" rim="#B7C79A" handle="#33401F" fill={fill} />; break;
+    case 'mugr': body = <Mug grad="gMugD" rim="#EBB099" handle="#6E2E16" fill={fill} />; break;
+    case 'mugk': body = <Mug grad="gMugE" rim="#6C655F" handle="#0C0A09" fill={fill} />; break;
+    case 'camp': body = <Mug grad="gEnamel" rim="#2F5D9B" handle="#2F5D9B" fill={fill} decor={<CampSpeckles />} />; break;
+    case 'summit': body = <Mug grad="gMugE" rim="#6C655F" handle="#0C0A09" fill={fill} decor={<Peak x={0} />} />; break;
+    case 'cupb': body = <StoicCup band="#2F5D9B" plain fill={fill} />; break;
+    case 'cupg': body = <StoicCup band="#6B7A3A" plain fill={fill} />; break;
+    case 'cupo': body = <StoicCup band="#C98A2B" plain fill={fill} />; break;
+    case 'peak': body = <StoicCup band="#3B4A5A" plain fill={fill} emblem />; break;
     case 'glass': body = <Glass fill={fill} />; break;
     case 'tiny': body = <Tiny fill={fill} />; break;
     case 'v60': body = <Pourover />; break;

@@ -57,13 +57,23 @@ test('parar cedo rende o proporcional e abaixo de 30 s a sessão é descartada',
 
 test('comprar: saldo, item já seu e item que só abre por sequência', () => {
   const st = useApp.getState();
-  assert.equal(st.buy('press'), 'poor'); // 300 moedas, há 100
+  assert.equal(st.buy('press'), 'poor'); // 400 moedas, há 100
   useApp.getState().addCoins(500);
   assert.equal(useApp.getState().buy('press'), 'ok');
-  assert.equal(useApp.getState().coins, 300);
+  assert.equal(useApp.getState().coins, 200); // 600 - 400, sem desconto ainda
   assert.equal(useApp.getState().buy('press'), 'owned');
   assert.equal(useApp.getState().buy('chemex'), 'locked');
   assert.equal(useApp.getState().buy('inexistente'), 'locked');
+});
+
+test('o desconto de check-in seguido vale na compra da cafeteira, mas não na xícara especial', () => {
+  const day = 86_400_000;
+  const now = Date.now();
+  useApp.setState({ coins: 5000, checkins: Array.from({ length: 10 }, (_, i) => ({ day: dayKey(now - i * day), energy: 3, at: now - i * day })) });
+  assert.equal(useApp.getState().buy('moka'), 'ok'); // 800 com 10% de desconto = 720
+  assert.equal(useApp.getState().coins, 4280);
+  assert.equal(useApp.getState().buy('camp'), 'ok'); // série especial: preço cheio
+  assert.equal(useApp.getState().coins, 3380);
 });
 
 test('equipar só funciona com item que a pessoa tem', () => {

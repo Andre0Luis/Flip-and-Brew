@@ -9,6 +9,7 @@ import { makeDemoCheckins, makeDemoSessions } from '@/lib/demo';
 import { makeTestData } from '@/lib/testUser';
 import { withCheckin } from '@/lib/checkin';
 import { cleanProfile } from '@/lib/profile';
+import { discountFor, priceOf } from '@/lib/pricing';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -142,8 +143,9 @@ export const useApp = create<State>()(
         if (!item) return 'locked';
         if (st.owned.includes(id)) return 'owned';
         if (item.streakUnlock) return 'locked';
-        if (st.coins < item.price) return 'poor';
-        set({ coins: st.coins - item.price, owned: [...st.owned, id] });
+        const price = priceOf(item, discountFor({ checkins: st.checkins, sessions: st.sessions, goalMin: st.settings.goalMin }).percent);
+        if (st.coins < price) return 'poor';
+        set({ coins: st.coins - price, owned: [...st.owned, id] });
         return 'ok';
       },
 

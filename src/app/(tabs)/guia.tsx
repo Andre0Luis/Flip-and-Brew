@@ -8,6 +8,7 @@ import { brewers, cups, localize, type LocalizedItem } from '@/data/catalog';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { formatNumber, useI18n } from '@/i18n';
+import { discountFor, priceOf } from '@/lib/pricing';
 import { buyCoinPack, loadCoinPacks, purchasesConfigured, type CoinPack } from '@/lib/purchases';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
@@ -18,7 +19,7 @@ export default function Guia() {
   const { c, r } = useTheme();
   const { lang, t } = useI18n();
   const num = (n: number) => formatNumber(lang, n);
-  const { coins, owned, brewerId, cupId, sessions } = useApp();
+  const { coins, owned, brewerId, cupId, sessions, checkins, settings } = useApp();
   const buy = useApp((s) => s.buy);
   const equip = useApp((s) => s.equip);
   const addCoins = useApp((s) => s.addCoins);
@@ -27,6 +28,8 @@ export default function Guia() {
   const [message, setMessage] = useState<string | null>(null);
   const [packs, setPacks] = useState<CoinPack[]>([]);
   const days = streak(sessions);
+  const disc = discountFor({ checkins, sessions, goalMin: settings.goalMin });
+  const priceNow = (item: LocalizedItem) => priceOf(item, disc.percent);
 
   useEffect(() => {
     if (purchasesConfigured) loadCoinPacks().then(setPacks);
@@ -53,7 +56,7 @@ export default function Guia() {
       setMessage(t('guide.bought', { name: pending.name }));
     } else if (res === 'poor') {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-      setMessage(t('guide.missing', { n: num(pending.price - coins), name: pending.name }));
+      setMessage(t('guide.missing', { n: num(priceNow(pending) - coins), name: pending.name }));
     }
     setPending(null);
   };
@@ -68,7 +71,7 @@ export default function Guia() {
             <Pressable
               key={item.id}
               accessibilityRole="button"
-              accessibilityLabel={`${item.name}. ${inUse ? t('guide.a11yInUse') : has ? t('guide.a11yOwned') : locked ? t('guide.a11yLocked', { n: item.streakUnlock ?? 0 }) : t('guide.a11yPrice', { n: num(item.price) })}`}
+              accessibilityLabel={`${item.name}. ${inUse ? t('guide.a11yInUse') : has ? t('guide.a11yOwned') : locked ? t('guide.a11yLocked', { n: item.streakUnlock ?? 0 }) : t('guide.a11yPrice', { n: num(priceNow(item)) })}`}
               onPress={() => onItem(item)}
               style={{ width: '47.5%', backgroundColor: c.surface, borderRadius: r.lg, borderWidth: inUse ? 2 : 1, borderColor: inUse ? c.accent : c.line, padding: 10, gap: 8 }}
             >
@@ -103,8 +106,18 @@ export default function Guia() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                   <Coin size={18} />
                   <Txt v="num" style={{ fontSize: 15 }}>
-                    {num(item.price)}
+                    {num(priceNow(item))}
                   </Txt>
+                  {priceNow(item) < item.price && (
+                    <>
+                      <Txt v="small" color="muted" style={{ textDecorationLine: 'line-through' }}>
+                        {num(item.price)}
+                      </Txt>
+                      <Txt v="label" color="accent">
+                        {t('guide.discountOff', { n: disc.percent })}
+                      </Txt>
+                    </>
+                  )}
                 </View>
               )}
             </Pressable>
@@ -136,8 +149,13 @@ export default function Guia() {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Coin size={22} />
             <Txt v="num" color="bg">
-              {num(pending.price)}
+              {num(priceNow(pending))}
             </Txt>
+            {priceNow(pending) < pending.price && (
+              <Txt v="small" color="bg" style={{ opacity: 0.7, textDecorationLine: 'line-through' }}>
+                {num(pending.price)}
+              </Txt>
+            )}
             <Txt v="small" color="bg" style={{ opacity: 0.7 }}>
               {t('guide.haveCoins', { n: num(coins) })}
             </Txt>
@@ -154,6 +172,20 @@ export default function Guia() {
         </Txt>
       )}
 
+      {tab === 'brewer' && (
+        <Card style={{ gap: 6 }}>
+          <Txt v="title" style={{ fontSize: 15 }}>
+            {t('guide.discountTitle', { pct: disc.percent })}
+          </Txt>
+          <Txt v="small" color="muted">
+            {t('guide.discountBody', { a: disc.fromCheckins, d: disc.streak, b: disc.fromOffline, share: Math.round(disc.share * 100) })}
+          </Txt>
+          <Txt v="small" color="muted">
+            {t('guide.discountHint')}
+          </Txt>
+        </Card>
+      )}
+
       {renderGrid(items.filter((i) => !i.collection))}
 
       {items.some((i) => i.collection === 'stoic') && (
@@ -165,6 +197,18 @@ export default function Guia() {
             </Txt>
           </View>
           {renderGrid(items.filter((i) => i.collection === 'stoic'))}
+        </View>
+      )}
+
+      {items.some((i) => i.collection === 'mountain') && (
+        <View style={{ gap: 10 }}>
+          <View style={{ gap: 2 }}>
+            <Txt v="title">{t('guide.mountainTitle')}</Txt>
+            <Txt v="small" color="muted">
+              {t('guide.mountainBody')}
+            </Txt>
+          </View>
+          {renderGrid(items.filter((i) => i.collection === 'mountain'))}
         </View>
       )}
 

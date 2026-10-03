@@ -301,6 +301,42 @@ export const pt: Content = {
       "name": "Sifão",
       "blurb": "Vidro, vapor e paciência. 50 minutos."
     },
+    "mugg": {
+      "name": "Caneca verde-musgo",
+      "blurb": "Esmaltada, cor de trilha."
+    },
+    "mugr": {
+      "name": "Caneca terracota",
+      "blurb": "Barro queimado, quente na mão."
+    },
+    "mugk": {
+      "name": "Caneca preta fosca",
+      "blurb": "Discreta, para o café de madrugada."
+    },
+    "cupb": {
+      "name": "Xícara cobalto",
+      "blurb": "Porcelana com faixa azul."
+    },
+    "cupg": {
+      "name": "Xícara oliva",
+      "blurb": "Porcelana com faixa verde-oliva."
+    },
+    "cupo": {
+      "name": "Xícara ocre",
+      "blurb": "Porcelana com faixa dourada fosca."
+    },
+    "camp": {
+      "name": "Caneca de acampamento",
+      "blurb": "Série Montanha. Esmalte branco, borda azul, manchas de uso."
+    },
+    "peak": {
+      "name": "Xícara Pico",
+      "blurb": "Série Montanha. Uma crista no horizonte da xícara."
+    },
+    "summit": {
+      "name": "Caneca Cume",
+      "blurb": "Série Montanha. Escura como a noite antes da subida."
+    },
     "cup": {
       "name": "Xícara de porcelana",
       "blurb": "A primeira da prateleira."
