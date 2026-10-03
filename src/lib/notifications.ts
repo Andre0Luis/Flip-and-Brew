@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { translate, type Lang } from '@/i18n';
 
 // Notificação local, silenciosa, avisando que o copo encheu. Só existe no aparelho e só quando a pessoa liga em Ajustes.
@@ -6,7 +7,8 @@ const CHANNEL = 'brew-done';
 const ID = 'brew-done';
 
 function mod() {
-  if (Platform.OS === 'web') return null;
+  // No Expo Go as notificações foram removidas (SDK 53+) e carregar a biblioteca só gera erro.
+  if (Platform.OS === 'web' || Constants.executionEnvironment === ExecutionEnvironment.StoreClient) return null;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require('expo-notifications') as typeof import('expo-notifications');
