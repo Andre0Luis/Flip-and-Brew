@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { BackHandler, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { FillingCup, Ring } from '@/components/BrewViz';
+import { Ring, Steam } from '@/components/BrewViz';
 import { Button, Insight, Screen, Txt } from '@/components/ui';
-import { Coin } from '@/art/Art';
+import { Art, Coin } from '@/art/Art';
 import { itemText } from '@/data/catalog';
 import { getQuotes } from '@/data/quotes';
 import { useI18n } from '@/i18n';
@@ -59,7 +59,10 @@ export default function Brew() {
         </Txt>
 
         <Ring progress={progress} size={250}>
-          <FillingCup progress={progress} size={150} />
+          <View style={{ width: 170, height: 170 }}>
+            <Art id={active.cupId} size={170} fill={progress} />
+            <Steam size={170} />
+          </View>
         </Ring>
 
         <View style={{ alignItems: 'center', gap: 6 }}>

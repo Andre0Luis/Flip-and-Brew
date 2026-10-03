@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useId } from 'react';
 import Svg, { Circle, ClipPath, Defs, Ellipse, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-type Props = { id: string; size?: number };
+type Props = { id: string; size?: number; /** 0 a 1: o quanto a xícara está cheia. Sem valor, aparece cheia. */ fill?: number };
 
 // Cada instância de SVG recebe um prefixo próprio. Na web, ids repetidos fazem o navegador usar o gradiente
 // de outro SVG (às vezes oculto) e a ilustração perde as cores.
@@ -77,7 +77,42 @@ function Grads() {
 
 const line = { fill: 'none', strokeLinecap: 'round' as const };
 
-function Cup() {
+const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+
+/**
+ * Superfície do café na abertura da xícara. Sem `fill` (ou cheia), é o desenho de sempre.
+ * Com `fill`, o café sobe: a elipse de café desliza de baixo para dentro da abertura e é recortada por ela.
+ */
+function Surface({ cx, cy, rx, ry, crx, cry, fill }: { cx: number; cy: number; rx: number; ry: number; crx: number; cry: number; fill?: number }) {
+  const u = useU();
+  const p = useContext(PrefixContext);
+  if (fill === undefined || fill >= 1) {
+    return (
+      <>
+        <Ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill={u('gCof')} />
+        <Ellipse cx={cx} cy={cy + 0.5} rx={crx} ry={cry} fill={u('gCrema')} opacity={0.8} />
+      </>
+    );
+  }
+  const f = clamp01(fill);
+  const shift = (1 - f) * 2 * ry;
+  return (
+    <>
+      <Defs>
+        <ClipPath id={`${p}surf`}>
+          <Ellipse cx={cx} cy={cy} rx={rx} ry={ry} />
+        </ClipPath>
+      </Defs>
+      <Ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="#E4D6C0" />
+      <G clipPath={`url(#${p}surf)`}>
+        <Ellipse cx={cx} cy={cy + shift} rx={rx} ry={ry} fill={u('gCof')} />
+        <Ellipse cx={cx} cy={cy + shift + 0.5} rx={crx} ry={cry} fill={u('gCrema')} opacity={0.8 * clamp01((f - 0.6) / 0.4)} />
+      </G>
+    </>
+  );
+}
+
+function Cup({ fill }: { fill?: number }) {
   const u = useU();
   return (
     <>
@@ -90,14 +125,13 @@ function Cup() {
       <Path d="M26 50H94C94 78 82 91 60 91C38 91 26 78 26 50Z" fill={u('gPorc')} />
       <Path d="M32 58C33 71 40 81 49 85" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
       <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke="#CDBDA6" strokeWidth={1} />
-      <Ellipse cx={60} cy={51} rx={29} ry={7} fill={u('gCof')} />
-      <Ellipse cx={60} cy={51.5} rx={22} ry={4.6} fill={u('gCrema')} opacity={0.8} />
+      <Surface cx={60} cy={51} rx={29} ry={7} crx={22} cry={4.6} fill={fill} />
       <Path d="M44 50c6-2 11-1 15 0" stroke="#fff" strokeWidth={1.5} opacity={0.35} {...line} />
     </>
   );
 }
 
-function StoicCup({ band }: { band: string }) {
+function StoicCup({ band, fill }: { band: string; fill?: number }) {
   const u = useU();
   const p = useContext(PrefixContext);
   return (
@@ -122,13 +156,12 @@ function StoicCup({ band }: { band: string }) {
       </G>
       <Path d="M32 56C33 71 40 81 49 85" stroke="#fff" strokeWidth={3} opacity={0.55} {...line} />
       <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke="#D7A040" strokeWidth={1.4} />
-      <Ellipse cx={60} cy={51} rx={29} ry={7} fill={u('gCof')} />
-      <Ellipse cx={60} cy={51.5} rx={22} ry={4.6} fill={u('gCrema')} opacity={0.8} />
+      <Surface cx={60} cy={51} rx={29} ry={7} crx={22} cry={4.6} fill={fill} />
     </>
   );
 }
 
-function Mug({ grad, rim }: { grad: string; rim: string }) {
+function Mug({ grad, rim, fill }: { grad: string; rim: string; fill?: number }) {
   const u = useU();
   const handleDark = grad === 'gMugA' ? '#6B3F1A' : '#243C3C';
   return (
@@ -139,21 +172,30 @@ function Mug({ grad, rim }: { grad: string; rim: string }) {
       <Path d="M30 40H86V90C86 97 80 100 72 100H44C36 100 30 97 30 90Z" fill={u(grad)} />
       <Rect x={36} y={48} width={5} height={44} rx={2.5} fill="#fff" opacity={0.3} />
       <Ellipse cx={58} cy={40} rx={28} ry={7} fill={rim} />
-      <Ellipse cx={58} cy={41} rx={24} ry={5.2} fill={u('gCof')} />
-      <Ellipse cx={58} cy={41.5} rx={17} ry={3.2} fill={u('gCrema')} opacity={0.75} />
+      <Surface cx={58} cy={41} rx={24} ry={5.2} crx={17} cry={3.2} fill={fill} />
     </>
   );
 }
 
-function Glass() {
+function Glass({ fill }: { fill?: number }) {
   const u = useU();
+  const p = useContext(PrefixContext);
+  const f = fill === undefined ? 1 : clamp01(fill);
+  const top = 99 - 71 * f; // as camadas do latte aparecem de baixo para cima
   return (
     <>
+      <Defs>
+        <ClipPath id={`${p}lvl`}>
+          <Rect x={30} y={top} width={56} height={100 - top} />
+        </ClipPath>
+      </Defs>
       <Ellipse cx={58} cy={102} rx={34} ry={6} fill={u('gShadow')} />
-      <Path d="M38.6 70H77.4L76.1 94Q76 98 72 98H44Q40 98 39.9 94Z" fill={u('gCofV')} />
-      <Path d="M37.1 44H78.9L77.4 70H38.6Z" fill="#CFA070" />
-      <Path d="M36.4 32H79.6L78.9 44H37.1Z" fill="#F4E7D1" />
-      <Ellipse cx={58} cy={32} rx={21.6} ry={3.2} fill="#FBF3E4" />
+      <G clipPath={`url(#${p}lvl)`}>
+        <Path d="M38.6 70H77.4L76.1 94Q76 98 72 98H44Q40 98 39.9 94Z" fill={u('gCofV')} />
+        <Path d="M37.1 44H78.9L77.4 70H38.6Z" fill="#CFA070" />
+        <Path d="M36.4 32H79.6L78.9 44H37.1Z" fill="#F4E7D1" />
+        <Ellipse cx={58} cy={32} rx={21.6} ry={3.2} fill="#FBF3E4" />
+      </G>
       <Path d="M36 28H80L76 94Q76 99 72 99H44Q40 99 40 94Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
       <Ellipse cx={58} cy={28} rx={22} ry={3.4} fill="none" stroke="#A89886" strokeWidth={1.4} />
       <Path d="M41 36L44 88" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
@@ -161,7 +203,7 @@ function Glass() {
   );
 }
 
-function Tiny() {
+function Tiny({ fill }: { fill?: number }) {
   const u = useU();
   return (
     <>
@@ -172,8 +214,7 @@ function Tiny() {
       <Ellipse cx={60} cy={92.5} rx={36} ry={7} fill={u('gPorc')} />
       <Path d="M34 64H86C86 82 76 93 60 93C44 93 34 82 34 64Z" fill={u('gPorc')} />
       <Ellipse cx={60} cy={64} rx={26} ry={7} fill="#F7F0E5" stroke="#CDBDA6" strokeWidth={1} />
-      <Ellipse cx={60} cy={65} rx={22} ry={5.2} fill={u('gCof')} />
-      <Ellipse cx={60} cy={65.5} rx={16} ry={3.2} fill={u('gCrema')} opacity={0.8} />
+      <Surface cx={60} cy={65} rx={22} ry={5.2} crx={16} cry={3.2} fill={fill} />
       <Path d="M40 72C41 80 46 86 51 88" stroke="#fff" strokeWidth={2.5} opacity={0.7} {...line} />
     </>
   );
@@ -256,22 +297,22 @@ function Chemex() {
   );
 }
 
-export function Art({ id, size = 96 }: Props) {
+export function Art({ id, size = 96, fill }: Props) {
   let body: React.ReactNode;
   switch (id) {
-    case 'cup': body = <Cup />; break;
-    case 'stoic-ep': body = <StoicCup band="#3F5F4A" />; break;
-    case 'stoic-sq': body = <StoicCup band="#7A2E3A" />; break;
-    case 'stoic-ma': body = <StoicCup band="#2E4A6B" />; break;
-    case 'mug': body = <Mug grad="gMugA" rim="#E7B67C" />; break;
-    case 'mugb': body = <Mug grad="gMugB" rim="#9BB8B8" />; break;
-    case 'glass': body = <Glass />; break;
-    case 'tiny': body = <Tiny />; break;
+    case 'cup': body = <Cup fill={fill} />; break;
+    case 'stoic-ep': body = <StoicCup band="#3F5F4A" fill={fill} />; break;
+    case 'stoic-sq': body = <StoicCup band="#7A2E3A" fill={fill} />; break;
+    case 'stoic-ma': body = <StoicCup band="#2E4A6B" fill={fill} />; break;
+    case 'mug': body = <Mug grad="gMugA" rim="#E7B67C" fill={fill} />; break;
+    case 'mugb': body = <Mug grad="gMugB" rim="#9BB8B8" fill={fill} />; break;
+    case 'glass': body = <Glass fill={fill} />; break;
+    case 'tiny': body = <Tiny fill={fill} />; break;
     case 'v60': body = <Pourover />; break;
     case 'press': body = <Press />; break;
     case 'moka': body = <Moka />; break;
     case 'chemex': body = <Chemex />; break;
-    default: body = <Cup />;
+    default: body = <Cup fill={fill} />;
   }
   const prefix = useId().replace(/[^a-zA-Z0-9]/g, '');
   return (

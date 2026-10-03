@@ -75,7 +75,7 @@ function Wisp({ left, delay, size }: { left: number; delay: number; size: number
   );
 }
 
-function Steam({ size }: { size: number }) {
+export function Steam({ size }: { size: number }) {
   return (
     <>
       <Wisp left={size * 0.4} delay={0} size={size} />
