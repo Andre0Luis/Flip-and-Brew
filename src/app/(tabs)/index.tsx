@@ -81,7 +81,11 @@ export default function Inicio() {
             getItemLayout={(_, i) => ({ length: w, offset: w * i, index: i })}
             onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / w))}
             renderItem={({ item, index }) => (
-              <Pressable accessibilityRole="button" accessibilityLabel={t('home.readContext', { text: item.text })} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => setCardH((h) => Math.max(h, Math.ceil(e.nativeEvent.layout.height)))} style={{ width: w }}>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('home.readContext', { text: item.text })} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => {
+                  // Lê a altura antes: dentro do atualizador o evento já foi liberado e nativeEvent vem nulo.
+                  const h = Math.ceil(e.nativeEvent.layout.height);
+                  setCardH((prev) => Math.max(prev, h));
+                }} style={{ width: w }}>
                 <Card inverse style={{ gap: 12, minHeight: cardH, justifyContent: 'space-between' }}>
                   <Txt v="label" color="bg" style={{ opacity: 0.7 }}>
                     {index === 0 ? t('home.quoteOfDay', { date: formatDateLong(lang, new Date()) }) : t('home.moreToday')}
