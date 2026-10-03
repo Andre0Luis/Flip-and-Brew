@@ -16,6 +16,7 @@ const ITEMS: Record<string, { label: Key; icon: IconName }> = {
   'bem-estar': { label: 'tab.wellbeing', icon: 'heart' },
   aprender: { label: 'tab.learn', icon: 'book' },
   colecao: { label: 'tab.collection', icon: 'shelf' },
+  comunidade: { label: 'tab.community', icon: 'people' },
 };
 
 function TabBar({ state, navigation }: TabBarProps) {
@@ -64,6 +65,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="bem-estar" />
       <Tabs.Screen name="aprender" />
       <Tabs.Screen name="colecao" />
+      <Tabs.Screen name="comunidade" />
     </Tabs>
   );
 }

@@ -776,28 +776,28 @@ export const pt: Content = {
       "blurb": "O melhor que existe: nota alta e origem rastreada. Rende muito mais."
     },
     "club-cor": {
-      "name": "Caneca Corinthians",
-      "blurb": "Série Torcida. Preto e branco, de casa."
+      "name": "Caneca Preta e Branca",
+      "blurb": "Cores da Torcida. Preta, com faixas brancas."
     },
     "club-spfc": {
-      "name": "Caneca São Paulo",
-      "blurb": "Série Torcida. Vermelho, branco e preto."
+      "name": "Caneca Vermelha, Branca e Preta",
+      "blurb": "Cores da Torcida. Três cores em faixas."
     },
     "club-pal": {
-      "name": "Caneca Palmeiras",
-      "blurb": "Série Torcida. Verde de ponta a ponta."
+      "name": "Caneca Verde e Branca",
+      "blurb": "Cores da Torcida. Verde, com um fio branco."
     },
     "club-san": {
-      "name": "Caneca Santos",
-      "blurb": "Série Torcida. Branca, com a faixa preta."
+      "name": "Caneca Branca e Preta",
+      "blurb": "Cores da Torcida. Branca, com a faixa preta."
     },
     "club-fla": {
-      "name": "Caneca Flamengo",
-      "blurb": "Série Torcida. Listras rubro-negras."
+      "name": "Caneca Rubro-Negra",
+      "blurb": "Cores da Torcida. Listras vermelhas e pretas."
     },
     "club-xv": {
-      "name": "Caneca XV de Piracicaba",
-      "blurb": "Série Torcida. Listras pretas e brancas."
+      "name": "Caneca Listrada Preta e Branca",
+      "blurb": "Cores da Torcida. Listras verticais."
     },
     "uni-galaxy": {
       "name": "Caneca Galáxia",
