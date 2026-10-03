@@ -6,15 +6,17 @@ import { Button, Card, Chip, Screen, Txt } from '@/components/ui';
 import { CreatorStory } from '@/components/CreatorStory';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { getBackend } from '@/lib/cloud';
+import { useSystemUsage } from '@/hooks/useSystemUsage';
+import { ensureNotificationPermission } from '@/lib/notifications';
 import { CONTENT } from '@/data/content';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const STEPS = 4;
+const STEPS = 5;
 
 /**
- * Primeira abertura, em quatro passos: a promessa, a ação central (aprender fazendo), por que o app existe e a autonomia.
+ * Primeira abertura, em cinco passos: a promessa, a ação central (aprender fazendo), por que o app existe, as permissões opcionais e a autonomia.
  * Nenhuma tela bloqueia: dá para pular em qualquer ponto. O resto (moedas, tropeços) aparece como dica na primeira vez.
  */
 export default function Intro() {
@@ -22,6 +24,14 @@ export default function Intro() {
   const { t, lang } = useI18n();
   const router = useRouter();
   const canSignUp = !!getBackend();
+  const usage = useSystemUsage(1);
+  const notifyOn = useApp((s) => s.settings.notifyOnDone);
+  const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
+  const allowNotify = async () => {
+    setNotifyMsg(null);
+    if (await ensureNotificationPermission()) setSettings({ notifyOnDone: true });
+    else setNotifyMsg(t('set.notifyDenied'));
+  };
   const setSettings = useApp((s) => s.setSettings);
   const setOnboarded = useApp((s) => s.setOnboarded);
   const [step, setStep] = useState(0);
@@ -114,6 +124,50 @@ export default function Intro() {
         )}
 
         {step === 3 && (
+          <View style={{ gap: 14, alignSelf: 'stretch' }}>
+            <Txt v="display" style={{ textAlign: 'center' }}>
+              {t('intro.perm.title')}
+            </Txt>
+            <Txt v="body" color="muted" style={{ textAlign: 'center' }}>
+              {t('intro.perm.intro')}
+            </Txt>
+            <Card style={{ gap: 8 }}>
+              <Txt v="title">{t('intro.perm.notifyTitle')}</Txt>
+              <Txt v="small" color="muted">
+                {t('intro.perm.notifyBody')}
+              </Txt>
+              {notifyOn ? (
+                <Txt v="label" color="good">
+                  {t('intro.perm.done')}
+                </Txt>
+              ) : (
+                <Button label={t('intro.perm.notifyCta')} tone="quiet" onPress={allowNotify} />
+              )}
+              {notifyMsg && (
+                <Txt v="small" color="bad" accessibilityLiveRegion="polite">
+                  {notifyMsg}
+                </Txt>
+              )}
+            </Card>
+            {usage.available && (
+              <Card style={{ gap: 8 }}>
+                <Txt v="title">{t('wb.usagePermTitle')}</Txt>
+                <Txt v="small" color="muted">
+                  {t('wb.usagePermBody')}
+                </Txt>
+                {usage.permitted ? (
+                  <Txt v="label" color="good">
+                    {t('intro.perm.done')}
+                  </Txt>
+                ) : (
+                  <Button label={t('wb.usagePermCta')} tone="quiet" onPress={usage.request} />
+                )}
+              </Card>
+            )}
+          </View>
+        )}
+
+        {step === 4 && (
           <>
             <Txt v="display" style={{ textAlign: 'center' }}>
               {t('intro.t2')}
