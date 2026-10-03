@@ -7,7 +7,7 @@ O humor só era registrado ao fim de um copo, então dias sem copo ficavam sem l
 
 ## Decisão
 - **Check-in diário de energia.** Um por dia, de 1 a 5 **xícaras de café** (1 = esgotado, 5 = cheia). Aparece no Início; responder de novo no mesmo dia troca a resposta. O Bem-estar mostra os 7 dias, a média e a comparação com dias de mais e menos tempo offline. Não gera notificação (ADR-0007 e o princípio de não disputar atenção).
-- **Perfil opcional** (tela `perfil`, em Ajustes, e no cadastro): nome, telefone, idade e preferências de café (café favorito, torra, moagem, corpo, acidez, sabores). Tudo facultativo. As preferências são **chaves neutras**, não texto traduzido. Telefone e idade só são salvos quando válidos.
+- **Perfil opcional** (tela `perfil`, em Ajustes, e no cadastro): nome, telefone, idade e preferências de café (café favorito, método preferido, torra, moagem, corpo, acidez, sabores). Tudo facultativo. As preferências são **chaves neutras**, não texto traduzido. Telefone e idade só são salvos quando válidos.
   - O telefone **não é usado para nada** (sem SMS, sem ligação, sem verificação); o texto da tela diz isso. É só um campo.
   - Fica no aparelho; com conta, vai no backup com o progresso (`checkins` e `profile` são campos opcionais do snapshot, então backups antigos continuam válidos). A política de privacidade e a página de exclusão de conta foram atualizadas.
 - **Começo do jogo:** Melitta (a mais simples), copo de papel e café extraforte, os três a custo zero. A V60 e a xícara de porcelana passaram a ser compradas.

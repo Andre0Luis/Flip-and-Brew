@@ -1,6 +1,7 @@
 import type { Profile } from '@/store/types';
 
 // Preferências guardadas como chaves neutras; o texto vem de i18n (profile.* e pref.*).
+export const METHODS = ['pourover', 'cloth', 'press', 'moka', 'espresso', 'aeropress', 'capsule', 'turkish', 'phin', 'coldbrew', 'siphon', 'drip'] as const;
 export const ROASTS = ['light', 'medium', 'dark'] as const;
 export const GRINDS = ['extraFine', 'fine', 'medium', 'coarse'] as const;
 export const BODIES = ['light', 'medium', 'full'] as const;
@@ -49,6 +50,8 @@ export function cleanProfile(p: unknown): Profile {
   if (typeof r.age === 'number' && Number.isInteger(r.age) && r.age >= AGE_MIN && r.age <= AGE_MAX) out.age = r.age;
   const favorite = text(r.favorite, FAVORITE_MAX);
   if (favorite) out.favorite = favorite;
+  const method = oneOf(METHODS, r.method);
+  if (method) out.method = method;
   const roast = oneOf(ROASTS, r.roast);
   if (roast) out.roast = roast;
   const grind = oneOf(GRINDS, r.grind);

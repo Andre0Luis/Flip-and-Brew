@@ -22,14 +22,19 @@ test('idade: vazio vale, número entre 10 e 120 vale, o resto é inválido', () 
 
 test('o perfil limpo descarta vazios, desconhecidos e inválidos', () => {
   const p = cleanProfile({
-    name: '  Ana  ', phone: 'abc', age: 200, favorite: '', roast: 'dark', grind: 'espuma', body: 'full',
+    name: '  Ana  ', phone: 'abc', age: 200, favorite: '', method: 'moka', roast: 'dark', grind: 'espuma', body: 'full',
     acidity: 'high', flavors: ['fruity', 'fruity', 'bacon', 'citrus'], extra: 'x',
   });
-  assert.deepEqual(p, { name: 'Ana', roast: 'dark', body: 'full', acidity: 'high', flavors: ['fruity', 'citrus'] });
+  assert.deepEqual(p, { name: 'Ana', method: 'moka', roast: 'dark', body: 'full', acidity: 'high', flavors: ['fruity', 'citrus'] });
   assert.equal(hasProfile({}), false);
   assert.equal(hasProfile({ age: 30 }), true);
   assert.deepEqual(cleanProfile(null), {});
   assert.deepEqual(cleanProfile('texto'), {});
+});
+
+test('método de preparo desconhecido é descartado', () => {
+  assert.deepEqual(cleanProfile({ method: 'microondas' }), {});
+  assert.deepEqual(cleanProfile({ method: 'coldbrew' }), { method: 'coldbrew' });
 });
 
 test('alternar escolha e sabores', () => {

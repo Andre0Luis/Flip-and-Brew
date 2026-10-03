@@ -27,6 +27,8 @@ export type Profile = {
   age?: number;
   /** café favorito, em texto livre */
   favorite?: string;
+  /** método de preparo preferido (chave de lib/profile.ts) */
+  method?: string;
   roast?: string;
   grind?: string;
   body?: string;

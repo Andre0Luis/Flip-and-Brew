@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Chip, Field, Txt } from './ui';
-import { ACIDITIES, AGE_MAX, AGE_MIN, BODIES, FLAVORS, GRINDS, ROASTS, isPhoneValid, parseAge, toggleChoice, toggleFlavor } from '@/lib/profile';
+import { ACIDITIES, AGE_MAX, AGE_MIN, BODIES, FLAVORS, GRINDS, METHODS, ROASTS, isPhoneValid, parseAge, toggleChoice, toggleFlavor } from '@/lib/profile';
 import { useApp } from '@/store/useApp';
 import { useI18n, type Key } from '@/i18n';
 
@@ -79,6 +79,7 @@ export function ProfileForm() {
       <View style={{ gap: 14 }}>
         <Txt v="title">{t('profile.coffee')}</Txt>
         <Field label={t('profile.favorite')} value={profile.favorite ?? ''} onChangeText={(v) => setProfile({ favorite: v })} placeholder={t('profile.favoritePh')} autoCapitalize="sentences" autoCorrect maxLength={80} />
+        <Choices label={t('profile.method')} options={METHODS} value={profile.method} prefix="method" onChange={(v) => setProfile({ method: v })} />
         <Choices label={t('profile.roast')} options={ROASTS} value={profile.roast} prefix="roast" onChange={(v) => setProfile({ roast: v })} />
         <Choices label={t('profile.grind')} options={GRINDS} value={profile.grind} prefix="grind" onChange={(v) => setProfile({ grind: v })} />
         <Choices label={t('profile.body')} options={BODIES} value={profile.body} prefix="body" onChange={(v) => setProfile({ body: v })} />
