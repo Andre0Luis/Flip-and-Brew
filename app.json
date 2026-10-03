@@ -26,6 +26,9 @@
       "package": "com.andre0luis.FlipAndBrew",
       "permissions": [
         "android.permission.PACKAGE_USAGE_STATS"
+      ],
+      "blockedPermissions": [
+        "android.permission.ACTIVITY_RECOGNITION"
       ]
     },
     "web": {
