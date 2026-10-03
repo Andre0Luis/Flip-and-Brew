@@ -402,6 +402,8 @@ export const en: Record<keyof typeof pt, string> = {
   'auth.modeIn': 'Sign in',
   'auth.modeUp': 'Create account',
   'auth.email': 'Email',
+  'auth.showPassword': 'Show password',
+  'auth.hidePassword': 'Hide password',
   'auth.password': 'Password',
   'auth.confirm': 'Confirm password',
   'auth.submitIn': 'Sign in',

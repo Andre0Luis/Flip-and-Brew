@@ -402,6 +402,8 @@ export const es: Record<keyof typeof pt, string> = {
   'auth.modeIn': 'Entrar',
   'auth.modeUp': 'Crear cuenta',
   'auth.email': 'Correo electrónico',
+  'auth.showPassword': 'Mostrar contraseña',
+  'auth.hidePassword': 'Ocultar contraseña',
   'auth.password': 'Contraseña',
   'auth.confirm': 'Confirmar contraseña',
   'auth.submitIn': 'Entrar',

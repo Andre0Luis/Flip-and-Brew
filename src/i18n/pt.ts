@@ -402,6 +402,8 @@ export const pt = {
   'auth.modeIn': 'Entrar',
   'auth.modeUp': 'Criar conta',
   'auth.email': 'E-mail',
+  'auth.showPassword': 'Mostrar senha',
+  'auth.hidePassword': 'Esconder senha',
   'auth.password': 'Senha',
   'auth.confirm': 'Confirmar senha',
   'auth.submitIn': 'Entrar',
