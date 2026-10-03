@@ -19,6 +19,8 @@ type State = {
   owned: string[];
   brewerId: string;
   cupId: string;
+  /** pacote de café em uso; muda as moedas ganhas */
+  packId: string;
   active: ActiveBrew | null;
   sessions: Session[];
   /** energia diária em xícaras (1 a 5), um registro por dia */
@@ -68,6 +70,7 @@ const initial = {
   owned: STARTER_IDS,
   brewerId: 'v60',
   cupId: 'cup',
+  packId: 'pack-extraforte',
   active: null as ActiveBrew | null,
   sessions: [] as Session[],
   checkins: [] as Checkin[],
@@ -100,7 +103,7 @@ export const useApp = create<State>()(
         if (st.active) return false;
         const brewer = byId(st.brewerId);
         const minutes = st.settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
-        set({ active: { brewerId: st.brewerId, cupId: st.cupId, startedAt: now, targetMs: minutes * 60_000 } });
+        set({ active: { brewerId: st.brewerId, cupId: st.cupId, packId: st.packId, startedAt: now, targetMs: minutes * 60_000 } });
         return true;
       },
 
@@ -108,7 +111,7 @@ export const useApp = create<State>()(
         const st = get();
         const a = st.active;
         if (!a) return null;
-        const o = outcomeOf(a.startedAt, a.targetMs, now, earnBonus(a.brewerId, a.cupId).total);
+        const o = outcomeOf(a.startedAt, a.targetMs, now, earnBonus(a.brewerId, a.cupId, a.packId).total);
         if (o.elapsedMs < MIN_LOGGED_MS) {
           set({ active: null, lastEndedAt: now });
           return null;
@@ -157,7 +160,7 @@ export const useApp = create<State>()(
         const st = get();
         const item = byId(id);
         if (!item || !st.owned.includes(id)) return;
-        set(item.kind === 'brewer' ? { brewerId: id } : { cupId: id });
+        set(item.kind === 'brewer' ? { brewerId: id } : item.kind === 'beans' ? { packId: id } : { cupId: id });
       },
 
       acceptPractice: () => set({ practiceAccepted: dayKey(Date.now()) }),
@@ -208,13 +211,15 @@ export const useApp = create<State>()(
       // O idioma e as demais configurações novas entram por cima do que já estava salvo.
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<State>;
-        return { ...current, ...p, settings: { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) } };
+        const owned = Array.from(new Set([...STARTER_IDS, ...(p.owned ?? current.owned)]));
+        return { ...current, ...p, owned, settings: { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) } };
       },
       partialize: (s) => ({
         coins: s.coins,
         owned: s.owned,
         brewerId: s.brewerId,
         cupId: s.cupId,
+        packId: s.packId,
         active: s.active,
         sessions: s.sessions,
         checkins: s.checkins,

@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
 import { Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
-import { CATALOG, brewers, byId, cups, localize, type CatalogItem } from '@/data/catalog';
+import { CATALOG, brewers, byId, cups, localize, packs, type CatalogItem } from '@/data/catalog';
 import { ARTICLE_COUNT } from '@/data/articles';
 import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
@@ -11,7 +11,7 @@ import { streak } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type Tab = 'cup' | 'brewer' | 'feitos';
+type Tab = 'cup' | 'brewer' | 'beans' | 'feitos';
 
 function Shelf({ items, owned, selected, onSelect }: { items: (CatalogItem & { name: string })[]; owned: string[]; selected: string; onSelect: (id: string) => void }) {
   const { c, r } = useTheme();
@@ -49,18 +49,18 @@ function Shelf({ items, owned, selected, onSelect }: { items: (CatalogItem & { n
 export default function Colecao() {
   const { c } = useTheme();
   const { lang, t } = useI18n();
-  const { owned, brewerId, cupId, sessions, articlesRead, practicesDone } = useApp();
+  const { owned, brewerId, cupId, packId, sessions, articlesRead, practicesDone } = useApp();
   const equip = useApp((s) => s.equip);
   const [tab, setTab] = useState<Tab>('cup');
-  const [sel, setSel] = useState<{ cup: string; brewer: string }>({ cup: cupId, brewer: brewerId });
+  const [sel, setSel] = useState<{ cup: string; brewer: string; beans: string }>({ cup: cupId, brewer: brewerId, beans: packId });
 
   const total = CATALOG.length;
   const have = owned.filter((id) => byId(id)).length;
   const finished = sessions.filter((s) => s.status === 'done').length;
 
-  const detailBase = tab === 'cup' ? byId(sel.cup) : tab === 'brewer' ? byId(sel.brewer) : undefined;
+  const detailBase = tab === 'feitos' ? undefined : byId(sel[tab]);
   const detail = detailBase ? localize(lang, detailBase) : undefined;
-  const equipped = detail && (detail.kind === 'cup' ? cupId : brewerId) === detail.id;
+  const equipped = detail && (detail.kind === 'cup' ? cupId : detail.kind === 'beans' ? packId : brewerId) === detail.id;
   const hasDetail = detail && owned.includes(detail.id);
 
   const totalMin = sessions.reduce((a, s) => a + s.elapsedMs / 60_000, 0);
@@ -84,6 +84,7 @@ export default function Colecao() {
         options={[
           { value: 'cup', label: t('col.tabShelf') },
           { value: 'brewer', label: t('col.tabBrewers') },
+          { value: 'beans', label: t('col.tabPacks') },
           { value: 'feitos', label: t('col.tabAchievements') },
         ]}
       />
@@ -104,9 +105,9 @@ export default function Colecao() {
       ) : (
         <>
           <Shelf
-            items={(tab === 'cup' ? cups() : brewers()).map((i) => localize(lang, i))}
+            items={(tab === 'cup' ? cups() : tab === 'beans' ? packs() : brewers()).map((i) => localize(lang, i))}
             owned={owned}
-            selected={tab === 'cup' ? sel.cup : sel.brewer}
+            selected={sel[tab]}
             onSelect={(id) => {
               Haptics.selectionAsync().catch(() => {});
               setSel((s) => ({ ...s, [tab]: id }));

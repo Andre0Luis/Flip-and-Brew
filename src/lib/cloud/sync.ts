@@ -13,6 +13,7 @@ export function localData(): LocalData {
     owned: s.owned,
     brewerId: s.brewerId,
     cupId: s.cupId,
+    packId: s.packId,
     sessions: s.sessions,
     checkins: s.checkins,
     profile: s.profile,

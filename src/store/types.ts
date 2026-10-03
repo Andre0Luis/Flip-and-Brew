@@ -34,7 +34,7 @@ export type Profile = {
   flavors?: string[];
 };
 
-export type ActiveBrew = { brewerId: string; cupId: string; startedAt: number; targetMs: number };
+export type ActiveBrew = { brewerId: string; cupId: string; /** ausente em copos iniciados antes dos pacotes de café */ packId?: string; startedAt: number; targetMs: number };
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type Language = 'pt' | 'en' | 'es';

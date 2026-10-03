@@ -35,6 +35,8 @@ export type SnapshotData = {
   owned: string[];
   brewerId: string;
   cupId: string;
+  /** Opcional: backups antigos não têm pacote de café. */
+  packId?: string;
   sessions: Session[];
   /** Opcional: backups feitos antes do check-in de energia não têm este campo. */
   checkins?: Checkin[];

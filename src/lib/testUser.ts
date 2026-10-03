@@ -21,6 +21,7 @@ export function makeTestData(now = Date.now()): Omit<LocalData, 'settings'> {
     owned: CATALOG.map((i) => i.id), // todas as cafeteiras e xícaras, inclusive a Chemex e a Coleção Estoica
     brewerId: 'chemex',
     cupId: 'stoic-ep',
+    packId: 'pack-especial',
     sessions,
     checkins: makeDemoCheckins(now, TEST_HISTORY_DAYS, sessions),
     profile: { name: 'Pessoa de Teste', age: 32, favorite: 'Coado de café do Cerrado', roast: 'medium', grind: 'medium', body: 'medium', acidity: 'medium', flavors: ['chocolate', 'caramel'] },

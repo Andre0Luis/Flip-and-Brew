@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import { Art } from '@/art/Art';
 import { LiveBrewer } from '@/components/BrewViz';
 import { CalibrateCard } from '@/components/CalibrateCard';
 import { earnBonus } from '@/lib/earnings';
@@ -22,7 +23,7 @@ export default function Inicio() {
   const router = useRouter();
   const { c } = useTheme();
   const { lang, t } = useI18n();
-  const { coins, owned, brewerId, cupId, sessions, active, settings } = useApp();
+  const { coins, owned, brewerId, cupId, packId, sessions, active, settings } = useApp();
   const equip = useApp((s) => s.equip);
   const start = useApp((s) => s.start);
 
@@ -52,7 +53,7 @@ export default function Inicio() {
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
   const minutes = settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
 
-  const combo = earnBonus(brewerId, cupId);
+  const combo = earnBonus(brewerId, cupId, packId);
 
   const begin = () => {
     if (active || start()) router.push('/brew');
@@ -113,7 +114,16 @@ export default function Inicio() {
       </View>
 
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
-        <LiveBrewer id={brewerId} size={230} />
+        {/* Bancada: a xícara de um lado, a cafeteira no centro e o pacote de café do outro. Tocar leva à Coleção. */}
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 2 }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: 82 }}>
+            <Art id={cupId} size={82} fill={1} />
+          </Pressable>
+          <LiveBrewer id={brewerId} size={186} />
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: 82 }}>
+            <Art id={packId} size={82} />
+          </Pressable>
+        </View>
         <Txt v="small" color="muted">
           {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
         </Txt>

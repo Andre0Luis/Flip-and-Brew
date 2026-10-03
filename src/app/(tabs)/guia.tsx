@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
 import { Icon } from '@/components/Icon';
 import { Bar, Button, Card, CoinBadge, Header, Screen, Segmented, Txt } from '@/components/ui';
-import { brewers, cups, localize, type LocalizedItem } from '@/data/catalog';
+import { brewers, COLLECTIONS, cups, localize, packs as coffeePacks, type LocalizedItem } from '@/data/catalog';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { formatNumber, useI18n } from '@/i18n';
@@ -13,13 +13,13 @@ import { buyCoinPack, loadCoinPacks, purchasesConfigured, type CoinPack } from '
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 
-type Tab = 'brewer' | 'cup';
+type Tab = 'brewer' | 'cup' | 'beans';
 
 export default function Guia() {
   const { c, r } = useTheme();
   const { lang, t } = useI18n();
   const num = (n: number) => formatNumber(lang, n);
-  const { coins, owned, brewerId, cupId, sessions, checkins, settings } = useApp();
+  const { coins, owned, brewerId, cupId, packId, sessions, checkins, settings } = useApp();
   const buy = useApp((s) => s.buy);
   const equip = useApp((s) => s.equip);
   const addCoins = useApp((s) => s.addCoins);
@@ -35,8 +35,8 @@ export default function Guia() {
     if (purchasesConfigured) loadCoinPacks().then(setPacks);
   }, []);
 
-  const items = (tab === 'brewer' ? brewers() : cups()).map((i) => localize(lang, i));
-  const equipped = tab === 'brewer' ? brewerId : cupId;
+  const items = (tab === 'brewer' ? brewers() : tab === 'beans' ? coffeePacks() : cups()).map((i) => localize(lang, i));
+  const equipped = tab === 'brewer' ? brewerId : tab === 'beans' ? packId : cupId;
 
   const onItem = (item: LocalizedItem) => {
     setMessage(null);
@@ -143,6 +143,7 @@ export default function Guia() {
         options={[
           { value: 'brewer', label: t('guide.brewers') },
           { value: 'cup', label: t('guide.cups') },
+          { value: 'beans', label: t('guide.packs') },
         ]}
       />
 
@@ -193,28 +194,24 @@ export default function Guia() {
 
       {renderGrid(items.filter((i) => !i.collection))}
 
-      {items.some((i) => i.collection === 'stoic') && (
-        <View style={{ gap: 10 }}>
-          <View style={{ gap: 2 }}>
-            <Txt v="title">{t('guide.stoicTitle')}</Txt>
-            <Txt v="small" color="muted">
-              {t('guide.stoicBody')}
-            </Txt>
-          </View>
-          {renderGrid(items.filter((i) => i.collection === 'stoic'))}
-        </View>
+      {tab === 'beans' && (
+        <Txt v="small" color="muted">
+          {t('guide.packsNote')}
+        </Txt>
       )}
 
-      {items.some((i) => i.collection === 'mountain') && (
-        <View style={{ gap: 10 }}>
-          <View style={{ gap: 2 }}>
-            <Txt v="title">{t('guide.mountainTitle')}</Txt>
-            <Txt v="small" color="muted">
-              {t('guide.mountainBody')}
-            </Txt>
+      {COLLECTIONS.map((col) =>
+        items.some((i) => i.collection === col) ? (
+          <View key={col} style={{ gap: 10 }}>
+            <View style={{ gap: 2 }}>
+              <Txt v="title">{t(`guide.${col}Title` as 'guide.stoicTitle')}</Txt>
+              <Txt v="small" color="muted">
+                {t(`guide.${col}Body` as 'guide.stoicBody')}
+              </Txt>
+            </View>
+            {renderGrid(items.filter((i) => i.collection === col))}
           </View>
-          {renderGrid(items.filter((i) => i.collection === 'mountain'))}
-        </View>
+        ) : null,
       )}
 
       <Card style={{ gap: 8 }}>

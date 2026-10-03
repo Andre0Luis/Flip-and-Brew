@@ -91,7 +91,7 @@ export default function Brew() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Coin size={20} />
           <Txt v="small" color="muted">
-            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs, earnBonus(active.brewerId, active.cupId).total) })}
+            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs, earnBonus(active.brewerId, active.cupId, active.packId).total) })}
           </Txt>
         </View>
 

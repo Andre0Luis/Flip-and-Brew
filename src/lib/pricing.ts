@@ -43,7 +43,7 @@ export function discountFor({ checkins, sessions, goalMin }: DiscountInput, now 
 /** Preço com desconto, em moedas inteiras e nunca abaixo de 1. */
 export const discountedPrice = (price: number, percent: number) => (price <= 0 ? 0 : Math.max(1, Math.round((price * (100 - percent)) / 100)));
 
-/** Só cafeteiras ganham desconto; xícaras, canecas e séries especiais têm sempre o preço cheio. */
-export function priceOf(item: { kind: 'brewer' | 'cup'; price: number }, percent: number): number {
+/** Só cafeteiras ganham desconto; copos, séries especiais e pacotes de café têm sempre o preço cheio. */
+export function priceOf(item: { kind: 'brewer' | 'cup' | 'beans'; price: number }, percent: number): number {
   return item.kind === 'brewer' ? discountedPrice(item.price, percent) : item.price;
 }

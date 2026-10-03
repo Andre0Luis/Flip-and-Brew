@@ -25,6 +25,7 @@ export function buildSnapshot(local: LocalData, now: number): Snapshot {
       owned: [...local.owned],
       brewerId: local.brewerId,
       cupId: local.cupId,
+      packId: local.packId,
       sessions: local.sessions.slice(-MAX_SESSIONS),
       checkins: (local.checkins ?? []).slice(-MAX_CHECKINS),
       profile: cleanProfile(local.profile),
@@ -57,6 +58,7 @@ export function parseSnapshot(raw: unknown): Snapshot | null {
     Array.isArray(d.articlesRead) &&
     typeof d.brewerId === 'string' &&
     typeof d.cupId === 'string' &&
+    (d.packId === undefined || typeof d.packId === 'string') &&
     !!d.settings;
   return ok ? (raw as Snapshot) : null;
 }
@@ -75,13 +77,14 @@ export function decideInitialSync(local: LocalData, remote: Snapshot | null): Sy
 }
 
 /** Estado local resultante de aplicar um snapshot. As configurações do aparelho são preservadas. */
-export function applySnapshot<S extends Record<string, unknown>>(current: { settings: S }, snap: Snapshot) {
+export function applySnapshot<S extends Record<string, unknown>>(current: { settings: S; packId?: string }, snap: Snapshot) {
   const d = snap.data;
   return {
     coins: d.coins,
     owned: d.owned,
     brewerId: d.brewerId,
     cupId: d.cupId,
+    packId: d.packId ?? current.packId ?? 'pack-extraforte',
     sessions: d.sessions as Session[],
     checkins: d.checkins ?? [],
     profile: cleanProfile(d.profile),
@@ -95,5 +98,5 @@ export function applySnapshot<S extends Record<string, unknown>>(current: { sett
 /** Assinatura barata do que entra no backup, para saber se vale agendar um novo. */
 export function dataSignature(d: LocalData): string {
   const s = d.settings;
-  return [d.coins, d.owned.length, d.sessions.length, d.sessions.at(-1)?.id ?? '', d.sessions.at(-1)?.mood ?? '', d.sessions.at(-1)?.trigger ?? '', d.checkins?.length ?? 0, d.checkins?.at(-1)?.energy ?? '', JSON.stringify(cleanProfile(d.profile)), d.brewerId, d.cupId, d.articlesRead.length, d.practicesDone.length, s.goalMin, s.language, s.themeMode, s.autoStart, s.notifyOnDone].join('|');
+  return [d.coins, d.owned.length, d.sessions.length, d.sessions.at(-1)?.id ?? '', d.sessions.at(-1)?.mood ?? '', d.sessions.at(-1)?.trigger ?? '', d.checkins?.length ?? 0, d.checkins?.at(-1)?.energy ?? '', JSON.stringify(cleanProfile(d.profile)), d.brewerId, d.cupId, d.packId ?? '', d.articlesRead.length, d.practicesDone.length, s.goalMin, s.language, s.themeMode, s.autoStart, s.notifyOnDone].join('|');
 }

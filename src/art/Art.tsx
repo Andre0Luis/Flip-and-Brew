@@ -151,7 +151,7 @@ function Cup({ fill }: { fill?: number }) {
   );
 }
 
-function StoicCup({ band, fill, plain, emblem }: { band: string; fill?: number; plain?: boolean; emblem?: boolean }) {
+function StoicCup({ band, fill, plain, emblem }: { band: string; fill?: number; plain?: boolean; emblem?: 'peak' | 'moon' | 'star' | boolean }) {
   const u = useU();
   const p = useContext(PrefixContext);
   return (
@@ -175,11 +175,26 @@ function StoicCup({ band, fill, plain, emblem }: { band: string; fill?: number; 
         {!plain && <Rect x={20} y={70} width={80} height={1.6} fill="#D7A040" />}
       </G>
       <Path d="M32 56C33 71 40 81 49 85" stroke="#fff" strokeWidth={3} opacity={0.55} {...line} />
-      {emblem && <Path d="M44 76L54 62L60 70L68 58L78 76Z" fill="#F1F5F8" opacity={0.92} />}
+      {(emblem === true || emblem === 'peak') && <Path d="M44 76L54 62L60 70L68 58L78 76Z" fill="#F1F5F8" opacity={0.92} />}
+      {emblem === 'moon' && <Moon x={58} y={68} s={0.9} />}
+      {emblem === 'star' && <Star x={60} y={68} s={0.95} />}
       <Ellipse cx={60} cy={50} rx={34} ry={9} fill="#F7F0E5" stroke={plain ? '#CDBDA6' : '#D7A040'} strokeWidth={plain ? 1 : 1.4} />
       <Surface cx={60} cy={51} rx={29} ry={7} crx={22} cry={4.6} fill={fill} />
     </>
   );
+}
+
+function Moon({ x = 60, y = 66, s = 1 }: { x?: number; y?: number; s?: number }) {
+  return <Path d={`M${x} ${y - 10 * s}A${10 * s} ${10 * s} 0 1 0 ${x + 9 * s} ${y + 6 * s}A${8 * s} ${8 * s} 0 1 1 ${x} ${y - 10 * s}Z`} fill="#F4E7C1" opacity={0.95} />;
+}
+
+function Star({ x = 60, y = 66, s = 1 }: { x?: number; y?: number; s?: number }) {
+  const pts = Array.from({ length: 10 }, (_, i) => {
+    const r = (i % 2 === 0 ? 9 : 4) * s;
+    const a = (Math.PI / 5) * i - Math.PI / 2;
+    return `${(x + r * Math.cos(a)).toFixed(1)} ${(y + r * Math.sin(a)).toFixed(1)}`;
+  });
+  return <Path d={`M${pts.join('L')}Z`} fill="#F4E7C1" opacity={0.95} />;
 }
 
 function CampSpeckles() {
@@ -251,6 +266,237 @@ function Tiny({ fill }: { fill?: number }) {
       <Ellipse cx={60} cy={64} rx={26} ry={7} fill="#F7F0E5" stroke="#CDBDA6" strokeWidth={1} />
       <Surface cx={60} cy={65} rx={22} ry={5.2} crx={16} cry={3.2} fill={fill} />
       <Path d="M40 72C41 80 46 86 51 88" stroke="#fff" strokeWidth={2.5} opacity={0.7} {...line} />
+    </>
+  );
+}
+
+/** Copo de vidro reto, como o copo americano. `band` desenha uma faixa; `gold` põe um fio dourado no aro. */
+function Americano({ fill, band, gold, small }: { fill?: number; band?: string; gold?: boolean; small?: boolean }) {
+  const u = useU();
+  const p = useContext(PrefixContext);
+  const f = fill === undefined ? 1 : clamp01(fill);
+  const top = small ? 60 : 44;
+  const bottom = small ? 100 : 101;
+  const level = bottom - (bottom - top - 6) * f;
+  const w = small ? 14 : 22;
+  const body = `M${58 - w - 2} ${top}H${58 + w + 2}L${58 + w - 3} ${bottom - 3}Q${58 + w - 3.5} ${bottom} ${58 + w - 7} ${bottom}H${58 - w + 7}Q${58 - w + 3.5} ${bottom} ${58 - w + 3} ${bottom - 3}Z`;
+  return (
+    <>
+      <Defs>
+        <ClipPath id={`${p}glvl`}>
+          <Rect x={20} y={level} width={80} height={bottom - level + 1} />
+        </ClipPath>
+        <ClipPath id={`${p}gbody`}>
+          <Path d={body} />
+        </ClipPath>
+      </Defs>
+      <Ellipse cx={58} cy={bottom + 3} rx={w + 12} ry={5} fill={u('gShadow')} />
+      <G clipPath={`url(#${p}gbody)`}>
+        <G clipPath={`url(#${p}glvl)`}>
+          <Rect x={20} y={top} width={80} height={bottom - top} fill={u('gCofV')} />
+          <Rect x={20} y={level} width={80} height={3} fill="#8A5A36" opacity={0.7} />
+        </G>
+        {band && <Rect x={20} y={top + (bottom - top) * 0.38} width={80} height={9} fill={band} opacity={0.92} />}
+      </G>
+      <Path d={body} fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Ellipse cx={58} cy={top} rx={w + 2} ry={3.4} fill="none" stroke={gold ? '#D7A040' : '#A89886'} strokeWidth={gold ? 2 : 1.4} />
+      <Path d={`M${58 - w + 3} ${top + 8}L${58 - w + 6} ${bottom - 12}`} stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+    </>
+  );
+}
+
+/** Caneca de vidro com alça (estilo café irlandês) ou xícara de parede dupla. */
+function GlassMug({ fill, double }: { fill?: number; double?: boolean }) {
+  const u = useU();
+  const p = useContext(PrefixContext);
+  const f = fill === undefined ? 1 : clamp01(fill);
+  const top = 40;
+  const bottom = 99;
+  const level = bottom - (bottom - top - 5) * f;
+  const body = 'M32 40H84L81 93Q80.5 99 75 99H41Q35.5 99 35 93Z';
+  return (
+    <>
+      <Defs>
+        <ClipPath id={`${p}mlvl`}>
+          <Rect x={20} y={level} width={80} height={bottom - level + 1} />
+        </ClipPath>
+        <ClipPath id={`${p}mbody`}>
+          <Path d={body} />
+        </ClipPath>
+      </Defs>
+      <Ellipse cx={58} cy={103} rx={34} ry={5} fill={u('gShadow')} />
+      <Path d="M82 50C102 48 102 82 80 82" stroke="#A89886" strokeWidth={6} {...line} />
+      <Path d="M82 50C102 48 102 82 80 82" stroke={u('gGlass')} strokeWidth={4} {...line} />
+      <G clipPath={`url(#${p}mbody)`}>
+        <G clipPath={`url(#${p}mlvl)`}>
+          <Rect x={20} y={top} width={80} height={bottom - top} fill={u('gCofV')} />
+          <Rect x={20} y={level} width={80} height={3} fill="#E9D3B5" opacity={0.85} />
+        </G>
+      </G>
+      <Path d={body} fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      {double && <Path d="M38 46H78L76 90Q75.6 94 72 94H44Q40.4 94 40 90Z" fill="none" stroke="#A89886" strokeWidth={1} opacity={0.8} />}
+      <Ellipse cx={58} cy={40} rx={26} ry={3.4} fill="none" stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M39 48L41 86" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+    </>
+  );
+}
+
+function Bowl({ fill }: { fill?: number }) {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={102} rx={42} ry={6} fill={u('gShadow')} />
+      <Path d="M18 62C10 62 10 76 22 76" stroke="#B9A78F" strokeWidth={7} {...line} />
+      <Path d="M102 62C110 62 110 76 98 76" stroke="#B9A78F" strokeWidth={7} {...line} />
+      <Path d="M18 56H102C102 84 86 98 60 98C34 98 18 84 18 56Z" fill={u('gPorc')} />
+      <Path d="M26 64C28 78 38 88 48 91" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+      <Ellipse cx={60} cy={56} rx={42} ry={10} fill="#F7F0E5" stroke="#CDBDA6" strokeWidth={1} />
+      <Surface cx={60} cy={57} rx={36} ry={7.6} crx={28} cry={5} fill={fill} />
+    </>
+  );
+}
+
+function PaperCup() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={104} rx={30} ry={5} fill={u('gShadow')} />
+      <Path d="M36 38H80L74 100Q73.6 103 70 103H46Q42.4 103 42 100Z" fill="#F4EDE0" />
+      <Path d="M38.4 62H77.6L75.2 86H40.8Z" fill="#7A4A26" />
+      <Path d="M43 66L45 82" stroke="#fff" strokeWidth={2.4} opacity={0.35} {...line} />
+      <Rect x={32} y={30} width={52} height={9} rx={4} fill="#3A2A22" />
+      <Rect x={40} y={26} width={36} height={6} rx={3} fill="#4A362B" />
+    </>
+  );
+}
+
+function Tumbler() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={106} rx={28} ry={5} fill={u('gShadow')} />
+      <Path d="M40 36H76L73 98Q72.6 104 67 104H49Q43.4 104 43 98Z" fill={u('gMetal')} />
+      <Rect x={44} y={58} width={28} height={16} rx={2} fill="#2A1D16" opacity={0.85} />
+      <Path d="M44 42L46 94" stroke="#fff" strokeWidth={2.6} opacity={0.55} {...line} />
+      <Rect x={37} y={26} width={42} height={12} rx={5} fill="#2A1D16" />
+      <Rect x={50} y={20} width={16} height={7} rx={3} fill="#3A2A22" />
+    </>
+  );
+}
+
+function Capsule() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={38} ry={5} fill={u('gShadow')} />
+      <Rect x={74} y={20} width={16} height={60} rx={6} fill="#8FB4C8" opacity={0.85} />
+      <Rect x={30} y={14} width={50} height={72} rx={10} fill="#2A2523" />
+      <Rect x={36} y={22} width={38} height={12} rx={4} fill="#4A423E" />
+      <Circle cx={62} cy={28} r={3} fill="#E9A23B" />
+      <Rect x={42} y={46} width={26} height={10} rx={3} fill="#6A5F58" />
+      <Rect x={50} y={56} width={10} height={9} rx={1} fill="#1A1614" />
+      <Path d="M55 65V80" stroke="#7A4527" strokeWidth={2.4} />
+      <Rect x={26} y={86} width={58} height={8} rx={3} fill="#3A3330" />
+      <Path d="M43 80H67L65 91Q64.6 93 62 93H48Q45.4 93 45 91Z" fill={u('gPorc')} />
+      <Ellipse cx={55} cy={80.6} rx={11} ry={2} fill="#4B2815" />
+      <Rect x={26} y={94} width={58} height={12} rx={3} fill="#1F1B19" />
+    </>
+  );
+}
+
+function EspressoMachine() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={110} rx={44} ry={5} fill={u('gShadow')} />
+      <Rect x={14} y={20} width={92} height={62} rx={7} fill={u('gMetal')} />
+      <Rect x={14} y={14} width={92} height={10} rx={4} fill="#3A3330" />
+      <Circle cx={36} cy={38} r={8} fill="#2A2523" stroke="#C9C2B6" strokeWidth={2} />
+      <Path d="M36 38L40 33" stroke="#E9A23B" strokeWidth={1.6} />
+      <Circle cx={60} cy={38} r={5} fill="#3A3330" />
+      <Circle cx={80} cy={38} r={5} fill="#3A3330" />
+      <Rect x={44} y={50} width={32} height={9} rx={3} fill="#2A2523" />
+      <Rect x={52} y={59} width={16} height={6} rx={2} fill="#1A1614" />
+      <Path d="M76 55L98 55" stroke="#2A1D16" strokeWidth={5} {...line} />
+      <Path d="M60 65V78" stroke="#7A4527" strokeWidth={2.4} />
+      <Rect x={14} y={82} width={92} height={7} rx={3} fill="#3A3330" />
+      <Path d="M48 88H72L70 102Q69.6 105 66 105H54Q50.4 105 50 102Z" fill={u('gPorc')} />
+      <Ellipse cx={60} cy={88.6} rx={12} ry={2.2} fill="#4B2815" />
+    </>
+  );
+}
+
+function DripMaker() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={110} rx={42} ry={5} fill={u('gShadow')} />
+      <Rect x={74} y={12} width={22} height={90} rx={5} fill="#2A2523" />
+      <Rect x={20} y={12} width={62} height={20} rx={6} fill="#2A2523" />
+      <Path d="M30 32H66L60 46H36Z" fill={u('gWood')} />
+      <Rect x={20} y={96} width={76} height={10} rx={4} fill="#1F1B19" />
+      <Path d="M28 56H68L66 94Q65.6 97 62 97H34Q30.4 97 30 94Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M29.4 72H66.6L65.4 94Q65 96 62 96H34Q31 96 30.6 94Z" fill={u('gCofV')} />
+      <Path d="M68 62C80 60 80 80 67 80" stroke="#2A2523" strokeWidth={5} {...line} />
+      <Rect x={44} y={46} width={4} height={8} fill="#7A4527" />
+      <Circle cx={88} cy={24} r={3} fill="#E9A23B" />
+    </>
+  );
+}
+
+function ColdBrew() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={108} rx={36} ry={5} fill={u('gShadow')} />
+      <Path d="M36 30H80V100Q80 104 76 104H40Q36 104 36 100Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M37.4 52H78.6V100Q78.6 102.6 76 102.6H40Q37.4 102.6 37.4 100Z" fill={u('gCofV')} />
+      <Circle cx={50} cy={62} r={2} fill="#fff" opacity={0.4} />
+      <Circle cx={64} cy={78} r={2.6} fill="#fff" opacity={0.3} />
+      <Circle cx={56} cy={90} r={1.6} fill="#fff" opacity={0.4} />
+      <Rect x={74} y={96} width={14} height={4} rx={1.5} fill={u('gMetal')} />
+      <Rect x={32} y={22} width={52} height={10} rx={3} fill="#3A3330" />
+      <Path d="M42 36L44 96" stroke="#fff" strokeWidth={3} opacity={0.6} {...line} />
+      <Path d="M44 100L40 106M72 100L76 106" stroke="#B8E0F0" strokeWidth={2} opacity={0.0} />
+    </>
+  );
+}
+
+function Phin() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={36} ry={5} fill={u('gShadow')} />
+      <Path d="M32 66H88L84 100Q83.6 104 79 104H41Q36.4 104 36 100Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M34 90H86L84 100Q83.6 102.6 79 102.6H41Q36.4 102.6 36 100Z" fill={u('gCofV')} />
+      <Circle cx={60} cy={76} r={1.8} fill="#4B2815" />
+      <Path d="M60 78V88" stroke="#4B2815" strokeWidth={1.4} />
+      <Rect x={22} y={60} width={76} height={6} rx={2} fill={u('gMetal')} />
+      <Path d="M30 60H90L84 40H36Z" fill={u('gMetal')} />
+      <Rect x={34} y={32} width={52} height={8} rx={3} fill={u('gMetal')} />
+      <Rect x={54} y={22} width={12} height={10} rx={3} fill="#8F887C" />
+    </>
+  );
+}
+
+/** Pacote de café. A cor e os pontinhos mostram a categoria: quanto mais pontos, melhor o café. */
+function BeanBag({ body, label, accent, tier, seal }: { body: string; label: string; accent: string; tier: number; seal?: boolean }) {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={34} ry={5} fill={u('gShadow')} />
+      <Path d="M34 28H86L90 100Q90.4 105 85 105H35Q29.6 105 30 100Z" fill={body} />
+      <Path d="M34 28H86L87 36H33Z" fill={accent} opacity={0.9} />
+      <Path d="M34 28L38 24L42 28L46 24L50 28L54 24L58 28L62 24L66 28L70 24L74 28L78 24L82 28L86 28" stroke={accent} strokeWidth={2.2} fill="none" />
+      <Rect x={40} y={46} width={40} height={44} rx={4} fill={label} />
+      <Ellipse cx={60} cy={62} rx={8} ry={11} fill="#4B2815" transform="rotate(25 60 62)" />
+      <Path d="M56 52Q62 62 64 72" stroke={label} strokeWidth={1.6} fill="none" />
+      {seal && <Circle cx={80} cy={50} r={8} fill="#D7A040" />}
+      {seal && <Star x={80} y={50} s={0.9} />}
+      {Array.from({ length: tier }, (_, i) => (
+        <Circle key={i} cx={60 + (i - (tier - 1) / 2) * 7} cy={84} r={2.2} fill={accent} />
+      ))}
+      <Path d="M36 40L39 98" stroke="#fff" strokeWidth={2.6} opacity={0.22} {...line} />
     </>
   );
 }
@@ -446,7 +692,32 @@ export function Art({ id, size = 96, fill }: Props) {
     case 'cupb': body = <StoicCup band="#2F5D9B" plain fill={fill} />; break;
     case 'cupg': body = <StoicCup band="#6B7A3A" plain fill={fill} />; break;
     case 'cupo': body = <StoicCup band="#C98A2B" plain fill={fill} />; break;
-    case 'peak': body = <StoicCup band="#3B4A5A" plain fill={fill} emblem />; break;
+    case 'peak': body = <StoicCup band="#3B4A5A" plain fill={fill} emblem="peak" />; break;
+    case 'americano': body = <Americano fill={fill} />; break;
+    case 'irish': body = <GlassMug fill={fill} />; break;
+    case 'double': body = <Americano fill={fill} small gold />; break;
+    case 'bowl': body = <Bowl fill={fill} />; break;
+    case 'paper': body = <PaperCup />; break;
+    case 'travel': body = <Tumbler />; break;
+    case 'night-moon': body = <StoicCup band="#1E2A4A" plain fill={fill} emblem="moon" />; break;
+    case 'night-star': body = <Mug grad="gMugE" rim="#3B4A6B" handle="#0C0A09" fill={fill} decor={<Star x={58} y={70} s={1.2} />} />; break;
+    case 'night-comet': body = <Americano fill={fill} band="#1E2A4A" />; break;
+    case 'bot-americano': body = <Americano fill={fill} band="#B3262B" />; break;
+    case 'bot-xicara': body = <StoicCup band="#B3262B" plain fill={fill} />; break;
+    case 'bot-esmaltada': body = <Mug grad="gEnamel" rim="#B3262B" handle="#B3262B" fill={fill} decor={<CampSpeckles />} />; break;
+    case 'gold-cup': body = <StoicCup band="#C99A2E" fill={fill} />; break;
+    case 'gold-mug': body = <Mug grad="gGold" rim="#F6DC93" handle="#A26A1C" fill={fill} />; break;
+    case 'gold-glass': body = <Americano fill={fill} gold band="#D7A040" />; break;
+    case 'pack-extraforte': body = <BeanBag body="#7A1F1A" label="#F1E4CF" accent="#E9A23B" tier={1} />; break;
+    case 'pack-tradicional': body = <BeanBag body="#8A5A36" label="#F1E4CF" accent="#F3D9B0" tier={2} />; break;
+    case 'pack-superior': body = <BeanBag body="#3F6B4F" label="#F1E4CF" accent="#CFE3C8" tier={3} />; break;
+    case 'pack-gourmet': body = <BeanBag body="#1E1815" label="#EFE2C8" accent="#D7A040" tier={4} />; break;
+    case 'pack-especial': body = <BeanBag body="#F1E4CF" label="#FFFFFF" accent="#C99A2E" tier={5} seal />; break;
+    case 'capsule': body = <Capsule />; break;
+    case 'espresso': body = <EspressoMachine />; break;
+    case 'drip': body = <DripMaker />; break;
+    case 'coldbrew': body = <ColdBrew />; break;
+    case 'phin': body = <Phin />; break;
     case 'glass': body = <Glass fill={fill} />; break;
     case 'tiny': body = <Tiny fill={fill} />; break;
     case 'v60': body = <Pourover />; break;

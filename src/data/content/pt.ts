@@ -675,6 +675,106 @@ export const pt: Content = {
       "name": "Caneca Cume",
       "blurb": "Série Montanha. Escura como a noite antes da subida."
     },
+    "phin": {
+      "name": "Filtro phin",
+      "blurb": "Vietnamita, gota a gota. 50 minutos."
+    },
+    "drip": {
+      "name": "Cafeteira elétrica",
+      "blurb": "Aperta e vai. 40 minutos."
+    },
+    "coldbrew": {
+      "name": "Cold brew",
+      "blurb": "Frio e paciente. 90 minutos."
+    },
+    "capsule": {
+      "name": "Máquina de cápsula",
+      "blurb": "Prática e rápida, sem cerimônia. 15 minutos."
+    },
+    "espresso": {
+      "name": "Máquina de espresso",
+      "blurb": "Pressão de balcão. 25 minutos."
+    },
+    "paper": {
+      "name": "Copo de papel",
+      "blurb": "Para levar. Simples e honesto."
+    },
+    "americano": {
+      "name": "Copo americano",
+      "blurb": "O copo transparente de balcão, clássico do cafezinho."
+    },
+    "bowl": {
+      "name": "Tigela de café com leite",
+      "blurb": "Para segurar com as duas mãos."
+    },
+    "irish": {
+      "name": "Caneca de vidro",
+      "blurb": "Com alça, para ver o café por dentro."
+    },
+    "double": {
+      "name": "Copo de parede dupla",
+      "blurb": "Esquenta pouco a mão e mostra o café."
+    },
+    "travel": {
+      "name": "Copo térmico",
+      "blurb": "Mantém quente na estrada."
+    },
+    "night-moon": {
+      "name": "Xícara Lua",
+      "blurb": "Série Noturna. Para o café depois da meia-noite."
+    },
+    "night-star": {
+      "name": "Caneca Estrela",
+      "blurb": "Série Noturna. Escura, com uma estrela só."
+    },
+    "night-comet": {
+      "name": "Copo Cometa",
+      "blurb": "Série Noturna. Vidro com uma faixa de céu."
+    },
+    "bot-americano": {
+      "name": "Americano do Botequim",
+      "blurb": "Série Botequim. Faixa vermelha, balcão de esquina."
+    },
+    "bot-xicara": {
+      "name": "Xicrinha do Botequim",
+      "blurb": "Série Botequim. A xícara do cafezinho de balcão."
+    },
+    "bot-esmaltada": {
+      "name": "Esmaltada do Botequim",
+      "blurb": "Série Botequim. Esmalte branco, borda vermelha."
+    },
+    "gold-cup": {
+      "name": "Xícara Ouro",
+      "blurb": "Série Ouro. Faixa dourada de verdade."
+    },
+    "gold-mug": {
+      "name": "Caneca Ouro",
+      "blurb": "Série Ouro. Brilho de dia de festa."
+    },
+    "gold-glass": {
+      "name": "Copo Ouro",
+      "blurb": "Série Ouro. Vidro com fio dourado."
+    },
+    "pack-extraforte": {
+      "name": "Café Extraforte",
+      "blurb": "Torra bem escura e sabor marcante. Rende poucas moedas."
+    },
+    "pack-tradicional": {
+      "name": "Café Tradicional",
+      "blurb": "O pacote de todo dia. Rende um pouco mais."
+    },
+    "pack-superior": {
+      "name": "Café Superior",
+      "blurb": "Grãos mais selecionados, mais doce e limpo."
+    },
+    "pack-gourmet": {
+      "name": "Café Gourmet",
+      "blurb": "Só grãos de qualidade e torra cuidadosa. Rende bem mais."
+    },
+    "pack-especial": {
+      "name": "Café Especial",
+      "blurb": "O melhor que existe: nota alta e origem rastreada. Rende muito mais."
+    },
     "cup": {
       "name": "Xícara de porcelana",
       "blurb": "A primeira da prateleira."

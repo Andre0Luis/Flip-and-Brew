@@ -7,16 +7,18 @@ import { CATALOG } from '@/data/catalog';
 const MIN = 60_000;
 
 test('o bônus é a soma da cafeteira, da xícara e de uma combinação que combina', () => {
-  assert.deepEqual(earnBonus('v60', 'cup'), { brewer: 0, cup: 0, synergy: 0, total: 0 });
+  assert.deepEqual(earnBonus('v60', 'cup'), { brewer: 0, cup: 0, pack: 0, synergy: 0, total: 0 });
   assert.equal(earnBonus('moka', 'cupb').total, 25); // 20 + 5
-  assert.deepEqual(earnBonus('turkish', 'mugk'), { brewer: 10, cup: 3, synergy: 5, total: 18 });
+  assert.deepEqual(earnBonus('turkish', 'mugk'), { brewer: 10, cup: 3, pack: 0, synergy: 5, total: 18 });
   assert.equal(earnBonus('inexistente', 'cup').total, 0);
 });
 
 test('o bônus nunca passa do teto, mesmo com a melhor combinação', () => {
   for (const b of CATALOG.filter((i) => i.kind === 'brewer'))
-    for (const c of CATALOG.filter((i) => i.kind === 'cup')) assert.ok(earnBonus(b.id, c.id).total <= MAX_EARN_BONUS);
+    for (const c of CATALOG.filter((i) => i.kind === 'cup'))
+      for (const p of CATALOG.filter((i) => i.kind === 'beans')) assert.ok(earnBonus(b.id, c.id, p.id).total <= MAX_EARN_BONUS);
   assert.equal(earnBonus('chemex', 'summit').total, 45); // 25 + 15 + 5
+  assert.equal(earnBonus('espresso', 'gold-cup', 'pack-especial').total, MAX_EARN_BONUS); // 32 + 25 + 35 + 5 passa do teto
 });
 
 test('o bônus multiplica as moedas do copo, e zero mantém o valor de sempre', () => {
@@ -32,4 +34,10 @@ test('as três primeiras cafeteiras e xícaras à venda são as mais baratas; as
   }
   const common = Math.max(...CATALOG.filter((i) => i.kind === 'cup' && !i.collection).map((i) => i.price));
   for (const i of CATALOG.filter((x) => x.collection)) assert.ok(i.price > common, `${i.id} deve custar mais que as peças comuns`);
+});
+
+test('o pacote de café muda as moedas: extraforte rende pouco, especial rende bem mais', () => {
+  const totals = ['pack-extraforte', 'pack-tradicional', 'pack-superior', 'pack-gourmet', 'pack-especial'].map((p) => earnBonus('v60', 'cup', p).total);
+  assert.deepEqual(totals, [0, 4, 10, 20, 35]);
+  assert.deepEqual([...totals].sort((a, b) => a - b), totals); // cada categoria rende mais que a anterior
 });
