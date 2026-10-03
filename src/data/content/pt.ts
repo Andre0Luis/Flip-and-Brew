@@ -374,6 +374,198 @@ export const pt: Content = {
         "Faça um gole de atenção total, sem tela."
       ]
     },
+    "cafe-etiopia": {
+      "title": "Etiópia, o berço do café",
+      "summary": "Onde a arábica nasceu, por que há tantas variedades e o que é a cerimônia do café.",
+      "oneLine": "Na Etiópia o café não é só uma bebida. É uma pausa de convivência que pode durar uma hora.",
+      "inApp": "Quando o seu copo enche, lembre: em muitas casas etíopes o café também é feito sem pressa.",
+      "body": [
+        "A arábica é originária das florestas do sudoeste da Etiópia, e ali ainda crescem milhares de variedades silvestres e locais. Esse tesouro genético é o motivo de os cafés etíopes serem tão diferentes entre si: florais, de chá, de frutas cítricas e de frutas vermelhas.",
+        "Regiões como Yirgacheffe, Sidamo, Guji e Harrar são conhecidas pelos seus perfis. Os cafés lavados costumam ser mais claros e delicados; os naturais, secos com a casca, mais doces e frutados.",
+        "A cerimônia do café é um ritual de convivência. Os grãos são torrados na hora, moídos e fervidos em uma jarra de barro, a jebena, e servidos em três rodadas. Recusar a primeira xícara é mal-visto: a bebida é um convite para ficar."
+      ],
+      "tryToday": [
+        "Prepare um café sem celular, com a calma de uma cerimônia.",
+        "Sirva a alguém, se puder, e converse enquanto bebe.",
+        "Procure um café etíope e anote as notas que encontrou."
+      ]
+    },
+    "cafe-iemen": {
+      "title": "Iêmen e o porto de Moca",
+      "summary": "O país que transformou o grão em bebida e deu nome a um sabor.",
+      "oneLine": "Foi no Iêmen que o café saiu da planta e entrou na rotina de um povo.",
+      "inApp": "Cada cafeteira da sua prateleira descende, de algum modo, das panelas e jarras que começaram aqui.",
+      "body": [
+        "Do século XV em diante, o Iêmen cultivou café em terraços de montanha e passou a torrar e ferver os grãos. Sufis o usavam para ficar acordados nas orações noturnas, e a bebida logo ganhou as casas e as praças.",
+        "O porto de Moca (Mokha), no Mar Vermelho, exportava quase todo o café do mundo. O nome ficou: moca virou sinônimo de café e, mais tarde, de misturas com chocolate. Cafés iemenitas atuais ainda são cultivados em pequenas propriedades de altitude, com notas de frutas secas, especiarias e vinho.",
+        "O Iêmen guardava os grãos e proibia levar mudas. Foi só no século XVII que as primeiras plantas conseguiram sair do país e se espalhar pelo mundo, dando origem às plantações da Índia, da Indonésia e das Américas."
+      ],
+      "tryToday": [
+        "Preste atenção no aroma do café antes do primeiro gole.",
+        "Experimente uma bebida com um toque de especiaria, como a canela.",
+        "Anote a diferença entre aroma e sabor."
+      ]
+    },
+    "cafe-casas": {
+      "title": "As casas de café e a conversa",
+      "summary": "Como cafeterias antigas viraram escolas, redações e bolsas de valores.",
+      "oneLine": "Antes dos aplicativos, existia um lugar para conversar, discordar e aprender: a casa de café.",
+      "inApp": "Você pode transformar o seu copo de 45 minutos em uma pequena casa de café: sem tela, só com pensamento e conversa.",
+      "body": [
+        "As primeiras casas de café surgiram em Constantinopla no século XVI e logo se espalharam pelo mundo islâmico. Eram lugares de música, jogos e conversa, e os governantes vez ou outra tentavam fechá-las por medo dos debates que nasciam ali.",
+        "Na Europa, a moda chegou no século XVII. Na Inglaterra, ficaram conhecidas como 'universidades de um centavo': com uma moeda, a pessoa tomava um café e ouvia cientistas, comerciantes e poetas. A Lloyd's, famosa seguradora de Londres, começou numa dessas casas.",
+        "O modelo se repetiu em Paris, Viena, Veneza e depois nas Américas. A ideia continua atual: um lugar sem pressa, onde a bebida é a desculpa para estar com gente e com as próprias ideias."
+      ],
+      "tryToday": [
+        "Convide alguém para um café sem celulares na mesa.",
+        "Faça uma pergunta que você nunca fez a essa pessoa.",
+        "Anote uma ideia que surgiu da conversa."
+      ]
+    },
+    "cafe-brasil-ciclo": {
+      "title": "O ciclo do café no Brasil",
+      "summary": "Da mão de obra escravizada à geada que mudou o mapa: uma história que não é só doce.",
+      "oneLine": "O café construiu parte do Brasil e custou caro a muita gente. Conhecer isso é beber com mais consciência.",
+      "inApp": "Cada moeda ganha no app vem de tempo, não de exploração. Vale lembrar o contraste ao olhar para a história.",
+      "body": [
+        "No século XIX, o café subiu pelo Vale do Paraíba e se tornou o principal produto de exportação do país. Essa riqueza se apoiou no trabalho de pessoas escravizadas, até a abolição em 1888. Depois, imigrantes europeus e asiáticos, muitas vezes em condições duras, passaram a trabalhar nas fazendas.",
+        "A cultura avançou para o oeste paulista, o norte do Paraná e Minas Gerais. Em 1975, uma geada intensa, a 'geada negra', destruiu cafezais no Paraná e acelerou a migração para regiões mais quentes, como o Cerrado Mineiro, onde hoje a mecanização é comum.",
+        "Hoje, o Brasil produz cafés comuns em grande escala e também cafés especiais premiados. A discussão atual passa por condições de trabalho, rastreabilidade e sustentabilidade, e o consumidor pode participar escolhendo com mais informação."
+      ],
+      "tryToday": [
+        "Procure no rótulo a fazenda ou a região do seu café.",
+        "Pesquise se ela tem algum selo de origem ou de boas práticas.",
+        "Converse com alguém sobre a história do café na sua família ou cidade."
+      ]
+    },
+    "cafe-colombia": {
+      "title": "Colômbia: montanha, família e lavado",
+      "summary": "Por que o café colombiano é associado a equilíbrio e a pequenos produtores.",
+      "oneLine": "Quase tudo na Colômbia acontece em montanha, em pequena escala e à mão.",
+      "inApp": "Quando o seu copo encher, pense em quantas mãos cuidam de cada grão até chegar a você.",
+      "body": [
+        "A Colômbia é conhecida por um café equilibrado: acidez média, doçura de caramelo e frutas, corpo médio. A maior parte vem de pequenas propriedades familiares em encostas de montanha, onde a colheita é feita grão por grão, à mão.",
+        "A região do Eixo Cafeeiro, formada por Caldas, Risaralda e Quindío, é reconhecida pela UNESCO como paisagem cultural. O processo mais comum é o lavado: o fruto é despolpado e fermentado em água, resultando em xícaras limpas e brilhantes.",
+        "A Federação Nacional de Cafeicultores, criada em 1927, organiza compra, pesquisa e marketing dos pequenos produtores. A colheita acontece em dois momentos do ano, o que mantém o café fresco o ano todo."
+      ],
+      "tryToday": [
+        "Prove um café colombiano e descreva o corpo em uma palavra.",
+        "Anote as notas de doçura que você sentiu.",
+        "Compare com um café brasileiro, se tiver."
+      ]
+    },
+    "cafe-quenia": {
+      "title": "Quênia: acidez de frutas vermelhas",
+      "summary": "Variedades próprias, lavagem dupla e leilão: o que torna o café queniano inconfundível.",
+      "oneLine": "O café do Quênia é famoso por uma acidez intensa e frutada, quase de groselha preta.",
+      "inApp": "No Bem-estar, você pode comparar dias intensos e dias calmos. Um café queniano é um dia intenso na xícara.",
+      "body": [
+        "O Quênia produz arábica em solo vulcânico e em altitude, com variedades desenvolvidas localmente, como a SL28 e a SL34. Elas dão uma xícara vibrante, com acidez marcante e notas de frutas vermelhas, tomate maduro e groselha.",
+        "O processamento costuma ser lavado com dupla fermentação e secagem em camas elevadas. Isso ajuda a limpar a bebida e a realçar as notas ácidas e doces.",
+        "Boa parte do café é vendida em leilões em Nairóbi, o que valoriza os lotes de maior qualidade. Se você nunca provou, prepare com água um pouco mais quente e com um filtro de papel, para destacar o brilho."
+      ],
+      "tryToday": [
+        "Prove um café queniano em um método de papel.",
+        "Descreva a acidez como se fosse uma fruta.",
+        "Anote se você gostou da intensidade."
+      ]
+    },
+    "cafe-centroamerica": {
+      "title": "América Central: vulcões e doçura limpa",
+      "summary": "Guatemala, Costa Rica, Honduras e El Salvador em um mapa de sabores.",
+      "oneLine": "Solo vulcânico, altitude e cuidado no processo dão cafés doces e limpos.",
+      "inApp": "A sua coleção de xícaras tem uma Montanha. A América Central tem vulcões: tudo começa na altitude.",
+      "body": [
+        "Guatemala tem regiões como Antigua e Huehuetenango, de solo vulcânico e altitude alta, com cafés de corpo médio a encorpado, chocolate e especiarias. A Costa Rica é famosa pelos micro-engenhos e pelo método 'honey', que preserva parte da mucilagem na secagem.",
+        "Honduras e Nicarágua têm perfis doces e frutados em crescimento. El Salvador é conhecido pela variedade pacamara, de grãos grandes e acidez elegante.",
+        "De modo geral, a região favorece cafés lavados, limpos e com acidez média, bons para coados de papel. É um ótimo ponto de partida para quem quer explorar origens."
+      ],
+      "tryToday": [
+        "Prove um café guatemalteco e um costarriquenho em sequência.",
+        "Note qual tem mais doçura.",
+        "Anote o corpo de cada um."
+      ]
+    },
+    "cafe-vietna": {
+      "title": "Vietnã: a potência da robusta",
+      "summary": "O segundo maior produtor do mundo, o filtro phin e o café com leite condensado.",
+      "oneLine": "No Vietnã, café é forte, doce e lento: pingando no copo, gota a gota.",
+      "inApp": "O copo do app também é lento. Ver o café encher é parte do prazer, em Hanói ou na sua mesa.",
+      "body": [
+        "O Vietnã é o segundo maior produtor de café do mundo e o primeiro em robusta, cultivada nos planaltos centrais. O café vietnamita é forte, de corpo pesado e amargor marcado, com cerca do dobro da cafeína da arábica.",
+        "O jeito clássico de beber é com o filtro phin, um pequeno filtro de metal que repousa sobre o copo. A água quente cai devagar e o café goteja por alguns minutos, em geral sobre leite condensado: o cà phê sữa đá, servido com gelo.",
+        "Outra criação famosa é o café de ovo, de Hanói: gema batida com açúcar e leite condensado, coberta sobre o café. É denso, doce e quase uma sobremesa."
+      ],
+      "tryToday": [
+        "Prepare um café em filtro lento e observe as gotas.",
+        "Prove uma pequena quantidade de robusta e anote a diferença.",
+        "Se gostar de doce, experimente com um pouco de leite condensado."
+      ]
+    },
+    "cafe-indonesia": {
+      "title": "Indonésia: corpo, terra e especiarias",
+      "summary": "Sumatra, Java e Sulawesi, e o processo de 'giling basah' que muda o grão.",
+      "oneLine": "Os cafés indonésios têm corpo pesado, notas de terra, ervas e especiarias.",
+      "inApp": "Se você gosta de corpo, marque 'Encorpado' no seu Perfil: é onde os cafés indonésios brilham.",
+      "body": [
+        "A Indonésia tem ilhas com cafés bem diferentes. Sumatra é conhecida por corpo pesado, baixa acidez e notas de terra, ervas e tabaco. Java tem uma tradição antiga e cafés mais suaves. Sulawesi (Toraja) costuma ser mais doce e complexa.",
+        "Parte do café de Sumatra usa o método 'giling basah' (descasque úmido): o pergaminho é removido com o grão ainda úmido, e a secagem termina sem ele. Isso dá a esse café uma cor azul-esverdeada e aquele caráter terroso.",
+        "Por serem pesados e de baixa acidez, cafés indonésios funcionam muito bem na prensa francesa e em preparos com leite. Evite a fama do 'kopi luwak': o café coletado de animais em cativeiro envolve maus-tratos e não é sinônimo de qualidade."
+      ],
+      "tryToday": [
+        "Prepare um café indonésio na prensa francesa.",
+        "Descreva o corpo e o aroma de terra.",
+        "Anote se prefere esse perfil ao de um café ácido."
+      ]
+    },
+    "cafe-processos": {
+      "title": "Natural, lavado e honey",
+      "summary": "Os três processos mais conhecidos depois da colheita e o que cada um muda na xícara.",
+      "oneLine": "O que acontece com o fruto depois da colheita muda o sabor tanto quanto a origem.",
+      "inApp": "No Perfil, anote os sabores que você prefere. Muitos deles vêm do processo, não só do grão.",
+      "body": [
+        "O fruto do café é uma cereja com polpa, mucilagem e o grão dentro. No processo natural, a cereja inteira seca ao sol: o açúcar da polpa migra para o grão, e a xícara fica doce, frutada e de corpo maior. No lavado, a polpa é removida e a mucilagem é fermentada e lavada: o resultado é mais limpo, brilhante e ácido.",
+        "O honey fica no meio do caminho. A polpa é retirada, mas parte da mucilagem (o 'mel') continua no grão durante a secagem. Quanto mais mucilagem, mais doce e encorpada tende a ser a bebida, com riscos maiores de defeitos se a secagem for mal controlada.",
+        "Hoje também há processos experimentais, com fermentações controladas, que criam sabores muito intensos. Como em tudo, a graça está em provar: o mesmo grão, em processos diferentes, pode parecer outro café."
+      ],
+      "tryToday": [
+        "Compare dois cafés da mesma região com processos diferentes.",
+        "Descreva a doçura de cada um.",
+        "Anote qual processo agradou mais."
+      ]
+    },
+    "cafe-sustentavel": {
+      "title": "Café, clima e sustentabilidade",
+      "summary": "O que o aquecimento global muda para a planta e o que a sombra tem a ver com isso.",
+      "oneLine": "O café é uma planta delicada: pequenas mudanças de temperatura e chuva já afetam a safra.",
+      "inApp": "O app incentiva tempo longe da tela, e isso gasta menos energia. Pequenas escolhas contam também no café.",
+      "body": [
+        "A arábica gosta de temperaturas amenas e de chuvas bem distribuídas. Com o aquecimento global, estudos indicam que as áreas apropriadas para cultivo devem diminuir, e geadas e secas tendem a ficar mais imprevisíveis. Pragas como a ferrugem do cafeeiro também ganham força em climas mais quentes.",
+        "Uma resposta é plantar café à sombra de outras árvores, em sistemas agroflorestais. A sombra regula a temperatura, protege o solo, preserva a água e abriga aves e insetos. Em geral o grão amadurece mais devagar, o que pode melhorar o sabor.",
+        "O consumidor ajuda comprando de produtores transparentes, evitando desperdício (moendo só o que vai usar) e reaproveitando a borra, que serve de adubo para plantas e composteiras."
+      ],
+      "tryToday": [
+        "Guarde a borra do café em um pote e use em uma planta.",
+        "Moa só a quantidade que vai usar hoje.",
+        "Anote uma compra que você pode fazer com mais consciência."
+      ]
+    },
+    "cafe-selos": {
+      "title": "Selos e certificações: o que significam",
+      "summary": "Orgânico, comércio justo, indicação geográfica e a nota de café especial.",
+      "oneLine": "Um selo na embalagem diz algo, mas não diz tudo. Saber o que cada um garante ajuda a escolher.",
+      "inApp": "O app não vende café. Use o Perfil para anotar o que você gosta e procure isso nos rótulos.",
+      "body": [
+        "Orgânico indica produção sem agrotóxicos e fertilizantes químicos sintéticos, seguindo regras de certificadoras. Comércio justo (como o Fairtrade) garante um preço mínimo e um prêmio para as comunidades produtoras. Selos de práticas sustentáveis avaliam impacto ambiental e condições de trabalho.",
+        "Indicação geográfica reconhece cafés de uma região com características próprias, como o Cerrado Mineiro, no Brasil. Já 'café especial' é uma classificação de qualidade: em geral, notas a partir de 80 em 100 numa avaliação sensorial padronizada, feita por provadores treinados.",
+        "Nenhum selo substitui olhar a data de torra, a origem e o produtor. Rótulos que contam a fazenda, a variedade e o processo costumam ser sinal de transparência."
+      ],
+      "tryToday": [
+        "Escolha um pacote de café e identifique o que o selo garante.",
+        "Procure a data de torra e a origem.",
+        "Anote o que você mais valoriza ao comprar café."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {

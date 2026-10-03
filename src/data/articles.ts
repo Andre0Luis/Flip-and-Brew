@@ -26,6 +26,18 @@ export const ARTICLE_BASE: ArticleBase[] = [
   { id: 'cafe-corpo', category: 'taste', minutes: 4, related: ['cafe-torra', 'cafe-proporcao'] },
   { id: 'cafe-metodos', category: 'brewing', minutes: 4, related: ['cafe-moagem', 'cafe-dicas'] },
   { id: 'cafe-dicas', category: 'brewing', minutes: 3, related: ['cafe-proporcao', 'cafe-metodos'] },
+  { id: 'cafe-etiopia', category: 'coffee', minutes: 3, related: ['cafe-historia', 'cafe-processos'] },
+  { id: 'cafe-iemen', category: 'coffee', minutes: 3, related: ['cafe-etiopia', 'cafe-casas'] },
+  { id: 'cafe-casas', category: 'coffee', minutes: 3, related: ['cafe-iemen', 'cafe-historia'] },
+  { id: 'cafe-brasil-ciclo', category: 'coffee', minutes: 4, related: ['cafe-historia', 'cafe-regioes'] },
+  { id: 'cafe-colombia', category: 'coffee', minutes: 3, related: ['cafe-regioes', 'cafe-centroamerica'] },
+  { id: 'cafe-quenia', category: 'coffee', minutes: 3, related: ['cafe-etiopia', 'cafe-historia'] },
+  { id: 'cafe-centroamerica', category: 'coffee', minutes: 3, related: ['cafe-colombia', 'cafe-processos'] },
+  { id: 'cafe-vietna', category: 'coffee', minutes: 3, related: ['cafe-graos', 'cafe-indonesia'] },
+  { id: 'cafe-indonesia', category: 'coffee', minutes: 3, related: ['cafe-vietna', 'cafe-processos'] },
+  { id: 'cafe-processos', category: 'coffee', minutes: 4, related: ['cafe-graos', 'cafe-historia'] },
+  { id: 'cafe-sustentavel', category: 'coffee', minutes: 4, related: ['cafe-selos', 'cafe-brasil-ciclo'] },
+  { id: 'cafe-selos', category: 'coffee', minutes: 3, related: ['cafe-sustentavel', 'cafe-historia'] },
   // gen:articles:end
 ];
 
