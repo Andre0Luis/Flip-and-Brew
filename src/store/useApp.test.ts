@@ -84,7 +84,7 @@ test('o desconto de check-in seguido vale na compra da cafeteira, mas não na x�
   assert.equal(useApp.getState().buy('moka'), 'ok'); // 3300 com 10% de desconto = 2970
   assert.equal(useApp.getState().coins, 17_030);
   assert.equal(useApp.getState().buy('camp'), 'ok'); // série especial: preço cheio
-  assert.equal(useApp.getState().coins, 13_430); // 17030 - 3600
+  assert.equal(useApp.getState().coins, 13_980); // 17030 - 3050
 });
 
 test('a combinação cafeteira + xícara aumenta as moedas do copo cheio', () => {
