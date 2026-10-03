@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { Art } from '@/art/Art';
+import { LiveBrewer } from '@/components/BrewViz';
 import { CalibrateCard } from '@/components/CalibrateCard';
 import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
@@ -110,7 +110,7 @@ export default function Inicio() {
       </View>
 
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
-        <Art id={brewerId} size={230} />
+        <LiveBrewer id={brewerId} size={230} />
         <Txt v="small" color="muted">
           {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
         </Txt>

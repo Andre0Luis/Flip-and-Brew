@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, Ellipse, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useReducedMotion, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { Art } from '@/art/Art';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
@@ -82,6 +83,33 @@ export function Steam({ size }: { size: number }) {
       <Wisp left={size * 0.5} delay={900} size={size} />
       <Wisp left={size * 0.6} delay={1800} size={size} />
     </>
+  );
+}
+
+/**
+ * Cafeteira do Início, com vida: flutua devagar e solta vapor. Com "reduzir movimento" ligado no sistema, fica parada.
+ * O vapor sai do topo, onde as cafeteiras têm o café.
+ */
+export function LiveBrewer({ id, size = 230 }: { id: string; size?: number }) {
+  const reduce = useReducedMotion();
+  const t = useSharedValue(0);
+  useEffect(() => {
+    if (reduce) return;
+    t.value = withRepeat(withSequence(withTiming(1, { duration: 2800, easing: Easing.inOut(Easing.sin) }), withTiming(0, { duration: 2800, easing: Easing.inOut(Easing.sin) })), -1, false);
+  }, [t, reduce]);
+  const float = useAnimatedStyle(() => ({ transform: [{ translateY: -t.value * size * 0.025 }, { scale: 1 + t.value * 0.012 }] }));
+  return (
+    <View style={{ width: size, height: size }}>
+      <Animated.View style={float}>
+        <Art id={id} size={size} />
+      </Animated.View>
+      {/* O vapor nasce um pouco acima do café, que fica no alto das cafeteiras. */}
+      {!reduce && (
+        <View pointerEvents="none" style={{ position: 'absolute', top: size * 0.3, left: 0, right: 0 }}>
+          <Steam size={size} />
+        </View>
+      )}
+    </View>
   );
 }
 
