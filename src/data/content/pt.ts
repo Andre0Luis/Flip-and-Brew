@@ -579,6 +579,358 @@ export const pt: Content = {
         "Anote o que você mais valoriza ao comprar café."
       ]
     },
+    "cafe-tipos": {
+      "title": "Extraforte, tradicional, superior, gourmet e especial",
+      "summary": "As categorias de café que aparecem no pacote e o que cada uma quer dizer.",
+      "oneLine": "Os nomes no pacote ajudam a comparar, mas cada um mede uma coisa diferente.",
+      "inApp": "Os cinco pacotes do app seguem essas categorias: quanto melhor o café, mais moedas cada copo rende.",
+      "body": [
+        "No Brasil, o mercado costuma agrupar o café em categorias. O tradicional é o mais comum: mistura grãos de qualidades variadas e dá uma bebida simples e de uso diário. O superior usa grãos mais selecionados, com menos defeitos, e costuma ser mais doce e limpo. O gourmet reúne apenas grãos de boa qualidade, com torra cuidadosa e nota sensorial mais alta.",
+        "O extraforte é diferente: em geral o nome indica uma torra bem escura e um sabor marcante, de corpo e amargor fortes, e não necessariamente um grau maior de qualidade. É o gosto de quem quer um café intenso e rápido, muitas vezes para beber com leite ou açúcar.",
+        "O café especial fica acima: em geral recebe 80 pontos ou mais, de 100, numa avaliação sensorial padronizada, e vem de um lote rastreado, de origem, variedade e processo conhecidos. Os critérios exatos de cada selo variam, então vale ler o rótulo e preferir quem informa a origem e a data de torra."
+      ],
+      "tryToday": [
+        "Veja em qual categoria está o café que você tem.",
+        "Prove um tradicional e um especial em sequência.",
+        "Anote o que mudou: doçura, acidez e corpo."
+      ]
+    },
+    "brew-espresso": {
+      "title": "Espresso: pressão, tempo e proporção",
+      "summary": "Os números por trás de uma dose curta e densa.",
+      "oneLine": "Um espresso é uma conta curta: pouco café, muita pressão e menos de meio minuto.",
+      "inApp": "A máquina de espresso do Guia rende o maior bônus, porque pede o maior cuidado.",
+      "body": [
+        "Espresso é café extraído sob pressão, em geral perto de 9 bar, com água entre 90 e 96 °C. O pó é fino e bem prensado no porta-filtro, para a água encontrar resistência uniforme. A dose clássica usa cerca de 18 g de café para 36 g de bebida, ou seja, proporção de 1 para 2.",
+        "O tempo normal fica entre 25 e 30 segundos. Se a bebida sai muito rápida e aguada, o pó está grosso ou pouco prensado. Se goteja devagar e amarga, o pó está fino demais. Ajuste a moagem antes de mudar o resto.",
+        "A crema, a espuma dourada no topo, mostra café fresco e boa extração, mas não garante sabor. Prove sempre. E limpe o porta-filtro e a máquina todos os dias: óleos velhos deixam o café rançoso."
+      ],
+      "tryToday": [
+        "Pese 18 g de café e 36 g de bebida, se tiver balança.",
+        "Marque o tempo de extração e prove.",
+        "Ajuste só a moagem e compare."
+      ]
+    },
+    "brew-moka": {
+      "title": "Moka: como não queimar o café",
+      "summary": "A cafeteira italiana de fogão, passo a passo.",
+      "oneLine": "A moka faz um café forte e simples, mas perdoa pouco o fogo alto.",
+      "inApp": "A moka do app é a cafeteira de 30 minutos: forte e rápida, como no fogão.",
+      "body": [
+        "A moka tem três partes: a base com água, o funil com o pó e o recipiente de cima. A água esquenta, o vapor empurra a água pelo pó e o café sobe. A pressão é bem menor que a do espresso, por isso o resultado é forte, mas diferente.",
+        "Use pó de moagem média-fina, mais grossa que a do espresso, e não prense. Encha a base com água quente até logo abaixo da válvula, para esquentar mais rápido e o pó não cozinhar. Fogo baixo, tampa aberta, e observe.",
+        "Quando o café começar a sair claro e fazer barulho, tire do fogo e esfrie a base com um pano úmido. Assim você interrompe a extração antes do amargor. Lave só com água, sem sabão forte, e seque bem."
+      ],
+      "tryToday": [
+        "Use água quente na base e fogo baixo.",
+        "Tire do fogo quando o café começar a chiar.",
+        "Esfrie a base com um pano úmido e prove."
+      ]
+    },
+    "brew-v60": {
+      "title": "V60: a técnica do cone",
+      "summary": "Despejar a água em espiral e o tempo certo.",
+      "oneLine": "O V60 é simples, mas premia quem despeja com calma e constância.",
+      "inApp": "O V60 está na sua prateleira como compra: enche o copo em 45 minutos, no ritmo de quem não tem pressa.",
+      "body": [
+        "O V60 é um cone com sulcos em espiral e um furo grande no fundo. O papel fica dentro e a água passa pelo pó por gravidade. Como o furo é grande, quem controla o tempo de contato é a moagem e o jeito de despejar a água.",
+        "Uma receita simples: 15 g de café em moagem média-fina, 250 g de água a cerca de 93 °C. Primeiro molhe o pó com um pouco de água e espere de 30 a 45 segundos, o bloom. Depois despeje em espiral, do centro para fora, em dois ou três tempos, sem jogar água direto no papel.",
+        "O tempo total ideal fica entre dois minutos e meio e três minutos e meio. Se foi muito rápido e aguado, afine a moagem. Se travou e amargou, engrosse. Lave o papel antes com água quente para tirar o gosto de papel."
+      ],
+      "tryToday": [
+        "Lave o filtro com água quente antes de passar o café.",
+        "Despeje em espiral e marque o tempo.",
+        "Ajuste a moagem na próxima vez e compare."
+      ]
+    },
+    "brew-chemex": {
+      "title": "Chemex: o café mais limpo",
+      "summary": "O vidro em ampulheta e o papel grosso que filtra quase tudo.",
+      "oneLine": "A Chemex pede paciência e entrega uma xícara muito limpa e brilhante.",
+      "inApp": "A Chemex abre com 30 dias de sequência: é a mais demorada do app, 75 minutos por copo.",
+      "body": [
+        "A Chemex é um vidro em forma de ampulheta, com um filtro de papel mais grosso que os comuns. Esse papel retém mais óleos e partículas, e por isso a bebida sai muito limpa, de acidez clara e corpo leve. Ela também é bonita de ficar na bancada.",
+        "Use moagem média-grossa, para a água passar sem travar o papel grosso. A proporção de 1 para 16 funciona bem, com água perto de 93 °C. Lave o filtro antes, descarte a água e despeje em etapas, começando pelo bloom. O tempo total fica entre 4 e 5 minutos.",
+        "Por filtrar tanto, a Chemex realça origens frutadas e florais. Se você prefere corpo mais cheio, o coador de pano ou a prensa ficam melhores. Lave o vidro só com água morna e uma esponja macia, para não riscar."
+      ],
+      "tryToday": [
+        "Lave o papel e descarte a água antes de começar.",
+        "Use um café frutado e perceba a clareza.",
+        "Compare com a mesma receita na prensa."
+      ]
+    },
+    "brew-prensa": {
+      "title": "Prensa francesa: imersão e corpo",
+      "summary": "Por que ela dá um café encorpado e como evitar o pó no fundo.",
+      "oneLine": "Na prensa, o café fica na água e você decide quando parar.",
+      "inApp": "A prensa francesa é uma das primeiras compras do app: corpo cheio, 60 minutos por copo.",
+      "body": [
+        "Na prensa francesa o pó fica em contato direto com a água, em imersão, e depois um êmbolo com tela de metal separa o café. A tela deixa passar óleos e partículas finas, por isso a bebida é encorpada e sedosa.",
+        "Use moagem grossa, parecida com sal grosso, proporção de 1 para 15 e água perto de 94 °C. Despeje toda a água, mexa devagar uma vez e tampe sem pressionar. Espere cerca de 4 minutos. Se o pó for fino demais, o café amarga e o êmbolo trava.",
+        "Pressione devagar e sirva logo. Deixar o café na prensa depois de pronto continua a extração e amarga. Se sobrar, passe para uma garrafa térmica. Para um café mais limpo, espere 1 minuto depois de pressionar, antes de servir."
+      ],
+      "tryToday": [
+        "Use moagem grossa e cronometre 4 minutos.",
+        "Pressione devagar e sirva logo.",
+        "Sinta o corpo e compare com um café de papel."
+      ]
+    },
+    "brew-aeropress": {
+      "title": "AeroPress: rápida e versátil",
+      "summary": "Imersão com pressão, receitas para todo gosto e fácil de levar.",
+      "oneLine": "A AeroPress cabe na mochila e aceita quase qualquer receita.",
+      "inApp": "A AeroPress do app dá um bom bônus de moedas: 35 minutos por copo.",
+      "body": [
+        "A AeroPress é um cilindro de plástico com um êmbolo. O café fica em contato com a água por um ou dois minutos e, em seguida, o êmbolo empurra a bebida por um filtro pequeno de papel. O resultado é limpo e intenso, entre um espresso e um coado.",
+        "Existem dezenas de receitas. Um ponto de partida: 15 g de café em moagem média-fina, 225 g de água a 90 °C, mexa por 10 segundos, espere até 1 minuto e meio e pressione devagar, por cerca de 30 segundos. Pode usar o método invertido, com o copo de cabeça para baixo, para a água não pingar antes.",
+        "Por ser de plástico resistente e leve, vai bem em viagem e em acampamento. Para um café mais forte, use menos água e dilua depois. Para mais clareza, use dois filtros de papel."
+      ],
+      "tryToday": [
+        "Teste uma receita simples e cronometre.",
+        "Mude só o tempo de contato e compare.",
+        "Experimente diluir o concentrado com água quente."
+      ]
+    },
+    "brew-turca": {
+      "title": "Café turco: espuma, fogo baixo e paciência",
+      "summary": "A cezve, o pó extrafino e o jeito certo de não deixar ferver.",
+      "oneLine": "No café turco, o pó vai na água fria, e o fogo baixo faz a diferença.",
+      "inApp": "A cafeteira turca é a mais rápida do app depois da cápsula: 20 minutos por copo.",
+      "body": [
+        "O café turco usa a cezve, um pequeno bule de cobre ou latão com cabo longo, e café moído extrafino, quase pó de talco. Coloque água fria e o pó juntos, mexa uma vez e leve ao fogo bem baixo. A espuma que sobe no topo é parte do prazer.",
+        "O truque é não deixar ferver. Quando a espuma começar a subir, tire do fogo, repita duas vezes se quiser mais corpo e sirva logo. Fervura forte queima o café e desfaz a espuma. Açúcar, quando usado, vai junto desde o início.",
+        "Não se coa. Espere cerca de um minuto para o pó assentar no fundo da xícara e beba devagar, sem chegar ao final. O café é denso e forte: é para uma pausa pequena, não para uma garrafa."
+      ],
+      "tryToday": [
+        "Use água fria e fogo baixo.",
+        "Tire do fogo quando a espuma subir.",
+        "Espere o pó assentar antes de beber."
+      ]
+    },
+    "brew-sifao": {
+      "title": "Sifão: vapor, vácuo e espetáculo",
+      "summary": "Como funciona a cafeteira de duas câmaras e por que ela é tão limpa.",
+      "oneLine": "O sifão mistura ciência e teatro: a água sobe, o café desce.",
+      "inApp": "O sifão é uma das cafeteiras mais caras do app, e a que mais rende moedas junto com o espresso.",
+      "body": [
+        "O sifão tem duas câmaras de vidro ligadas por um tubo: a de baixo com água e a de cima com o pó. Ao aquecer, o vapor aumenta a pressão e empurra a água para a câmara de cima, onde ela se mistura ao café. Por isso o contato é uma imersão, com temperatura bem controlada.",
+        "Quando você retira o calor, a câmara de baixo esfria, a pressão cai e cria um vácuo que puxa o café de volta, por um filtro de pano ou de papel. Em geral o contato dura cerca de um minuto, com uma mexida suave no começo e outra antes de retirar o fogo.",
+        "O resultado é limpo, aromático e doce. Exige cuidado com o fogo e com o vidro quente, e é mais demorado de montar e de lavar. É uma ótima pedida para uma ocasião especial, com tempo e sem celular."
+      ],
+      "tryToday": [
+        "Assista com atenção, sem tela, à água subir e descer.",
+        "Mexa suavemente e marque um minuto.",
+        "Prove ainda morno e descreva o aroma."
+      ]
+    },
+    "brew-pano": {
+      "title": "Coador de pano: o cuidado que ninguém vê",
+      "summary": "A tradição brasileira do pano e como mantê-lo limpo.",
+      "oneLine": "O pano dá corpo e doçura, mas pede cuidado antes e depois de cada uso.",
+      "inApp": "O coador de pano é uma das primeiras compras do app, e a mais barata das cafeteiras.",
+      "body": [
+        "O coador de pano é uma tradição brasileira. O tecido deixa passar parte dos óleos do café, por isso a xícara sai mais encorpada e doce que a de papel. É também reutilizável, o que é bom para o bolso e para o lixo.",
+        "Para usar, escalde o pano com água quente para tirar resíduos e aquecê-lo. Coloque o pó, despeje a água aos poucos, sem fervura forte, e deixe coar. Use água perto de 92 a 94 °C. Ferver o café com o pó dentro deixa o gosto queimado e amargo.",
+        "O cuidado é o que mais importa: depois de usar, lave só com água corrente, sem sabão, e guarde o pano imerso em água limpa na geladeira, trocando a água todos os dias. Troque o pano a cada poucos meses, quando escurecer ou tiver cheiro."
+      ],
+      "tryToday": [
+        "Escalde o pano antes de usar.",
+        "Lave só com água e guarde na geladeira em água limpa.",
+        "Compare o corpo com um café de papel."
+      ]
+    },
+    "brew-phin": {
+      "title": "Filtro phin: o gotejar vietnamita",
+      "summary": "Como usar o pequeno filtro de metal e por que ele é tão lento.",
+      "oneLine": "O phin ensina a esperar: o café cai gota a gota, sem pressa.",
+      "inApp": "O filtro phin do app é lento de propósito: 50 minutos por copo, no ritmo do gotejar.",
+      "body": [
+        "O phin é um filtro de metal composto de uma câmara com furinhos, um prensador e uma tampa. Ele repousa sobre o copo e a água quente passa pelo pó muito devagar, porque o prensador deixa o pó compactado. O café que sai é forte, de corpo pesado e pouco ácido.",
+        "Uso básico: coloque 2 colheres de sopa de café moído médio-fino na câmara, aperte levemente com o prensador, molhe com um pouco de água quente e espere 20 segundos. Depois encha com água a cerca de 92 °C, tampe e espere de 4 a 6 minutos pelo gotejar.",
+        "O jeito tradicional é com leite condensado no fundo do copo, e gelo em dia quente. O phin vai bem com robusta e com cafés de torra escura. Para um café sem açúcar, use menos pó para não ficar amargo."
+      ],
+      "tryToday": [
+        "Molhe o pó antes e espere 20 segundos.",
+        "Observe o gotejar sem mexer no celular.",
+        "Experimente com leite condensado e gelo."
+      ]
+    },
+    "brew-capsula": {
+      "title": "Máquina de cápsula: praticidade com atenção",
+      "summary": "O que a cápsula entrega, o que ela custa e como tirar mais dela.",
+      "oneLine": "A cápsula é a forma mais rápida de fazer um café. Rapidez também pede atenção.",
+      "inApp": "A máquina de cápsula é a mais rápida do app, 15 minutos por copo, e um pequeno atalho com bônus de moedas.",
+      "body": [
+        "A máquina de cápsula faz uma dose por vez: a água quente passa sob pressão pelo café já moído e dosado dentro da cápsula. É rápida, limpa e repetível, e por isso é muito popular em escritórios e casas com pouco tempo.",
+        "Para um café melhor, use a água fresca e filtrada, aqueça a máquina antes e não deixe água parada no reservatório por dias. Escolha a dose certa: a dose curta dá um café mais denso, a longa dilui e perde sabor.",
+        "O custo por xícara é maior que o do pó, e as cápsulas geram resíduo. Existem cápsulas recicláveis e programas de coleta; vale conferir. Mesmo sendo rápido, aproveite o café sem tela: são dois minutos de pausa de verdade."
+      ],
+      "tryToday": [
+        "Faça o próximo café com a água fresca e filtrada.",
+        "Experimente a dose curta e a longa e compare.",
+        "Beba sem olhar para o celular."
+      ]
+    },
+    "brew-coldbrew": {
+      "title": "Cold brew: o café feito no frio",
+      "summary": "Por que a extração longa e fria dá um café doce e pouco ácido.",
+      "oneLine": "No cold brew, o tempo faz o trabalho que o calor faz nos outros métodos.",
+      "inApp": "O cold brew é a cafeteira mais lenta do app, 90 minutos por copo, e a mais paciente.",
+      "body": [
+        "No cold brew, o café moído fica em imersão em água fria ou em temperatura ambiente por 12 a 18 horas, na geladeira ou fora dela. A extração lenta tira menos ácidos e amargor, e a bebida sai doce, suave e de corpo redondo.",
+        "Uma receita simples: 1 parte de café em moagem grossa para 8 de água, em um pote com tampa. Misture, deixe em repouso por cerca de 14 horas e coe em um filtro de papel ou de pano. O concentrado se mantém por alguns dias na geladeira em um recipiente fechado.",
+        "Sirva com gelo e dilua a gosto, em geral meio a meio com água ou leite. Por ter menos acidez, combina com torras médias e escuras e com cafés de notas de chocolate. Para quem tem estômago sensível, pode ser uma boa alternativa."
+      ],
+      "tryToday": [
+        "Deixe um pote de cold brew preparado para amanhã.",
+        "Dilua meio a meio com água e gelo.",
+        "Compare a doçura com a do mesmo café quente."
+      ]
+    },
+    "brew-agua": {
+      "title": "A água do café: 98% da xícara",
+      "summary": "Como a qualidade, a dureza e a temperatura da água mudam o sabor.",
+      "oneLine": "O café é quase só água. Uma água ruim estraga um grão bom.",
+      "inApp": "Prepare o café com água fresca enquanto o copo do app enche. O cuidado vale mais que o equipamento.",
+      "body": [
+        "Uma xícara de café é cerca de 98% água. Por isso o que está nela importa muito. Água com muito cloro dá gosto químico. Água muito dura, rica em cálcio e magnésio, pode deixar o café opaco e amargo e ainda formar calcário na cafeteira. Água muito mole, sem minerais, extrai mal e deixa o sabor vazio.",
+        "Uma boa regra: água filtrada, sem cheiro, e com um pouco de minerais. Água mineral de baixa mineralização costuma funcionar bem. Não use água destilada pura nem a que já foi fervida várias vezes, porque perde oxigênio e o café fica achatado.",
+        "A temperatura também conta: de 90 a 96 °C para a maioria dos métodos. Se a água acabou de ferver, espere de 30 a 60 segundos. Para torras escuras, um pouco mais baixa, perto de 90 °C, evita o amargor."
+      ],
+      "tryToday": [
+        "Troque a água da chaleira por água fresca e filtrada.",
+        "Espere 30 segundos depois de ferver.",
+        "Compare o mesmo café com a água da torneira e a filtrada."
+      ]
+    },
+    "brew-bloom": {
+      "title": "Bloom: o primeiro minuto que muda tudo",
+      "summary": "Por que molhar o pó antes de despejar toda a água melhora o café.",
+      "oneLine": "O café fresco solta gás. O bloom deixa o gás sair antes de começar de verdade.",
+      "inApp": "O copo do app começa devagar também: o primeiro tempo é de preparar, não de correr.",
+      "body": [
+        "O café recém-torrado guarda gás carbônico dentro dos grãos. Quando a água quente toca o pó, o gás sai em bolhas e o pó incha, como uma pequena nuvem. Esse é o bloom. Se você despeja tudo de uma vez, o gás atrapalha o contato da água com o café, e a extração fica irregular.",
+        "A prática é simples: molhe todo o pó com o dobro do seu peso em água, perto de 93 °C, e espere de 30 a 45 segundos. Depois continue com o resto da água. Quanto mais fresco o café, mais ele infla. Se não infla quase nada, o café provavelmente está velho.",
+        "O bloom serve também como um termômetro de frescor. Em cafés com mais de um mês de torra, quase não há espuma. E no ritual, é um bom momento para respirar e sentir o aroma, que é mais forte nessa hora."
+      ],
+      "tryToday": [
+        "Faça o bloom de 30 segundos no próximo coado.",
+        "Observe se o pó infla bastante.",
+        "Respire fundo e sinta o aroma nessa hora."
+      ]
+    },
+    "brew-extracao": {
+      "title": "Extração: o que sai do grão e quando",
+      "summary": "Os compostos que a água tira primeiro e por que o ponto certo é um meio-termo.",
+      "oneLine": "Ajustar um café é ajustar a extração. Nem pouca, nem demais.",
+      "inApp": "O tempo do copo no app é o tempo de uma extração de verdade: dá para sentir a diferença quando se espera.",
+      "body": [
+        "Quando a água passa pelo café, ela tira compostos em uma ordem: primeiro os ácidos e os aromas mais leves, depois os açúcares e a doçura, e por último os amargos e os que dão corpo seco. Por isso a extração curta é ácida e salgada, e a longa é amarga e seca.",
+        "O ponto ideal costuma ficar entre 18% e 22% do peso do pó dissolvido na bebida, mas isso se mede com instrumentos. Em casa, o sentido é o guia: azedo, pouco doce, sabor curto e ralo quer dizer subextraído. Amargo, seco, com gosto de queimado quer dizer superextraído.",
+        "Quatro botões controlam a extração: moagem, temperatura, tempo e proporção de água. Mude um por vez. Para extrair mais, afine a moagem, suba a temperatura ou aumente o tempo. Para extrair menos, faça o contrário. Anotar o que você fez é o que transforma tentativa em aprendizado."
+      ],
+      "tryToday": [
+        "Prepare o mesmo café duas vezes, mudando só a moagem.",
+        "Descreva em uma frase a diferença de sabor.",
+        "Anote qual moagem agradou mais."
+      ]
+    },
+    "brew-moedor": {
+      "title": "O moedor: o equipamento que mais muda o café",
+      "summary": "Discos, lâminas e manual: o que importa na hora de escolher.",
+      "oneLine": "Se for gastar com um equipamento, gaste no moedor.",
+      "inApp": "Cada cafeteira do app pede uma moagem. O moedor é o que deixa você escolher.",
+      "body": [
+        "O moedor decide a uniformidade do pó. Um moedor de lâminas, parecido com um liquidificador pequeno, corta o grão de modo irregular: sai pó fino e pedaços grandes ao mesmo tempo, e a extração fica desigual. Um moedor de discos, ou de rebarbas, esmaga o grão entre duas peças e entrega partículas muito mais parecidas.",
+        "Os de disco existem em versão manual e elétrica. Os manuais são baratos e portáteis, e dão ótimo resultado, mas pedem braço. Os elétricos são mais rápidos e fáceis de ajustar. Procure um que tenha ajuste de moagem em passos pequenos e que seja fácil de limpar.",
+        "Para cuidar bem: moa só o que vai usar, limpe os restos e os óleos com uma escova de vez em quando e evite moer grãos oleosos de torra muito escura em excesso, que grudam. Um moedor bom dura muito e melhora até um café comum."
+      ],
+      "tryToday": [
+        "Moa só a dose do café que vai tomar agora.",
+        "Limpe o moedor com uma escova.",
+        "Anote a configuração que você mais usa."
+      ]
+    },
+    "brew-leite": {
+      "title": "Café com leite: proporção, textura e temperatura",
+      "summary": "Do pingado ao cappuccino: o que muda e como acertar o leite.",
+      "oneLine": "O leite muda o café. Saber a proporção e a temperatura deixa a xícara no lugar.",
+      "inApp": "Seu café do dia pode ser puro ou com leite. A escolha de pacote e de cafeteira decide a base.",
+      "body": [
+        "Existem muitos cafés com leite, e a diferença está na proporção. O pingado é um pouco de leite em um café. O café com leite brasileiro costuma ser meio a meio. O latte leva muito leite e pouca espuma. O cappuccino divide em terços, de espresso, leite quente e espuma. O macchiato é um espresso com um toque de espuma.",
+        "O leite aquecido deve ficar entre 60 e 65 °C. Acima de 70 °C ele perde doçura e ganha gosto de cozido. Se for vaporizar, mantenha a ponta do bico logo abaixo da superfície no começo, para entrar ar e fazer espuma, e depois afunde para criar um redemoinho e uma textura cremosa.",
+        "Para o café aguentar o leite, ele precisa ser forte: espresso, moka, prensa ou um coado mais concentrado. Torras médias a escuras e o café tradicional ou extraforte funcionam bem. Para leites vegetais, prefira os feitos para café, que não talham tanto."
+      ],
+      "tryToday": [
+        "Prepare um café com leite meio a meio e outro com um terço.",
+        "Aqueça o leite sem passar de 65 °C.",
+        "Anote a proporção que você preferiu."
+      ]
+    },
+    "taste-roda": {
+      "title": "A roda de sabores do café",
+      "summary": "Um mapa para dar nome ao que você sente na xícara.",
+      "oneLine": "Dizer o que você sente é o primeiro passo para gostar mais do que bebe.",
+      "inApp": "No Perfil, você marca os sabores de que gosta. A roda ajuda a achar as palavras.",
+      "body": [
+        "A roda de sabores do café é um mapa criado por profissionais para descrever o que se sente na xícara. Ela parte de grandes grupos no centro, como frutado, floral, doce, tostado e especiarias, e vai se abrindo, para fora, em nomes mais específicos, como cítrico, jasmim, caramelo ou canela.",
+        "Para usar, comece pelo centro: o café lembra algo doce, ácido, tostado? Depois escolha a família mais próxima e vá para fora, pergunta por pergunta. Não existe resposta errada: o objetivo é treinar a atenção, não acertar o que está escrito no rótulo.",
+        "Com a prática, você nota que um mesmo café muda ao esfriar: no começo, mais aroma e acidez, depois mais doçura e corpo. Experimente provar quente, morno e frio, e anotar o que aparece em cada fase."
+      ],
+      "tryToday": [
+        "Escolha uma família da roda: frutado, doce ou tostado.",
+        "Prove e tente achar um nome mais específico.",
+        "Anote no Perfil um sabor que combina com você."
+      ]
+    },
+    "taste-acidez": {
+      "title": "Acidez: o brilho bom do café",
+      "summary": "O que é a acidez no café e como ela se diferencia do azedo.",
+      "oneLine": "Acidez boa é frescor. Azedo é defeito. Os dois se confundem.",
+      "inApp": "Em Perfil, você marca acidez baixa, média ou alta. É uma das preferências que mais ajudam a escolher um café.",
+      "body": [
+        "No café, acidez não é o mesmo que azedo. É o brilho que dá vida à bebida, como o de uma maçã, de um cítrico ou de frutas vermelhas. Em cafés de altitude, como os do Quênia ou da Etiópia, ela é mais marcada. Em cafés de torra escura, é mais baixa.",
+        "O azedo desagradável, com gosto de vinagre ou de limão sem açúcar, aparece quando o café foi subextraído ou está velho e fermentado. Um bom teste: a acidez boa vem junto com doçura e some depressa. O azedo seco fica na boca e dá vontade de parar.",
+        "Se você prefere acidez baixa, escolha torras médias a escuras, cafés do Brasil e de Sumatra e métodos como prensa ou cold brew. Para realçar a acidez, escolha torras claras, métodos de papel e água um pouco mais quente."
+      ],
+      "tryToday": [
+        "Prove um café do Quênia ou da Etiópia e um brasileiro.",
+        "Descreva a acidez como uma fruta.",
+        "Marque no Perfil se você prefere baixa, média ou alta."
+      ]
+    },
+    "taste-amargor": {
+      "title": "Amargor: quando é bom e quando é erro",
+      "summary": "Por que o café amarga e como deixar o amargor agradável.",
+      "oneLine": "Um pouco de amargor faz parte do café. Muito amargor é sinal de que algo passou do ponto.",
+      "inApp": "Se o seu copo do app foi longo e o café está amargo, é a hora de ajustar a moagem ou o tempo.",
+      "body": [
+        "O amargor é parte natural do café, vem da cafeína, de compostos da torra e de ácidos clorogênicos. Em pequena dose, dá estrutura e equilíbrio, como no chocolate amargo. Muita gente aprende a gostar dele, e ele combina bem com leite e com doces.",
+        "O amargor excessivo, áspero e seco, aparece por três motivos principais: extração demais (moagem fina, água muito quente ou tempo longo), torra muito escura ou queimada, e equipamento sujo, com óleos velhos. Cafeteira que raramente é lavada deixa o café amargo mesmo com bom grão.",
+        "Para reduzir o amargor, engrosse a moagem, baixe a temperatura da água, encurte o tempo e use uma torra mais clara. Se mesmo assim o café continuar amargo, verifique o equipamento e o frescor do grão. E lembre: o açúcar disfarça, mas não corrige a extração."
+      ],
+      "tryToday": [
+        "Engrosse a moagem e compare o amargor.",
+        "Lave bem a cafeteira e prove de novo.",
+        "Anote se o amargor diminuiu."
+      ]
+    },
+    "taste-docura": {
+      "title": "Doçura: o que torna um café gostoso",
+      "summary": "De onde vem a doçura do café, mesmo sem açúcar.",
+      "oneLine": "Um bom café é doce sem açúcar. Essa doçura é a pista de que algo foi bem feito.",
+      "inApp": "Quando você marca caramelo ou chocolate no Perfil, está dizendo que gosta de doçura natural.",
+      "body": [
+        "O café tem açúcares naturais que a torra transforma em caramelo, mel, chocolate e frutas cozidas. A doçura aparece quando a extração está no ponto: depois dos ácidos e antes dos amargos. É por isso que um café bem extraído parece doce mesmo sem açúcar.",
+        "Para realçar a doçura: use grãos frescos e de boa qualidade, moagem uniforme e água na temperatura certa. Evite extrair demais. Cafés processados pelo método natural e honey costumam ser mais doces, assim como os de torra média.",
+        "Se você coloca muito açúcar, tente reduzir aos poucos, por exemplo metade da colher por semana. O paladar se adapta e, com o tempo, o café começa a mostrar a própria doçura. E se o café só é doce com açúcar, vale trocar o grão por um mais fresco."
+      ],
+      "tryToday": [
+        "Prove o café sem açúcar e procure a doçura.",
+        "Reduza o açúcar à metade esta semana.",
+        "Compare dois cafés e escolha o mais doce."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {
