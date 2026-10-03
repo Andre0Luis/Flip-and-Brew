@@ -1411,6 +1411,166 @@ export const pt: Content = {
         "Releia as anotações da semana."
       ]
     },
+    "est-raiva": {
+      "title": "Raiva: o intervalo antes da resposta",
+      "summary": "O que Sêneca ensinou sobre esperar antes de reagir.",
+      "oneLine": "A raiva cresce no impulso. O intervalo a desmonta.",
+      "inApp": "Um café é um intervalo natural: prepare-o antes de responder aquela mensagem.",
+      "body": [
+        "Sêneca escreveu um tratado inteiro sobre a ira. Para ele, a raiva não é um raio que cai de fora: nasce de um juízo, de achar que fomos ofendidos e que precisamos reagir já. O primeiro movimento, o calor no peito, é involuntário. O que vem depois, aceitar ou não a raiva, ainda é uma escolha.",
+        "O melhor remédio, dizia ele, é o adiamento. Dar tempo ao tempo. Respirar, beber água, sair da sala, contar até dez. Quase sempre a raiva diminui com os minutos, e a resposta que sai depois é mais clara e mais justa. Mensagens escritas com raiva e não enviadas poupam muita dor de cabeça.",
+        "Prepare um café quando sentir a raiva subir. O gesto de moer, esperar a água e servir ocupa as mãos e dá os minutos de que a cabeça precisa. Depois, pergunte: o que eu quero de verdade com esta resposta? E responda a isso."
+      ],
+      "tryToday": [
+        "Quando a raiva subir, faça um café antes de responder.",
+        "Escreva a resposta, mas só envie depois de meia hora.",
+        "Pergunte o que você quer de verdade."
+      ]
+    },
+    "est-virtudes": {
+      "title": "As quatro virtudes e a xícara de cada dia",
+      "summary": "Sabedoria, coragem, justiça e moderação em pequenos gestos.",
+      "oneLine": "Virtude não é coisa grande. É o que se faz com as coisas pequenas.",
+      "inApp": "Cada copo é uma chance de treinar a moderação: não precisa de mais, só de atenção.",
+      "body": [
+        "Para os estoicos, a vida boa é a vida de virtude, e as virtudes principais são quatro: sabedoria, saber o que é bom e o que não é; coragem, agir bem mesmo com medo; justiça, tratar os outros como merecem; e moderação, não se deixar levar pelos excessos. Elas se treinam no dia a dia, não em grandes gestos.",
+        "No cotidiano com café, a moderação aparece em saber a hora de parar. A sabedoria, em notar o que o corpo pede. A coragem, em escolher um café sem celular e sentir o incômodo de ficar parado. A justiça, em servir o outro primeiro, ou em pagar um preço justo pelo grão e por quem o cultiva.",
+        "Escolha uma virtude por semana e procure uma pequena prática dela por dia. Ao fim da noite, pergunte: onde agi com esta virtude hoje? Onde não? Não é cobrança, é atenção. Com o tempo, o caráter se forma assim, uma xícara de cada vez."
+      ],
+      "tryToday": [
+        "Escolha uma virtude para esta semana.",
+        "Procure um gesto pequeno que a pratique.",
+        "À noite, anote onde você a viveu."
+      ]
+    },
+    "est-impressoes": {
+      "title": "Impressões: o espaço entre o fato e a reação",
+      "summary": "Epicteto e a pausa que muda o que sentimos.",
+      "oneLine": "Entre o que acontece e o que fazemos, existe um intervalo. É ali que mora a liberdade.",
+      "inApp": "O botão de pegar o celular é uma reação. O copo do app é o intervalo.",
+      "body": [
+        "Epicteto ensinava que não são as coisas que nos perturbam, mas os julgamentos que fazemos delas. Quando algo acontece, recebemos uma impressão: 'isso é terrível', 'isso é uma ofensa'. A impressão chega sozinha. O que podemos fazer é examiná-la antes de aceitá-la.",
+        "A prática é uma pausa curta, com uma pergunta: 'isso é uma impressão, não necessariamente a realidade. O que de fato aconteceu? O que é apenas a minha interpretação?' Separar o fato do julgamento costuma reduzir a intensidade da reação, e abre espaço para escolher uma resposta.",
+        "Treine em coisas pequenas: um trânsito parado, uma mensagem seca, uma notificação. Sinta o impulso e nomeie: 'estou tendo a impressão de que...'. Depois decida. Quanto mais você faz isso, mais o intervalo cresce, e a vida fica menos dirigida pelos gatilhos."
+      ],
+      "tryToday": [
+        "Nomeie uma impressão de hoje: 'estou tendo a impressão de que...'.",
+        "Separe o fato da interpretação.",
+        "Decida a resposta depois da pausa."
+      ]
+    },
+    "est-tempo": {
+      "title": "Seu tempo é o seu único bem",
+      "summary": "Sêneca e o inventário das horas.",
+      "oneLine": "Ninguém pode devolver o seu tempo. Por isso ele é o que você deve proteger primeiro.",
+      "inApp": "Cada minuto offline é um minuto reclamado. O app só conta o tempo que você escolheu.",
+      "body": [
+        "Na primeira de suas cartas, Sêneca pede a Lucílio que reclame o seu tempo para si. Ele nota que as pessoas guardam o dinheiro e as posses com cuidado, mas distribuem o tempo sem contar, com quem pede e para o que for. O tempo, dizia, é a única coisa que realmente nos pertence, e a única que não se devolve.",
+        "Um exercício é fazer um inventário: ao fim do dia, anotar onde o tempo foi. Trabalho, descanso, pessoas, telas. Sem culpa, só observação. Muitos descobrem, com surpresa, horas que não escolheram, rolagem sem fim, reuniões sem pauta, urgências dos outros.",
+        "Depois, proteja o que é seu: um bloco de tempo por dia sem telas, uma recusa gentil a algo que não importa, um café sem pressa. O que você dá ao tempo, ele devolve em atenção, e é isso que o app mede: minutos escolhidos, um a um."
+      ],
+      "tryToday": [
+        "Faça um inventário do seu dia, sem culpa.",
+        "Escolha um bloco de tempo para proteger.",
+        "Diga um não gentil a algo que não importa."
+      ]
+    },
+    "anti-hormese": {
+      "title": "Hormese: o estresse na dose certa",
+      "summary": "Por que um pouco de desconforto fortalece e demais quebra.",
+      "oneLine": "Uma dose pequena de estresse faz o corpo e a mente ficarem mais fortes.",
+      "inApp": "Os copos longos do app são um desconforto pequeno e voluntário: ficar sem o celular e crescer com isso.",
+      "body": [
+        "Hormese é o fenômeno em que uma dose pequena de algo que seria nocivo em excesso traz benefício. O exercício é o exemplo mais claro: levantar peso estressa o músculo, que se recupera mais forte. Jejum curto, frio breve e esforço intelectual seguem a mesma lógica: um estresse pontual provoca uma resposta que deixa o sistema melhor.",
+        "O ponto central é a dose. Pouco demais não estimula, demais machuca. A zona útil fica um pouco acima do conforto e bem abaixo do limite. E o descanso faz parte: a força aparece na recuperação, não durante o esforço. Quem treina todo dia sem descansar não melhora, só se desgasta.",
+        "Para uma rotina de bem-estar, a ideia é aplicar pequenos estresses voluntários: dez minutos sem celular, um copo inteiro sem abrir o app, uma caminhada com chuva fina. Aumente aos poucos e descanse. A antifragilidade é construída em doses."
+      ],
+      "tryToday": [
+        "Escolha um desconforto pequeno e voluntário para hoje.",
+        "Aumente um pouco na próxima semana.",
+        "Garanta um descanso depois do esforço."
+      ]
+    },
+    "anti-halteres": {
+      "title": "A estratégia dos halteres",
+      "summary": "Segurança de um lado, risco pequeno do outro, nada no meio.",
+      "oneLine": "Proteja o essencial e arrisque pouco em coisas de ganho grande.",
+      "inApp": "O app protege o seu tempo básico e deixa espaço para experimentar cafeteiras e rotinas novas.",
+      "body": [
+        "A estratégia dos halteres, de Taleb, divide os recursos em dois extremos: a maior parte em algo muito seguro e uma parte pequena em apostas de risco alto e ganho grande. Evita-se o meio, onde se arrisca bastante por um retorno modesto. O pior que pode acontecer é perder a parte pequena, e o melhor não tem teto.",
+        "Aplicada ao tempo e à rotina, pode ser assim: um núcleo estável, como horário de sono, uma caminhada e um café sem tela, que você não negocia; e uma fatia de experimentação, como um curso estranho, um método novo, uma conversa com quem você não conhece. A maior parte falha, e tudo bem. Uma ou duas mudam algo.",
+        "Para o café, o equivalente é manter o seu café de todo dia e, uma vez por semana, provar algo muito diferente. O risco é perder uma xícara. O ganho possível é descobrir um novo favorito. Poucas apostas, baratas, e muita curiosidade."
+      ],
+      "tryToday": [
+        "Defina o seu núcleo estável da semana.",
+        "Reserve uma pequena fatia para experimentar.",
+        "Prove um café muito diferente do habitual."
+      ]
+    },
+    "anti-opcoes": {
+      "title": "Opcionalidade: o direito de escolher depois",
+      "summary": "Manter portas abertas custa pouco e vale muito.",
+      "oneLine": "Uma opção é a liberdade de agir sem a obrigação de agir.",
+      "inApp": "Ter várias cafeteiras e xícaras é uma forma de opcionalidade: você escolhe conforme o dia pede.",
+      "body": [
+        "Uma opção dá o direito, mas não a obrigação, de fazer algo no futuro. Em finanças, é um contrato; na vida, é qualquer situação em que você pode aproveitar um ganho se ele aparecer e ignorar se não. Taleb considera a opcionalidade uma das fontes da antifragilidade: quem tem opções ganha com a variação e a incerteza.",
+        "Na prática, opções são coisas como ter dinheiro de reserva, aprender uma habilidade extra, manter contatos, ter mais de um jeito de resolver o mesmo problema. O custo é pequeno e regular, e o benefício aparece quando as coisas mudam. É por isso que quem diversifica as habilidades costuma se virar melhor em tempos incertos.",
+        "No cotidiano, mantenha portas abertas quando o custo for baixo: um curso curto, uma conversa a mais, um método novo. Evite compromissos longos e irreversíveis com pouca informação. E quando uma opção valer a pena, exerça-a sem remorso."
+      ],
+      "tryToday": [
+        "Liste duas opções baratas que você pode abrir.",
+        "Adie um compromisso irreversível por uma semana.",
+        "Aprenda algo pequeno fora da sua área."
+      ]
+    },
+    "anti-redundancia": {
+      "title": "Redundância: a folga que salva",
+      "summary": "Por que ter um pouco de sobra torna tudo mais resistente.",
+      "oneLine": "A eficiência total é frágil. Um pouco de folga é seguro.",
+      "inApp": "O desconto das cafeteiras premia a constância, e a folga no dia deixa espaço para ela.",
+      "body": [
+        "Redundância é ter mais do que o estritamente necessário: dois rins, um pneu estepe, uma reserva de dinheiro. Do ponto de vista da eficiência, parece desperdício. Mas é ela que permite continuar quando algo falha. Sistemas sem folga, otimizados até o limite, quebram com o primeiro imprevisto.",
+        "Na rotina, redundância é deixar margem. Sair com mais tempo do que o trajeto pede, ter uma refeição simples pronta, dois horários possíveis para a mesma tarefa, um plano B para o dia ruim. Uma agenda 100% cheia não tem como absorver um atraso, e vira estresse.",
+        "Para o hábito do café offline, vale o mesmo: tenha um horário alternativo se o primeiro falhar e aceite o copo curto como vitória em dia corrido. A folga não é fraqueza, é o que mantém o hábito de pé quando a vida aperta."
+      ],
+      "tryToday": [
+        "Deixe 20% de folga na agenda de amanhã.",
+        "Tenha um horário alternativo para o seu café offline.",
+        "Prepare um plano B para o dia ruim."
+      ]
+    },
+    "anti-erros": {
+      "title": "Errar barato e aprender rápido",
+      "summary": "Pequenos erros como informação, não como derrota.",
+      "oneLine": "Erros pequenos e frequentes ensinam mais que um acerto sorteado.",
+      "inApp": "O copo interrompido rende o proporcional e vira dado: é errar barato.",
+      "body": [
+        "Em sistemas antifrágeis, os erros pequenos são combustível. Quem tenta muitas coisas pequenas e aprende com cada falha avança mais rápido do que quem espera acertar de primeira. É a lógica da tentativa e erro: cada erro barato elimina um caminho e mostra o próximo.",
+        "A condição é que o erro seja pequeno e reversível. Errar em um café é barato. Errar em uma decisão enorme e irreversível não é. Por isso o truque é transformar decisões grandes em uma série de passos pequenos, que dão feedback antes de você ter se comprometido demais.",
+        "Mude a relação com o erro: em vez de 'falhei', pergunte 'o que isso me ensinou?'. Anote o que tentou e o que viu. Com o tempo, você acumula um conjunto de erros úteis que ninguém mais tem, e é isso que vira experiência."
+      ],
+      "tryToday": [
+        "Tente uma coisa nova e pequena esta semana.",
+        "Anote o que deu errado e o que ensinou.",
+        "Troque 'falhei' por 'o que aprendi'."
+      ]
+    },
+    "anti-treino": {
+      "title": "Sobrecarga progressiva: crescer aos poucos",
+      "summary": "Como aumentar o desafio sem quebrar.",
+      "oneLine": "Quem aumenta um pouco por vez chega mais longe que quem tenta tudo de uma vez.",
+      "inApp": "As metas do app crescem com você: de meia hora a quatro horas offline, no seu ritmo.",
+      "body": [
+        "A sobrecarga progressiva é o princípio do treino: aumentar a carga um pouco além do que o corpo já faz, esperar a adaptação e repetir. Vale para músculos, para corrida, para o estudo e para hábitos. O que mantém o processo seguro é o passo pequeno e o descanso entre os degraus.",
+        "Aplicando ao tempo offline: se hoje você fica meia hora longe do celular, não pule para quatro horas. Suba para quarenta minutos, depois uma hora, e só então avance. Se uma semana for ruim, volte um degrau sem culpa. O objetivo é construir uma base que aguente a vida real.",
+        "Use a meta diária do app como degrau: escolha uma meta que seja um pouco desconfortável, não impossível. Quando ela ficar fácil por duas semanas, suba. É assim que um hábito frágil vira um hábito robusto e, com sorte, antifrágil."
+      ],
+      "tryToday": [
+        "Defina uma meta offline um pouco acima da atual.",
+        "Mantenha por duas semanas antes de subir.",
+        "Se falhar, volte um degrau, sem culpa."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {
