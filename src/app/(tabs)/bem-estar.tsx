@@ -6,9 +6,10 @@ import { Ring } from '@/components/BrewViz';
 import { UsageCard } from '@/components/UsageCard';
 import { useApp } from '@/store/useApp';
 import {
-  afterMissInsight, balanceScore, calendar, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
+  afterMissInsight, balanceScore, calendar, dayKey, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
 } from '@/lib/stats';
-import { energySummary } from '@/lib/checkin';
+import { Art } from '@/art/Art';
+import { checkinHistory, energySummary } from '@/lib/checkin';
 import { minutesLabel } from '@/lib/format';
 import { formatDateShort, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -73,6 +74,8 @@ export default function BemEstar() {
   const mood = moodSummary(sessions, goal);
   const checkins = useApp((s) => s.checkins);
   const energy = energySummary(checkins, sessions, goal);
+  const removeCheckin = useApp((s) => s.removeCheckin);
+  const history = checkinHistory(checkins);
   const hrs = hourly(sessions);
 
   return (
@@ -274,6 +277,37 @@ export default function BemEstar() {
             ) : (
               <Txt v="small" color="muted">
                 {t('wb.energyEmpty')}
+              </Txt>
+            )}
+          </Card>
+
+          <Card style={{ gap: 10 }}>
+            <Txt v="label" color="muted">
+              {t('wb.energyHistory')}
+            </Txt>
+            {history.length ? (
+              history.map((h) => (
+                <View key={h.day} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <Txt v="small" style={{ width: 64 }}>
+                    {formatDateShort(lang, h.at)}
+                  </Txt>
+                  <View style={{ flexDirection: 'row', flex: 1 }}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Art key={n} id="tiny" size={26} fill={n <= h.energy ? 1 : 0} />
+                    ))}
+                  </View>
+                  {h.day === dayKey(now) ? (
+                    <Button label={t('wb.energyRedo')} tone="quiet" onPress={() => removeCheckin(h.day)} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
+                  ) : (
+                    <Txt v="small" color="muted">
+                      {t(`energy.${h.energy}` as 'energy.1')}
+                    </Txt>
+                  )}
+                </View>
+              ))
+            ) : (
+              <Txt v="small" color="muted">
+                {t('wb.energyHistoryEmpty')}
               </Txt>
             )}
           </Card>

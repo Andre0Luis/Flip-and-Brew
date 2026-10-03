@@ -7,7 +7,7 @@ import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
 import { dayKey, streak } from '@/lib/stats';
 import { makeDemoCheckins, makeDemoSessions } from '@/lib/demo';
 import { makeTestData } from '@/lib/testUser';
-import { withCheckin } from '@/lib/checkin';
+import { withCheckin, withoutCheckin } from '@/lib/checkin';
 import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
 
@@ -44,6 +44,8 @@ type State = {
   finish: (now?: number) => string | null;
   /** Registra (ou troca) a energia de hoje, de 1 a 5 xícaras. */
   setCheckin: (energy: number, now?: number) => void;
+  /** Apaga o check-in de um dia (para refazer). */
+  removeCheckin: (day: string) => void;
   /** Atualiza o perfil. Passe undefined para limpar um campo. */
   setProfile: (patch: Partial<Record<keyof Profile, unknown>>) => void;
   clearProfile: () => void;
@@ -87,6 +89,7 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
+      removeCheckin: (day) => set((st) => ({ checkins: withoutCheckin(st.checkins, day) })),
       setProfile: (patch) => set((st) => ({ profile: cleanProfile({ ...st.profile, ...patch }) })),
       clearProfile: () => set({ profile: {} }),
       setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s } })),

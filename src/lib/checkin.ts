@@ -17,6 +17,12 @@ export function withCheckin(checkins: Checkin[], energy: number, now = Date.now(
   return [...checkins.filter((c) => c.day !== key), { day: key, energy: level, at: now }].sort((a, b) => a.day.localeCompare(b.day));
 }
 
+/** Remove o check-in de um dia (para refazer). */
+export const withoutCheckin = (checkins: Checkin[], day: string): Checkin[] => checkins.filter((c) => c.day !== day);
+
+/** Histórico do mais recente ao mais antigo. */
+export const checkinHistory = (checkins: Checkin[], limit = 14): Checkin[] => [...checkins].sort((a, b) => b.day.localeCompare(a.day)).slice(0, limit);
+
 /** Energia dos últimos 7 dias (do mais antigo ao de hoje); dia sem resposta vira null. */
 export function energyWeek(checkins: Checkin[], now = Date.now()): (number | null)[] {
   const by = new Map(checkins.map((c) => [c.day, c.energy]));

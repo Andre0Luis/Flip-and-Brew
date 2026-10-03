@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { energySummary, energyWeek, todayCheckin, withCheckin } from './checkin';
+import { checkinHistory, energySummary, energyWeek, todayCheckin, withCheckin, withoutCheckin } from './checkin';
 import { dayKey } from './stats';
 import type { Session } from '@/store/types';
 
@@ -49,4 +49,15 @@ test('o resumo compara dias com muito e pouco tempo offline', () => {
 test('sem check-ins, o resumo é nulo', () => {
   assert.equal(energySummary([], [], 120, 30, NOON), null);
   assert.equal(dayKey(NOON), '2026-10-14');
+});
+
+test('refazer remove só o dia pedido e o histórico sai do mais novo ao mais antigo', () => {
+  let c = withCheckin([], 2, NOON - 2 * DAY);
+  c = withCheckin(c, 3, NOON - DAY);
+  c = withCheckin(c, 5, NOON);
+  assert.deepEqual(checkinHistory(c).map((x) => x.energy), [5, 3, 2]);
+  assert.equal(checkinHistory(c, 2).length, 2);
+  const redone = withoutCheckin(c, dayKey(NOON));
+  assert.equal(todayCheckin(redone, NOON), null);
+  assert.equal(redone.length, 2);
 });
