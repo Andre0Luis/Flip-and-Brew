@@ -1,7 +1,7 @@
 import { brewers } from '@/data/catalog';
 import { outcomeOf } from '@/lib/brew';
-import type { Session } from '@/store/types';
-import { TRIGGERS } from '@/lib/stats';
+import type { Checkin, Session } from '@/store/types';
+import { dayKey, minutesByDay, TRIGGERS } from '@/lib/stats';
 
 // Gerador determinístico, para o resultado ser sempre o mesmo.
 function rng(seed: number) {
@@ -47,6 +47,20 @@ export function makeDemoSessions(now = Date.now(), days = 28): Session[] {
       if (o.status === 'interrupted') session.trigger = TRIGGERS[Math.floor(rand() * 3 + (hour < 9 ? 0 : 1)) % TRIGGERS.length];
       out.push(session);
     }
+  }
+  return out;
+}
+
+/** Check-ins de exemplo: mais tempo offline no dia, mais xícaras de energia (com um pouco de variação). */
+export function makeDemoCheckins(now = Date.now(), days = 28, sessions = makeDemoSessions(now, days)): Checkin[] {
+  const rand = rng(7);
+  const by = minutesByDay(sessions);
+  const out: Checkin[] = [];
+  for (let back = days - 1; back >= 0; back--) {
+    if (back % 5 === 3) continue; // alguns dias sem resposta
+    const t = now - back * 86_400_000;
+    const energy = Math.min(5, Math.max(1, Math.round(1.8 + Math.min(by[dayKey(t)] ?? 0, 180) / 60 + (rand() - 0.5) * 1.6)));
+    out.push({ day: dayKey(t), energy, at: t });
   }
   return out;
 }

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Icon } from '@/components/Icon';
-import { Button, Card, Field, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Chip, Field, Screen, Segmented, Txt } from '@/components/ui';
+import { ProfileForm } from '@/components/ProfileForm';
+import { AppleButton } from '@/components/AppleButton';
 import { formatDateShort, useI18n, type Key } from '@/i18n';
 import { AuthError, getBackend, isValidEmail, MIN_PASSWORD, toAuthError } from '@/lib/cloud';
 import { backupNow, localData, resolveChoice, restoreNow } from '@/lib/cloud/sync';
@@ -26,6 +28,8 @@ export default function Conta() {
   const { t } = useI18n();
   const status = useAuth((s) => s.status);
   const [notice, setNotice] = useState<string | null>(null);
+  // Vindo de Ajustes > Excluir conta, a confirmação já abre no alto da tela.
+  const { excluir } = useLocalSearchParams<{ excluir?: string }>();
 
   return (
     <Screen edges={['top', 'bottom']}>
@@ -45,7 +49,7 @@ export default function Conta() {
           </Txt>
         </Card>
       )}
-      {status === 'loading' ? <Txt v="body" color="muted">{t('account.loading')}</Txt> : status === 'signedIn' ? <SignedIn onNotice={setNotice} /> : <SignedOut />}
+      {status === 'loading' ? <Txt v="body" color="muted">{t('account.loading')}</Txt> : status === 'signedIn' ? <SignedIn onNotice={setNotice} startDeleting={excluir === '1'} /> : <SignedOut />}
     </Screen>
   );
 }
@@ -54,7 +58,10 @@ function ErrorLine({ error }: { error: AuthError | string | null }) {
   const { t } = useI18n();
   if (!error) return null;
   if (error instanceof AuthError && error.code === 'cancelled') return null; // fechar o seletor do Google não é erro
-  const text = typeof error === 'string' ? error : t(`auth.err.${error.code}` as Key);
+  const base = typeof error === 'string' ? error : t(`auth.err.${error.code}` as Key);
+  // Erro sem tradução ou de configuração: mostra o código técnico pequeno, para quem for relatar.
+  const detail = typeof error !== 'string' && (error.code === 'unknown' || error.code === 'config') && error.message !== error.code ? ` (${error.message.slice(0, 120)})` : '';
+  const text = base + detail;
   return (
     <Txt v="small" color="bad" accessibilityLiveRegion="polite">
       {text}
@@ -71,6 +78,8 @@ function SignedOut() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AuthError | string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -104,10 +113,49 @@ function SignedOut() {
     if (!backend) return;
     if (!isValidEmail(email)) return setError(t('auth.fillEmail'));
     void run(async () => {
-      await backend.sendPasswordReset(email);
+      try {
+        await backend.sendPasswordReset(email);
+      } catch (e) {
+        // Não revelamos se o e-mail existe: só erros de rede ou de formato aparecem.
+        const err = toAuthError(e);
+        if (err.code !== 'wrong-credentials' && err.code !== 'unknown') throw err;
+      }
       setInfo(t('auth.resetSent'));
     });
   };
+
+  if (resetting) {
+    return (
+      <View style={{ gap: 16 }}>
+        <Txt v="title">{t('auth.reset.title')}</Txt>
+        <Txt v="body" color="muted">
+          {t('auth.reset.body')}
+        </Txt>
+        <Field label={t('auth.email')} value={email} onChangeText={setEmail} keyboardType="email-address" autoComplete="email" textContentType="emailAddress" returnKeyType="send" onSubmitEditing={forgot} />
+        <ErrorLine error={error} />
+        {info && (
+          <Txt v="small" color="good" accessibilityLiveRegion="polite">
+            {info}
+          </Txt>
+        )}
+        <Button label={t('auth.reset.send')} onPress={forgot} disabled={busy} />
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => {
+            setResetting(false);
+            setError(null);
+            setInfo(null);
+          }}
+          hitSlop={8}
+          style={{ alignSelf: 'center' }}
+        >
+          <Txt v="small" color="accent" style={{ textDecorationLine: 'underline' }}>
+            {t('auth.reset.back')}
+          </Txt>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={{ gap: 16 }}>
@@ -147,6 +195,20 @@ function SignedOut() {
         {mode === 'up' && <Field label={t('auth.confirm')} value={confirm} onChangeText={setConfirm} secureTextEntry autoComplete="new-password" textContentType="newPassword" returnKeyType="done" onSubmitEditing={submit} />}
       </View>
 
+      {mode === 'up' && (
+        <View style={{ gap: 12 }}>
+          <Chip label={t('profile.signupToggle')} on={showProfile} onPress={() => setShowProfile((v) => !v)} />
+          {showProfile && (
+            <>
+              <ProfileForm />
+              <Txt v="small" color="muted">
+                {t('profile.privacy')}
+              </Txt>
+            </>
+          )}
+        </View>
+      )}
+
       <ErrorLine error={error} />
       {info && (
         <Txt v="small" color="good" accessibilityLiveRegion="polite">
@@ -156,11 +218,15 @@ function SignedOut() {
 
       <Button label={mode === 'up' ? t('auth.submitUp') : t('auth.submitIn')} onPress={submit} disabled={busy} />
       {mode === 'in' && (
-        <Pressable accessibilityRole="button" onPress={forgot} hitSlop={8} style={{ alignSelf: 'center' }}>
+        <Pressable accessibilityRole="button" onPress={() => { setResetting(true); setError(null); setInfo(null); }} hitSlop={8} style={{ alignSelf: 'center' }}>
           <Txt v="small" color="accent" style={{ textDecorationLine: 'underline' }}>
             {t('auth.forgot')}
           </Txt>
         </Pressable>
+      )}
+
+      {backend?.appleAvailable() && (
+        <AppleButton onPress={() => run(() => backend.signInApple())} disabled={busy} />
       )}
 
       {backend?.googleAvailable() && (
@@ -192,14 +258,141 @@ function SignedOut() {
   );
 }
 
-function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
+/** Quem criou a conta com e-mail e senha precisa confirmar o e-mail: ajuda a recuperar a conta e libera recursos de administrador. */
+function VerifyEmailCard() {
+  const { t } = useI18n();
+  const backend = getBackend();
+  const user = useAuth((s) => s.user);
+  const now = useNow(1000);
+  const [sentAt, setSentAt] = useState<number | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<AuthError | string | null>(null);
+  const [busy, setBusy] = useState(false);
+  if (!backend || !user || user.provider !== 'password') return null;
+  if (user.emailVerified) {
+    return (
+      <Txt v="small" color="good">
+        {t('verify.done')}
+      </Txt>
+    );
+  }
+  const wait = sentAt ? Math.max(0, 60 - Math.floor((now - sentAt) / 1000)) : 0;
+  const resend = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await backend.sendVerificationEmail();
+      setSentAt(Date.now());
+      setMessage(t('verify.sent'));
+    } catch (e) {
+      setError(toAuthError(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  const check = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const fresh = await backend.refreshUser();
+      if (fresh) useAuth.setState({ user: fresh });
+      setMessage(fresh?.emailVerified ? t('verify.done') : t('verify.notYet'));
+    } catch (e) {
+      setError(toAuthError(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Card style={{ gap: 10 }}>
+      <Txt v="title">{t('verify.title')}</Txt>
+      <Txt v="small" color="muted">
+        {t('verify.body', { email: user.email ?? '' })}
+      </Txt>
+      <ErrorLine error={error} />
+      {message && (
+        <Txt v="small" color="accent" accessibilityLiveRegion="polite">
+          {message}
+        </Txt>
+      )}
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        <Button label={wait ? t('verify.wait', { n: wait }) : t('verify.resend')} tone="quiet" disabled={busy || wait > 0} style={{ flex: 1, paddingHorizontal: 12 }} onPress={resend} />
+        <Button label={t('verify.check')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={check} />
+      </View>
+    </Card>
+  );
+}
+
+/** Troca de senha para conta com e-mail e senha: pede a senha atual e a nova duas vezes. */
+function ChangePasswordCard() {
+  const { t } = useI18n();
+  const backend = getBackend();
+  const user = useAuth((s) => s.user);
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState('');
+  const [next, setNext] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<AuthError | string | null>(null);
+  const [done, setDone] = useState(false);
+  if (!backend || !user || user.provider !== 'password') return null;
+  const submit = async () => {
+    setError(null);
+    setDone(false);
+    if (!current || !next) return setError(t('auth.fillAll'));
+    if (next.length < MIN_PASSWORD) return setError(new AuthError('weak-password'));
+    if (next !== confirm) return setError(t('auth.mismatch'));
+    if (next === current) return setError(t('pwd.same'));
+    setBusy(true);
+    try {
+      await backend.changePassword(current, next);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+      setDone(true);
+      setOpen(false);
+      setCurrent('');
+      setNext('');
+      setConfirm('');
+    } catch (e) {
+      setError(toAuthError(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Card style={{ gap: 10 }}>
+      <Txt v="title">{t('pwd.title')}</Txt>
+      {done && (
+        <Txt v="small" color="good" accessibilityLiveRegion="polite">
+          {t('pwd.done')}
+        </Txt>
+      )}
+      {open ? (
+        <View style={{ gap: 10 }}>
+          <Field label={t('pwd.current')} value={current} onChangeText={setCurrent} secureTextEntry autoComplete="current-password" textContentType="password" />
+          <Field label={t('pwd.new')} value={next} onChangeText={setNext} secureTextEntry autoComplete="new-password" textContentType="newPassword" />
+          <Field label={t('pwd.confirm')} value={confirm} onChangeText={setConfirm} secureTextEntry autoComplete="new-password" textContentType="newPassword" onSubmitEditing={submit} />
+          <ErrorLine error={error} />
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <Button label={t('pwd.do')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={submit} />
+            <Button label={t('delete.cancel')} tone="quiet" style={{ flex: 1 }} onPress={() => { setOpen(false); setError(null); }} />
+          </View>
+        </View>
+      ) : (
+        <Button label={t('pwd.title')} tone="quiet" onPress={() => { setOpen(true); setDone(false); }} />
+      )}
+    </Card>
+  );
+}
+
+
+function SignedIn({ onNotice, startDeleting }: { onNotice: (s: string | null) => void; startDeleting?: boolean }) {
   const { t, lang } = useI18n();
   const { c, r } = useTheme();
   const backend = getBackend();
   const { user, sync, lastBackupAt, choice } = useAuth();
   const [message, setMessage] = useState<string | null>(null);
   const [confirmRestore, setConfirmRestore] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(!!startDeleting);
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AuthError | string | null>(null);
@@ -236,8 +429,48 @@ function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
   const local = localData();
   const syncing = sync === 'syncing';
 
+  const deleteCard = (
+    <Card style={{ gap: 12, borderColor: c.bad, borderRadius: r.lg }}>
+        <Txt v="title" color="bad">
+          {t('delete.title')}
+        </Txt>
+        <Txt v="small" color="muted">
+          {t('delete.body')}
+        </Txt>
+        {deleting ? (
+          <View style={{ gap: 10 }}>
+            {user.provider === 'password' ? (
+              <>
+                <Txt v="small">{t('delete.confirmPassword')}</Txt>
+                <Field label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" error={!!error} />
+              </>
+            ) : (
+              <Txt v="small">{user.provider === 'apple' ? t('delete.confirmApple') : t('delete.confirmGoogle')}</Txt>
+            )}
+            <ErrorLine error={error} />
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Button label={t('delete.do')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={doDelete} />
+              <Button
+                label={t('delete.cancel')}
+                tone="quiet"
+                style={{ flex: 1 }}
+                onPress={() => {
+                  setDeleting(false);
+                  setPassword('');
+                  setError(null);
+                }}
+              />
+            </View>
+          </View>
+        ) : (
+          <Button label={t('delete.start')} tone="quiet" onPress={() => setDeleting(true)} />
+        )}
+    </Card>
+  );
+
   return (
     <View style={{ gap: 16 }}>
+      {startDeleting && deleteCard}
       <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
           <Txt v="title" color="accentFg">
@@ -319,44 +552,12 @@ function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
         )}
       </Card>
 
+      <VerifyEmailCard />
+      <ChangePasswordCard />
+
       <Button label={t('account.signOut')} tone="quiet" onPress={() => void backend.signOut()} />
 
-      <Card style={{ gap: 12, borderColor: c.bad, borderRadius: r.lg }}>
-        <Txt v="title" color="bad">
-          {t('delete.title')}
-        </Txt>
-        <Txt v="small" color="muted">
-          {t('delete.body')}
-        </Txt>
-        {deleting ? (
-          <View style={{ gap: 10 }}>
-            {user.provider === 'password' ? (
-              <>
-                <Txt v="small">{t('delete.confirmPassword')}</Txt>
-                <Field label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" error={!!error} />
-              </>
-            ) : (
-              <Txt v="small">{t('delete.confirmGoogle')}</Txt>
-            )}
-            <ErrorLine error={error} />
-            <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button label={t('delete.do')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={doDelete} />
-              <Button
-                label={t('delete.cancel')}
-                tone="quiet"
-                style={{ flex: 1 }}
-                onPress={() => {
-                  setDeleting(false);
-                  setPassword('');
-                  setError(null);
-                }}
-              />
-            </View>
-          </View>
-        ) : (
-          <Button label={t('delete.start')} tone="quiet" onPress={() => setDeleting(true)} />
-        )}
-      </Card>
+      {!startDeleting && deleteCard}
     </View>
   );
 }

@@ -1,17 +1,26 @@
 import { Platform } from 'react-native';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { NO_PRO, PRO_ENTITLEMENT, coinsOf, proFromCustomerInfo, type ProInfo } from './proRules';
 export { PRO_ENTITLEMENT, type ProInfo };
 
-// As chaves vêm de variáveis de ambiente do build (EAS secrets ou .env). Sem elas, as compras ficam desligadas.
-const KEY = Platform.select({
-  ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
-  android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
-});
+// No Expo Go não existe a loja nativa e o RevenueCat recusa as chaves de loja (goog_, appl_).
+// Ali só vale a chave da Test Store do RevenueCat (EXPO_PUBLIC_REVENUECAT_TEST_KEY); sem ela, as compras ficam desligadas.
+export const inExpoGo = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
-/** Chaves "test_" são da Test Store e derrubam o app em build de release, então só valem em desenvolvimento. */
-const keyAllowed = !!KEY && (__DEV__ || !KEY.startsWith('test_'));
+// As chaves vêm de variáveis de ambiente do build (EAS secrets ou .env.local). Sem elas, as compras ficam desligadas.
+const KEY = inExpoGo
+  ? process.env.EXPO_PUBLIC_REVENUECAT_TEST_KEY
+  : Platform.select({
+      ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
+      android: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
+    });
+
+/** Chaves "test_" são da Test Store e derrubam o app em build de release, então só valem em desenvolvimento e no Expo Go. */
+const keyAllowed = !!KEY && (__DEV__ || inExpoGo || !KEY.startsWith('test_'));
 
 export const purchasesConfigured = Platform.OS !== 'web' && keyAllowed;
+/** No Expo Go sem a chave de teste: as compras estão desligadas por causa do ambiente, não por falta de configuração. */
+export const purchasesBlockedByExpoGo = Platform.OS !== 'web' && inExpoGo && !KEY;
 
 export type CoinPack = { id: string; coins: number; price: string; raw: unknown };
 type Sdk = typeof import('react-native-purchases').default;

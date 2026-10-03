@@ -58,3 +58,21 @@ Um único documento `users/{uid}` com o progresso (copos, moedas, itens, humor, 
 
 ## Exclusão de conta
 Conta › Excluir conta pede a senha (ou a confirmação do Google), apaga o documento `users/{uid}` e depois a conta no Firebase Authentication. Os dados do aparelho continuam até a pessoa apagá-los em Ajustes. Veja também `docs/ACCOUNT-DELETION.md`.
+
+
+## Entrar com a Apple (iOS)
+
+Obrigatório na App Store quando há login com o Google (diretriz 4.8). No código está pronto (`expo-apple-authentication`, botão oficial, nonce com SHA-256, revogação do token ao excluir a conta). Falta configurar nas contas:
+
+1. **Apple Developer** > Certificates, Identifiers & Profiles > Identifiers > o App ID `com.andre0luis.FlipAndBrew` > marque **Sign In with Apple**.
+2. Crie uma **Service ID** (para o Firebase) e uma **chave** (Keys > Sign in with Apple), anote o Key ID e baixe o `.p8`.
+3. **Firebase Console** > Authentication > Método de login > **Apple** > ativar e colar o Service ID, o Team ID, o Key ID e a chave privada.
+4. Rebuild do app de iOS (`eas build -p ios`), porque o `app.json` ganhou `usesAppleSignIn` e o plugin.
+
+## Contas com e-mail e senha
+
+- **Esqueci a senha:** `Entrar` > "Esqueci a senha" > e-mail > o Firebase envia o link. A tela sempre responde "se existir uma conta...", para não revelar quais e-mails estão cadastrados.
+- **Confirmar e-mail:** o cadastro envia o e-mail de confirmação; em Conta há "Reenviar" (com espera de 60 s) e "Já confirmei".
+- **Alterar senha:** em Conta, pede a senha atual e a nova duas vezes (mínimo de 8 caracteres).
+- **Modelos de e-mail:** Firebase Console > Authentication > Templates. Ajuste o nome do remetente, o idioma (português) e o assunto da confirmação e da redefinição de senha. Sem isso, os e-mails saem em inglês e com o nome do projeto.
+- **Política de senha:** em Authentication > Configurações > Política de senha, exija o mesmo mínimo de 8 caracteres.

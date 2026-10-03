@@ -11,7 +11,7 @@ A Google Play exige que apps com criação de conta ofereçam a exclusão **dent
 2. Role até **Excluir conta** e toque em **Excluir minha conta**.
 3. Confirme com a sua senha (ou com o Google, se você entrou com ele) e toque em **Excluir definitivamente**.
 
-**O que é apagado:** a sua conta e o backup do seu progresso na nuvem (copos, moedas, itens, humor e preferências), de forma permanente.
+**O que é apagado:** a sua conta e o backup do seu progresso na nuvem (copos, moedas, itens, humor, energia diária, perfil e preferências), de forma permanente.
 **O que continua:** os dados guardados no seu celular. Para removê-los, use **Ajustes › Apagar todos os dados** ou desinstale o app.
 
 **Sem acesso ao app?** Escreva para [E-MAIL DE CONTATO] com o e-mail da conta, a partir desse mesmo e-mail, pedindo a exclusão. Atendemos em até 30 dias.

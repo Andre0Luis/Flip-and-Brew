@@ -1,6 +1,6 @@
 # ADR-0011 · Economia de moedas, compra com RevenueCat e itens
 
-**Status:** Aceita · **Data:** 2026-10
+**Status:** Aceita; preços e itens substituídos em parte pelo [ADR-0018](0018-checkin-perfil-cafeteiras-e-descontos.md) · **Data:** 2026-10
 
 ## Contexto
 A loja usa moedas ganhas offline. O usuário quer manter compra de moedas por dinheiro (IAP) e cosméticos. O código antigo tinha um **mock que concedia moedas de graça**.

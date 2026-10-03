@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { Session } from '@/store/types';
-import { afterMissInsight, balanceScore, calendar, dayKey, hourly, lastDays, streak, triggerCounts } from './stats';
+import { afterMissInsight, balanceScore, calendar, dayKey, fullCupsAverage, hourly, lastDays, streak, triggerCounts } from './stats';
 
 const DAY = 86_400_000;
 // 15 de outubro de 2025, 20:00 no fuso local
@@ -98,4 +98,18 @@ test('gatilhos contados e ordenados', () => {
     { trigger: 'work', count: 2 },
     { trigger: 'boredom', count: 1 },
   ]);
+});
+
+test('média de copos cheios por dia usa só os dias desde o primeiro copo e separa os dias ativos', () => {
+  const NOW2 = new Date(2026, 9, 14, 12).getTime();
+  const mk = (back: number, q: 'encorpado' | 'equilibrado'): Session =>
+    ({ id: `f${back}-${q}`, brewerId: 'melitta', cupId: 'paper', startedAt: NOW2 - back * 86_400_000, elapsedMs: 40 * 60_000, targetMs: 40 * 60_000, status: 'done', coins: 48, quality: q }) as Session;
+  assert.deepEqual(fullCupsAverage([], 30, NOW2), { total: 0, perDay: 0, perActiveDay: 0, span: 1 });
+  // primeiro copo há 3 dias: janela de 4 dias; 4 copos cheios em 2 dias ativos
+  const sessions = [mk(3, 'encorpado'), mk(3, 'encorpado'), mk(1, 'encorpado'), mk(1, 'encorpado'), mk(0, 'equilibrado')];
+  const a = fullCupsAverage(sessions, 30, NOW2);
+  assert.equal(a.span, 4);
+  assert.equal(a.total, 4);
+  assert.equal(a.perDay, 1);
+  assert.equal(a.perActiveDay, 2);
 });

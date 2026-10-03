@@ -47,7 +47,7 @@ Os passos 4 a 7 podem esperar: o app roda sem eles. Comece pelo 1, 2 e 6.
 Você não precisa de Firebase para ver as telas de conta e o app cheio.
 
 ### Usuário de teste no app (qualquer build de desenvolvimento)
-1. Abra **Ajustes** (engrenagem no Início). Em build de desenvolvimento as ferramentas de teste já aparecem; em outro build, toque **7 vezes na versão**, no fim da tela.
+1. Abra **Ajustes** (engrenagem no Início). Em build de desenvolvimento as ferramentas de teste já aparecem; em outro build, só aparecem para a conta de administrador (e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`).
 2. Toque em **Carregar usuário de teste**. Você ganha:
    - **50.000 moedas**
    - **todas** as cafeteiras e xícaras (Chemex e Coleção Estoica incluídas)
@@ -97,7 +97,8 @@ O EAS gera o app instalável (APK para testar, AAB para a Play Store).
    eas build --platform android --profile preview
    ```
    Na primeira vez o EAS pergunta se pode gerar e guardar a **keystore** (chave de assinatura). Responda que sim: ele cuida disso e você pode baixar depois com `eas credentials`.
-5. **Variáveis de ambiente do build.** Tudo o que está no `.env` precisa existir também no EAS, porque o EAS não lê o seu `.env`:
+5. **Build automático no merge.** `.github/workflows/eas-build.yml` enfileira um APK `preview` e um AAB `production` a cada push na `main` (exceto mudança só em `docs/` ou `.md`). Crie um token em <https://expo.dev/settings/access-tokens> e salve como segredo `EXPO_TOKEN` em GitHub > Settings > Secrets and variables > Actions. O workflow também roda à mão pela aba Actions.
+6. **Variáveis de ambiente do build.** Tudo o que está no `.env` precisa existir também no EAS, porque o EAS não lê o seu `.env`:
    ```bash
    eas env:create --name EXPO_PUBLIC_FIREBASE_API_KEY --value "..." --environment preview --visibility plaintext
    ```
@@ -282,6 +283,7 @@ Copie `.env.example` para `.env`. Para o build no EAS, cadastre as mesmas variá
 | `EXPO_PUBLIC_FIREBASE_APP_ID` | `appId` | idem | idem |
 | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` | Firebase › Authentication › Google › ID do cliente da Web | Login com Google | O botão do Google não aparece |
 | `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | RevenueCat › chave pública do SDK (`goog_…`) | Compra de moedas | A loja explica que a compra não está ativa |
+| `EXPO_PUBLIC_REVENUECAT_TEST_KEY` | RevenueCat › Test Store › chave de API (`test_…`) | Testar a compra no Expo Go | Sem ela, a loja explica que no Expo Go a compra não funciona |
 | `EXPO_PUBLIC_REVENUECAT_IOS_KEY` | RevenueCat (`appl_…`) | Compra no iOS | Só importa se for lançar no iOS |
 | `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` | Você escolhe | Só o script `seed:test-user` | O script recusa rodar |
 | `EXPO_PUBLIC_AUTH_MODE=mock` | Você liga | Servidor falso, só em desenvolvimento | Usa o Firebase real, se houver chaves |

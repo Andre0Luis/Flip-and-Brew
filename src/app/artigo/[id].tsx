@@ -28,7 +28,7 @@ export default function Artigo() {
       </Reading>
     );
   }
-  const q = quoteById(lang, a.quoteId);
+  const q = a.quoteId ? quoteById(lang, a.quoteId) : undefined;
 
   return (
     <Reading eyebrow={t('article.eyebrow', { cat: t(`cat.${a.category}`), n: a.minutes })}>

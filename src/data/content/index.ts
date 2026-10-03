@@ -5,4 +5,4 @@ import { en } from './en';
 import { es } from './es';
 
 export const CONTENT: Record<Lang, Content> = { pt, en, es };
-export type { Content, QuoteText, ArticleText, PracticeText, ItemText } from './types';
+export type { Content, CreatorText, QuoteText, ArticleText, PracticeText, ItemText } from './types';

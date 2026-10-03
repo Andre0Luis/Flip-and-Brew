@@ -1,6 +1,6 @@
 import { CATALOG } from '@/data/catalog';
 import { ARTICLE_BASE } from '@/data/articles';
-import { makeDemoSessions } from './demo';
+import { makeDemoCheckins, makeDemoSessions } from './demo';
 import { dayKey } from './stats';
 import type { LocalData } from './cloud/snapshot';
 
@@ -14,13 +14,17 @@ export const TEST_COINS = 50_000;
 export const TEST_HISTORY_DAYS = 90;
 
 export function makeTestData(now = Date.now()): Omit<LocalData, 'settings'> {
+  const sessions = makeDemoSessions(now, TEST_HISTORY_DAYS);
   const practicesDone = Array.from({ length: 9 }, (_, i) => dayKey(now - (i + 1) * 86_400_000));
   return {
     coins: TEST_COINS,
     owned: CATALOG.map((i) => i.id), // todas as cafeteiras e xícaras, inclusive a Chemex e a Coleção Estoica
     brewerId: 'chemex',
     cupId: 'stoic-ep',
-    sessions: makeDemoSessions(now, TEST_HISTORY_DAYS),
+    packId: 'pack-especial',
+    sessions,
+    checkins: makeDemoCheckins(now, TEST_HISTORY_DAYS, sessions),
+    profile: { name: 'Pessoa de Teste', age: 32, favorite: 'Coado de café do Cerrado', roast: 'medium', grind: 'medium', body: 'medium', acidity: 'medium', flavors: ['chocolate', 'caramel'] },
     practiceAccepted: null,
     practicesDone,
     articlesRead: ARTICLE_BASE.slice(0, 6).map((a) => a.id),

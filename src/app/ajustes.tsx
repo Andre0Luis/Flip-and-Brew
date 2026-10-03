@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react';
-import { Pressable, Switch, View } from 'react-native';
+import React, { useState } from 'react';
+import { Switch, View } from 'react-native';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
-import { Button, Card, Chip, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Screen, Segmented, Txt } from '@/components/ui';
 import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
+import { hasProfile } from '@/lib/profile';
+import { useTestTools } from '@/lib/admin';
+import { GoalPicker } from '@/components/GoalPicker';
 import { useAuth } from '@/store/useAuth';
 import { usePro } from '@/store/usePro';
 import { presentCustomerCenter, presentPaywall, purchasesConfigured } from '@/lib/purchases';
@@ -14,7 +17,6 @@ import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const GOALS = [60, 90, 120, 180, 240];
 
 function Row({ title, hint, value, onChange }: { title: string; hint: string; value: boolean; onChange: (v: boolean) => void }) {
   const { c } = useTheme();
@@ -45,21 +47,12 @@ export default function Ajustes() {
   const { run: calibrate, busy: calibrating, message: cal, available } = useCalibrate();
   const [confirmReset, setConfirmReset] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
-  const taps = useRef(0);
-  const showDev = __DEV__ || settings.devTools;
+  const showDev = useTestTools();
   const setOnboarded = useApp((s) => s.setOnboarded);
+  const profile = useApp((s) => s.profile);
   const authUser = useAuth((s) => s.user);
   const pro = usePro();
   const [proMsg, setProMsg] = useState<string | null>(null);
-
-  // Sete toques na versão liberam as ferramentas de teste em qualquer build.
-  const onVersionTap = () => {
-    taps.current += 1;
-    if (taps.current >= 7) {
-      taps.current = 0;
-      set({ devTools: true });
-    }
-  };
 
   const toggleNotify = async (v: boolean) => {
     setNotifyMsg(null);
@@ -77,14 +70,7 @@ export default function Ajustes() {
         <Button label={t('common.close')} tone="quiet" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} style={{ paddingVertical: 8, paddingHorizontal: 16 }} />
       </View>
 
-      <Card style={{ gap: 12 }}>
-        <Txt v="title">{t('set.goal')}</Txt>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          {GOALS.map((g) => (
-            <Chip key={g} label={`${(g / 60).toFixed(g % 60 === 0 ? 0 : 1).replace('.', t('number.locale') === 'en-US' ? '.' : ',')} h`} on={settings.goalMin === g} onPress={() => set({ goalMin: g })} />
-          ))}
-        </View>
-      </Card>
+      <GoalPicker />
 
       <Card style={{ gap: 12 }}>
         <Txt v="title">{t('set.look')}</Txt>
@@ -197,10 +183,20 @@ export default function Ajustes() {
             {authUser ? t('account.cardIn', { email: authUser.email ?? '' }) : t('account.cardOut')}
           </Txt>
           <Button label={t('account.open')} tone="quiet" onPress={() => router.push('/conta')} />
+          {authUser && <Button label={t('delete.start')} tone="quiet" onPress={() => router.push({ pathname: '/conta', params: { excluir: '1' } })} />}
         </Card>
       )}
 
       <Card style={{ gap: 10 }}>
+        <Txt v="title">{t('profile.title')}</Txt>
+        <Txt v="small" color="muted">
+          {profile.name ? t('profile.cardFilled', { name: profile.name }) : hasProfile(profile) ? t('profile.cardFilledNoName') : t('profile.cardBody')}
+        </Txt>
+        <Button label={t('profile.open')} tone="quiet" onPress={() => router.push('/perfil')} />
+      </Card>
+
+      <Card style={{ gap: 10 }}>
+        <Button label={t('creator.open')} tone="quiet" onPress={() => router.push('/criador')} />
         <Button label={t('set.intro')} tone="quiet" onPress={() => setOnboarded(false)} />
         <Button label={t('set.privacy')} tone="quiet" onPress={() => router.push('/privacidade')} />
       </Card>
@@ -208,12 +204,10 @@ export default function Ajustes() {
       <Txt v="small" color="muted">
         {t('set.footer')}
       </Txt>
-      <Pressable accessibilityRole="button" accessibilityLabel={t('set.version', { v: Constants.expoConfig?.version ?? '' })} onPress={onVersionTap} hitSlop={8}>
-        <Txt v="label" color="muted">
-          {t('set.version', { v: Constants.expoConfig?.version ?? '1.0.0' })}
-          {settings.devTools ? ` · ${t('set.devOn')}` : ''}
-        </Txt>
-      </Pressable>
+      <Txt v="label" color="muted">
+        {t('set.version', { v: Constants.expoConfig?.version ?? '1.0.0' })}
+        {showDev ? ` · ${t('set.devOn')}` : ''}
+      </Txt>
     </Screen>
   );
 }

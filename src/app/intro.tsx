@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Art, Coin } from '@/art/Art';
+import { useRouter } from 'expo-router';
 import { FillingCup } from '@/components/BrewViz';
 import { Button, Card, Chip, Screen, Txt } from '@/components/ui';
+import { CreatorStory } from '@/components/CreatorStory';
 import { useCalibrate } from '@/engine/useCalibrate';
+import { getBackend } from '@/lib/cloud';
+import { CONTENT } from '@/data/content';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
-import { getQuotes } from '@/data/quotes';
 import { useApp } from '@/store/useApp';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const STEPS = 4;
 
-/** Primeira abertura: a ideia do app em quatro passos curtos, com escolha de idioma e calibração opcional. */
+/**
+ * Primeira abertura, em quatro passos: a promessa, a ação central (aprender fazendo), por que o app existe e a autonomia.
+ * Nenhuma tela bloqueia: dá para pular em qualquer ponto. O resto (moedas, tropeços) aparece como dica na primeira vez.
+ */
 export default function Intro() {
   const { c } = useTheme();
   const { t, lang } = useI18n();
+  const router = useRouter();
+  const canSignUp = !!getBackend();
   const setSettings = useApp((s) => s.setSettings);
   const setOnboarded = useApp((s) => s.setOnboarded);
   const [step, setStep] = useState(0);
   const [fill, setFill] = useState(0.15);
   const cal = useCalibrate();
+  const calibrated = useApp((s) => s.settings.faceUpSign !== 0);
 
-  // O copo da primeira tela enche e esvazia devagar, só para mostrar a ideia.
+  // O copo enche e esvazia devagar, só para mostrar a ideia; no passo 2 ele acompanha a calibração.
   useEffect(() => {
-    if (step !== 0) return;
+    if (step > 1) return;
     const id = setInterval(() => setFill((f) => (f >= 0.95 ? 0.15 : f + 0.2)), 1600);
     return () => clearInterval(id);
   }, [step]);
 
   const finish = () => setOnboarded(true);
+  // A Conta só existe depois da introdução (rota protegida): conclui e abre a tela no quadro seguinte.
+  const finishAndSignUp = () => {
+    setOnboarded(true);
+    setTimeout(() => router.push('/conta'), 400);
+  };
   const last = step === STEPS - 1;
-  const quote = getQuotes(lang).find((q) => q.id === 'nt-vento');
 
   return (
     <Screen edges={['top', 'bottom']}>
@@ -43,54 +55,98 @@ export default function Intro() {
 
       <View style={{ alignItems: 'center', gap: 20, paddingTop: 12 }}>
         {step === 0 && <FillingCup progress={fill} size={190} />}
-        {step === 1 && (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Coin size={64} />
-            <Art id="cup" size={130} />
-            <Art id="mug" size={110} />
-          </View>
-        )}
-        {step === 2 && quote && (
-          <Card inverse style={{ gap: 10, alignSelf: 'stretch' }}>
-            <Txt v="quote" color="bg">
-              {quote.text}
-            </Txt>
-            <Txt v="label" color="bg" style={{ opacity: 0.7 }}>
-              {quote.author} · {quote.source}
-            </Txt>
-          </Card>
-        )}
-        {step === 3 && <Art id="v60" size={190} />}
-
-        <Txt v="display" style={{ textAlign: 'center' }}>
-          {t(`intro.t${step}` as 'intro.t0')}
-        </Txt>
-        <Txt v="body" color="muted" style={{ textAlign: 'center', maxWidth: 340 }}>
-          {t(`intro.b${step}` as 'intro.b0')}
-        </Txt>
+        {step === 1 && <FillingCup progress={calibrated ? 1 : cal.busy ? 0.6 : fill} size={190} />}
 
         {step === 0 && (
-          <View style={{ gap: 8, alignItems: 'center' }}>
-            <Txt v="label" color="muted">
-              {t('intro.lang')}
+          <>
+            <Txt v="display" style={{ textAlign: 'center' }}>
+              {t('intro.t0')}
             </Txt>
-            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-              {LANGS.map((l) => (
-                <Chip key={l} label={dictionaries[l]['lang.name']} on={lang === l} onPress={() => setSettings({ language: l })} />
-              ))}
+            <Txt v="body" color="muted" style={{ textAlign: 'center', maxWidth: 340 }}>
+              {t('intro.b0')}
+            </Txt>
+            <View style={{ gap: 8, alignItems: 'center' }}>
+              <Txt v="label" color="muted">
+                {t('intro.lang')}
+              </Txt>
+              <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+                {LANGS.map((l) => (
+                  <Chip key={l} label={dictionaries[l]['lang.name']} on={lang === l} onPress={() => setSettings({ language: l })} />
+                ))}
+              </View>
             </View>
+          </>
+        )}
+
+        {step === 1 && (
+          <>
+            <Txt v="display" style={{ textAlign: 'center' }}>
+              {t('intro.t1')}
+            </Txt>
+            <Txt v="body" color="muted" style={{ textAlign: 'center', maxWidth: 340 }}>
+              {t('intro.b1')}
+            </Txt>
+            {cal.available ? (
+              <View style={{ gap: 8, alignSelf: 'stretch' }}>
+                <Button label={cal.busy ? t('calib.busy') : t('calib.cta')} tone="dark" disabled={cal.busy} onPress={cal.run} />
+                {cal.message && (
+                  <Txt v="small" color="accent" style={{ textAlign: 'center' }} accessibilityLiveRegion="polite">
+                    {cal.message}
+                  </Txt>
+                )}
+              </View>
+            ) : (
+              <Txt v="small" color="muted" style={{ textAlign: 'center', maxWidth: 340 }}>
+                {t('intro.noSensor')}
+              </Txt>
+            )}
+          </>
+        )}
+
+        {step === 2 && (
+          <View style={{ gap: 16, alignSelf: 'stretch' }}>
+            <Txt v="display">{CONTENT[lang].creator.title}</Txt>
+            <Txt v="small" color="muted">
+              {CONTENT[lang].creator.byline}
+            </Txt>
+            <CreatorStory />
           </View>
         )}
 
-        {step === 3 && cal.available && (
-          <View style={{ gap: 8, alignSelf: 'stretch' }}>
-            <Button label={cal.busy ? t('calib.busy') : t('calib.cta')} tone="quiet" disabled={cal.busy} onPress={cal.run} />
-            {cal.message && (
-              <Txt v="small" color="accent" style={{ textAlign: 'center' }} accessibilityLiveRegion="polite">
-                {cal.message}
-              </Txt>
+        {step === 3 && (
+          <>
+            <Txt v="display" style={{ textAlign: 'center' }}>
+              {t('intro.t2')}
+            </Txt>
+            <Card style={{ gap: 10, alignSelf: 'stretch' }}>
+              {(['intro.l1', 'intro.l2', 'intro.l3'] as const).map((k) => (
+                <View key={k} style={{ flexDirection: 'row', gap: 10 }}>
+                  <Txt v="body" color="accent">
+                    •
+                  </Txt>
+                  <Txt v="body" style={{ flex: 1 }}>
+                    {t(k)}
+                  </Txt>
+                </View>
+              ))}
+            </Card>
+            {canSignUp && (
+              <Card style={{ gap: 10, alignSelf: 'stretch' }}>
+                <Txt v="title">{t('intro.acc.title')}</Txt>
+                {(['intro.acc.b1', 'intro.acc.b2', 'intro.acc.b3'] as const).map((k) => (
+                  <View key={k} style={{ flexDirection: 'row', gap: 10 }}>
+                    <Txt v="body" color="accent">
+                      •
+                    </Txt>
+                    <Txt v="body" style={{ flex: 1 }}>
+                      {t(k)}
+                    </Txt>
+                  </View>
+                ))}
+                <Button label={t('intro.acc.cta')} tone="quiet" onPress={finishAndSignUp} />
+              </Card>
             )}
-          </View>
+          </>
         )}
       </View>
 
@@ -100,7 +156,7 @@ export default function Intro() {
         ))}
       </View>
 
-      <Button label={last ? t('intro.start') : t('intro.next')} onPress={last ? finish : () => setStep((s) => s + 1)} />
+      <Button label={last ? t('intro.start') : step === 1 && !calibrated && cal.available ? t('intro.later') : t('intro.next')} onPress={last ? finish : () => setStep((s) => s + 1)} />
     </Screen>
   );
 }

@@ -2,25 +2,31 @@ import React, { useEffect, useRef } from 'react';
 import { BackHandler, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { FillingCup, Ring } from '@/components/BrewViz';
+import { Ring, Steam } from '@/components/BrewViz';
 import { Button, Insight, Screen, Txt } from '@/components/ui';
-import { Coin } from '@/art/Art';
+import { Art, Coin } from '@/art/Art';
 import { itemText } from '@/data/catalog';
 import { getQuotes } from '@/data/quotes';
 import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { useNow } from '@/hooks/useNow';
 import { clock, minutesLabel } from '@/lib/format';
+import { earnBonus } from '@/lib/earnings';
 import { coinsFor, qualityOf, type Quality } from '@/lib/brew';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const GRADES: Quality[] = ['ralo', 'equilibrado', 'encorpado'];
+
+/** "Café superior" no meio da frase: só a primeira letra desce. */
+const lower = (s: string) => s.charAt(0).toLocaleLowerCase() + s.slice(1);
 
 export default function Brew() {
   const router = useRouter();
   const { c, r, f } = useTheme();
   const { lang, t } = useI18n();
   const active = useApp((s) => s.active);
+  // Copos iniciados antes de o café entrar no registro não têm pacote; vale o que está equipado.
+  const packId = useApp((s) => s.packId);
   const now = useNow(1000);
 
   // Se a tela abrir sem copo (link antigo, app reaberto), volta ao Início. Quando o copo termina com a tela aberta,
@@ -55,11 +61,14 @@ export default function Brew() {
     <Screen edges={['top', 'bottom']}>
       <View style={{ alignItems: 'center', gap: 20, paddingTop: 12 }}>
         <Txt v="label" color="muted">
-          {t('brew.extracting', { name: itemText(lang, active.brewerId).name })}
+          {t('brew.extracting', { coffee: lower(itemText(lang, active.packId ?? packId).name), name: itemText(lang, active.brewerId).name })}
         </Txt>
 
         <Ring progress={progress} size={250}>
-          <FillingCup progress={progress} size={150} />
+          <View style={{ width: 170, height: 170 }}>
+            <Art id={active.cupId} size={170} fill={progress} />
+            <Steam size={170} />
+          </View>
         </Ring>
 
         <View style={{ alignItems: 'center', gap: 6 }}>
@@ -87,7 +96,7 @@ export default function Brew() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Coin size={20} />
           <Txt v="small" color="muted">
-            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs) })}
+            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs, earnBonus(active.brewerId, active.cupId, active.packId).total) })}
           </Txt>
         </View>
 

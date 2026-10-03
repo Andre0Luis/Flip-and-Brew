@@ -39,7 +39,7 @@ test('nenhum campo de texto está vazio e as listas têm o mesmo tamanho do port
 test('artigos apontam para frases e artigos que existem', () => {
   const ids = new Set(ARTICLE_BASE.map((a) => a.id));
   for (const a of ARTICLE_BASE) {
-    assert.ok(QUOTE_IDS.includes(a.quoteId as never), `${a.id} → frase ${a.quoteId}`);
+    if (a.quoteId) assert.ok(QUOTE_IDS.includes(a.quoteId as never), `${a.id} → frase ${a.quoteId}`);
     for (const r of a.related) assert.ok(ids.has(r), `${a.id} → ${r}`);
   }
 });
@@ -56,4 +56,13 @@ test('getters devolvem texto no idioma pedido', () => {
   assert.equal(getQuotes('en').find((q) => q.id === 'nt-vento')?.text, 'Wind extinguishes a candle and energizes fire.');
   assert.match(getArticles('es')[0].title, /Antifrágil/);
   assert.match(getArticles('pt')[0].title, /Antifrágil/);
+});
+
+test('o texto do criador existe e está preenchido nos três idiomas', () => {
+  for (const l of LANGS) {
+    const c = CONTENT[l].creator;
+    for (const f of [c.title, c.byline, c.motto, c.closing, c.signature]) assert.ok(filled(f), `${l}: criador`);
+    assert.equal(c.blocks.length, CONTENT.pt.creator.blocks.length, `${l}: blocos do criador`);
+    for (const b of c.blocks) assert.ok(filled(b.heading) && filled(b.text), `${l}: bloco`);
+  }
 });

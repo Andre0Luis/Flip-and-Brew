@@ -13,10 +13,11 @@ const fresh = (): LocalData => ({
   brewerId: 'v60',
   cupId: 'cup',
   sessions: [],
+  checkins: [],
   practiceAccepted: null,
   practicesDone: [],
   articlesRead: [],
-  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, faceUpSign: 1, devTools: true, quickBrew: true },
+  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, faceUpSign: 1, quickBrew: true },
 });
 const used = (): LocalData => ({ ...fresh(), coins: 340, sessions: [session(1), session(2)] });
 
@@ -66,7 +67,7 @@ test('aplicar um backup troca o progresso e mantém as configurações do aparel
   assert.equal(next.sessions.length, 2);
   assert.equal(next.settings.language, 'es');
   assert.equal(next.settings.faceUpSign, 1); // calibração do aparelho preservada
-  assert.equal(next.settings.devTools, true);
+  assert.equal(next.settings.quickBrew, true);
 });
 
 test('só aceita snapshot que reconhece', () => {
@@ -90,6 +91,11 @@ test('erros do Firebase e do Google viram códigos da interface', () => {
   assert.equal(toAuthError({ code: 'auth/requires-recent-login' }).code, 'recent-login');
   assert.equal(toAuthError({ code: 'SIGN_IN_CANCELLED' }).code, 'cancelled');
   assert.equal(toAuthError(new Error('qualquer')).code, 'unknown');
+  // Login desativado no console e SHA-1 errado no Google são problema de configuração, não do usuário.
+  assert.equal(toAuthError({ code: 'auth/operation-not-allowed' }).code, 'config');
+  assert.equal(toAuthError({ code: 'DEVELOPER_ERROR' }).code, 'config');
+  // Erro sem tradução leva o código original para dar para diagnosticar.
+  assert.equal(toAuthError({ code: 'auth/algo-novo' }).message, 'auth/algo-novo');
   const own = new AuthError('too-many');
   assert.equal(toAuthError(own), own);
 });
@@ -100,4 +106,49 @@ test('validação de e-mail e das chaves', () => {
   assert.equal(isValidEmail('sem arroba'), false);
   assert.equal(isFirebaseConfigured({ apiKey: '', authDomain: '', projectId: '', storageBucket: '', messagingSenderId: '', appId: '' }), false);
   assert.equal(isFirebaseConfigured({ apiKey: 'k', authDomain: '', projectId: 'p', storageBucket: '', messagingSenderId: '', appId: 'a' }), true);
+});
+
+test('o check-in de energia vai e volta pelo backup, e um backup antigo sem ele ainda vale', () => {
+  const withCheckin = { ...fresh(), checkins: [{ day: '2026-10-14', energy: 4, at: 1 }] };
+  const snap = buildSnapshot(withCheckin, 3);
+  assert.deepEqual(snap.data.checkins, [{ day: '2026-10-14', energy: 4, at: 1 }]);
+  assert.equal(hasMeaningfulData(withCheckin), true);
+  assert.notEqual(dataSignature(withCheckin), dataSignature(fresh()));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).checkins, withCheckin.checkins);
+
+  const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 4)));
+  delete old.data.checkins;
+  assert.ok(parseSnapshot(old));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).checkins, []);
+  assert.equal(parseSnapshot({ ...old, data: { ...old.data, checkins: 'x' } }), null);
+});
+
+test('o perfil vai e volta pelo backup, vazio não conta como dado e campo inválido é descartado', () => {
+  const profile = { name: 'Ana', phone: '(11) 91234-5678', age: 30, roast: 'dark', flavors: ['fruity'] };
+  const withProfile = { ...fresh(), profile };
+  const snap = buildSnapshot(withProfile, 3);
+  assert.deepEqual(snap.data.profile, profile);
+  assert.equal(hasMeaningfulData(withProfile), true);
+  assert.equal(hasMeaningfulData({ ...fresh(), profile: {} }), false);
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).profile, profile);
+  assert.notEqual(dataSignature(withProfile), dataSignature(fresh()));
+
+  const dirty = buildSnapshot({ ...fresh(), profile: { phone: 'abc', age: 5, grind: 'espuma' } as never }, 4);
+  assert.deepEqual(dirty.data.profile, {});
+  const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 5)));
+  delete old.data.profile;
+  assert.ok(parseSnapshot(old));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).profile, {});
+  assert.equal(parseSnapshot({ ...old, data: { ...old.data, profile: [] } }), null);
+});
+
+test('as missões resgatadas vão no backup e um backup antigo sem elas ainda vale', () => {
+  const snap = buildSnapshot({ ...fresh(), missionsClaimed: ['2026-10-14:checkin'] }, 6);
+  assert.deepEqual(snap.data.missionsClaimed, ['2026-10-14:checkin']);
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).missionsClaimed, ['2026-10-14:checkin']);
+  assert.equal(buildSnapshot({ ...fresh(), missionsDone: 7, missionBonusDays: 2 }, 6).data.missionsDone, 7);
+  const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 7)));
+  delete old.data.missionsClaimed;
+  assert.ok(parseSnapshot(old));
+  assert.deepEqual(applySnapshot({ settings: fresh().settings }, old).missionsClaimed, []);
 });

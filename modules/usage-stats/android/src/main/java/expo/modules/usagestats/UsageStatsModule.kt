@@ -68,6 +68,7 @@ class UsageStatsModule : Module() {
         val end = minOf(dayCal.timeInMillis, now)
 
         var unlocks = 0
+        var locks = 0
         var screenMs = 0L
         var onSince = -1L
         var sawScreenEvent = false
@@ -83,6 +84,7 @@ class UsageStatsModule : Module() {
             if (onSince < 0) onSince = event.timeStamp
             sawScreenEvent = true
           } else if (type == UsageEvents.Event.SCREEN_NON_INTERACTIVE) {
+            locks++ // a tela apagou ou foi bloqueada
             if (onSince >= 0) {
               screenMs += event.timeStamp - onSince
             } else if (!sawScreenEvent) {
@@ -95,7 +97,7 @@ class UsageStatsModule : Module() {
         }
         if (onSince >= 0) screenMs += end - onSince
 
-        result.add(mapOf("dayStart" to start, "unlocks" to unlocks, "screenMs" to screenMs))
+        result.add(mapOf("dayStart" to start, "unlocks" to unlocks, "locks" to locks, "screenMs" to screenMs))
       }
       result
     }

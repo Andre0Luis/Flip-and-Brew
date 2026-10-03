@@ -35,6 +35,8 @@ export default function Resultado() {
   const sessions = useApp((s) => s.sessions);
   const lastId = useApp((s) => s.lastResultId);
   const setResult = useApp((s) => s.setResult);
+  const seenTips = useApp((s) => s.seenTips);
+  const markTip = useApp((s) => s.markTip);
   const session = sessions.find((s) => s.id === lastId);
   const coins = useCountUp(session?.coins ?? 0);
 
@@ -56,6 +58,8 @@ export default function Resultado() {
   const done = session.status === 'done';
   const days = streak(sessions);
   const cupName = itemText(lang, session.cupId).name;
+  const tipKey = done ? 'coins' : 'early';
+  const showTip = !seenTips.includes(tipKey);
 
   return (
     <Screen edges={['top', 'bottom']}>
@@ -71,6 +75,13 @@ export default function Resultado() {
           {t('result.line', { time: minutesLabel(session.elapsedMs / 60_000), quality: t(`quality.${session.quality}`), cup: cupName })}
         </Txt>
       </View>
+
+      {showTip && (
+        <Card style={{ gap: 10, backgroundColor: c.soft }}>
+          <Txt v="small">{t(done ? 'tip.coins' : 'tip.early')}</Txt>
+          <Button label={t('tip.dismiss')} tone="quiet" onPress={() => markTip(tipKey)} style={{ alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 16 }} />
+        </Card>
+      )}
 
       <Card style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>

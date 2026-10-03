@@ -1,0 +1,46 @@
+name: EAS Build
+
+# Depois de cada merge na main, dispara no EAS um APK de preview e um AAB de produção (Android).
+# Precisa do segredo EXPO_TOKEN no GitHub (Settings > Secrets and variables > Actions).
+# As variáveis EXPO_PUBLIC_* ficam no EAS (eas env), não aqui.
+
+on:
+  push:
+    branches: [main]
+    # Mudança só de documentação não gasta cota de build.
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+concurrency:
+  group: eas-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [preview, production]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts
+
+      # --no-wait: o job só enfileira o build; o andamento e o download ficam em expo.dev.
+      - name: Enfileirar build Android (${{ matrix.profile }})
+        run: eas build --platform android --profile ${{ matrix.profile }} --non-interactive --no-wait

@@ -9,6 +9,7 @@ import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono'
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { BrewEngine } from '@/engine/BrewEngine';
 import { CloudSync } from '@/engine/CloudSync';
+import { WidgetSync } from '@/engine/WidgetSync';
 import { useApp } from '@/store/useApp';
 import { translate } from '@/i18n';
 import { light } from '@/theme/tokens';
@@ -26,6 +27,7 @@ function Shell() {
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <BrewEngine />
       <CloudSync />
+      <WidgetSync />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
         {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
         <Stack.Protected guard={!onboarded}>
@@ -40,6 +42,8 @@ function Shell() {
           <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
           <Stack.Screen name="privacidade" />
           <Stack.Screen name="conta" />
+          <Stack.Screen name="perfil" />
+          <Stack.Screen name="criador" />
         </Stack.Protected>
       </Stack>
     </NavThemeProvider>

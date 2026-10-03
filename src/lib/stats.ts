@@ -187,3 +187,13 @@ export function weekTotals(sessions: Session[], now = Date.now()) {
     sessions: inWeek.length,
   };
 }
+
+/** Média de copos cheios por dia nos últimos `days` dias. Se o app é novo, a média usa só os dias desde o primeiro copo. */
+export function fullCupsAverage(sessions: Session[], days = 30, now = Date.now()) {
+  const since = startOfDay(now) - (days - 1) * DAY;
+  const inWindow = sessions.filter((s) => s.startedAt >= since && s.status === 'done' && s.quality === 'encorpado');
+  const firstEver = sessions.length ? Math.min(...sessions.map((s) => startOfDay(s.startedAt))) : startOfDay(now);
+  const span = Math.max(1, Math.min(days, Math.round((startOfDay(now) - Math.max(since, firstEver)) / DAY) + 1));
+  const activeDays = new Set(inWindow.map((s) => dayKey(s.startedAt))).size;
+  return { total: inWindow.length, perDay: inWindow.length / span, perActiveDay: activeDays ? inWindow.length / activeDays : 0, span };
+}

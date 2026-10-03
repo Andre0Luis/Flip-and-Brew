@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Bar, Card, Header, Insight, Screen, Segmented, Txt } from '@/components/ui';
-import { CalendarGrid, HourBars, WeekBars } from '@/components/Charts';
+import { HourBars, WeekBars } from '@/components/Charts';
 import { Ring } from '@/components/BrewViz';
+import { GoalPicker } from '@/components/GoalPicker';
+import { MissionsCard } from '@/components/MissionsCard';
+import { MonthCalendar } from '@/components/MonthCalendar';
 import { UsageCard } from '@/components/UsageCard';
 import { useApp } from '@/store/useApp';
 import {
-  afterMissInsight, balanceScore, calendar, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
+  afterMissInsight, balanceScore, dayKey, fullCupsAverage, hourly, lastDays, longestSession, moodSummary, streak, triggerCounts, weekTotals,
 } from '@/lib/stats';
+import { Art } from '@/art/Art';
+import { checkinHistory, energySummary } from '@/lib/checkin';
+import { useTestTools } from '@/lib/admin';
+import { bestEnergyWeekday, bestWeekday, completionRate, criticalHour, favoriteCombo, longestStreak, weekdayAverages } from '@/lib/patterns';
+import { itemText } from '@/data/catalog';
 import { minutesLabel } from '@/lib/format';
-import { formatDateShort, useI18n } from '@/i18n';
+import { dictionaries, formatDateShort, useI18n, weekdayInitial } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useNow } from '@/hooks/useNow';
 import { fonts } from '@/theme/tokens';
@@ -51,6 +59,22 @@ function Meter({ label, value, pct }: { label: string; value: string; pct: numbe
   );
 }
 
+/** Título de cartão com um valor à direita. O título quebra de linha em vez de empurrar o valor para fora da tela. */
+function TitleRow({ title, right }: { title: string; right?: string | null }) {
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+      <Txt v="label" color="muted" style={{ flex: 1, flexShrink: 1 }}>
+        {title}
+      </Txt>
+      {right ? (
+        <Txt v="label" color="muted" style={{ flexShrink: 0 }}>
+          {right}
+        </Txt>
+      ) : null}
+    </View>
+  );
+}
+
 export default function BemEstar() {
   const { c } = useTheme();
   const { lang, t } = useI18n();
@@ -58,6 +82,7 @@ export default function BemEstar() {
   const { sessions, settings } = useApp();
   const now = useNow(60_000);
   const loadDemo = useApp((s) => s.loadDemo);
+  const showDev = useTestTools();
   const [tab, setTab] = useState<Tab>('resumo');
   const goal = settings.goalMin;
 
@@ -65,11 +90,24 @@ export default function BemEstar() {
   const score = balanceScore(sessions, goal);
   const wk = weekTotals(sessions);
   const week = lastDays(sessions, 7);
+  const fullAvg = fullCupsAverage(sessions, 30, now);
   const days = streak(sessions);
   const best = longestSession(sessions, now - 7 * 86_400_000);
   const miss = afterMissInsight(sessions);
   const trig = triggerCounts(sessions);
   const mood = moodSummary(sessions, goal);
+  const checkins = useApp((s) => s.checkins);
+  const energy = energySummary(checkins, sessions, goal);
+  const removeCheckin = useApp((s) => s.removeCheckin);
+  const history = checkinHistory(checkins);
+  const wdAvg = weekdayAverages(sessions, 8, now);
+  const wdBest = bestWeekday(wdAvg);
+  const comp = completionRate(sessions, 30, now);
+  const combo = favoriteCombo(sessions);
+  const longest = longestStreak(sessions);
+  const critical = criticalHour(sessions);
+  const energyDay = bestEnergyWeekday(checkins);
+  const weekdayName = (i: number) => dictionaries[lang]['date.weekdays'].split(',')[i];
   const hrs = hourly(sessions);
 
   return (
@@ -84,16 +122,24 @@ export default function BemEstar() {
         ]}
       />
 
-      {empty ? (
+      {tab === 'resumo' && <MissionsCard />}
+
+      {tab === 'resumo' && <GoalPicker hint />}
+
+      {tab === 'resumo' && empty ? (
         <Card style={{ gap: 12 }}>
           <Txt v="title">{t('wb.emptyTitle')}</Txt>
           <Txt v="body" color="muted">
             {t('wb.emptyBody')}
           </Txt>
-          <Button label={t('wb.demo')} tone="quiet" onPress={loadDemo} />
-          <Txt v="small" color="muted">
-            {t('wb.demoNote')}
-          </Txt>
+          {showDev && (
+            <>
+              <Button label={t('wb.demo')} tone="quiet" onPress={loadDemo} />
+              <Txt v="small" color="muted">
+                {t('wb.demoNote')}
+              </Txt>
+            </>
+          )}
         </Card>
       ) : tab === 'resumo' ? (
         <>
@@ -129,6 +175,9 @@ export default function BemEstar() {
             <Kpi label={t('wb.kpiCups')} value={String(wk.cups)} note={t('wb.ofStarted', { n: wk.sessions })} />
             <Kpi label={t('wb.kpiInterrupted')} value={String(wk.interrupted)} note={t('wb.pickedEarly')} />
           </View>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <Kpi label={t('wb.kpiFullAvg')} value={dec(fullAvg.perDay)} note={t('wb.fullAvgNote', { n: fullAvg.span, a: dec(fullAvg.perActiveDay) })} good={fullAvg.perDay >= 1} />
+          </View>
 
           <UsageCard />
 
@@ -139,17 +188,7 @@ export default function BemEstar() {
             <WeekBars days={week} />
           </Card>
 
-          <Card style={{ gap: 8 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Txt v="label" color="muted">
-                {t('wb.last4')}
-              </Txt>
-              <Txt v="label" color="muted">
-                {t('wb.noCup', { n: calendar(sessions, goal).filter((x) => x.missed).length })}
-              </Txt>
-            </View>
-            <CalendarGrid cells={calendar(sessions, goal)} />
-          </Card>
+          <MonthCalendar />
 
           {miss ? (
             miss.percent >= 0 ? (
@@ -163,6 +202,56 @@ export default function BemEstar() {
         </>
       ) : (
         <>
+          <Card style={{ gap: 12 }}>
+            <Txt v="label" color="muted">
+              {t('wb.styleTitle')}
+            </Txt>
+            {wdBest === null && !comp.started ? (
+              <Txt v="small" color="muted">
+                {t('wb.styleEmpty')}
+              </Txt>
+            ) : (
+              <>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 64 }} accessibilityLabel={t('wb.styleWeekdayA11y')}>
+                  {wdAvg.map((m, i) => (
+                    <View key={i} style={{ flex: 1, alignItems: 'center', gap: 4 }}>
+                      <View style={{ width: '100%', height: Math.max(3, (m / Math.max(...wdAvg, 1)) * 40), borderRadius: 3, backgroundColor: i === wdBest ? c.accent : c.cupFill, opacity: i === wdBest ? 1 : 0.55 }} />
+                      <Txt v="small" color="muted" style={{ fontSize: 10, lineHeight: 12 }}>
+                        {weekdayInitial(lang, i)}
+                      </Txt>
+                    </View>
+                  ))}
+                </View>
+                {[
+                  wdBest !== null ? [t('wb.styleBestDay'), weekdayName(wdBest)] : null,
+                  comp.started ? [t('wb.styleCompletion'), `${Math.round(comp.rate * 100)}%`, t('wb.styleCompletionNote', { a: comp.done, b: comp.started })] : null,
+                  combo ? [t('wb.styleCombo'), `${itemText(lang, combo.brewerId).name} + ${itemText(lang, combo.cupId).name}`, t('wb.styleComboNote', { n: combo.count })] : null,
+                  longest ? [t('wb.styleLongest'), `${longest} ${t('unit.day', { n: longest })}`] : null,
+                  critical !== null ? [t('wb.styleCritical'), `${critical}h`, t('wb.styleCriticalNote')] : null,
+                  energyDay !== null ? [t('wb.styleEnergyDay'), weekdayName(energyDay)] : null,
+                ]
+                  .filter((r): r is string[] => !!r)
+                  .map(([label, value, note]) => (
+                    <View key={label} style={{ gap: 2 }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                        <Txt v="small" color="muted" style={{ flex: 1 }}>
+                          {label}
+                        </Txt>
+                        <Txt v="title" style={{ fontSize: 15, flexShrink: 1, textAlign: 'right', textTransform: 'capitalize' }}>
+                          {value}
+                        </Txt>
+                      </View>
+                      {note ? (
+                        <Txt v="small" color="muted" style={{ fontSize: 12 }}>
+                          {note}
+                        </Txt>
+                      ) : null}
+                    </View>
+                  ))}
+              </>
+            )}
+          </Card>
+
           <Card style={{ gap: 8 }}>
             <Txt v="label" color="muted">
               {t('wb.hourTitle')}
@@ -183,7 +272,7 @@ export default function BemEstar() {
               <>
                 {trig.map((tr) => (
                   <View key={tr.trigger} style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                    <Txt v="small" style={{ width: 96 }}>
+                    <Txt v="small" style={{ width: 96 }} numberOfLines={2}>
                       {t(`trigger.${tr.trigger}` as Key)}
                     </Txt>
                     <View style={{ flex: 1 }}>
@@ -214,16 +303,7 @@ export default function BemEstar() {
           </Card>
 
           <Card style={{ gap: 10 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Txt v="label" color="muted">
-                {t('wb.moodTitle')}
-              </Txt>
-              {mood && (
-                <Txt v="label" color="muted">
-                  {t('wb.moodAvg', { n: dec(mood.average) })}
-                </Txt>
-              )}
-            </View>
+            <TitleRow title={t('wb.moodTitle')} right={mood ? t('wb.moodAvg', { n: dec(mood.average) }) : null} />
             {mood ? (
               <>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 52 }}>
@@ -240,6 +320,59 @@ export default function BemEstar() {
             ) : (
               <Txt v="small" color="muted">
                 {t('wb.moodEmpty')}
+              </Txt>
+            )}
+          </Card>
+
+          <Card style={{ gap: 10 }}>
+            <TitleRow title={t('wb.energyTitle')} right={energy ? t('wb.energyAvg', { n: dec(energy.average) }) : null} />
+            {energy ? (
+              <>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 52 }}>
+                  {energy.week.map((e, i) => (
+                    <View key={i} style={{ flex: 1, height: e === null ? 4 : e * 10, borderRadius: 3, backgroundColor: e !== null && e >= 5 ? c.accent : e === null ? c.line : c.cupFill, opacity: e !== null && e >= 5 ? 1 : 0.55 }} />
+                  ))}
+                </View>
+                {energy.high !== null && energy.low !== null && (
+                  <Txt v="small" color="muted">
+                    {t('wb.energyCompare', { time: minutesLabel(Math.min(goal, 120)), a: dec(energy.high), b: dec(energy.low) })}
+                  </Txt>
+                )}
+              </>
+            ) : (
+              <Txt v="small" color="muted">
+                {t('wb.energyEmpty')}
+              </Txt>
+            )}
+          </Card>
+
+          <Card style={{ gap: 10 }}>
+            <Txt v="label" color="muted">
+              {t('wb.energyHistory')}
+            </Txt>
+            {history.length ? (
+              history.map((h) => (
+                <View key={h.day} style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', columnGap: 8, rowGap: 4 }}>
+                  <Txt v="small" style={{ width: 56 }} numberOfLines={1}>
+                    {formatDateShort(lang, h.at)}
+                  </Txt>
+                  <View style={{ flexDirection: 'row' }}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Art key={n} id="tiny" size={24} fill={n <= h.energy ? 1 : 0} />
+                    ))}
+                  </View>
+                  {h.day === dayKey(now) ? (
+                    <Button label={t('wb.energyRedo')} tone="quiet" onPress={() => removeCheckin(h.day)} style={{ paddingVertical: 6, paddingHorizontal: 12 }} />
+                  ) : (
+                    <Txt v="small" color="muted" style={{ flexShrink: 1 }}>
+                      {t(`energy.${h.energy}` as 'energy.1')}
+                    </Txt>
+                  )}
+                </View>
+              ))
+            ) : (
+              <Txt v="small" color="muted">
+                {t('wb.energyHistoryEmpty')}
               </Txt>
             )}
           </Card>

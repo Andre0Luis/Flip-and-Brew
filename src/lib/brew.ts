@@ -11,18 +11,19 @@ export function qualityOf(ratio: number): Quality {
   return 'ralo';
 }
 
-export function coinsFor(elapsedMs: number, targetMs: number): number {
+/** `bonusPct` é o bônus da combinação cafeteira + xícara (lib/earnings.ts). */
+export function coinsFor(elapsedMs: number, targetMs: number, bonusPct = 0): number {
   const minutes = Math.floor(Math.min(elapsedMs, targetMs) / 60_000);
   const base = minutes * COINS_PER_MINUTE;
   const bonus = elapsedMs >= targetMs ? Math.round((targetMs / 60_000) * FULL_CUP_BONUS) : 0;
-  return base + bonus;
+  return Math.round((base + bonus) * (1 + bonusPct / 100));
 }
 
 export type BrewOutcome = { elapsedMs: number; status: 'done' | 'interrupted'; coins: number; quality: Quality };
 
-export function outcomeOf(startedAt: number, targetMs: number, now: number): BrewOutcome {
+export function outcomeOf(startedAt: number, targetMs: number, now: number, bonusPct = 0): BrewOutcome {
   const elapsedMs = Math.max(0, Math.min(now - startedAt, targetMs));
   const status = elapsedMs >= targetMs ? 'done' : 'interrupted';
-  return { elapsedMs, status, coins: coinsFor(elapsedMs, targetMs), quality: qualityOf(elapsedMs / targetMs) };
+  return { elapsedMs, status, coins: coinsFor(elapsedMs, targetMs, bonusPct), quality: qualityOf(elapsedMs / targetMs) };
 }
 

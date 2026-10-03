@@ -1,12 +1,17 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
+import { BrewerCarousel } from '@/components/BrewerCarousel';
 import { CalibrateCard } from '@/components/CalibrateCard';
+import { earnBonus } from '@/lib/earnings';
+import { useTestTools } from '@/lib/admin';
+import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
-import { Button, Card, Chip, CoinBadge, Screen, Txt } from '@/components/ui';
+import { Button, Card, CoinBadge, Screen, Txt } from '@/components/ui';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
 import { brewers, byId, itemText } from '@/data/catalog';
 import { formatDateLong, useI18n } from '@/i18n';
@@ -20,7 +25,7 @@ export default function Inicio() {
   const router = useRouter();
   const { c } = useTheme();
   const { lang, t } = useI18n();
-  const { coins, owned, brewerId, sessions, active, settings } = useApp();
+  const { coins, owned, brewerId, cupId, packId, sessions, active, settings } = useApp();
   const equip = useApp((s) => s.equip);
   const start = useApp((s) => s.start);
 
@@ -48,7 +53,24 @@ export default function Inicio() {
   const days = streak(sessions);
   const brewer = byId(brewerId);
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
-  const minutes = settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
+  const testTools = useTestTools();
+  const minutes = settings.quickBrew && testTools ? 1 : brewer?.brewMinutes ?? 45;
+
+  const combo = earnBonus(brewerId, cupId, packId);
+  // A bancada usa a largura da tela: xícara e pacote maiores nos lados, cafeteira no centro.
+  const [stageW, setStageW] = useState(0);
+  const side = Math.round(Math.min(116, Math.max(88, (stageW || 340) * 0.3)));
+  const center = Math.round(Math.min(214, Math.max(168, (stageW || 340) - 2 * side + 44)));
+  const brewerIds = ownedBrewers.map((b) => b.id);
+  const brewerIndex = Math.max(0, brewerIds.indexOf(brewerId));
+  // O parâmetro t muda a cada toque, para a Coleção reagir mesmo quando já está aberta na mesma aba.
+  const openCollection = (tab: 'cup' | 'beans') => router.push({ pathname: '/colecao', params: { tab, t: String(Date.now()) } });
+  const goBrewer = (to: number) => {
+    const id = brewerIds[to];
+    if (!id) return;
+    Haptics.selectionAsync().catch(() => {});
+    equip(id);
+  };
 
   const begin = () => {
     if (active || start()) router.push('/brew');
@@ -81,7 +103,11 @@ export default function Inicio() {
             getItemLayout={(_, i) => ({ length: w, offset: w * i, index: i })}
             onMomentumScrollEnd={(e) => setPage(Math.round(e.nativeEvent.contentOffset.x / w))}
             renderItem={({ item, index }) => (
-              <Pressable accessibilityRole="button" accessibilityLabel={t('home.readContext', { text: item.text })} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => setCardH((h) => Math.max(h, Math.ceil(e.nativeEvent.layout.height)))} style={{ width: w }}>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('home.readContext', { text: item.text })} onPress={() => router.push({ pathname: '/frase/[id]', params: { id: item.id } })} onLayout={(e) => {
+                  // Lê a altura antes: dentro do atualizador o evento já foi liberado e nativeEvent vem nulo.
+                  const h = Math.ceil(e.nativeEvent.layout.height);
+                  setCardH((prev) => Math.max(prev, h));
+                }} style={{ width: w }}>
                 <Card inverse style={{ gap: 12, minHeight: cardH, justifyContent: 'space-between' }}>
                   <Txt v="label" color="bg" style={{ opacity: 0.7 }}>
                     {index === 0 ? t('home.quoteOfDay', { date: formatDateLong(lang, new Date()) }) : t('home.moreToday')}
@@ -105,23 +131,42 @@ export default function Inicio() {
       </View>
 
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
-        <Art id={brewerId} size={230} />
-        <Txt v="small" color="muted">
-          {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
-        </Txt>
+        {/* Bancada: a xícara de um lado, a cafeteira no centro e o pacote de café do outro. Tocar leva à Coleção. */}
+        <View onLayout={(e) => setStageW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', alignSelf: 'stretch' }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => openCollection('cup')} hitSlop={8} style={{ width: side, marginRight: -14, marginBottom: -6 }}>
+            <Art id={cupId} size={side} fill={1} />
+          </Pressable>
+          <BrewerCarousel ids={ownedBrewers.map((b) => b.id)} current={brewerId} size={center} onChange={equip} />
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => openCollection('beans')} hitSlop={8} style={{ width: side, marginLeft: -14, marginBottom: -6 }}>
+            <Art id={packId} size={side} />
+          </Pressable>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, alignSelf: 'stretch' }}>
+          {brewerIds.length > 1 ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t('home.brewerPrev')} onPress={() => goBrewer(brewerIndex - 1)} disabled={brewerIndex === 0} hitSlop={10} style={{ padding: 6, opacity: brewerIndex === 0 ? 0.25 : 1 }}>
+              <Icon name="back" color={c.fg} />
+            </Pressable>
+          ) : null}
+          <Txt v="small" color="muted" style={{ flexShrink: 1, textAlign: 'center' }}>
+            {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
+          </Txt>
+          {brewerIds.length > 1 ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t('home.brewerNext')} onPress={() => goBrewer(brewerIndex + 1)} disabled={brewerIndex === brewerIds.length - 1} hitSlop={10} style={{ padding: 6, opacity: brewerIndex === brewerIds.length - 1 ? 0.25 : 1, transform: [{ scaleX: -1 }] }}>
+              <Icon name="back" color={c.fg} />
+            </Pressable>
+          ) : null}
+        </View>
+        {combo.total > 0 && (
+          <Txt v="label" color="accent">
+            {t('home.combo', { n: combo.total })}
+          </Txt>
+        )}
       </View>
 
       <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
         {t('home.todayPrefix')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} {t('home.offlineSuffix')}</Txt> · {today.cups} {t('unit.cup', { n: today.cups })}{unlocksToday !== undefined ? ` · ${unlocksToday} ${t('unit.unlock', { n: unlocksToday })}` : ''}
       </Txt>
 
-      {ownedBrewers.length > 1 && (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-          {ownedBrewers.map((b) => (
-            <Chip key={b.id} label={itemText(lang, b.id).name} on={b.id === brewerId} onPress={() => equip(b.id)} />
-          ))}
-        </View>
-      )}
 
       <View style={{ gap: 8 }}>
         <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />
@@ -131,6 +176,8 @@ export default function Inicio() {
           </Txt>
         )}
       </View>
+
+      <CheckinCard />
 
       <CalibrateCard />
     </Screen>

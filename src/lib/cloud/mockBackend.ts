@@ -6,7 +6,7 @@ import { AuthError, type CloudBackend, type CloudUser, type Snapshot } from './t
 
 // Servidor falso para desenvolvimento: guarda tudo no armazenamento local do aparelho ou do navegador.
 // Só é usado com EXPO_PUBLIC_AUTH_MODE=mock em build de desenvolvimento. Nunca fala com a internet.
-type Account = { uid: string; email: string; password: string; provider: 'password' | 'google'; snapshot: Snapshot | null };
+type Account = { uid: string; email: string; password: string; provider: 'password' | 'google' | 'apple'; snapshot: Snapshot | null; /** e-mail confirmado (só conta com senha começa sem) */ verified?: boolean; verifySent?: boolean };
 type Db = { accounts: Account[]; currentUid: string | null };
 
 const KEY = 'flip-and-brew-mock-auth';
@@ -31,7 +31,7 @@ function load(): Db {
   return { accounts: [test], currentUid: null };
 }
 const save = (db: Db) => void appStorage.setItem(KEY, JSON.stringify(db));
-const view = (a: Account): CloudUser => ({ uid: a.uid, email: a.email, provider: a.provider, emailVerified: false });
+const view = (a: Account): CloudUser => ({ uid: a.uid, email: a.email, provider: a.provider, emailVerified: a.provider !== 'password' || !!a.verified });
 const current = (db: Db) => db.accounts.find((a) => a.uid === db.currentUid) ?? null;
 const emit = (db: Db) => {
   const a = current(db);
@@ -50,12 +50,13 @@ export const mockBackend: CloudBackend = {
   },
 
   googleAvailable: () => true,
+  appleAvailable: () => true,
 
   async signUp(email, password) {
     await delay();
     const db = load();
     if (db.accounts.some((a) => a.email === email.trim().toLowerCase())) throw new AuthError('email-in-use');
-    if (password.length < 6) throw new AuthError('weak-password');
+    if (password.length < 8) throw new AuthError('weak-password');
     const acc: Account = { uid: `mock-${Date.now()}`, email: email.trim().toLowerCase(), password, provider: 'password', snapshot: null };
     db.accounts.push(acc);
     db.currentUid = acc.uid;
@@ -87,6 +88,51 @@ export const mockBackend: CloudBackend = {
     save(db);
     emit(db);
     return view(acc);
+  },
+
+  async signInApple() {
+    await delay();
+    const db = load();
+    let acc = db.accounts.find((a) => a.provider === 'apple');
+    if (!acc) {
+      acc = { uid: `mock-a-${Date.now()}`, email: 'pessoa.teste@privaterelay.appleid.com', password: '', provider: 'apple', snapshot: null };
+      db.accounts.push(acc);
+    }
+    db.currentUid = acc.uid;
+    save(db);
+    emit(db);
+    return view(acc);
+  },
+
+  async sendVerificationEmail() {
+    await delay();
+    const db = load();
+    const acc = current(db);
+    if (!acc) throw new AuthError('wrong-credentials');
+    acc.verifySent = true;
+    save(db);
+  },
+
+  // No servidor falso, "abrir o link do e-mail" é simulado: depois de pedir o envio, a próxima checagem confirma.
+  async refreshUser() {
+    await delay();
+    const db = load();
+    const acc = current(db);
+    if (!acc) return null;
+    if (acc.verifySent) acc.verified = true;
+    save(db);
+    emit(db);
+    return view(acc);
+  },
+
+  async changePassword(currentPassword, next) {
+    await delay();
+    const db = load();
+    const acc = current(db);
+    if (!acc || acc.provider !== 'password' || acc.password !== currentPassword) throw new AuthError('wrong-credentials');
+    if (next.length < 8) throw new AuthError('weak-password');
+    acc.password = next;
+    save(db);
   },
 
   async sendPasswordReset() {
