@@ -80,3 +80,12 @@ export function pruneClaims(claimed: string[], now = Date.now(), keepDays = 14):
   const since = dayKey(now - keepDays * 86_400_000);
   return claimed.filter((c) => c.slice(0, 10) >= since);
 }
+
+/** Missões resgatadas mais recentes (sem o bônus), da mais nova para a mais antiga. */
+export function recentMissions(claimed: string[], limit = 10): { day: string; id: MissionId }[] {
+  return claimed
+    .filter((c) => !c.endsWith(':all'))
+    .map((c) => ({ day: c.slice(0, 10), id: c.slice(11) as MissionId }))
+    .sort((a, b) => b.day.localeCompare(a.day))
+    .slice(0, limit);
+}

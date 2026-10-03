@@ -44,6 +44,9 @@ export type SnapshotData = {
   profile?: Profile;
   /** Opcional: missões diárias resgatadas, para não resgatar de novo depois de restaurar. */
   missionsClaimed?: string[];
+  /** Opcional: totais de missões, para as conquistas. */
+  missionsDone?: number;
+  missionBonusDays?: number;
   practiceAccepted: string | null;
   practicesDone: string[];
   articlesRead: string[];

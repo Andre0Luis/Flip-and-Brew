@@ -18,6 +18,8 @@ export function localData(): LocalData {
     checkins: s.checkins,
     profile: s.profile,
     missionsClaimed: s.missionsClaimed,
+    missionsDone: s.missionsDone,
+    missionBonusDays: s.missionBonusDays,
     practiceAccepted: s.practiceAccepted,
     practicesDone: s.practicesDone,
     articlesRead: s.articlesRead,

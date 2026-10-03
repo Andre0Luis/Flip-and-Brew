@@ -30,6 +30,10 @@ type State = {
   lastResultId: string | null;
   /** missões diárias já resgatadas, como "2026-10-14:checkin" (só os últimos dias) */
   missionsClaimed: string[];
+  /** missões resgatadas desde sempre (não conta o bônus) */
+  missionsDone: number;
+  /** dias em que as três missões foram resgatadas */
+  missionBonusDays: number;
   /** perfil opcional (dados pessoais e preferências de café) */
   profile: Profile;
   practiceAccepted: string | null; // dayKey
@@ -83,6 +87,8 @@ const initial = {
   lastResultId: null as string | null,
   profile: {} as Profile,
   missionsClaimed: [] as string[],
+  missionsDone: 0,
+  missionBonusDays: 0,
   practiceAccepted: null as string | null,
   practicesDone: [] as string[],
   articlesRead: [] as string[],
@@ -114,7 +120,11 @@ export const useApp = create<State>()(
           if (!m || !m.done) return 0;
           coins = m.reward;
         }
-        set({ coins: st.coins + coins, missionsClaimed: pruneClaims([...st.missionsClaimed, key], now) });
+        set({
+          coins: st.coins + coins,
+          missionsClaimed: pruneClaims([...st.missionsClaimed, key], now),
+          ...(id === 'all' ? { missionBonusDays: st.missionBonusDays + 1 } : { missionsDone: st.missionsDone + 1 }),
+        });
         return coins;
       },
       removeCheckin: (day) => set((st) => ({ checkins: withoutCheckin(st.checkins, day) })),
@@ -250,6 +260,8 @@ export const useApp = create<State>()(
         lastResultId: s.lastResultId,
         profile: s.profile,
         missionsClaimed: s.missionsClaimed,
+        missionsDone: s.missionsDone,
+        missionBonusDays: s.missionBonusDays,
         practiceAccepted: s.practiceAccepted,
         practicesDone: s.practicesDone,
         articlesRead: s.articlesRead,

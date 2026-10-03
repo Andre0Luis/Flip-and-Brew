@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from './missions';
+import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims, recentMissions } from './missions';
 import { withCheckin } from './checkin';
 import { dayKey } from './stats';
 import type { Session } from '@/store/types';
@@ -55,4 +55,10 @@ test('resgatado, bônus e limpeza de resgates antigos', () => {
   assert.equal(ALL_BONUS, 30);
   const old = claimKey(dayKey(NOW - 40 * DAY), 'checkin');
   assert.deepEqual(pruneClaims([old, ...claimed], NOW), claimed);
+});
+
+test('o histórico lista as missões resgatadas, da mais nova para a mais antiga, sem o bônus', () => {
+  const list = recentMissions(['2026-10-12:checkin', '2026-10-14:fullcup1', '2026-10-14:all', '2026-10-13:night']);
+  assert.deepEqual(list, [{ day: '2026-10-14', id: 'fullcup1' }, { day: '2026-10-13', id: 'night' }, { day: '2026-10-12', id: 'checkin' }]);
+  assert.equal(recentMissions(list.map((l) => `${l.day}:${l.id}`), 2).length, 2);
 });

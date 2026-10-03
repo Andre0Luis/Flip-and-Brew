@@ -136,6 +136,8 @@ test('missões: resgatar só vale se concluída, uma vez por dia, e as três dã
   assert.equal(first().claimMission('all', now), 30);
   assert.equal(first().claimMission('all', now), 0);
   assert.equal(first().coins, total + 30);
+  assert.equal(first().missionsDone, 3);
+  assert.equal(first().missionBonusDays, 1);
 });
 
 test('equipar só funciona com item que a pessoa tem', () => {

@@ -141,6 +141,7 @@ test('as missões resgatadas vão no backup e um backup antigo sem elas ainda va
   const snap = buildSnapshot({ ...fresh(), missionsClaimed: ['2026-10-14:checkin'] }, 6);
   assert.deepEqual(snap.data.missionsClaimed, ['2026-10-14:checkin']);
   assert.deepEqual(applySnapshot({ settings: fresh().settings }, snap).missionsClaimed, ['2026-10-14:checkin']);
+  assert.equal(buildSnapshot({ ...fresh(), missionsDone: 7, missionBonusDays: 2 }, 6).data.missionsDone, 7);
   const old = JSON.parse(JSON.stringify(buildSnapshot(used(), 7)));
   delete old.data.missionsClaimed;
   assert.ok(parseSnapshot(old));

@@ -5,7 +5,8 @@ import { Art } from '@/art/Art';
 import { Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
 import { CATALOG, brewers, byId, cups, localize, packs, type CatalogItem } from '@/data/catalog';
 import { ARTICLE_COUNT } from '@/data/articles';
-import { useI18n } from '@/i18n';
+import { recentMissions } from '@/lib/missions';
+import { formatDateShort, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
@@ -49,7 +50,7 @@ function Shelf({ items, owned, selected, onSelect }: { items: (CatalogItem & { n
 export default function Colecao() {
   const { c } = useTheme();
   const { lang, t } = useI18n();
-  const { owned, brewerId, cupId, packId, sessions, articlesRead, practicesDone } = useApp();
+  const { owned, brewerId, cupId, packId, sessions, articlesRead, practicesDone, missionsDone, missionBonusDays, missionsClaimed } = useApp();
   const equip = useApp((s) => s.equip);
   const [tab, setTab] = useState<Tab>('cup');
   const [sel, setSel] = useState<{ cup: string; brewer: string; beans: string }>({ cup: cupId, brewer: brewerId, beans: packId });
@@ -73,6 +74,8 @@ export default function Colecao() {
     [t('col.statFull'), String(sessions.filter((s) => s.quality === 'encorpado').length)],
     [t('col.statArticles'), t('col.statArticlesValue', { n: articlesRead.length, total: ARTICLE_COUNT })],
     [t('col.statPractices'), String(practicesDone.length)],
+    [t('col.statMissions'), String(missionsDone)],
+    [t('col.statMissionDays'), String(missionBonusDays)],
   ];
 
   return (
@@ -90,6 +93,7 @@ export default function Colecao() {
       />
 
       {tab === 'feitos' ? (
+        <>
         <Card style={{ gap: 0, paddingVertical: 4 }}>
           {stats.map(([k, v], i) => (
             <View key={k} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderTopWidth: i ? 1 : 0, borderTopColor: c.line }}>
@@ -102,6 +106,28 @@ export default function Colecao() {
             </View>
           ))}
         </Card>
+        <Card style={{ gap: 10 }}>
+          <Txt v="label" color="muted">
+            {t('col.missionsRecent')}
+          </Txt>
+          {recentMissions(missionsClaimed).length ? (
+            recentMissions(missionsClaimed).map((m) => (
+              <View key={`${m.day}-${m.id}`} style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 12 }}>
+                <Txt v="small" style={{ flex: 1 }}>
+                  {t(`mission.h.${m.id}` as 'mission.h.checkin')}
+                </Txt>
+                <Txt v="small" color="muted">
+                  {formatDateShort(lang, new Date(`${m.day}T12:00:00`).getTime())}
+                </Txt>
+              </View>
+            ))
+          ) : (
+            <Txt v="small" color="muted">
+              {t('col.missionsEmpty')}
+            </Txt>
+          )}
+        </Card>
+        </>
       ) : (
         <>
           <Shelf
