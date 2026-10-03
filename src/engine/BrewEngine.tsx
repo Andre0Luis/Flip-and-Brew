@@ -5,6 +5,7 @@ import { Accelerometer } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
 import { useApp } from '@/store/useApp';
 import { decide, onReopen, type Pose } from '@/lib/engine';
+import { dimScreen, restoreScreen } from '@/lib/brightness';
 import { cancelBrewDone, scheduleBrewDone } from '@/lib/notifications';
 import { poseOf, sensorAvailable } from './sensor';
 
@@ -18,6 +19,15 @@ export function BrewEngine() {
   const pose = useRef<{ value: Pose; since: number }>({ value: 'other', since: 0 });
   // O acelerômetro só fica ligado quando há decisão a tomar: copo em andamento, ou Início aberto com início automático.
   const needSensor = useApp((s) => !!s.active || (s.settings.autoStart && s.homeFocused));
+
+  // Escurece a tela durante o copo, se a pessoa ligou em Ajustes. Fora do copo (ou com o ajuste desligado) devolve o brilho,
+  // o que também desfaz um brilho preso por um fechamento forçado no meio do copo.
+  const brewing = useApp((s) => !!s.active);
+  const dim = useApp((s) => s.settings.dimDuringBrew);
+  useEffect(() => {
+    if (brewing && dim) void dimScreen();
+    else void restoreScreen();
+  }, [brewing, dim]);
 
   useEffect(() => {
     if (!needSensor) return;

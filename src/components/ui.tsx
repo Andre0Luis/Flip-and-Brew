@@ -5,6 +5,7 @@ import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Coin } from '@/art/Art';
 import { formatNumber, useI18n } from '@/i18n';
+import { Icon } from '@/components/Icon';
 
 type Variant = 'hero' | 'display' | 'quote' | 'title' | 'body' | 'small' | 'label' | 'num' | 'numBig';
 type ColorKey = 'fg' | 'muted' | 'accent' | 'good' | 'bad' | 'bg' | 'accentFg';
@@ -207,32 +208,51 @@ export function Insight({ children, tag }: { children: React.ReactNode; tag: str
   );
 }
 
-/** Campo de texto com rótulo. O rótulo fica fora do campo para continuar legível com texto digitado e com fonte grande. */
+/** Campo de texto com rótulo. O rótulo fica fora do campo para continuar legível com texto digitado e com fonte grande.
+ * Campos de senha (`secureTextEntry`) ganham o olho para mostrar ou esconder o que foi digitado. */
 export function Field({ label, error, ...input }: TextInputProps & { label: string; error?: boolean }) {
   const { c, f, r } = useTheme();
+  const { t } = useI18n();
+  const [visible, setVisible] = React.useState(false);
+  const isPassword = !!input.secureTextEntry;
   return (
     <View style={{ gap: 6 }}>
       <Txt v="label" color="muted">
         {label}
       </Txt>
-      <TextInput
-        accessibilityLabel={label}
-        placeholderTextColor={c.muted}
-        autoCapitalize="none"
-        autoCorrect={false}
-        {...input}
-        style={{
-          fontFamily: f.body,
-          fontSize: 16,
-          color: c.fg,
-          backgroundColor: c.surface,
-          borderWidth: 1,
-          borderColor: error ? c.bad : c.line,
-          borderRadius: r.md,
-          paddingHorizontal: 14,
-          paddingVertical: 13,
-        }}
-      />
+      <View>
+        <TextInput
+          accessibilityLabel={label}
+          placeholderTextColor={c.muted}
+          autoCapitalize="none"
+          autoCorrect={false}
+          {...input}
+          secureTextEntry={isPassword && !visible}
+          style={{
+            fontFamily: f.body,
+            fontSize: 16,
+            color: c.fg,
+            backgroundColor: c.surface,
+            borderWidth: 1,
+            borderColor: error ? c.bad : c.line,
+            borderRadius: r.md,
+            paddingHorizontal: 14,
+            paddingVertical: 13,
+            paddingRight: isPassword ? 52 : 14,
+          }}
+        />
+        {isPassword && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={visible ? t('auth.hidePassword') : t('auth.showPassword')}
+            onPress={() => setVisible((v) => !v)}
+            hitSlop={8}
+            style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 48, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Icon name={visible ? 'eyeOff' : 'eye'} color={c.muted} />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }

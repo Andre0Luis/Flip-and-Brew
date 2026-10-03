@@ -51,6 +51,8 @@ export type Settings = {
   quickBrew: boolean;
   /** aviso silencioso quando o copo enche */
   notifyOnDone: boolean;
+  /** escurece a tela enquanto o copo está em andamento (desligado por padrão) */
+  dimDuringBrew: boolean;
   /** +1 ou -1 quando o eixo z do acelerômetro aponta para cima; 0 usa o padrão da plataforma */
   faceUpSign: -1 | 0 | 1;
 };
