@@ -13,6 +13,7 @@ import {
 } from '@/lib/stats';
 import { Art } from '@/art/Art';
 import { checkinHistory, energySummary } from '@/lib/checkin';
+import { useTestTools } from '@/lib/admin';
 import { bestEnergyWeekday, bestWeekday, completionRate, criticalHour, favoriteCombo, longestStreak, weekdayAverages } from '@/lib/patterns';
 import { itemText } from '@/data/catalog';
 import { minutesLabel } from '@/lib/format';
@@ -81,6 +82,7 @@ export default function BemEstar() {
   const { sessions, settings } = useApp();
   const now = useNow(60_000);
   const loadDemo = useApp((s) => s.loadDemo);
+  const showDev = useTestTools();
   const [tab, setTab] = useState<Tab>('resumo');
   const goal = settings.goalMin;
 
@@ -120,20 +122,24 @@ export default function BemEstar() {
         ]}
       />
 
-      {(tab === 'resumo' || empty) && <MissionsCard />}
+      {tab === 'resumo' && <MissionsCard />}
 
-      {(tab === 'resumo' || empty) && <GoalPicker hint />}
+      {tab === 'resumo' && <GoalPicker hint />}
 
-      {empty ? (
+      {tab === 'resumo' && empty ? (
         <Card style={{ gap: 12 }}>
           <Txt v="title">{t('wb.emptyTitle')}</Txt>
           <Txt v="body" color="muted">
             {t('wb.emptyBody')}
           </Txt>
-          <Button label={t('wb.demo')} tone="quiet" onPress={loadDemo} />
-          <Txt v="small" color="muted">
-            {t('wb.demoNote')}
-          </Txt>
+          {showDev && (
+            <>
+              <Button label={t('wb.demo')} tone="quiet" onPress={loadDemo} />
+              <Txt v="small" color="muted">
+                {t('wb.demoNote')}
+              </Txt>
+            </>
+          )}
         </Card>
       ) : tab === 'resumo' ? (
         <>
