@@ -41,6 +41,7 @@ function Shell() {
           <Stack.Screen name="privacidade" />
           <Stack.Screen name="conta" />
           <Stack.Screen name="perfil" />
+          <Stack.Screen name="criador" />
         </Stack.Protected>
       </Stack>
     </NavThemeProvider>

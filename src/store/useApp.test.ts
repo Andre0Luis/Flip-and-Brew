@@ -195,3 +195,9 @@ test('migração da versão 1: gatilhos viram chaves e quem já usava pula a int
   const fresh = migrate({ sessions: [] }, 1) as unknown as ReturnType<typeof useApp.getState>;
   assert.equal(fresh.onboarded, false);
 });
+
+test('dicas de primeira vez: marcar não repete, e quem já tem copos não as vê', () => {
+  useApp.getState().markTip('coins');
+  useApp.getState().markTip('coins');
+  assert.deepEqual(useApp.getState().seenTips, ['coins']);
+});

@@ -34,6 +34,8 @@ type State = {
   missionsDone: number;
   /** dias em que as três missões foram resgatadas */
   missionBonusDays: number;
+  /** dicas de primeira vez já vistas (chaves como 'coins' e 'early') */
+  seenTips: string[];
   /** perfil opcional (dados pessoais e preferências de café) */
   profile: Profile;
   practiceAccepted: string | null; // dayKey
@@ -59,6 +61,8 @@ type State = {
   removeCheckin: (day: string) => void;
   /** Resgata a recompensa de uma missão concluída hoje. Devolve as moedas ganhas (0 se não pôde). 'all' resgata o bônus das três. */
   claimMission: (id: string, now?: number) => number;
+  /** Marca uma dica de primeira vez como vista. */
+  markTip: (key: string) => void;
   /** Atualiza o perfil. Passe undefined para limpar um campo. */
   setProfile: (patch: Partial<Record<keyof Profile, unknown>>) => void;
   clearProfile: () => void;
@@ -86,6 +90,7 @@ const initial = {
   checkins: [] as Checkin[],
   lastResultId: null as string | null,
   profile: {} as Profile,
+  seenTips: [] as string[],
   missionsClaimed: [] as string[],
   missionsDone: 0,
   missionBonusDays: 0,
@@ -106,6 +111,7 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
+      markTip: (key) => set((st) => (st.seenTips.includes(key) ? {} : { seenTips: [...st.seenTips, key] })),
       claimMission: (id, now = Date.now()) => {
         const st = get();
         const ms = missionsFor({ sessions: st.sessions, checkins: st.checkins, practicesDone: st.practicesDone, goalMin: st.settings.goalMin, claimed: st.missionsClaimed }, now);
@@ -240,6 +246,8 @@ export const useApp = create<State>()(
         p.settings = { ...DEFAULT_SETTINGS, ...(p.settings ?? {}) };
         // Quem já usava o app não precisa da introdução.
         if (p.onboarded === undefined) p.onboarded = Array.isArray(p.sessions) && p.sessions.length > 0;
+        // Quem já tem copos não precisa das dicas de primeira vez.
+        if (p.seenTips === undefined && Array.isArray(p.sessions) && p.sessions.length > 0) p.seenTips = ['coins', 'early'];
         return p as State;
       },
       // O idioma e as demais configurações novas entram por cima do que já estava salvo.
@@ -259,6 +267,7 @@ export const useApp = create<State>()(
         checkins: s.checkins,
         lastResultId: s.lastResultId,
         profile: s.profile,
+        seenTips: s.seenTips,
         missionsClaimed: s.missionsClaimed,
         missionsDone: s.missionsDone,
         missionBonusDays: s.missionBonusDays,

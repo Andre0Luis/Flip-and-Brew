@@ -2,6 +2,19 @@ import type { Content } from './types';
 
 // Quotes are free translations made for the app. Check the original work before citing.
 export const en: Content = {
+  creator: {
+    title: 'Why this app exists',
+    byline: 'André Luis Teixeira, who built Flip & Brew',
+    motto: 'Every second counts.',
+    blocks: [
+      { heading: 'Who makes it', text: 'I am André, a platform engineer. My job is to build the foundation nobody sees, so everything else runs without friction. Outside work I do long-distance trekking. On a mountain, extra weight in the backpack costs you, and only the next step exists.' },
+      { heading: 'The phrase on my arm', text: 'I have this phrase tattooed. It is not a motivational poster. It is simple math: time is the only resource that does not come back. Hesitation, noise and illusion spend the same clock as everything else.' },
+      { heading: 'The turning point', text: 'The end of a cycle showed me how much time and energy I had been giving to something with no future. I am grateful for that. It took off the blindfold and gave me back control of my own clock.' },
+      { heading: 'What this app is', text: 'Flip & Brew does not want your attention. It has no trick to keep you and no alert to pull you back; the only alert is the cup-ready one, and only if you turn it on. It exists for the opposite: you put the phone down, the coffee brews, and your time goes to what matters off the screen.' }
+    ],
+    closing: 'Safe travels.',
+    signature: 'André'
+  },
   quotes: {
     'sq-13': {
       text: 'We suffer more often in imagination than in reality.',

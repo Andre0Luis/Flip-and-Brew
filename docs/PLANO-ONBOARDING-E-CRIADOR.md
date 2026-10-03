@@ -1,6 +1,6 @@
 # Plano: tutorial de boas-vindas e seção "Por que este app existe"
 
-Status: proposta, nada implementado. Base: o briefing do André (perfil, tom, eixos narrativos) e o código atual (`src/app/intro.tsx`, `src/app/ajustes.tsx`, `src/i18n/`).
+Status: **implementado** (ADR-0019). Base: o briefing do André (perfil, tom, eixos narrativos) e o código atual (`src/app/intro.tsx`, `src/app/ajustes.tsx`, `src/i18n/`).
 
 ## 1. Ponto de partida
 

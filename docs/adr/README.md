@@ -29,6 +29,7 @@ Formato de cada ADR: Status · Data · Contexto · Decisão · Alternativas desc
 | [0016](0016-fluxo-de-trabalho-e-prs.md) | Fluxo de trabalho: PRs, branches e a lição dos PRs empilhados | Aceita |
 | [0017](0017-pendencias-e-riscos-conhecidos.md) | Pendências e riscos conhecidos (vivo, atualize sempre) | Aberto |
 | [0018](0018-checkin-perfil-cafeteiras-e-descontos.md) | Check-in de energia, perfil opcional, mais itens e desconto por constância | Aceita |
+| [0019](0019-introducao-em-tres-passos-e-secao-do-criador.md) | Introdução em três passos e seção "Por que este app existe" | Aceita |
 
 > **Nota de transição.** O ADR-0010 (contas e Firebase), partes do 0011, 0014 e 0015 (usuário de teste, página de exclusão, manual) descrevem o que chega com o **PR #7**. Se o #7 ainda não foi mergeado, esses arquivos de `docs/` e o código de contas ainda não estão no `main`.
 

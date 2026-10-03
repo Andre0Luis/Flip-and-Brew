@@ -163,6 +163,7 @@ export default function Ajustes() {
       </Card>
 
       <Card style={{ gap: 10 }}>
+        <Button label={t('creator.open')} tone="quiet" onPress={() => router.push('/criador')} />
         <Button label={t('set.intro')} tone="quiet" onPress={() => setOnboarded(false)} />
         <Button label={t('set.privacy')} tone="quiet" onPress={() => router.push('/privacidade')} />
       </Card>

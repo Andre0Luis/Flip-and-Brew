@@ -57,3 +57,12 @@ test('getters devolvem texto no idioma pedido', () => {
   assert.match(getArticles('es')[0].title, /Antifrágil/);
   assert.match(getArticles('pt')[0].title, /Antifrágil/);
 });
+
+test('o texto do criador existe e está preenchido nos três idiomas', () => {
+  for (const l of LANGS) {
+    const c = CONTENT[l].creator;
+    for (const f of [c.title, c.byline, c.motto, c.closing, c.signature]) assert.ok(filled(f), `${l}: criador`);
+    assert.equal(c.blocks.length, CONTENT.pt.creator.blocks.length, `${l}: blocos do criador`);
+    for (const b of c.blocks) assert.ok(filled(b.heading) && filled(b.text), `${l}: bloco`);
+  }
+});
