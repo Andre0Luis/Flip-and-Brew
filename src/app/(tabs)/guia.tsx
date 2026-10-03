@@ -9,7 +9,7 @@ import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { formatNumber, useI18n } from '@/i18n';
 import { discountFor, priceOf } from '@/lib/pricing';
-import { buyCoinPack, loadCoinPacks, purchasesConfigured, type CoinPack } from '@/lib/purchases';
+import { buyCoinPack, loadCoinPacks, purchasesBlockedByExpoGo, purchasesConfigured, type CoinPack } from '@/lib/purchases';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 
@@ -241,9 +241,12 @@ export default function Guia() {
           )
         ) : (
           <Txt v="small" color="muted">
-            {t('guide.coinsInfo')}
+            {purchasesBlockedByExpoGo ? t('guide.coinsExpoGo') : t('guide.coinsInfo')}
           </Txt>
         )}
+        <Txt v="small" color="muted">
+          {t('guide.coinsHow')}
+        </Txt>
       </Card>
     </Screen>
   );

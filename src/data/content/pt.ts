@@ -775,6 +775,46 @@ export const pt: Content = {
       "name": "Café Especial",
       "blurb": "O melhor que existe: nota alta e origem rastreada. Rende muito mais."
     },
+    "club-cor": {
+      "name": "Caneca Corinthians",
+      "blurb": "Série Torcida. Preto e branco, de casa."
+    },
+    "club-spfc": {
+      "name": "Caneca São Paulo",
+      "blurb": "Série Torcida. Vermelho, branco e preto."
+    },
+    "club-pal": {
+      "name": "Caneca Palmeiras",
+      "blurb": "Série Torcida. Verde de ponta a ponta."
+    },
+    "club-san": {
+      "name": "Caneca Santos",
+      "blurb": "Série Torcida. Branca, com a faixa preta."
+    },
+    "club-fla": {
+      "name": "Caneca Flamengo",
+      "blurb": "Série Torcida. Listras rubro-negras."
+    },
+    "club-xv": {
+      "name": "Caneca XV de Piracicaba",
+      "blurb": "Série Torcida. Listras pretas e brancas."
+    },
+    "uni-galaxy": {
+      "name": "Caneca Galáxia",
+      "blurb": "Série Universo. Um redemoinho de estrelas."
+    },
+    "uni-saturn": {
+      "name": "Caneca Saturno",
+      "blurb": "Série Universo. Com anel e tudo."
+    },
+    "uni-eclipse": {
+      "name": "Caneca Eclipse",
+      "blurb": "Série Universo. A sombra e a coroa de luz."
+    },
+    "uni-nebula": {
+      "name": "Caneca Nebulosa",
+      "blurb": "Série Universo. Rosa e azul, onde nascem estrelas."
+    },
     "cup": {
       "name": "Xícara de porcelana",
       "blurb": "A primeira da prateleira."

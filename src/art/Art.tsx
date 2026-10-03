@@ -57,6 +57,26 @@ function Grads() {
         <Stop offset="0.6" stopColor="#EEF1F0" />
         <Stop offset="1" stopColor="#C8CFCD" />
       </LinearGradient>
+      <LinearGradient id={`${p}gGalaxy`} x1="0" x2="1" y1="0" y2="1">
+        <Stop offset="0" stopColor="#6A4CC8" />
+        <Stop offset="0.5" stopColor="#2A1A5E" />
+        <Stop offset="1" stopColor="#0B0620" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gSaturn`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#F4C58A" />
+        <Stop offset="0.5" stopColor="#D27A32" />
+        <Stop offset="1" stopColor="#8A4418" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gNebula`} x1="0" x2="1" y1="0" y2="1">
+        <Stop offset="0" stopColor="#E05AA8" />
+        <Stop offset="0.55" stopColor="#6A3AA8" />
+        <Stop offset="1" stopColor="#1E5A7A" />
+      </LinearGradient>
+      <LinearGradient id={`${p}gPalm`} x1="0" x2="1" y1="0" y2="0">
+        <Stop offset="0" stopColor="#3FAE75" />
+        <Stop offset="0.5" stopColor="#0A7A47" />
+        <Stop offset="1" stopColor="#04512E" />
+      </LinearGradient>
       <LinearGradient id={`${p}gWood`} x1="0" x2="1" y1="0" y2="0">
         <Stop offset="0" stopColor="#A8703F" />
         <Stop offset="0.5" stopColor="#7A4A26" />
@@ -197,6 +217,79 @@ function Star({ x = 60, y = 66, s = 1 }: { x?: number; y?: number; s?: number })
   return <Path d={`M${pts.join('L')}Z`} fill="#F4E7C1" opacity={0.95} />;
 }
 
+const STARS: [number, number, number][] = [[38, 52, 1.2], [48, 78, 0.9], [56, 58, 1], [66, 84, 1.3], [74, 54, 0.9], [80, 72, 1.1], [44, 92, 0.8], [62, 70, 0.8], [70, 94, 0.9]];
+function Stars({ n = 9 }: { n?: number }) {
+  return (
+    <>
+      {STARS.slice(0, n).map(([x, y, r], i) => (
+        <Circle key={i} cx={x} cy={y} r={r} fill="#F4F0FF" opacity={0.9} />
+      ))}
+    </>
+  );
+}
+
+function GalaxyDecor() {
+  return (
+    <>
+      <Path d="M58 70C72 58 84 72 68 82C54 90 40 74 54 63" stroke="#D8CCFF" strokeWidth={2} opacity={0.65} {...line} />
+      <Ellipse cx={58} cy={70} rx={4} ry={3} fill="#F4F0FF" opacity={0.9} />
+      <Stars />
+    </>
+  );
+}
+
+function SaturnDecor() {
+  return (
+    <>
+      <Path d="M30 78C46 66 72 64 86 70" stroke="#FBE9C7" strokeWidth={5} fill="none" opacity={0.85} />
+      <Path d="M30 79C46 67 72 65 86 71" stroke="#8A4418" strokeWidth={1.2} fill="none" opacity={0.6} />
+      <Path d="M30 54H86M30 90H86" stroke="#FBE9C7" strokeWidth={1.4} opacity={0.35} />
+    </>
+  );
+}
+
+function EclipseDecor() {
+  return (
+    <>
+      <Circle cx={58} cy={70} r={20} fill="#F4E7C1" opacity={0.18} />
+      <Circle cx={58} cy={70} r={15} fill="#F4E7C1" opacity={0.35} />
+      <Circle cx={58} cy={70} r={12} fill="#0B0910" stroke="#F6E9C9" strokeWidth={1.6} />
+      <Stars n={5} />
+    </>
+  );
+}
+
+function NebulaDecor() {
+  return (
+    <>
+      <Circle cx={50} cy={64} r={14} fill="#FFB3DD" opacity={0.28} />
+      <Circle cx={70} cy={80} r={16} fill="#7FD6E8" opacity={0.25} />
+      <Stars />
+    </>
+  );
+}
+
+/** Faixas horizontais para canecas de time: cada cor ocupa um intervalo de altura. */
+function HBands({ bands }: { bands: [string, number, number][] }) {
+  return (
+    <>
+      {bands.map(([color, y, h], i) => (
+        <Rect key={i} x={28} y={y} width={60} height={h} fill={color} />
+      ))}
+    </>
+  );
+}
+
+function VStripes({ color, top = 40, bottom = 102 }: { color: string; top?: number; bottom?: number }) {
+  return (
+    <>
+      {[34, 50, 66, 82].map((x) => (
+        <Rect key={x} x={x} y={top} width={8} height={bottom - top} fill={color} />
+      ))}
+    </>
+  );
+}
+
 function CampSpeckles() {
   return (
     <>
@@ -213,13 +306,19 @@ function Peak({ x }: { x: number }) {
 
 function Mug({ grad, rim, handle, fill, decor }: { grad: string; rim: string; handle: string; fill?: number; decor?: React.ReactNode }) {
   const u = useU();
+  const p = useContext(PrefixContext);
   return (
     <>
+      <Defs>
+        <ClipPath id={`${p}mugclip`}>
+          <Path d="M30 40H86V90C86 97 80 100 72 100H44C36 100 30 97 30 90Z" />
+        </ClipPath>
+      </Defs>
       <Ellipse cx={58} cy={102} rx={40} ry={7} fill={u('gShadow')} />
       <Path d="M86 52C108 50 108 84 86 84" stroke={handle} strokeWidth={9} {...line} />
       <Path d="M86 52C108 50 108 84 86 84" stroke={u(grad)} strokeWidth={6} {...line} />
       <Path d="M30 40H86V90C86 97 80 100 72 100H44C36 100 30 97 30 90Z" fill={u(grad)} />
-      {decor}
+      {decor && <G clipPath={`url(#${p}mugclip)`}>{decor}</G>}
       <Rect x={36} y={48} width={5} height={44} rx={2.5} fill="#fff" opacity={0.3} />
       <Ellipse cx={58} cy={40} rx={28} ry={7} fill={rim} />
       <Surface cx={58} cy={41} rx={24} ry={5.2} crx={17} cry={3.2} fill={fill} />
@@ -713,6 +812,16 @@ export function Art({ id, size = 96, fill }: Props) {
     case 'pack-superior': body = <BeanBag body="#3F6B4F" label="#F1E4CF" accent="#CFE3C8" tier={3} />; break;
     case 'pack-gourmet': body = <BeanBag body="#1E1815" label="#EFE2C8" accent="#D7A040" tier={4} />; break;
     case 'pack-especial': body = <BeanBag body="#F1E4CF" label="#FFFFFF" accent="#C99A2E" tier={5} seal />; break;
+    case 'uni-galaxy': body = <Mug grad="gGalaxy" rim="#8E78E6" handle="#1A0F40" fill={fill} decor={<GalaxyDecor />} />; break;
+    case 'uni-saturn': body = <Mug grad="gSaturn" rim="#F8D9AA" handle="#7A3A12" fill={fill} decor={<SaturnDecor />} />; break;
+    case 'uni-eclipse': body = <Mug grad="gMugE" rim="#6C655F" handle="#0C0A09" fill={fill} decor={<EclipseDecor />} />; break;
+    case 'uni-nebula': body = <Mug grad="gNebula" rim="#F2A6D2" handle="#2A1A5E" fill={fill} decor={<NebulaDecor />} />; break;
+    case 'club-cor': body = <Mug grad="gMugE" rim="#FFFFFF" handle="#111111" fill={fill} decor={<HBands bands={[['#FFFFFF', 60, 10], ['#FFFFFF', 76, 3]]} />} />; break;
+    case 'club-spfc': body = <Mug grad="gEnamel" rim="#D2232A" handle="#D2232A" fill={fill} decor={<HBands bands={[['#D2232A', 40, 20], ['#111111', 76, 26]]} />} />; break;
+    case 'club-pal': body = <Mug grad="gPalm" rim="#FFFFFF" handle="#04512E" fill={fill} decor={<HBands bands={[['#FFFFFF', 66, 4]]} />} />; break;
+    case 'club-san': body = <Mug grad="gEnamel" rim="#111111" handle="#111111" fill={fill} decor={<HBands bands={[['#111111', 62, 8], ['#111111', 74, 3]]} />} />; break;
+    case 'club-fla': body = <Mug grad="gMugE" rim="#D2232A" handle="#D2232A" fill={fill} decor={<HBands bands={[['#D2232A', 46, 10], ['#D2232A', 66, 10], ['#D2232A', 86, 12]]} />} />; break;
+    case 'club-xv': body = <Mug grad="gMugE" rim="#FFFFFF" handle="#111111" fill={fill} decor={<VStripes color="#FFFFFF" />} />; break;
     case 'capsule': body = <Capsule />; break;
     case 'espresso': body = <EspressoMachine />; break;
     case 'drip': body = <DripMaker />; break;

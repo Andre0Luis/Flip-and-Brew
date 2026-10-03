@@ -16,7 +16,7 @@ export type CatalogItem = {
   /** só cafeteiras: minutos offline para encher o copo */
   brewMinutes?: number;
   /** itens de uma coleção temática, mostrados juntos no Guia */
-  collection?: 'stoic' | 'mountain' | 'night' | 'botequim' | 'gold';
+  collection?: 'stoic' | 'mountain' | 'night' | 'botequim' | 'gold' | 'torcida' | 'universe';
 };
 
 export const CATALOG: CatalogItem[] = [
@@ -70,6 +70,16 @@ export const CATALOG: CatalogItem[] = [
   { id: 'gold-cup', kind: 'cup', price: 2200, earn: 25, collection: 'gold' },
   { id: 'gold-mug', kind: 'cup', price: 2200, earn: 25, collection: 'gold' },
   { id: 'gold-glass', kind: 'cup', price: 2200, earn: 25, collection: 'gold' },
+  { id: 'club-cor', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'club-spfc', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'club-pal', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'club-san', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'club-fla', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'club-xv', kind: 'cup', price: 1300, earn: 12, collection: 'torcida' },
+  { id: 'uni-galaxy', kind: 'cup', price: 3000, earn: 30, collection: 'universe' },
+  { id: 'uni-saturn', kind: 'cup', price: 3000, earn: 30, collection: 'universe' },
+  { id: 'uni-eclipse', kind: 'cup', price: 3000, earn: 30, collection: 'universe' },
+  { id: 'uni-nebula', kind: 'cup', price: 3000, earn: 30, collection: 'universe' },
   // Pacotes de café (categorias do mercado brasileiro): quanto melhor o café, mais moedas. Sem desconto.
   { id: 'pack-extraforte', kind: 'beans', price: 0, earn: 0 },
   { id: 'pack-tradicional', kind: 'beans', price: 150, earn: 4 },
@@ -84,7 +94,7 @@ export const byId = (id: string) => CATALOG.find((i) => i.id === id);
 export const brewers = () => CATALOG.filter((i) => i.kind === 'brewer');
 export const cups = () => CATALOG.filter((i) => i.kind === 'cup');
 export const packs = () => CATALOG.filter((i) => i.kind === 'beans');
-export const COLLECTIONS = ['stoic', 'mountain', 'botequim', 'night', 'gold'] as const;
+export const COLLECTIONS = ['stoic', 'mountain', 'botequim', 'torcida', 'night', 'gold', 'universe'] as const;
 export const STARTER_IDS = CATALOG.filter((i) => i.price === 0 && !i.streakUnlock).map((i) => i.id);
 
 export const itemText = (lang: Lang, id: string): ItemText => CONTENT[lang].items[id] ?? CONTENT.pt.items[id] ?? { name: id, blurb: '' };

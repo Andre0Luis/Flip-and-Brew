@@ -275,6 +275,7 @@ Copie `.env.example` para `.env`. Para o build no EAS, cadastre as mesmas variá
 | `EXPO_PUBLIC_FIREBASE_APP_ID` | `appId` | idem | idem |
 | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` | Firebase › Authentication › Google › ID do cliente da Web | Login com Google | O botão do Google não aparece |
 | `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | RevenueCat › chave pública do SDK (`goog_…`) | Compra de moedas | A loja explica que a compra não está ativa |
+| `EXPO_PUBLIC_REVENUECAT_TEST_KEY` | RevenueCat › Test Store › chave de API (`test_…`) | Testar a compra no Expo Go | Sem ela, a loja explica que no Expo Go a compra não funciona |
 | `EXPO_PUBLIC_REVENUECAT_IOS_KEY` | RevenueCat (`appl_…`) | Compra no iOS | Só importa se for lançar no iOS |
 | `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` | Você escolhe | Só o script `seed:test-user` | O script recusa rodar |
 | `EXPO_PUBLIC_AUTH_MODE=mock` | Você liga | Servidor falso, só em desenvolvimento | Usa o Firebase real, se houver chaves |
