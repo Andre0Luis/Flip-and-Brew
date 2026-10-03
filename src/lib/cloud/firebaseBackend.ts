@@ -42,7 +42,7 @@ function sdk() {
 }
 
 function toUser(u: import('firebase/auth').User): CloudUser {
-  const provider: Provider = u.providerData.some((p) => p.providerId === 'google.com') ? 'google' : 'password';
+  const provider: Provider = u.providerData.some((p) => p.providerId === 'google.com') ? 'google' : u.providerData.some((p) => p.providerId === 'apple.com') ? 'apple' : 'password';
   return { uid: u.uid, email: u.email, provider, emailVerified: u.emailVerified };
 }
 
@@ -67,6 +67,33 @@ async function googleIdToken(): Promise<string> {
   return token;
 }
 
+function apple() {
+  try {
+    return require('expo-apple-authentication') as typeof import('expo-apple-authentication');
+  } catch {
+    return null;
+  }
+}
+
+// Guardado só na memória: a Apple exige revogar este código quando a conta é excluída.
+let appleAuthCode: string | null = null;
+
+/** Abre o login da Apple com um nonce (o Firebase confere o hash) e devolve a credencial do Firebase. */
+async function appleCredential(A: AuthMod) {
+  const Apple = apple();
+  if (!Apple) throw new AuthError('unavailable');
+  const Crypto = require('expo-crypto') as typeof import('expo-crypto');
+  const raw = Array.from(await Crypto.getRandomBytesAsync(16), (b) => b.toString(16).padStart(2, '0')).join('');
+  const hashed = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, raw);
+  const res = await Apple.signInAsync({
+    requestedScopes: [Apple.AppleAuthenticationScope.FULL_NAME, Apple.AppleAuthenticationScope.EMAIL],
+    nonce: hashed,
+  });
+  if (!res.identityToken) throw new AuthError('unknown');
+  appleAuthCode = res.authorizationCode ?? null;
+  return new A.OAuthProvider('apple.com').credential({ idToken: res.identityToken, rawNonce: raw });
+}
+
 const wrap = async <T>(fn: () => Promise<T>): Promise<T> => {
   try {
     return await fn();
@@ -84,6 +111,8 @@ export const firebaseBackend: CloudBackend = {
   },
 
   googleAvailable: () => Platform.OS !== 'web' && !!googleWebClientId && !!google(),
+
+  appleAvailable: () => Platform.OS === 'ios' && !!apple(),
 
   signUp: (email, password) =>
     wrap(async () => {
@@ -106,6 +135,36 @@ export const firebaseBackend: CloudBackend = {
       return toUser((await A.signInWithCredential(auth, cred)).user);
     }),
 
+  signInApple: () =>
+    wrap(async () => {
+      const { auth, A } = sdk();
+      return toUser((await A.signInWithCredential(auth, await appleCredential(A))).user);
+    }),
+
+  sendVerificationEmail: () =>
+    wrap(async () => {
+      const { auth, A } = sdk();
+      if (!auth.currentUser) throw new AuthError('wrong-credentials');
+      await A.sendEmailVerification(auth.currentUser);
+    }),
+
+  refreshUser: () =>
+    wrap(async () => {
+      const { auth } = sdk();
+      if (!auth.currentUser) return null;
+      await auth.currentUser.reload();
+      return auth.currentUser ? toUser(auth.currentUser) : null;
+    }),
+
+  changePassword: (current, next) =>
+    wrap(async () => {
+      const { auth, A } = sdk();
+      const user = auth.currentUser;
+      if (!user?.email) throw new AuthError('wrong-credentials');
+      await A.reauthenticateWithCredential(user, A.EmailAuthProvider.credential(user.email, current));
+      await A.updatePassword(user, next);
+    }),
+
   sendPasswordReset: (email) =>
     wrap(async () => {
       const { auth, A } = sdk();
@@ -126,6 +185,8 @@ export const firebaseBackend: CloudBackend = {
       if (!user) throw new AuthError('wrong-credentials');
       if (user.providerData.some((p) => p.providerId === 'google.com')) {
         await A.reauthenticateWithCredential(user, A.GoogleAuthProvider.credential(await googleIdToken()));
+      } else if (user.providerData.some((p) => p.providerId === 'apple.com')) {
+        await A.reauthenticateWithCredential(user, await appleCredential(A));
       } else {
         if (!user.email || !password) throw new AuthError('wrong-credentials');
         await A.reauthenticateWithCredential(user, A.EmailAuthProvider.credential(user.email, password));
@@ -139,6 +200,11 @@ export const firebaseBackend: CloudBackend = {
       if (!user) return;
       // Primeiro os dados, depois a conta: se a exclusão da conta falhar, dá para tentar de novo sem deixar backup órfão.
       await F.deleteDoc(F.doc(db, 'users', user.uid));
+      // A Apple exige revogar o acesso ao apagar a conta. Se a revogação falhar, a exclusão segue: não prendemos a pessoa.
+      if (appleAuthCode && user.providerData.some((p) => p.providerId === 'apple.com')) {
+        await A.revokeAccessToken(auth, appleAuthCode).catch(() => {});
+        appleAuthCode = null;
+      }
       await A.deleteUser(user);
       await google()?.GoogleSignin.signOut().catch(() => {});
     }),

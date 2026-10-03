@@ -42,3 +42,39 @@ test('o servidor falso já traz a conta de teste com o backup farto', async () =
   assert.equal(snap?.data.coins, TEST_COINS);
   await assert.rejects(() => mockBackend.signIn(TEST_EMAIL, 'senha-errada'));
 });
+
+test('cadastro por e-mail: confirmar o e-mail, trocar a senha e entrar com a nova', async () => {
+  const email = `novo${Date.now()}@exemplo.com`;
+  await assert.rejects(() => mockBackend.signUp(email, 'curta'), (e: { code?: string }) => e.code === 'weak-password');
+  const user = await mockBackend.signUp(email, 'senha-boa-123');
+  assert.equal(user.emailVerified, false);
+
+  // Ainda sem pedir o envio, checar não confirma.
+  assert.equal((await mockBackend.refreshUser())?.emailVerified, false);
+  await mockBackend.sendVerificationEmail();
+  assert.equal((await mockBackend.refreshUser())?.emailVerified, true);
+
+  await assert.rejects(() => mockBackend.changePassword('errada', 'outra-senha-123'), (e: { code?: string }) => e.code === 'wrong-credentials');
+  await assert.rejects(() => mockBackend.changePassword('senha-boa-123', 'curta'), (e: { code?: string }) => e.code === 'weak-password');
+  await mockBackend.changePassword('senha-boa-123', 'outra-senha-123');
+  await mockBackend.signOut();
+  await assert.rejects(() => mockBackend.signIn(email, 'senha-boa-123'));
+  assert.equal((await mockBackend.signIn(email, 'outra-senha-123')).uid, user.uid);
+});
+
+test('entrar com a Apple e com o Google cria contas já verificadas, e o e-mail repetido é recusado', async () => {
+  assert.equal(mockBackend.appleAvailable(), true);
+  const apple = await mockBackend.signInApple();
+  assert.equal(apple.provider, 'apple');
+  assert.equal(apple.emailVerified, true);
+  await mockBackend.signOut();
+  const email = `dup${Date.now()}@exemplo.com`;
+  await mockBackend.signUp(email, 'senha-boa-123');
+  await assert.rejects(() => mockBackend.signUp(email, 'senha-boa-123'), (e: { code?: string }) => e.code === 'email-in-use');
+});
+
+test('o cancelamento do login da Apple não aparece como erro', async () => {
+  const { toAuthError } = await import('./cloud/errors');
+  assert.equal(toAuthError({ code: 'ERR_REQUEST_CANCELED' }).code, 'cancelled');
+  assert.equal(toAuthError({ code: 'auth/requires-recent-login' }).code, 'recent-login');
+});

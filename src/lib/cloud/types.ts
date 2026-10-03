@@ -1,6 +1,6 @@
 import type { Checkin, Profile, Session } from '@/store/types';
 
-export type Provider = 'password' | 'google';
+export type Provider = 'password' | 'google' | 'apple';
 
 export type CloudUser = {
   uid: string;
@@ -67,12 +67,21 @@ export interface CloudBackend {
   /** Chama `cb` com o usuário atual (ou null) agora e a cada mudança. Devolve a função que cancela. */
   onChange(cb: (user: CloudUser | null) => void): () => void;
   googleAvailable(): boolean;
+  /** Entrar com a Apple: só no iOS. */
+  appleAvailable(): boolean;
   signUp(email: string, password: string): Promise<CloudUser>;
   signIn(email: string, password: string): Promise<CloudUser>;
   signInGoogle(): Promise<CloudUser>;
+  signInApple(): Promise<CloudUser>;
+  /** Reenvia o e-mail de confirmação da conta com senha. */
+  sendVerificationEmail(): Promise<void>;
+  /** Recarrega a conta para saber se o e-mail já foi confirmado. Devolve o usuário atualizado. */
+  refreshUser(): Promise<CloudUser | null>;
+  /** Troca a senha de uma conta com e-mail e senha, confirmando a senha atual. */
+  changePassword(current: string, next: string): Promise<void>;
   sendPasswordReset(email: string): Promise<void>;
   signOut(): Promise<void>;
-  /** Confirma a identidade antes de apagar. Com senha para e-mail, sem argumento para Google. */
+  /** Confirma a identidade antes de apagar. Com senha para e-mail, sem argumento para Google e Apple. */
   reauthenticate(password?: string): Promise<void>;
   /** Apaga o backup e a conta. Chame `reauthenticate` antes. */
   deleteAccount(): Promise<void>;
