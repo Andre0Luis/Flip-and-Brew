@@ -38,6 +38,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] Faixas do desconto (30% check-in + 20% offline) e os preços novos **não foram testados com pessoas** (ADR-0018).
 - [ ] Telefone e idade do perfil entram no formulário de Segurança dos dados da Play Store e na revisão da política de privacidade (ADR-0018).
 - [ ] **Série Torcida** usa nomes e cores de clubes de futebol (marcas registradas); antes de publicar, pedir licença ou trocar por nomes neutros (ADR-0018).
+- [ ] **App Store (iOS):** oferecer login com o Google exige também oferecer "Entrar com a Apple" (diretriz 4.8) ou ficar só com e-mail e senha; a exclusão de conta já pode ser iniciada em Ajustes (requisito da Apple, diretriz 5.1.1(v)).
 - [ ] Widget de tela inicial/bloqueio, dados do Health Connect e a seção de café em Aprender **foram pedidos e ainda não existem**.
 
 ## Dívidas técnicas

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Icon } from '@/components/Icon';
 import { Button, Card, Chip, Field, Screen, Segmented, Txt } from '@/components/ui';
@@ -27,6 +27,8 @@ export default function Conta() {
   const { t } = useI18n();
   const status = useAuth((s) => s.status);
   const [notice, setNotice] = useState<string | null>(null);
+  // Vindo de Ajustes > Excluir conta, a confirmação já abre no alto da tela.
+  const { excluir } = useLocalSearchParams<{ excluir?: string }>();
 
   return (
     <Screen edges={['top', 'bottom']}>
@@ -46,7 +48,7 @@ export default function Conta() {
           </Txt>
         </Card>
       )}
-      {status === 'loading' ? <Txt v="body" color="muted">{t('account.loading')}</Txt> : status === 'signedIn' ? <SignedIn onNotice={setNotice} /> : <SignedOut />}
+      {status === 'loading' ? <Txt v="body" color="muted">{t('account.loading')}</Txt> : status === 'signedIn' ? <SignedIn onNotice={setNotice} startDeleting={excluir === '1'} /> : <SignedOut />}
     </Screen>
   );
 }
@@ -208,14 +210,14 @@ function SignedOut() {
   );
 }
 
-function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
+function SignedIn({ onNotice, startDeleting }: { onNotice: (s: string | null) => void; startDeleting?: boolean }) {
   const { t, lang } = useI18n();
   const { c, r } = useTheme();
   const backend = getBackend();
   const { user, sync, lastBackupAt, choice } = useAuth();
   const [message, setMessage] = useState<string | null>(null);
   const [confirmRestore, setConfirmRestore] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(!!startDeleting);
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AuthError | string | null>(null);
@@ -252,8 +254,48 @@ function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
   const local = localData();
   const syncing = sync === 'syncing';
 
+  const deleteCard = (
+    <Card style={{ gap: 12, borderColor: c.bad, borderRadius: r.lg }}>
+        <Txt v="title" color="bad">
+          {t('delete.title')}
+        </Txt>
+        <Txt v="small" color="muted">
+          {t('delete.body')}
+        </Txt>
+        {deleting ? (
+          <View style={{ gap: 10 }}>
+            {user.provider === 'password' ? (
+              <>
+                <Txt v="small">{t('delete.confirmPassword')}</Txt>
+                <Field label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" error={!!error} />
+              </>
+            ) : (
+              <Txt v="small">{t('delete.confirmGoogle')}</Txt>
+            )}
+            <ErrorLine error={error} />
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Button label={t('delete.do')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={doDelete} />
+              <Button
+                label={t('delete.cancel')}
+                tone="quiet"
+                style={{ flex: 1 }}
+                onPress={() => {
+                  setDeleting(false);
+                  setPassword('');
+                  setError(null);
+                }}
+              />
+            </View>
+          </View>
+        ) : (
+          <Button label={t('delete.start')} tone="quiet" onPress={() => setDeleting(true)} />
+        )}
+    </Card>
+  );
+
   return (
     <View style={{ gap: 16 }}>
+      {startDeleting && deleteCard}
       <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
         <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center' }}>
           <Txt v="title" color="accentFg">
@@ -337,42 +379,7 @@ function SignedIn({ onNotice }: { onNotice: (s: string | null) => void }) {
 
       <Button label={t('account.signOut')} tone="quiet" onPress={() => void backend.signOut()} />
 
-      <Card style={{ gap: 12, borderColor: c.bad, borderRadius: r.lg }}>
-        <Txt v="title" color="bad">
-          {t('delete.title')}
-        </Txt>
-        <Txt v="small" color="muted">
-          {t('delete.body')}
-        </Txt>
-        {deleting ? (
-          <View style={{ gap: 10 }}>
-            {user.provider === 'password' ? (
-              <>
-                <Txt v="small">{t('delete.confirmPassword')}</Txt>
-                <Field label={t('auth.password')} value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" error={!!error} />
-              </>
-            ) : (
-              <Txt v="small">{t('delete.confirmGoogle')}</Txt>
-            )}
-            <ErrorLine error={error} />
-            <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button label={t('delete.do')} tone="dark" disabled={busy} style={{ flex: 1, paddingHorizontal: 12 }} onPress={doDelete} />
-              <Button
-                label={t('delete.cancel')}
-                tone="quiet"
-                style={{ flex: 1 }}
-                onPress={() => {
-                  setDeleting(false);
-                  setPassword('');
-                  setError(null);
-                }}
-              />
-            </View>
-          </View>
-        ) : (
-          <Button label={t('delete.start')} tone="quiet" onPress={() => setDeleting(true)} />
-        )}
-      </Card>
+      {!startDeleting && deleteCard}
     </View>
   );
 }

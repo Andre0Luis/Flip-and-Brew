@@ -150,6 +150,7 @@ export default function Ajustes() {
             {authUser ? t('account.cardIn', { email: authUser.email ?? '' }) : t('account.cardOut')}
           </Txt>
           <Button label={t('account.open')} tone="quiet" onPress={() => router.push('/conta')} />
+          {authUser && <Button label={t('delete.start')} tone="quiet" onPress={() => router.push({ pathname: '/conta', params: { excluir: '1' } })} />}
         </Card>
       )}
 
