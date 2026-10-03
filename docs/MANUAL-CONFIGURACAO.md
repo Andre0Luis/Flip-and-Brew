@@ -207,18 +207,26 @@ Depois siga **`docs/VALIDATION.md`**, em checklist: sensor de virar o celular, s
 
 ---
 
-## 9. RevenueCat: compra de moedas (opcional)
+## 9. RevenueCat: Pro e moedas (opcional)
 
-Só se for vender moedas. Sem isto o app mostra que a compra não está ativa.
+O SDK (`react-native-purchases` e `react-native-purchases-ui`) já está no app. Sem chave, tudo fica desligado e o app segue normal.
 
-1. Conta em <https://app.revenuecat.com>. Crie um **projeto**.
-2. **Play Console**: crie os **produtos no app** (Monetizar › Produtos › Produtos no app) do tipo consumível, com identificadores que **terminem no número de moedas**: `coins_100`, `coins_500`, `coins_1000`, `coins_5000`. O app lê o número do identificador.
-3. **RevenueCat › Apps › + New › Google Play Store**: informe o pacote `com.andre0luis.FlipAndBrew` e envie a **credencial de conta de serviço** do Google Play (o RevenueCat tem um guia passo a passo; é o mesmo tipo de chave da seção 11).
-4. **Products**: importe os produtos criados. **Offerings**: crie a offering `default`, marque como atual e inclua um pacote por produto.
-5. Copie a **chave pública do SDK Android** (começa com `goog_`) para `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`.
-6. Rebuilde. A tela **Guia** passa a listar os pacotes, e a compra soma as moedas.
+**O que o código já faz**
+- Entitlement `flip_and_brew_pro`, liberado por três produtos: `lifetime` (compra única), `yearly` e `monthly` (assinaturas).
+- Ajustes › **Flip & Brew Pro**: abre o **Paywall** do RevenueCat; com o Pro ativo, abre a **Central do cliente** (gerenciar, cancelar, reembolso). Há também **Restaurar compras**.
+- O estado do Pro é lido do `CustomerInfo` e atualizado por listener (compra, renovação, restauração). Ao entrar na conta do app, o RevenueCat faz `logIn(uid)`; ao sair, `logOut()`.
+- Pacotes de moedas continuam na aba Guia: produtos consumíveis com id terminando no número (`coins_500`). Produtos sem número (`lifetime`, `yearly`, `monthly`) não aparecem como moedas.
 
-Atenção: as moedas são creditadas no aparelho depois da compra, **sem validação em servidor**. Antes de vender de verdade, considere um webhook do RevenueCat gravando o crédito no Firestore.
+**O que você faz no painel**
+1. Projeto em <https://app.revenuecat.com>. **Entitlements**: crie `flip_and_brew_pro`.
+2. **Play Console**: crie a assinatura (Monetizar › Assinaturas) com plano mensal e anual, e um produto no app não consumível para o vitalício. Conecte o app ao RevenueCat com a conta de serviço (seção 11).
+3. **RevenueCat › Products**: importe `monthly`, `yearly`, `lifetime` e anexe os três ao entitlement `flip_and_brew_pro`. Opcional: `coins_100`, `coins_500`… (consumíveis).
+4. **Offerings**: offering `default`, atual, com os pacotes Mensal, Anual e Vitalício.
+5. **Paywalls**: crie e publique um paywall para a offering `default`. **Customer Center**: ative em Tools.
+6. Chave pública do SDK Android (`goog_...`) em `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY`. Para testar antes do Play Console, use a chave da **Test Store** (`test_...`): ela só funciona em desenvolvimento, e o app a ignora em build de release (no release ela derrubaria o app).
+7. `npx expo start --clear` e rebuild (`npx expo run:android`).
+
+Atenção: as moedas e o Pro são lidos no aparelho. Para moedas, não há validação em servidor; considere um webhook do RevenueCat gravando o crédito no Firestore antes de vender de verdade.
 
 ---
 
