@@ -5,6 +5,7 @@ import { Art } from '@/art/Art';
 import { LiveBrewer } from '@/components/BrewViz';
 import { CalibrateCard } from '@/components/CalibrateCard';
 import { earnBonus } from '@/lib/earnings';
+import { useTestTools } from '@/lib/admin';
 import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
@@ -51,7 +52,8 @@ export default function Inicio() {
   const days = streak(sessions);
   const brewer = byId(brewerId);
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
-  const minutes = settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
+  const testTools = useTestTools();
+  const minutes = settings.quickBrew && testTools ? 1 : brewer?.brewMinutes ?? 45;
 
   const combo = earnBonus(brewerId, cupId, packId);
 

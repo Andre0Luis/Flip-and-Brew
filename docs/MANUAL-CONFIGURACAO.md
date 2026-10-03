@@ -47,7 +47,7 @@ Os passos 4 a 7 podem esperar: o app roda sem eles. Comece pelo 1, 2 e 6.
 Você não precisa de Firebase para ver as telas de conta e o app cheio.
 
 ### Usuário de teste no app (qualquer build de desenvolvimento)
-1. Abra **Ajustes** (engrenagem no Início). Em build de desenvolvimento as ferramentas de teste já aparecem; em outro build, toque **7 vezes na versão**, no fim da tela.
+1. Abra **Ajustes** (engrenagem no Início). Em build de desenvolvimento as ferramentas de teste já aparecem; em outro build, só aparecem para a conta de administrador (e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`).
 2. Toque em **Carregar usuário de teste**. Você ganha:
    - **50.000 moedas**
    - **todas** as cafeteiras e xícaras (Chemex e Coleção Estoica incluídas)

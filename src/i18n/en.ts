@@ -280,7 +280,7 @@ export const en: Record<keyof typeof pt, string> = {
   'set.intro': 'See the introduction again',
   'set.privacy': 'Privacy policy',
   'set.version': 'Version {v}',
-  'set.devOn': 'Test tools enabled.',
+  'set.devOn': 'Test tools enabled (admin).',
   'set.notify': 'Notify when the cup fills',
   'set.notifyHint': 'A silent notification, with no sound or vibration. Off by default so it does not pull you out of being offline.',
   'set.notifyDenied': 'Android blocked notifications for the app. Allow them in the system settings.',

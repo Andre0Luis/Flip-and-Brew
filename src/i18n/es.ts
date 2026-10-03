@@ -280,7 +280,7 @@ export const es: Record<keyof typeof pt, string> = {
   'set.intro': 'Ver la introducción otra vez',
   'set.privacy': 'Política de privacidad',
   'set.version': 'Versión {v}',
-  'set.devOn': 'Herramientas de prueba activadas.',
+  'set.devOn': 'Herramientas de prueba activadas (administrador).',
   'set.notify': 'Avisar cuando la taza se llene',
   'set.notifyHint': 'Una notificación silenciosa, sin sonido ni vibración. Desactivada por defecto para no sacarte de la desconexión.',
   'set.notifyDenied': 'Android bloqueó las notificaciones de la app. Permítelas en los ajustes del sistema.',

@@ -49,8 +49,6 @@ export type Settings = {
   autoStart: boolean;
   /** copos de 1 minuto, para testar */
   quickBrew: boolean;
-  /** mostra as ferramentas de teste em Ajustes (toque 7 vezes na versão) */
-  devTools: boolean;
   /** aviso silencioso quando o copo enche */
   notifyOnDone: boolean;
   /** +1 ou -1 quando o eixo z do acelerômetro aponta para cima; 0 usa o padrão da plataforma */

@@ -17,7 +17,7 @@ const fresh = (): LocalData => ({
   practiceAccepted: null,
   practicesDone: [],
   articlesRead: [],
-  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, faceUpSign: 1, devTools: true, quickBrew: true },
+  settings: { goalMin: 120, language: 'pt', themeMode: 'system', autoStart: true, notifyOnDone: false, faceUpSign: 1, quickBrew: true },
 });
 const used = (): LocalData => ({ ...fresh(), coins: 340, sessions: [session(1), session(2)] });
 
@@ -67,7 +67,7 @@ test('aplicar um backup troca o progresso e mantém as configurações do aparel
   assert.equal(next.sessions.length, 2);
   assert.equal(next.settings.language, 'es');
   assert.equal(next.settings.faceUpSign, 1); // calibração do aparelho preservada
-  assert.equal(next.settings.devTools, true);
+  assert.equal(next.settings.quickBrew, true);
 });
 
 test('só aceita snapshot que reconhece', () => {

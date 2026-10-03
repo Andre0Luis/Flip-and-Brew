@@ -62,7 +62,7 @@ As cores e fontes seguem o style board da fase de design: Young Serif para frase
 
 - Na primeira abertura o app mostra uma introdução de quatro passos, com escolha de idioma e calibração do sensor. Em Ajustes dá para rever.
 - Sem conta, tudo fica no aparelho, sem servidor nem análise. Com conta, o backup do progresso vai para o Firebase. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
-- Ajustes › toque 7 vezes na versão libera as ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) em qualquer build.
+- As ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) são **só para administrador**: aparecem em build de desenvolvimento ou para a conta com e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`. Usuários comuns não as veem.
 
 ## Uso do sistema (Android)
 

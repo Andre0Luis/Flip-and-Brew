@@ -11,8 +11,9 @@ import { withCheckin, withoutCheckin } from '@/lib/checkin';
 import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
+import { canUseTestTools } from '@/lib/admin';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -102,7 +103,7 @@ export const useApp = create<State>()(
         const st = get();
         if (st.active) return false;
         const brewer = byId(st.brewerId);
-        const minutes = st.settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
+        const minutes = st.settings.quickBrew && canUseTestTools() ? 1 : brewer?.brewMinutes ?? 45;
         set({ active: { brewerId: st.brewerId, cupId: st.cupId, packId: st.packId, startedAt: now, targetMs: minutes * 60_000 } });
         return true;
       },

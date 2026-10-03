@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Pressable, Switch, View } from 'react-native';
+import React, { useState } from 'react';
+import { Switch, View } from 'react-native';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { Button, Card, Chip, Screen, Segmented, Txt } from '@/components/ui';
@@ -8,6 +8,7 @@ import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
 import { hasProfile } from '@/lib/profile';
+import { useTestTools } from '@/lib/admin';
 import { useAuth } from '@/store/useAuth';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
@@ -44,20 +45,10 @@ export default function Ajustes() {
   const { run: calibrate, busy: calibrating, message: cal, available } = useCalibrate();
   const [confirmReset, setConfirmReset] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
-  const taps = useRef(0);
-  const showDev = __DEV__ || settings.devTools;
+  const showDev = useTestTools();
   const setOnboarded = useApp((s) => s.setOnboarded);
   const profile = useApp((s) => s.profile);
   const authUser = useAuth((s) => s.user);
-
-  // Sete toques na versão liberam as ferramentas de teste em qualquer build.
-  const onVersionTap = () => {
-    taps.current += 1;
-    if (taps.current >= 7) {
-      taps.current = 0;
-      set({ devTools: true });
-    }
-  };
 
   const toggleNotify = async (v: boolean) => {
     setNotifyMsg(null);
@@ -185,12 +176,10 @@ export default function Ajustes() {
       <Txt v="small" color="muted">
         {t('set.footer')}
       </Txt>
-      <Pressable accessibilityRole="button" accessibilityLabel={t('set.version', { v: Constants.expoConfig?.version ?? '' })} onPress={onVersionTap} hitSlop={8}>
-        <Txt v="label" color="muted">
-          {t('set.version', { v: Constants.expoConfig?.version ?? '1.0.0' })}
-          {settings.devTools ? ` · ${t('set.devOn')}` : ''}
-        </Txt>
-      </Pressable>
+      <Txt v="label" color="muted">
+        {t('set.version', { v: Constants.expoConfig?.version ?? '1.0.0' })}
+        {showDev ? ` · ${t('set.devOn')}` : ''}
+      </Txt>
     </Screen>
   );
 }

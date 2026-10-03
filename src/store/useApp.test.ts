@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { DEFAULT_SETTINGS, useApp } from './useApp';
 import type { Session } from './types';
 import { dayKey } from '@/lib/stats';
+import { useAuth } from './useAuth';
 
 const MIN = 60_000;
 const DAY = 86_400_000;
@@ -23,10 +24,19 @@ test('iniciar usa o tempo da cafeteira, ou 1 minuto no modo de teste', () => {
   assert.deepEqual(useApp.getState().active, { brewerId: 'melitta', cupId: 'paper', packId: 'pack-extraforte', startedAt: t0, targetMs: 40 * MIN });
   assert.equal(useApp.getState().start(t0 + 1), false); // já há um copo em andamento
 
+  // O modo de 1 minuto só vale para administrador; para os demais, a opção salva é ignorada.
   useApp.setState({ active: null });
   useApp.getState().setSettings({ quickBrew: true });
   useApp.getState().start(t0);
+  assert.equal(useApp.getState().active?.targetMs, 40 * MIN);
+
+  process.env.EXPO_PUBLIC_ADMIN_EMAILS = 'admin@flipandbrew.app';
+  useAuth.setState({ user: { uid: 'u1', email: 'admin@flipandbrew.app', provider: 'google', emailVerified: true } });
+  useApp.setState({ active: null });
+  useApp.getState().start(t0);
   assert.equal(useApp.getState().active?.targetMs, MIN);
+  useAuth.setState({ user: null });
+  delete process.env.EXPO_PUBLIC_ADMIN_EMAILS;
 });
 
 test('encerrar um copo cheio registra a sessão e soma as moedas com bônus', () => {

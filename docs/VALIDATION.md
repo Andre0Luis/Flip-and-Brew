@@ -5,7 +5,7 @@ Este roteiro lista o que **só dá para confirmar no celular**. Marque cada item
 
 Usuário de teste (50 mil moedas, tudo desbloqueado, 90 dias de histórico): Ajustes › Carregar usuário de teste. Veja `docs/MANUAL-CONFIGURACAO.md`, seção 3.
 
-Preparação: `npx expo run:android` com o aparelho conectado. Em Ajustes, toque 7 vezes na versão para liberar as ferramentas de teste e ative “Copos de 1 minuto”.
+Preparação: `npx expo run:android` com o aparelho conectado. Entre com a conta de administrador (e-mail verificado em `EXPO_PUBLIC_ADMIN_EMAILS`) ou use um build de desenvolvimento; em Ajustes, ative “Copos de 1 minuto”.
 
 ## 1. Sensor de virar o celular (o item de maior risco)
 - [ ] Primeira abertura mostra a introdução. No último passo, “Calibrar agora” funciona com o celular deitado de tela para cima.
