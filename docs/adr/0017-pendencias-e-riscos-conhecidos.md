@@ -40,7 +40,9 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [x] **Série Cores da Torcida:** só referências de cores, sem nomes nem escudos de clubes (decisão do dono, ADR-0018).
 - [x] Código do **Entrar com a Apple**, da redefinição de senha, da confirmação de e-mail e da troca de senha pronto (docs/FIREBASE.md); falta configurar a Apple e o Firebase e testar em aparelho.
 - [ ] **App Store (iOS):** oferecer login com o Google exige também oferecer "Entrar com a Apple" (diretriz 4.8) ou ficar só com e-mail e senha; a exclusão de conta já pode ser iniciada em Ajustes (requisito da Apple, diretriz 5.1.1(v)).
-- [ ] Widget de tela inicial/bloqueio, dados do Health Connect e a seção de café em Aprender **foram pedidos e ainda não existem**.
+- [x] Seção de café em Aprender, widgets de tela inicial e de bloqueio (docs/WIDGETS.md), comunidade em "em breve" (docs/COMUNIDADE.md) e introdução em três passos feitos.
+- [ ] **Widgets nunca rodaram num aparelho**; precisam de build novo e teste no Android e no iOS.
+- [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).

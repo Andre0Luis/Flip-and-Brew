@@ -52,7 +52,144 @@
       "@react-native-google-signin/google-signin",
       "expo-font",
       "expo-status-bar",
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "FlipQuote",
+              "displayName": "Frase do dia",
+              "description": "Só a frase do dia, para começar o dia com calma.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "systemLarge",
+                  "accessoryRectangular",
+                  "accessoryInline"
+                ]
+              }
+            },
+            {
+              "name": "FlipBrew",
+              "displayName": "Copo em andamento",
+              "description": "O progresso do copo que está enchendo.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "accessoryCircular",
+                  "accessoryRectangular",
+                  "accessoryInline"
+                ]
+              }
+            },
+            {
+              "name": "FlipStreak",
+              "displayName": "Sequência e moedas",
+              "description": "Seus dias seguidos e suas moedas.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "accessoryCircular",
+                  "accessoryInline"
+                ]
+              }
+            },
+            {
+              "name": "FlipGoal",
+              "displayName": "Meta de hoje",
+              "description": "Quanto falta para a sua meta offline de hoje.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "accessoryCircular",
+                  "accessoryRectangular",
+                  "accessoryInline"
+                ]
+              }
+            },
+            {
+              "name": "FlipMissions",
+              "displayName": "Missões do dia",
+              "description": "As missões de hoje que já estão concluídas.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium",
+                  "accessoryCircular",
+                  "accessoryInline"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "FlipQuote",
+              "label": "Frase do dia",
+              "description": "Só a frase do dia.",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 3,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "FlipBrew",
+              "label": "Copo em andamento",
+              "description": "O progresso do copo que está enchendo.",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 3,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "FlipStreak",
+              "label": "Sequência e moedas",
+              "description": "Seus dias seguidos e suas moedas.",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 3,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "FlipGoal",
+              "label": "Meta de hoje",
+              "description": "Quanto falta para a meta offline de hoje.",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 3,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "FlipMissions",
+              "label": "Missões do dia",
+              "description": "As missões de hoje.",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -64,6 +64,10 @@ As cores e fontes seguem o style board da fase de design: Young Serif para frase
 - Sem conta, tudo fica no aparelho, sem servidor nem análise. Com conta, o backup do progresso vai para o Firebase. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
 - As ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) são **só para administrador**: aparecem em build de desenvolvimento ou para a conta com e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`. Usuários comuns não as veem.
 
+## Widgets
+
+Cinco widgets (frase do dia, copo em andamento, sequência e moedas, meta de hoje e missões), na tela inicial e, no iOS, na tela de bloqueio. Detalhes e limites em `docs/WIDGETS.md`.
+
 ## Uso do sistema (Android)
 
 `modules/usage-stats` é um módulo nativo que lê desbloqueios (`KEYGUARD_HIDDEN`) e tempo de tela do dia. O Bem-estar mostra esses números depois que a pessoa autoriza o “Acesso ao uso”; sem a permissão, o cartão explica e pede. O Android guarda poucos dias de eventos. Só compila no build nativo (`expo run:android`).

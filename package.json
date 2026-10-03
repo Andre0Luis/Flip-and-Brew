@@ -1,6 +1,6 @@
 {
   "name": "flipandbrew",
-  "main": "expo-router/entry",
+  "main": "index.ts",
   "version": "1.0.0",
   "dependencies": {
     "@expo-google-fonts/dm-mono": "^0.4.2",
@@ -21,10 +21,12 @@
     "expo-splash-screen": "~57.0.9",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
+    "expo-widgets": "~57.0.22",
     "firebase": "^12.19.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
+    "react-native-android-widget": "^0.22.1",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-mmkv": "^4.3.1",
     "react-native-purchases": "^10.11.0",
