@@ -91,6 +91,11 @@ test('erros do Firebase e do Google viram códigos da interface', () => {
   assert.equal(toAuthError({ code: 'auth/requires-recent-login' }).code, 'recent-login');
   assert.equal(toAuthError({ code: 'SIGN_IN_CANCELLED' }).code, 'cancelled');
   assert.equal(toAuthError(new Error('qualquer')).code, 'unknown');
+  // Login desativado no console e SHA-1 errado no Google são problema de configuração, não do usuário.
+  assert.equal(toAuthError({ code: 'auth/operation-not-allowed' }).code, 'config');
+  assert.equal(toAuthError({ code: 'DEVELOPER_ERROR' }).code, 'config');
+  // Erro sem tradução leva o código original para dar para diagnosticar.
+  assert.equal(toAuthError({ code: 'auth/algo-novo' }).message, 'auth/algo-novo');
   const own = new AuthError('too-many');
   assert.equal(toAuthError(own), own);
 });

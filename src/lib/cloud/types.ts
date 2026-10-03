@@ -19,6 +19,7 @@ export type AuthErrorCode =
   | 'cancelled'
   | 'recent-login'
   | 'not-configured'
+  | 'config'
   | 'unavailable'
   | 'unknown';
 

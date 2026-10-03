@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { FillingCup } from '@/components/BrewViz';
 import { Button, Card, Chip, Screen, Txt } from '@/components/ui';
 import { CreatorStory } from '@/components/CreatorStory';
 import { useCalibrate } from '@/engine/useCalibrate';
+import { getBackend } from '@/lib/cloud';
 import { CONTENT } from '@/data/content';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
@@ -18,6 +20,8 @@ const STEPS = 4;
 export default function Intro() {
   const { c } = useTheme();
   const { t, lang } = useI18n();
+  const router = useRouter();
+  const canSignUp = !!getBackend();
   const setSettings = useApp((s) => s.setSettings);
   const setOnboarded = useApp((s) => s.setOnboarded);
   const [step, setStep] = useState(0);
@@ -33,6 +37,11 @@ export default function Intro() {
   }, [step]);
 
   const finish = () => setOnboarded(true);
+  // A Conta só existe depois da introdução (rota protegida): conclui e abre a tela no quadro seguinte.
+  const finishAndSignUp = () => {
+    setOnboarded(true);
+    setTimeout(() => router.push('/conta'), 400);
+  };
   const last = step === STEPS - 1;
 
   return (
@@ -121,6 +130,22 @@ export default function Intro() {
                 </View>
               ))}
             </Card>
+            {canSignUp && (
+              <Card style={{ gap: 10, alignSelf: 'stretch' }}>
+                <Txt v="title">{t('intro.acc.title')}</Txt>
+                {(['intro.acc.b1', 'intro.acc.b2', 'intro.acc.b3'] as const).map((k) => (
+                  <View key={k} style={{ flexDirection: 'row', gap: 10 }}>
+                    <Txt v="body" color="accent">
+                      •
+                    </Txt>
+                    <Txt v="body" style={{ flex: 1 }}>
+                      {t(k)}
+                    </Txt>
+                  </View>
+                ))}
+                <Button label={t('intro.acc.cta')} tone="quiet" onPress={finishAndSignUp} />
+              </Card>
+            )}
           </>
         )}
       </View>

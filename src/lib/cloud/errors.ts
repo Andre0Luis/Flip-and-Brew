@@ -18,6 +18,12 @@ const FIREBASE: Record<string, AuthErrorCode> = {
   'auth/user-token-expired': 'recent-login',
   'auth/credential-already-in-use': 'email-in-use',
   'auth/account-exists-with-different-credential': 'email-in-use',
+  // O método de login não foi ativado no console do Firebase, ou a chave do app não tem permissão.
+  'auth/operation-not-allowed': 'config',
+  'auth/admin-restricted-operation': 'config',
+  'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'config',
+  'auth/invalid-api-key': 'config',
+  'auth/app-not-authorized': 'config',
 };
 
 // Códigos da biblioteca de login com o Google (@react-native-google-signin).
@@ -26,6 +32,9 @@ const GOOGLE: Record<string, AuthErrorCode> = {
   '12501': 'cancelled',
   IN_PROGRESS: 'cancelled',
   PLAY_SERVICES_NOT_AVAILABLE: 'unavailable',
+  // SHA-1 ou nome do pacote do build não batem com o cliente OAuth Android do Google Cloud.
+  DEVELOPER_ERROR: 'config',
+  '10': 'config',
 };
 
 // Códigos do login com a Apple (expo-apple-authentication).
@@ -40,7 +49,9 @@ const APPLE: Record<string, AuthErrorCode> = {
 export function toAuthError(e: unknown): AuthError {
   if (e instanceof AuthError) return e;
   const code = typeof e === 'object' && e && 'code' in e ? String((e as { code: unknown }).code) : '';
-  return new AuthError(FIREBASE[code] ?? GOOGLE[code] ?? APPLE[code] ?? 'unknown', e instanceof Error ? e.message : undefined);
+  const known = FIREBASE[code] ?? GOOGLE[code] ?? APPLE[code];
+  // Sem tradução conhecida, o código original vai junto, para dar para diagnosticar.
+  return new AuthError(known ?? 'unknown', code || (e instanceof Error ? e.message : undefined));
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;

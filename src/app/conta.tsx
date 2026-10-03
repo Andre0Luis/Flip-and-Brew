@@ -58,7 +58,10 @@ function ErrorLine({ error }: { error: AuthError | string | null }) {
   const { t } = useI18n();
   if (!error) return null;
   if (error instanceof AuthError && error.code === 'cancelled') return null; // fechar o seletor do Google não é erro
-  const text = typeof error === 'string' ? error : t(`auth.err.${error.code}` as Key);
+  const base = typeof error === 'string' ? error : t(`auth.err.${error.code}` as Key);
+  // Erro sem tradução ou de configuração: mostra o código técnico pequeno, para quem for relatar.
+  const detail = typeof error !== 'string' && (error.code === 'unknown' || error.code === 'config') && error.message !== error.code ? ` (${error.message.slice(0, 120)})` : '';
+  const text = base + detail;
   return (
     <Txt v="small" color="bad" accessibilityLiveRegion="polite">
       {text}
