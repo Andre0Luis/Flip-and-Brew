@@ -240,6 +240,103 @@ function Pourover() {
   );
 }
 
+function Aeropress() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={36} ry={5} fill={u('gShadow')} />
+      <Path d="M36 74H84L81.5 102Q81 106 76.5 106H43.5Q39 106 38.5 102Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M38 88H82L80.6 102Q80.2 104.6 76.5 104.6H43.5Q39.8 104.6 39.4 102Z" fill={u('gCofV')} />
+      <Path d="M41 80L43 98" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+      <Rect x={46} y={30} width={28} height={46} rx={2.5} fill="#5A544E" />
+      <Rect x={50} y={34} width={4} height={38} rx={2} fill="#fff" opacity={0.2} />
+      <Path d="M62 42H72M62 52H72M62 62H72" stroke="#fff" strokeWidth={1.2} opacity={0.45} />
+      <Rect x={39} y={68} width={42} height={7} rx={2.5} fill="#3E3A36" />
+      <Rect x={50} y={12} width={20} height={26} rx={2} fill="#8A8076" />
+      <Rect x={44} y={7} width={32} height={7} rx={3} fill="#3E3A36" />
+    </>
+  );
+}
+
+function Melitta() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={38} ry={5} fill={u('gShadow')} />
+      <Path d="M38 70Q36 70 36 74L40 102Q40.5 106 45 106H75Q79.5 106 80 102L84 74Q84 70 82 70Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M37.4 88H82.6L80 102Q79.5 104.5 75 104.5H45Q40.5 104.5 40 102Z" fill={u('gCofV')} />
+      <Path d="M40 76L43 98" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+      <Path d="M24 30H96L78 62H42Z" fill={u('gPorc')} stroke="#CDBDA6" strokeWidth={1} />
+      <Path d="M36 36L48 60M50 35L55 60M70 35L65 60M84 36L72 60" stroke="#CDBDA6" strokeWidth={1.3} opacity={0.7} />
+      <Rect x={44} y={62} width={32} height={9} rx={2} fill={u('gPorc')} stroke="#CDBDA6" strokeWidth={1} />
+      <Ellipse cx={60} cy={30} rx={36} ry={6} fill="#F7F0E5" stroke="#CDBDA6" strokeWidth={1} />
+      <Ellipse cx={60} cy={31} rx={30} ry={4.6} fill="#3B2212" />
+      <Ellipse cx={60} cy={31} rx={22} ry={3} fill="#6A3E22" />
+      <Path d="M24 33C12 33 12 49 25 49" stroke="#CDBDA6" strokeWidth={5} {...line} />
+    </>
+  );
+}
+
+function Siphon() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={108} rx={40} ry={5} fill={u('gShadow')} />
+      <Rect x={90} y={10} width={5} height={96} rx={2} fill={u('gWood')} />
+      <Rect x={32} y={102} width={66} height={6} rx={2.5} fill={u('gWood')} />
+      <Rect x={74} y={30} width={18} height={4} rx={2} fill={u('gMetal')} />
+      <Path d="M44 14H74V44Q74 52 66 52H52Q44 52 44 44Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M45.4 28H72.6V43.5Q72.6 50.6 66 50.6H52Q45.4 50.6 45.4 43.5Z" fill={u('gCofV')} />
+      <Ellipse cx={59} cy={28} rx={13.6} ry={2.6} fill="#6A3E22" />
+      <Rect x={56} y={50} width={6} height={22} fill={u('gGlass')} stroke="#A89886" strokeWidth={1.2} />
+      <Circle cx={59} cy={84} r={21} fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M39 86H79A20 20 0 0 1 59 103A20 20 0 0 1 39 86Z" fill={u('gCofV')} />
+      <Path d="M46 76C47 70 51 66 56 65" stroke="#fff" strokeWidth={3} opacity={0.7} {...line} />
+      <Ellipse cx={59} cy={102} rx={9} ry={2.2} fill="#E9A23B" />
+    </>
+  );
+}
+
+function Turkish() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={58} cy={106} rx={38} ry={5} fill={u('gShadow')} />
+      <Path d="M84 62L112 44" stroke="#3A2515" strokeWidth={7} {...line} />
+      <Path d="M84 62L112 44" stroke={u('gWood')} strokeWidth={4.5} {...line} />
+      <Path d="M44 38H76L82 52H38Z" fill={u('gGold')} />
+      <Path d="M44 38L33 33L40 46Z" fill={u('gGold')} />
+      <Path d="M38 50H82L90 92Q91 103 80 103H40Q29 103 30 92Z" fill={u('gGold')} />
+      <Path d="M36 58C34 72 36 86 42 96" stroke="#fff" strokeWidth={3} opacity={0.5} {...line} />
+      <Rect x={34} y={68} width={52} height={4} fill="#8E5A14" opacity={0.45} />
+      <Ellipse cx={60} cy={38} rx={16} ry={3.6} fill={u('gCofV')} />
+      <Ellipse cx={60} cy={38.5} rx={11} ry={2.2} fill={u('gCrema')} opacity={0.8} />
+      <Ellipse cx={60} cy={38} rx={16} ry={3.6} fill="none" stroke="#A26A1C" strokeWidth={1} />
+    </>
+  );
+}
+
+function Cloth() {
+  const u = useU();
+  return (
+    <>
+      <Ellipse cx={60} cy={108} rx={40} ry={5} fill={u('gShadow')} />
+      <Rect x={94} y={14} width={6} height={94} rx={2} fill={u('gWood')} />
+      <Rect x={26} y={104} width={76} height={5} rx={2} fill={u('gWood')} />
+      <Rect x={48} y={16} width={50} height={6} rx={3} fill={u('gWood')} />
+      <Path d="M32 24H68V28Q68 31 65 31H35Q32 31 32 28Z" fill="none" />
+      <Ellipse cx={50} cy={30} rx={20} ry={4.4} fill="none" stroke={u('gWood')} strokeWidth={4} />
+      <Path d="M31 30Q31 60 50 76Q69 60 69 30Z" fill="#EADFC8" stroke="#CDBDA6" strokeWidth={1} />
+      <Path d="M36 50Q38 66 50 76Q62 66 64 50Q50 56 36 50Z" fill="#7A4A26" opacity={0.55} />
+      <Path d="M36 38L46 66M50 38V68M64 38L54 66" stroke="#CDBDA6" strokeWidth={1} opacity={0.6} />
+      <Ellipse cx={50} cy={30} rx={18} ry={3} fill="#3B2212" opacity={0.85} />
+      <Circle cx={50} cy={82} r={1.8} fill="#4B2815" />
+      <Path d="M32 90H68L66 104Q65.6 106 63 106H37Q34.4 106 34 104Z" fill={u('gGlass')} stroke="#A89886" strokeWidth={1.4} />
+      <Path d="M33.6 98H66.4L65.4 104Q65.2 105 63 105H37Q34.8 105 34.6 104Z" fill={u('gCofV')} />
+    </>
+  );
+}
+
 function Press() {
   const u = useU();
   return (
@@ -311,6 +408,11 @@ export function Art({ id, size = 96, fill }: Props) {
     case 'v60': body = <Pourover />; break;
     case 'press': body = <Press />; break;
     case 'moka': body = <Moka />; break;
+    case 'aeropress': body = <Aeropress />; break;
+    case 'melitta': body = <Melitta />; break;
+    case 'siphon': body = <Siphon />; break;
+    case 'turkish': body = <Turkish />; break;
+    case 'cloth': body = <Cloth />; break;
     case 'chemex': body = <Chemex />; break;
     default: body = <Cup fill={fill} />;
   }

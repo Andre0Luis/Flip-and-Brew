@@ -281,6 +281,26 @@ export const pt: Content = {
       "name": "Chemex",
       "blurb": "Para quem aguenta 75 minutos."
     },
+    "cloth": {
+      "name": "Coador de pano",
+      "blurb": "O clássico da casa da avó. 55 minutos."
+    },
+    "melitta": {
+      "name": "Coador Melitta",
+      "blurb": "Simples e certeiro. 40 minutos."
+    },
+    "aeropress": {
+      "name": "AeroPress",
+      "blurb": "Pressão e pouca espera. 35 minutos."
+    },
+    "turkish": {
+      "name": "Cafeteira turca",
+      "blurb": "Café curto e denso, na fervura lenta. 20 minutos."
+    },
+    "siphon": {
+      "name": "Sifão",
+      "blurb": "Vidro, vapor e paciência. 50 minutos."
+    },
     "cup": {
       "name": "Xícara de porcelana",
       "blurb": "A primeira da prateleira."
