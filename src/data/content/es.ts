@@ -7,7 +7,7 @@ export const es: Content = {
     byline: 'André Luis Teixeira, quien construyó Flip & Brew',
     motto: 'Every second counts.',
     blocks: [
-      { heading: 'Quién la hace', text: 'Soy André Luis, ingeniero de plataforma. Mi trabajo es construir la base que nadie ve, para que todo lo demás funcione sin fricción. Fuera del trabajo hago trekking de travesía. En la montaña, el peso de más en la mochila se paga, y solo existe el próximo paso.' },
+      { heading: 'Quién la hace', text: 'Soy André Luis, ingeniero de plataforma. Mi trabajo es construir la base que nadie ve, para que todo lo demás funcione sin fricción. Fuera del trabajo hago trekkings cortos y largos, de todo tipo. En el sendero solo existe el siguiente paso, y nunca sé cuál será: es imprevisible. Eso es lo que me da tranquilidad: salir de mi zona de confort.' },
       { heading: 'La frase en el brazo', text: 'Tengo esta frase tatuada. No es un cartel de motivación. Es una cuenta simple: el tiempo es el único recurso que no vuelve. La duda, el ruido y la ilusión gastan el mismo reloj que todo lo demás.' },
       { heading: 'El giro', text: 'El fin de un ciclo me mostró cuánto tiempo y energía le venía dando a algo sin futuro. Estoy agradecido por eso. Fue lo que me quitó la venda y me devolvió el control de mi propio reloj.' },
       { heading: 'Qué es esta app', text: 'Flip & Brew no quiere tu atención. No tiene trucos para retenerte ni avisos para traerte de vuelta; el único aviso es el de taza lista, y solo si lo activas. Existe para lo contrario: dejas el móvil, el café se hace y el tiempo va a lo que importa fuera de la pantalla.' }
