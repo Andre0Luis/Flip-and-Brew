@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { FillingCup } from '@/components/BrewViz';
 import { Button, Card, Chip, Screen, Txt } from '@/components/ui';
+import { CreatorStory } from '@/components/CreatorStory';
 import { useCalibrate } from '@/engine/useCalibrate';
+import { CONTENT } from '@/data/content';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const STEPS = 3;
+const STEPS = 4;
 
 /**
- * Primeira abertura, em segundos e em três passos: a promessa, a ação central (aprender fazendo) e a autonomia.
+ * Primeira abertura, em quatro passos: a promessa, a ação central (aprender fazendo), por que o app existe e a autonomia.
  * Nenhuma tela bloqueia: dá para pular em qualquer ponto. O resto (moedas, tropeços) aparece como dica na primeira vez.
  */
 export default function Intro() {
@@ -25,7 +27,7 @@ export default function Intro() {
 
   // O copo enche e esvazia devagar, só para mostrar a ideia; no passo 2 ele acompanha a calibração.
   useEffect(() => {
-    if (step === 2) return;
+    if (step > 1) return;
     const id = setInterval(() => setFill((f) => (f >= 0.95 ? 0.15 : f + 0.2)), 1600);
     return () => clearInterval(id);
   }, [step]);
@@ -93,6 +95,16 @@ export default function Intro() {
         )}
 
         {step === 2 && (
+          <View style={{ gap: 16, alignSelf: 'stretch' }}>
+            <Txt v="display">{CONTENT[lang].creator.title}</Txt>
+            <Txt v="small" color="muted">
+              {CONTENT[lang].creator.byline}
+            </Txt>
+            <CreatorStory />
+          </View>
+        )}
+
+        {step === 3 && (
           <>
             <Txt v="display" style={{ textAlign: 'center' }}>
               {t('intro.t2')}
