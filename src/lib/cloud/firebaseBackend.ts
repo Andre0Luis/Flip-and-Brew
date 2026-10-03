@@ -46,7 +46,18 @@ function toUser(u: import('firebase/auth').User): CloudUser {
   return { uid: u.uid, email: u.email, provider, emailVerified: u.emailVerified };
 }
 
+/** No Expo Go não existe o módulo nativo do Google, e o Metro mostra o erro como fatal mesmo dentro de try/catch. */
+function inExpoGo(): boolean {
+  try {
+    const { default: Constants, ExecutionEnvironment } = require('expo-constants') as typeof import('expo-constants');
+    return Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+  } catch {
+    return false;
+  }
+}
+
 function google() {
+  if (inExpoGo()) return null;
   try {
     return require('@react-native-google-signin/google-signin') as typeof import('@react-native-google-signin/google-signin');
   } catch {
