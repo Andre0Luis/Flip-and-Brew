@@ -157,7 +157,7 @@ export const pt = {
   'calib.notFlat': 'O celular não estava deitado e parado. Apoie-o numa mesa, com a tela para cima, e tente de novo.',
   'calib.unavailable': 'Este aparelho não tem acelerômetro disponível.',
 
-  'brew.extracting': 'Extraindo · {name}',
+  'brew.extracting': 'Extraindo {coffee} em {name}',
   'brew.ofFull': 'de {time} para um copo cheio',
   'brew.ifStop': 'Se parar agora: +{n} moedas',
   'brew.hint': 'Vire o celular para baixo. O copo continua enchendo com a tela apagada, e pegar o celular encerra o copo.',

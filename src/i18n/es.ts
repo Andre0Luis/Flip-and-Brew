@@ -157,7 +157,7 @@ export const es: Record<keyof typeof pt, string> = {
   'calib.notFlat': 'El móvil no estaba quieto y plano. Apóyalo en una mesa, con la pantalla hacia arriba, e inténtalo de nuevo.',
   'calib.unavailable': 'Este dispositivo no tiene acelerómetro disponible.',
 
-  'brew.extracting': 'Preparando · {name}',
+  'brew.extracting': 'Preparando {coffee} en {name}',
   'brew.ofFull': 'de {time} para una taza llena',
   'brew.ifStop': 'Si paras ahora: +{n} monedas',
   'brew.hint': 'Voltea el móvil boca abajo. La taza sigue llenándose con la pantalla apagada, y al coger el móvil la taza termina.',

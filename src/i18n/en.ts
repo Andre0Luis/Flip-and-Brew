@@ -157,7 +157,7 @@ export const en: Record<keyof typeof pt, string> = {
   'calib.notFlat': 'The phone was not lying still. Rest it on a table, screen up, and try again.',
   'calib.unavailable': 'This device has no accelerometer available.',
 
-  'brew.extracting': 'Brewing · {name}',
+  'brew.extracting': 'Brewing {coffee} with {name}',
   'brew.ofFull': 'of {time} for a full cup',
   'brew.ifStop': 'If you stop now: +{n} coins',
   'brew.hint': 'Turn your phone face down. The cup keeps filling with the screen off, and picking up the phone ends the cup.',

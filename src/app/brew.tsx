@@ -17,11 +17,16 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 const GRADES: Quality[] = ['ralo', 'equilibrado', 'encorpado'];
 
+/** "Café superior" no meio da frase: só a primeira letra desce. */
+const lower = (s: string) => s.charAt(0).toLocaleLowerCase() + s.slice(1);
+
 export default function Brew() {
   const router = useRouter();
   const { c, r, f } = useTheme();
   const { lang, t } = useI18n();
   const active = useApp((s) => s.active);
+  // Copos iniciados antes de o café entrar no registro não têm pacote; vale o que está equipado.
+  const packId = useApp((s) => s.packId);
   const now = useNow(1000);
 
   // Se a tela abrir sem copo (link antigo, app reaberto), volta ao Início. Quando o copo termina com a tela aberta,
@@ -56,7 +61,7 @@ export default function Brew() {
     <Screen edges={['top', 'bottom']}>
       <View style={{ alignItems: 'center', gap: 20, paddingTop: 12 }}>
         <Txt v="label" color="muted">
-          {t('brew.extracting', { name: itemText(lang, active.brewerId).name })}
+          {t('brew.extracting', { coffee: lower(itemText(lang, active.packId ?? packId).name), name: itemText(lang, active.brewerId).name })}
         </Txt>
 
         <Ring progress={progress} size={250}>
