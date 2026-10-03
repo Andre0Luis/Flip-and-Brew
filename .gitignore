@@ -49,3 +49,5 @@ example
 *service-account*.json
 google-services.json
 *.keystore
+store-assets/
+dist-web/
