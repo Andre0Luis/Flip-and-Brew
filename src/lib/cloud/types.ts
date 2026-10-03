@@ -42,6 +42,8 @@ export type SnapshotData = {
   checkins?: Checkin[];
   /** Opcional: nome, telefone, idade e preferências de café. Backups antigos não têm. */
   profile?: Profile;
+  /** Opcional: missões diárias resgatadas, para não resgatar de novo depois de restaurar. */
+  missionsClaimed?: string[];
   practiceAccepted: string | null;
   practicesDone: string[];
   articlesRead: string[];

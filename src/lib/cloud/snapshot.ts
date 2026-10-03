@@ -29,6 +29,7 @@ export function buildSnapshot(local: LocalData, now: number): Snapshot {
       sessions: local.sessions.slice(-MAX_SESSIONS),
       checkins: (local.checkins ?? []).slice(-MAX_CHECKINS),
       profile: cleanProfile(local.profile),
+      missionsClaimed: (local.missionsClaimed ?? []).slice(-60),
       practiceAccepted: local.practiceAccepted,
       practicesDone: [...local.practicesDone],
       articlesRead: [...local.articlesRead],
@@ -53,6 +54,7 @@ export function parseSnapshot(raw: unknown): Snapshot | null {
     Array.isArray(d.owned) &&
     Array.isArray(d.sessions) &&
     (d.checkins === undefined || Array.isArray(d.checkins)) &&
+    (d.missionsClaimed === undefined || Array.isArray(d.missionsClaimed)) &&
     (d.profile === undefined || (typeof d.profile === 'object' && d.profile !== null && !Array.isArray(d.profile))) &&
     Array.isArray(d.practicesDone) &&
     Array.isArray(d.articlesRead) &&
@@ -88,6 +90,7 @@ export function applySnapshot<S extends Record<string, unknown>>(current: { sett
     sessions: d.sessions as Session[],
     checkins: d.checkins ?? [],
     profile: cleanProfile(d.profile),
+    missionsClaimed: d.missionsClaimed ?? [],
     practiceAccepted: d.practiceAccepted,
     practicesDone: d.practicesDone,
     articlesRead: d.articlesRead,
@@ -98,5 +101,5 @@ export function applySnapshot<S extends Record<string, unknown>>(current: { sett
 /** Assinatura barata do que entra no backup, para saber se vale agendar um novo. */
 export function dataSignature(d: LocalData): string {
   const s = d.settings;
-  return [d.coins, d.owned.length, d.sessions.length, d.sessions.at(-1)?.id ?? '', d.sessions.at(-1)?.mood ?? '', d.sessions.at(-1)?.trigger ?? '', d.checkins?.length ?? 0, d.checkins?.at(-1)?.energy ?? '', JSON.stringify(cleanProfile(d.profile)), d.brewerId, d.cupId, d.packId ?? '', d.articlesRead.length, d.practicesDone.length, s.goalMin, s.language, s.themeMode, s.autoStart, s.notifyOnDone].join('|');
+  return [d.coins, d.owned.length, d.sessions.length, d.sessions.at(-1)?.id ?? '', d.sessions.at(-1)?.mood ?? '', d.sessions.at(-1)?.trigger ?? '', d.checkins?.length ?? 0, d.checkins?.at(-1)?.energy ?? '', JSON.stringify(cleanProfile(d.profile)), d.missionsClaimed?.length ?? 0, d.brewerId, d.cupId, d.packId ?? '', d.articlesRead.length, d.practicesDone.length, s.goalMin, s.language, s.themeMode, s.autoStart, s.notifyOnDone].join('|');
 }

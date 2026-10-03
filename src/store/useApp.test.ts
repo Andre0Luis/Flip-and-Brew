@@ -4,6 +4,7 @@ import { DEFAULT_SETTINGS, useApp } from './useApp';
 import type { Session } from './types';
 import { dayKey } from '@/lib/stats';
 import { useAuth } from './useAuth';
+import { missionsFor } from '@/lib/missions';
 
 const MIN = 60_000;
 const DAY = 86_400_000;
@@ -107,6 +108,34 @@ test('o pacote de café equipado entra nas moedas do copo e equipar pacote exige
   assert.ok(useApp.getState().start(t0));
   const id = useApp.getState().finish(t0 + 40 * MIN + 5000)!; // Melitta (40 min) + papel + pacote especial: +35%
   assert.equal(useApp.getState().sessions.find((x) => x.id === id)!.coins, Math.round(48 * 1.35));
+});
+
+test('missões: resgatar só vale se concluída, uma vez por dia, e as três dão bônus', () => {
+  const now = Date.now();
+  const first = () => useApp.getState();
+  const ms = missionsFor({ sessions: first().sessions, checkins: first().checkins, practicesDone: first().practicesDone, goalMin: first().settings.goalMin, claimed: first().missionsClaimed }, now);
+  assert.equal(first().claimMission(ms[0].id, now), 0); // ainda não concluída
+  // Conclui as três do dia com dados reais.
+  useApp.setState({
+    checkins: [{ day: dayKey(now), energy: 3, at: now }],
+    practicesDone: [dayKey(now)],
+    sessions: [8, 21, 12].map((h, i) => {
+      const d = new Date(now);
+      d.setHours(h, 0, 0, 0);
+      return { id: `mm${i}`, brewerId: 'melitta', cupId: 'paper', startedAt: d.getTime(), elapsedMs: 400 * MIN, targetMs: 40 * MIN, status: 'done', coins: 0, quality: 'encorpado' } as Session;
+    }),
+    coins: 0,
+  });
+  let total = 0;
+  for (const m of ms) {
+    const got = first().claimMission(m.id, now);
+    assert.equal(got, m.reward, m.id);
+    assert.equal(first().claimMission(m.id, now), 0); // não resgata duas vezes
+    total += got;
+  }
+  assert.equal(first().claimMission('all', now), 30);
+  assert.equal(first().claimMission('all', now), 0);
+  assert.equal(first().coins, total + 30);
 });
 
 test('equipar só funciona com item que a pessoa tem', () => {

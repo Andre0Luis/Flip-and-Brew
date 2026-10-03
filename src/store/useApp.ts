@@ -12,6 +12,7 @@ import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
+import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -27,6 +28,8 @@ type State = {
   /** energia diária em xícaras (1 a 5), um registro por dia */
   checkins: Checkin[];
   lastResultId: string | null;
+  /** missões diárias já resgatadas, como "2026-10-14:checkin" (só os últimos dias) */
+  missionsClaimed: string[];
   /** perfil opcional (dados pessoais e preferências de café) */
   profile: Profile;
   practiceAccepted: string | null; // dayKey
@@ -50,6 +53,8 @@ type State = {
   setCheckin: (energy: number, now?: number) => void;
   /** Apaga o check-in de um dia (para refazer). */
   removeCheckin: (day: string) => void;
+  /** Resgata a recompensa de uma missão concluída hoje. Devolve as moedas ganhas (0 se não pôde). 'all' resgata o bônus das três. */
+  claimMission: (id: string, now?: number) => number;
   /** Atualiza o perfil. Passe undefined para limpar um campo. */
   setProfile: (patch: Partial<Record<keyof Profile, unknown>>) => void;
   clearProfile: () => void;
@@ -77,6 +82,7 @@ const initial = {
   checkins: [] as Checkin[],
   lastResultId: null as string | null,
   profile: {} as Profile,
+  missionsClaimed: [] as string[],
   practiceAccepted: null as string | null,
   practicesDone: [] as string[],
   articlesRead: [] as string[],
@@ -94,6 +100,23 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
+      claimMission: (id, now = Date.now()) => {
+        const st = get();
+        const ms = missionsFor({ sessions: st.sessions, checkins: st.checkins, practicesDone: st.practicesDone, goalMin: st.settings.goalMin, claimed: st.missionsClaimed }, now);
+        const key = claimKey(dayKey(now), id);
+        if (st.missionsClaimed.includes(key)) return 0;
+        let coins = 0;
+        if (id === 'all') {
+          if (!allClaimed(ms) || bonusClaimed(st.missionsClaimed, now)) return 0;
+          coins = ALL_BONUS;
+        } else {
+          const m = ms.find((x) => x.id === id);
+          if (!m || !m.done) return 0;
+          coins = m.reward;
+        }
+        set({ coins: st.coins + coins, missionsClaimed: pruneClaims([...st.missionsClaimed, key], now) });
+        return coins;
+      },
       removeCheckin: (day) => set((st) => ({ checkins: withoutCheckin(st.checkins, day) })),
       setProfile: (patch) => set((st) => ({ profile: cleanProfile({ ...st.profile, ...patch }) })),
       clearProfile: () => set({ profile: {} }),
@@ -226,6 +249,7 @@ export const useApp = create<State>()(
         checkins: s.checkins,
         lastResultId: s.lastResultId,
         profile: s.profile,
+        missionsClaimed: s.missionsClaimed,
         practiceAccepted: s.practiceAccepted,
         practicesDone: s.practicesDone,
         articlesRead: s.articlesRead,

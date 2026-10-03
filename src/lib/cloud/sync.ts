@@ -17,6 +17,7 @@ export function localData(): LocalData {
     sessions: s.sessions,
     checkins: s.checkins,
     profile: s.profile,
+    missionsClaimed: s.missionsClaimed,
     practiceAccepted: s.practiceAccepted,
     practicesDone: s.practicesDone,
     articlesRead: s.articlesRead,
