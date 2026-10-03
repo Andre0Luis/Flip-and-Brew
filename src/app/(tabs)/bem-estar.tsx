@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Button, Bar, Card, Header, Insight, Screen, Segmented, Txt } from '@/components/ui';
 import { CalendarGrid, HourBars, WeekBars } from '@/components/Charts';
 import { Ring } from '@/components/BrewViz';
+import { GoalPicker } from '@/components/GoalPicker';
 import { UsageCard } from '@/components/UsageCard';
 import { useApp } from '@/store/useApp';
 import {
@@ -89,6 +90,8 @@ export default function BemEstar() {
           { value: 'padroes', label: t('wb.tabPatterns') },
         ]}
       />
+
+      {(tab === 'resumo' || empty) && <GoalPicker hint />}
 
       {empty ? (
         <Card style={{ gap: 12 }}>

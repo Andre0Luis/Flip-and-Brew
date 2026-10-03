@@ -207,6 +207,7 @@ export const es: Record<keyof typeof pt, string> = {
 
   'wb.title': 'Bienestar',
   'wb.goalHeader': 'Meta {time}/día',
+  'wb.goalHint': 'Cambia el equilibrio, el calendario y el descuento de las cafeteras. Vale desde hoy.',
   'wb.tabSummary': 'Resumen',
   'wb.tabPatterns': 'Patrones',
   'wb.emptyTitle': 'Aún no hay tazas por aquí',

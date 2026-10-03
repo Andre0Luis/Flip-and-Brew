@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { Switch, View } from 'react-native';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
-import { Button, Card, Chip, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Screen, Segmented, Txt } from '@/components/ui';
 import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
 import { hasProfile } from '@/lib/profile';
 import { useTestTools } from '@/lib/admin';
+import { GoalPicker } from '@/components/GoalPicker';
 import { useAuth } from '@/store/useAuth';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const GOALS = [60, 90, 120, 180, 240];
 
 function Row({ title, hint, value, onChange }: { title: string; hint: string; value: boolean; onChange: (v: boolean) => void }) {
   const { c } = useTheme();
@@ -66,14 +66,7 @@ export default function Ajustes() {
         <Button label={t('common.close')} tone="quiet" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} style={{ paddingVertical: 8, paddingHorizontal: 16 }} />
       </View>
 
-      <Card style={{ gap: 12 }}>
-        <Txt v="title">{t('set.goal')}</Txt>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          {GOALS.map((g) => (
-            <Chip key={g} label={`${(g / 60).toFixed(g % 60 === 0 ? 0 : 1).replace('.', t('number.locale') === 'en-US' ? '.' : ',')} h`} on={settings.goalMin === g} onPress={() => set({ goalMin: g })} />
-          ))}
-        </View>
-      </Card>
+      <GoalPicker />
 
       <Card style={{ gap: 12 }}>
         <Txt v="title">{t('set.look')}</Txt>

@@ -207,6 +207,7 @@ export const en: Record<keyof typeof pt, string> = {
 
   'wb.title': 'Wellbeing',
   'wb.goalHeader': 'Goal {time}/day',
+  'wb.goalHint': 'Changes the balance score, the calendar and the brewer discount. Applies from today.',
   'wb.tabSummary': 'Summary',
   'wb.tabPatterns': 'Patterns',
   'wb.emptyTitle': 'No cups here yet',

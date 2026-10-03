@@ -207,6 +207,7 @@ export const pt = {
 
   'wb.title': 'Bem-estar',
   'wb.goalHeader': 'Meta {time}/dia',
+  'wb.goalHint': 'Muda o equilíbrio, o calendário e o desconto das cafeteiras. Vale a partir de hoje.',
   'wb.tabSummary': 'Resumo',
   'wb.tabPatterns': 'Padrões',
   'wb.emptyTitle': 'Ainda não há copos por aqui',
