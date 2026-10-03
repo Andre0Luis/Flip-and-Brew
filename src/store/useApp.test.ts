@@ -67,10 +67,10 @@ test('parar cedo rende o proporcional e abaixo de 30 s a sessão é descartada',
 
 test('comprar: saldo, item já seu e item que só abre por sequência', () => {
   const st = useApp.getState();
-  assert.equal(st.buy('press'), 'poor'); // 250 moedas, há 100
-  useApp.getState().addCoins(500);
+  assert.equal(st.buy('press'), 'poor'); // 600 moedas, há 100
+  useApp.getState().addCoins(900);
   assert.equal(useApp.getState().buy('press'), 'ok');
-  assert.equal(useApp.getState().coins, 350); // 600 - 250, sem desconto ainda
+  assert.equal(useApp.getState().coins, 400); // 1000 - 600, sem desconto ainda
   assert.equal(useApp.getState().buy('press'), 'owned');
   assert.equal(useApp.getState().buy('chemex'), 'locked');
   assert.equal(useApp.getState().buy('inexistente'), 'locked');
@@ -79,11 +79,11 @@ test('comprar: saldo, item já seu e item que só abre por sequência', () => {
 test('o desconto de check-in seguido vale na compra da cafeteira, mas não na xícara especial', () => {
   const day = 86_400_000;
   const now = Date.now();
-  useApp.setState({ coins: 5000, checkins: Array.from({ length: 10 }, (_, i) => ({ day: dayKey(now - i * day), energy: 3, at: now - i * day })) });
-  assert.equal(useApp.getState().buy('moka'), 'ok'); // 1100 com 10% de desconto = 990
-  assert.equal(useApp.getState().coins, 4010);
+  useApp.setState({ coins: 20_000, checkins: Array.from({ length: 10 }, (_, i) => ({ day: dayKey(now - i * day), energy: 3, at: now - i * day })) });
+  assert.equal(useApp.getState().buy('moka'), 'ok'); // 3300 com 10% de desconto = 2970
+  assert.equal(useApp.getState().coins, 17_030);
   assert.equal(useApp.getState().buy('camp'), 'ok'); // série especial: preço cheio
-  assert.equal(useApp.getState().coins, 2810); // 4010 - 1200
+  assert.equal(useApp.getState().coins, 13_430); // 17030 - 3600
 });
 
 test('a combinação cafeteira + xícara aumenta as moedas do copo cheio', () => {
@@ -99,7 +99,7 @@ test('o pacote de café equipado entra nas moedas do copo e equipar pacote exige
   assert.equal(useApp.getState().packId, 'pack-extraforte');
   useApp.getState().equip('pack-especial');
   assert.equal(useApp.getState().packId, 'pack-extraforte'); // não é dono ainda
-  useApp.setState({ coins: 5000 });
+  useApp.setState({ coins: 20_000 });
   assert.equal(useApp.getState().buy('pack-especial'), 'ok');
   useApp.getState().equip('pack-especial');
   assert.equal(useApp.getState().packId, 'pack-especial');
@@ -112,7 +112,7 @@ test('o pacote de café equipado entra nas moedas do copo e equipar pacote exige
 test('equipar só funciona com item que a pessoa tem', () => {
   useApp.getState().equip('moka');
   assert.equal(useApp.getState().brewerId, 'melitta');
-  useApp.getState().addCoins(1000);
+  useApp.getState().addCoins(5000);
   useApp.getState().buy('moka');
   useApp.getState().equip('moka');
   assert.equal(useApp.getState().brewerId, 'moka');

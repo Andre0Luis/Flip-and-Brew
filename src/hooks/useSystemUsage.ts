@@ -13,7 +13,7 @@ export function useSystemUsage(days = 7) {
     if (!isUsageStatsAvailable) return;
     const ok = hasUsageStatsPermission();
     setPermitted(ok);
-    setData(ok ? getDailyUsage(days) : []);
+    setData(ok ? getDailyUsage(days).map((d) => ({ ...d, locks: d.locks ?? 0 })) : []);
   }, [days]);
 
   useFocusEffect(refresh);

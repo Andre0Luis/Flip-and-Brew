@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Art } from '@/art/Art';
-import { LiveBrewer } from '@/components/BrewViz';
+import { BrewerCarousel } from '@/components/BrewerCarousel';
 import { CalibrateCard } from '@/components/CalibrateCard';
 import { earnBonus } from '@/lib/earnings';
 import { useTestTools } from '@/lib/admin';
@@ -10,7 +10,7 @@ import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
-import { Button, Card, Chip, CoinBadge, Screen, Txt } from '@/components/ui';
+import { Button, Card, CoinBadge, Screen, Txt } from '@/components/ui';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
 import { brewers, byId, itemText } from '@/data/catalog';
 import { formatDateLong, useI18n } from '@/i18n';
@@ -56,6 +56,10 @@ export default function Inicio() {
   const minutes = settings.quickBrew && testTools ? 1 : brewer?.brewMinutes ?? 45;
 
   const combo = earnBonus(brewerId, cupId, packId);
+  // A bancada usa a largura da tela: xícara e pacote maiores nos lados, cafeteira no centro.
+  const [stageW, setStageW] = useState(0);
+  const side = Math.round(Math.min(116, Math.max(84, (stageW || 340) * 0.31)));
+  const center = Math.round(Math.min(200, Math.max(150, (stageW || 340) - 2 * side + 36)));
 
   const begin = () => {
     if (active || start()) router.push('/brew');
@@ -117,13 +121,13 @@ export default function Inicio() {
 
       <View style={{ alignItems: 'center', paddingVertical: 4 }}>
         {/* Bancada: a xícara de um lado, a cafeteira no centro e o pacote de café do outro. Tocar leva à Coleção. */}
-        <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 2 }}>
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: 82 }}>
-            <Art id={cupId} size={82} fill={1} />
+        <View onLayout={(e) => setStageW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', alignSelf: 'stretch' }}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.cupA11y', { name: itemText(lang, cupId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginRight: -10 }}>
+            <Art id={cupId} size={side} fill={1} />
           </Pressable>
-          <LiveBrewer id={brewerId} size={186} />
-          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: 82 }}>
-            <Art id={packId} size={82} />
+          <BrewerCarousel ids={ownedBrewers.map((b) => b.id)} current={brewerId} size={center} onChange={equip} />
+          <Pressable accessibilityRole="button" accessibilityLabel={t('home.packA11y', { name: itemText(lang, packId).name })} onPress={() => router.push('/colecao')} hitSlop={8} style={{ width: side, marginLeft: -10 }}>
+            <Art id={packId} size={side} />
           </Pressable>
         </View>
         <Txt v="small" color="muted">
@@ -140,13 +144,6 @@ export default function Inicio() {
         {t('home.todayPrefix')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{minutesLabel(today.minutes)} {t('home.offlineSuffix')}</Txt> · {today.cups} {t('unit.cup', { n: today.cups })}{unlocksToday !== undefined ? ` · ${unlocksToday} ${t('unit.unlock', { n: unlocksToday })}` : ''}
       </Txt>
 
-      {ownedBrewers.length > 1 && (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-          {ownedBrewers.map((b) => (
-            <Chip key={b.id} label={itemText(lang, b.id).name} on={b.id === brewerId} onPress={() => equip(b.id)} />
-          ))}
-        </View>
-      )}
 
       <View style={{ gap: 8 }}>
         <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />

@@ -15,7 +15,7 @@ O humor só era registrado ao fim de um copo, então dias sem copo ficavam sem l
 - **Mais copos e séries especiais:** xícaras, canecas e copos de vidro (inclusive o copo americano). Séries: Estoica, Botequim, Torcida (seis canecas de time, só com as cores, sem escudos), Noturna, Montanha, Ouro e Universo (a exclusiva).
 - **Pacotes de café** (extraforte, tradicional, superior, gourmet e especial): item de um terceiro tipo (`beans`), equipado ao lado da cafeteira e do copo. Quanto melhor a categoria, mais moedas.
 - **Bônus de moedas por combinação** (`lib/earnings.ts`, no ADR-0011 isso estava descartado): a cafeteira, o copo e o pacote em uso somam um bônus percentual sobre as moedas do copo, com +5% por combinação que combina (ex.: turca com caneca preta). Teto de 70%. A base continua 1 moeda por minuto, e o bônus de 20% do copo cheio.
-- **Preços** (moedas): as três primeiras peças à venda de cada tipo custam pouco, para chamar a atenção (cafeteiras 120, 150 e 250; copos 100); depois sobem. Séries especiais custam mais que qualquer peça comum (900 a 3000). Pacotes: 150, 450, 1000 e 2500.
+- **Preços** (moedas): as três primeiras peças à venda de cada tipo custam pouco, para chamar a atenção (cafeteiras 300, 400 e 600; copos 250); depois sobem. Séries especiais custam mais que qualquer peça comum (2700 a 9000). Pacotes: 450, 1350, 3000 e 7500. Como a base é 1 moeda por minuto, os preços foram triplicados para que cada peça custe horas de tempo offline, não minutos.
 - A cafeteira do Início ganhou animação leve (flutuar e vapor), desligada com "reduzir movimento".
 
 ## Alternativas descartadas

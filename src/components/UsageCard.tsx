@@ -4,7 +4,7 @@ import { Button, Card, Txt } from './ui';
 import { WeekBars } from './Charts';
 import { useI18n } from '@/i18n';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
-import { screenBars, summarizeUsage } from '@/lib/usage';
+import { lockedMs, screenBars, summarizeUsage } from '@/lib/usage';
 import { minutesLabel } from '@/lib/format';
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -13,7 +13,7 @@ function Stat({ label, value }: { label: string; value: string }) {
       <Txt v="label" color="muted" numberOfLines={2}>
         {label}
       </Txt>
-      <Txt v="num" style={{ fontSize: 20 }}>
+      <Txt v="num" style={{ fontSize: 20 }} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
         {value}
       </Txt>
     </View>
@@ -43,6 +43,14 @@ export function UsageCard() {
     <Card style={{ gap: 12 }}>
       <Txt v="label" color="muted">
         {t('wb.usageTitle')}
+      </Txt>
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <Stat label={t('wb.usageLocks')} value={String(s.today?.locks ?? 0)} />
+        <Stat label={t('wb.usageLocked')} value={minutesLabel(s.today ? lockedMs(s.today) / 60_000 : 0)} />
+        <Stat label={t('wb.usageLocksAvg')} value={s.fullDays ? String(Math.round(s.avgLocks)) : '—'} />
+      </View>
+      <Txt v="small" color="muted">
+        {t('wb.usageLockedNote')}
       </Txt>
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <Stat label={t('wb.usageToday')} value={String(s.today?.unlocks ?? 0)} />
