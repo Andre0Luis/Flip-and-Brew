@@ -59,8 +59,8 @@ export default function Inicio() {
   const combo = earnBonus(brewerId, cupId, packId);
   // A bancada usa a largura da tela: xícara e pacote maiores nos lados, cafeteira no centro.
   const [stageW, setStageW] = useState(0);
-  const side = Math.round(Math.min(100, Math.max(76, (stageW || 340) * 0.26)));
-  const center = Math.round(Math.min(250, Math.max(190, (stageW || 340) - 2 * side + 60)));
+  const side = Math.round(Math.min(116, Math.max(88, (stageW || 340) * 0.3)));
+  const center = Math.round(Math.min(214, Math.max(168, (stageW || 340) - 2 * side + 44)));
   const brewerIds = ownedBrewers.map((b) => b.id);
   const brewerIndex = Math.max(0, brewerIds.indexOf(brewerId));
   const goBrewer = (to: number) => {

@@ -29,6 +29,7 @@ export function BrewerCarousel({ ids, current, size, onChange }: { ids: string[]
         <FlatList
           ref={list}
           data={ids}
+          extraData={current}
           horizontal
           pagingEnabled
           scrollEnabled={many}
