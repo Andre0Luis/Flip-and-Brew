@@ -84,6 +84,11 @@ export default function Guia() {
               <Txt v="small" color="muted" numberOfLines={3} style={{ minHeight: 54 }}>
                 {item.blurb}
               </Txt>
+              {!!item.earn && (
+                <Txt v="label" color="accent">
+                  {t('guide.earn', { n: item.earn })}
+                </Txt>
+              )}
               {locked ? (
                 <View style={{ gap: 6 }}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>

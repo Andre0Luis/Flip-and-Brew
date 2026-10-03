@@ -3,6 +3,7 @@ import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native'
 import { useFocusEffect, useRouter } from 'expo-router';
 import { LiveBrewer } from '@/components/BrewViz';
 import { CalibrateCard } from '@/components/CalibrateCard';
+import { earnBonus } from '@/lib/earnings';
 import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
@@ -21,7 +22,7 @@ export default function Inicio() {
   const router = useRouter();
   const { c } = useTheme();
   const { lang, t } = useI18n();
-  const { coins, owned, brewerId, sessions, active, settings } = useApp();
+  const { coins, owned, brewerId, cupId, sessions, active, settings } = useApp();
   const equip = useApp((s) => s.equip);
   const start = useApp((s) => s.start);
 
@@ -50,6 +51,8 @@ export default function Inicio() {
   const brewer = byId(brewerId);
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
   const minutes = settings.quickBrew ? 1 : brewer?.brewMinutes ?? 45;
+
+  const combo = earnBonus(brewerId, cupId);
 
   const begin = () => {
     if (active || start()) router.push('/brew');
@@ -114,6 +117,11 @@ export default function Inicio() {
         <Txt v="small" color="muted">
           {t('home.brewerInfo', { name: itemText(lang, brewerId).name, min: minutes })}
         </Txt>
+        {combo.total > 0 && (
+          <Txt v="label" color="accent">
+            {t('home.combo', { n: combo.total })}
+          </Txt>
+        )}
       </View>
 
       <Txt v="small" color="muted" style={{ textAlign: 'center' }}>

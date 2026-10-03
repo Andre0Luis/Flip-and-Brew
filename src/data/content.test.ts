@@ -39,7 +39,7 @@ test('nenhum campo de texto está vazio e as listas têm o mesmo tamanho do port
 test('artigos apontam para frases e artigos que existem', () => {
   const ids = new Set(ARTICLE_BASE.map((a) => a.id));
   for (const a of ARTICLE_BASE) {
-    assert.ok(QUOTE_IDS.includes(a.quoteId as never), `${a.id} → frase ${a.quoteId}`);
+    if (a.quoteId) assert.ok(QUOTE_IDS.includes(a.quoteId as never), `${a.id} → frase ${a.quoteId}`);
     for (const r of a.related) assert.ok(ids.has(r), `${a.id} → ${r}`);
   }
 });

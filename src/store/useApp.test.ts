@@ -57,10 +57,10 @@ test('parar cedo rende o proporcional e abaixo de 30 s a sessão é descartada',
 
 test('comprar: saldo, item já seu e item que só abre por sequência', () => {
   const st = useApp.getState();
-  assert.equal(st.buy('press'), 'poor'); // 400 moedas, há 100
+  assert.equal(st.buy('press'), 'poor'); // 250 moedas, há 100
   useApp.getState().addCoins(500);
   assert.equal(useApp.getState().buy('press'), 'ok');
-  assert.equal(useApp.getState().coins, 200); // 600 - 400, sem desconto ainda
+  assert.equal(useApp.getState().coins, 350); // 600 - 250, sem desconto ainda
   assert.equal(useApp.getState().buy('press'), 'owned');
   assert.equal(useApp.getState().buy('chemex'), 'locked');
   assert.equal(useApp.getState().buy('inexistente'), 'locked');
@@ -70,10 +70,19 @@ test('o desconto de check-in seguido vale na compra da cafeteira, mas não na x�
   const day = 86_400_000;
   const now = Date.now();
   useApp.setState({ coins: 5000, checkins: Array.from({ length: 10 }, (_, i) => ({ day: dayKey(now - i * day), energy: 3, at: now - i * day })) });
-  assert.equal(useApp.getState().buy('moka'), 'ok'); // 800 com 10% de desconto = 720
-  assert.equal(useApp.getState().coins, 4280);
+  assert.equal(useApp.getState().buy('moka'), 'ok'); // 1100 com 10% de desconto = 990
+  assert.equal(useApp.getState().coins, 4010);
   assert.equal(useApp.getState().buy('camp'), 'ok'); // série especial: preço cheio
-  assert.equal(useApp.getState().coins, 3380);
+  assert.equal(useApp.getState().coins, 2810); // 4010 - 1200
+});
+
+test('a combinação cafeteira + xícara aumenta as moedas do copo cheio', () => {
+  useApp.setState({ brewerId: 'moka', cupId: 'tiny', owned: [...useApp.getState().owned, 'moka', 'tiny'] });
+  const t0 = 1_000_000;
+  assert.ok(useApp.getState().start(t0));
+  const id = useApp.getState().finish(t0 + 30 * MIN + 5000)!; // moka: 30 min, +20% + 2% + 5% de combinação = +27%
+  const s = useApp.getState().sessions.find((x) => x.id === id)!;
+  assert.equal(s.coins, Math.round((30 + 6) * 1.27));
 });
 
 test('equipar só funciona com item que a pessoa tem', () => {

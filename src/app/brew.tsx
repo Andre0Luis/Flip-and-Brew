@@ -11,6 +11,7 @@ import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { useNow } from '@/hooks/useNow';
 import { clock, minutesLabel } from '@/lib/format';
+import { earnBonus } from '@/lib/earnings';
 import { coinsFor, qualityOf, type Quality } from '@/lib/brew';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -90,7 +91,7 @@ export default function Brew() {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Coin size={20} />
           <Txt v="small" color="muted">
-            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs) })}
+            {t('brew.ifStop', { n: coinsFor(elapsed, active.targetMs, earnBonus(active.brewerId, active.cupId).total) })}
           </Txt>
         </View>
 

@@ -11,6 +11,8 @@ export type CatalogItem = {
   price: number;
   /** sequência (dias) necessária no lugar de moedas */
   streakUnlock?: number;
+  /** bônus (em %) nas moedas ganhas por copo quando o item está em uso */
+  earn?: number;
   /** só cafeteiras: minutos offline para encher o copo */
   brewMinutes?: number;
   /** itens de uma coleção temática, mostrados juntos no Guia */
@@ -18,35 +20,36 @@ export type CatalogItem = {
 };
 
 export const CATALOG: CatalogItem[] = [
-  // Cafeteiras. Têm desconto por check-in seguido e por tempo offline (lib/pricing.ts).
-  { id: 'v60', kind: 'brewer', price: 0, brewMinutes: 45 },
-  { id: 'cloth', kind: 'brewer', price: 200, brewMinutes: 55 },
-  { id: 'melitta', kind: 'brewer', price: 300, brewMinutes: 40 },
-  { id: 'press', kind: 'brewer', price: 400, brewMinutes: 60 },
-  { id: 'turkish', kind: 'brewer', price: 500, brewMinutes: 20 },
-  { id: 'aeropress', kind: 'brewer', price: 600, brewMinutes: 35 },
-  { id: 'moka', kind: 'brewer', price: 800, brewMinutes: 30 },
-  { id: 'siphon', kind: 'brewer', price: 1500, brewMinutes: 50 },
-  { id: 'chemex', kind: 'brewer', price: 0, streakUnlock: 30, brewMinutes: 75 },
-  // Xícaras e canecas, sempre pelo preço cheio.
-  { id: 'cup', kind: 'cup', price: 0 },
-  { id: 'mug', kind: 'cup', price: 150 },
-  { id: 'mugb', kind: 'cup', price: 150 },
-  { id: 'tiny', kind: 'cup', price: 200 },
-  { id: 'mugg', kind: 'cup', price: 200 },
-  { id: 'mugr', kind: 'cup', price: 200 },
-  { id: 'mugk', kind: 'cup', price: 200 },
-  { id: 'glass', kind: 'cup', price: 250 },
-  { id: 'cupb', kind: 'cup', price: 280 },
-  { id: 'cupg', kind: 'cup', price: 280 },
-  { id: 'cupo', kind: 'cup', price: 280 },
-  // Séries especiais: mais caras e sem desconto.
-  { id: 'stoic-ep', kind: 'cup', price: 700, collection: 'stoic' },
-  { id: 'stoic-sq', kind: 'cup', price: 700, collection: 'stoic' },
-  { id: 'stoic-ma', kind: 'cup', price: 700, collection: 'stoic' },
-  { id: 'camp', kind: 'cup', price: 900, collection: 'mountain' },
-  { id: 'peak', kind: 'cup', price: 900, collection: 'mountain' },
-  { id: 'summit', kind: 'cup', price: 900, collection: 'mountain' },
+  // Cafeteiras. Têm desconto por check-in seguido e por tempo offline (lib/pricing.ts) e dão bônus de moedas (lib/earnings.ts).
+  // As três primeiras à venda custam pouco, para chamar a atenção; as demais pedem constância.
+  { id: 'v60', kind: 'brewer', price: 0, brewMinutes: 45, earn: 0 },
+  { id: 'cloth', kind: 'brewer', price: 120, brewMinutes: 55, earn: 5 },
+  { id: 'melitta', kind: 'brewer', price: 180, brewMinutes: 40, earn: 5 },
+  { id: 'press', kind: 'brewer', price: 250, brewMinutes: 60, earn: 10 },
+  { id: 'turkish', kind: 'brewer', price: 600, brewMinutes: 20, earn: 10 },
+  { id: 'aeropress', kind: 'brewer', price: 800, brewMinutes: 35, earn: 15 },
+  { id: 'moka', kind: 'brewer', price: 1100, brewMinutes: 30, earn: 20 },
+  { id: 'siphon', kind: 'brewer', price: 2000, brewMinutes: 50, earn: 30 },
+  { id: 'chemex', kind: 'brewer', price: 0, streakUnlock: 30, brewMinutes: 75, earn: 25 },
+  // Xícaras e canecas, sempre pelo preço cheio. Também dão bônus, menor que o das cafeteiras.
+  { id: 'cup', kind: 'cup', price: 0, earn: 0 },
+  { id: 'mug', kind: 'cup', price: 100, earn: 0 },
+  { id: 'mugb', kind: 'cup', price: 100, earn: 0 },
+  { id: 'tiny', kind: 'cup', price: 150, earn: 2 },
+  { id: 'mugg', kind: 'cup', price: 300, earn: 3 },
+  { id: 'mugr', kind: 'cup', price: 300, earn: 3 },
+  { id: 'mugk', kind: 'cup', price: 300, earn: 3 },
+  { id: 'glass', kind: 'cup', price: 350, earn: 4 },
+  { id: 'cupb', kind: 'cup', price: 420, earn: 5 },
+  { id: 'cupg', kind: 'cup', price: 420, earn: 5 },
+  { id: 'cupo', kind: 'cup', price: 420, earn: 5 },
+  // Séries especiais: mais caras, sem desconto e com o maior bônus.
+  { id: 'stoic-ep', kind: 'cup', price: 900, earn: 10, collection: 'stoic' },
+  { id: 'stoic-sq', kind: 'cup', price: 900, earn: 10, collection: 'stoic' },
+  { id: 'stoic-ma', kind: 'cup', price: 900, earn: 10, collection: 'stoic' },
+  { id: 'camp', kind: 'cup', price: 1200, earn: 15, collection: 'mountain' },
+  { id: 'peak', kind: 'cup', price: 1200, earn: 15, collection: 'mountain' },
+  { id: 'summit', kind: 'cup', price: 1200, earn: 15, collection: 'mountain' },
 ];
 
 export type LocalizedItem = CatalogItem & ItemText;

@@ -1,10 +1,10 @@
 import { CONTENT, type ArticleText, type PracticeText } from './content';
 import type { Lang } from '@/i18n';
 
-export type Category = 'antifragile' | 'stoicism' | 'digital' | 'sleep';
-export const CATEGORIES: Category[] = ['antifragile', 'stoicism', 'digital', 'sleep'];
+export type Category = 'antifragile' | 'stoicism' | 'digital' | 'sleep' | 'coffee' | 'brewing' | 'taste' | 'health' | 'ritual';
+export const CATEGORIES: Category[] = ['antifragile', 'stoicism', 'digital', 'sleep', 'coffee', 'brewing', 'taste', 'health', 'ritual'];
 
-type ArticleBase = { id: string; category: Category; minutes: number; quoteId: string; related: string[] };
+type ArticleBase = { id: string; category: Category; minutes: number; /** frase estoica opcional que abre o artigo */ quoteId?: string; related: string[] };
 
 export const ARTICLE_BASE: ArticleBase[] = [
   { id: 'antifragil', category: 'antifragile', minutes: 3, quoteId: 'nt-vento', related: ['via-negativa', 'recaida'] },
@@ -16,6 +16,17 @@ export const ARTICLE_BASE: ArticleBase[] = [
   { id: 'atencao', category: 'digital', minutes: 3, quoteId: 'sq-brev', related: ['notificacoes', 'via-negativa'] },
   { id: 'recaida', category: 'antifragile', minutes: 3, quoteId: 'nt-vento', related: ['antifragil', 'desconforto'] },
   { id: 'manha', category: 'digital', minutes: 3, quoteId: 'ma-847', related: ['sono', 'notificacoes'] },
+  // gen:articles:start
+  { id: 'cafe-historia', category: 'coffee', minutes: 3, related: ['cafe-graos', 'cafe-regioes'] },
+  { id: 'cafe-graos', category: 'coffee', minutes: 3, related: ['cafe-regioes', 'cafe-torra'] },
+  { id: 'cafe-regioes', category: 'coffee', minutes: 3, related: ['cafe-graos', 'cafe-corpo'] },
+  { id: 'cafe-torra', category: 'taste', minutes: 3, related: ['cafe-corpo', 'cafe-moagem'] },
+  { id: 'cafe-moagem', category: 'brewing', minutes: 3, related: ['cafe-proporcao', 'cafe-metodos'] },
+  { id: 'cafe-proporcao', category: 'brewing', minutes: 3, related: ['cafe-moagem', 'cafe-corpo'] },
+  { id: 'cafe-corpo', category: 'taste', minutes: 4, related: ['cafe-torra', 'cafe-proporcao'] },
+  { id: 'cafe-metodos', category: 'brewing', minutes: 4, related: ['cafe-moagem', 'cafe-dicas'] },
+  { id: 'cafe-dicas', category: 'brewing', minutes: 3, related: ['cafe-proporcao', 'cafe-metodos'] },
+  // gen:articles:end
 ];
 
 export type Article = ArticleBase & ArticleText;

@@ -10,6 +10,7 @@ import { makeTestData } from '@/lib/testUser';
 import { withCheckin, withoutCheckin } from '@/lib/checkin';
 import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
+import { earnBonus } from '@/lib/earnings';
 
 export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, devTools: false, notifyOnDone: false, faceUpSign: 0 };
 
@@ -107,7 +108,7 @@ export const useApp = create<State>()(
         const st = get();
         const a = st.active;
         if (!a) return null;
-        const o = outcomeOf(a.startedAt, a.targetMs, now);
+        const o = outcomeOf(a.startedAt, a.targetMs, now, earnBonus(a.brewerId, a.cupId).total);
         if (o.elapsedMs < MIN_LOGGED_MS) {
           set({ active: null, lastEndedAt: now });
           return null;

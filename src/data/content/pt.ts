@@ -228,7 +228,153 @@ export const pt: Content = {
         "Prepare o primeiro copo do dia antes de olhar mensagens.",
         "Deixe o carregador fora do quarto esta noite."
       ]
-    }
+    },
+    // gen:articles:start
+    "cafe-historia": {
+      "title": "De Kaldi ao seu copo",
+      "summary": "Uma lenda etíope, um século de mercados e como o café chegou ao Brasil.",
+      "oneLine": "O café viaja há mais de quinhentos anos. Cada xícara é o último trecho de uma estrada longa.",
+      "inApp": "Cada copo do app dura o tempo de uma extração de verdade. Esperar faz parte da história do café.",
+      "body": [
+        "Diz a lenda que um pastor etíope chamado Kaldi viu as cabras ficarem agitadas depois de comer os frutos de um arbusto. É uma história bonita e não há prova dela, mas o café é mesmo originário da Etiópia. No século XV já era bebido no Iêmen, em rodas de oração e de conversa que atravessavam a noite.",
+        "Dali, o grão passou por Meca, Cairo e Istambul e chegou à Europa no século XVII, onde as primeiras casas de café viraram pontos de debate e de negócio. Os holandeses e os franceses levaram mudas para as colônias, e o café virou uma das mercadorias mais valiosas do mundo.",
+        "No Brasil, as primeiras mudas chegaram ao Pará em 1727, trazidas por Francisco de Melo Palheta. A cultura subiu pelo Vale do Paraíba, depois pelo oeste paulista e por Minas Gerais. Desde o século XIX o Brasil é o maior produtor do mundo."
+      ],
+      "tryToday": [
+        "Beba o próximo café sem tela, só prestando atenção.",
+        "Pense em quantas mãos ele passou até chegar a você.",
+        "Anote um sabor que você notou."
+      ]
+    },
+    "cafe-graos": {
+      "title": "Arábica e robusta",
+      "summary": "As duas espécies que dominam o mercado e o que muda no sabor e na cafeína.",
+      "oneLine": "Quase todo café vem de duas espécies. Saber a diferença ajuda a escolher o que está no pacote.",
+      "inApp": "Em Perfil, você pode marcar o corpo e a acidez que prefere. Isso já aponta para um grão ou outro.",
+      "body": [
+        "A arábica responde por cerca de 60% do café do mundo. Cresce em altitude, pede clima mais ameno e rende uma bebida mais doce, aromática e com acidez agradável. A robusta (ou conilon) cresce bem em locais quentes e baixos, é mais resistente a pragas e tem corpo forte, amargor marcado e cerca do dobro da cafeína.",
+        "Dentro de cada espécie há variedades, como bourbon, típica, catuaí e geisha, cada uma com o seu perfil de doçura e acidez. O processamento depois da colheita também pesa: o café natural, seco com a casca, tende a ser mais doce e frutado. O lavado, sem a polpa, é mais limpo e brilhante.",
+        "Blends misturam grãos para buscar equilíbrio ou custo. Cafés de origem única (single origin) mostram o carácter de um lugar e de uma safra. Nenhum é melhor em si: depende do que você quer na xícara."
+      ],
+      "tryToday": [
+        "Leia o rótulo do seu café: espécie, variedade e processo.",
+        "Prove um café 100% arábica e um com robusta, lado a lado.",
+        "Anote qual tem mais corpo e qual tem mais doçura."
+      ]
+    },
+    "cafe-regioes": {
+      "title": "Regiões de cultivo",
+      "summary": "Altitude, clima e solo: por que um café do Cerrado não tem o gosto de um da Etiópia.",
+      "oneLine": "O café carrega o lugar onde nasceu. Altitude, chuva e solo desenham o sabor antes de qualquer método.",
+      "inApp": "Sua coleção de cafeteiras é uma viagem: cada uma realça um tipo de grão e de região.",
+      "body": [
+        "O café cresce no chamado cinturão do café, entre os trópicos de Câncer e de Capricórnio. Quanto mais alto o cultivo, mais lento o amadurecimento do fruto, e mais complexa e ácida tende a ser a bebida. Cafés de altitude costumam ser mais densos e brilhantes.",
+        "Na Etiópia, berço do café, são comuns notas florais, de chá e de frutas cítricas. Na Colômbia, equilíbrio, caramelo e acidez suave. No Quênia, acidez intensa lembrando frutas vermelhas. Na América Central, como Costa Rica e Guatemala, corpo médio e doçura limpa. O Vietnã é grande produtor de robusta.",
+        "O Brasil tem regiões bem distintas: o Cerrado Mineiro, o Sul de Minas e a Mogiana costumam dar cafés doces, com chocolate, amendoado e corpo médio a encorpado, ótimos para coado e espresso. Cada região tem também a sua colheita, entre maio e setembro."
+      ],
+      "tryToday": [
+        "Veja de qual região é o café que você tem em casa.",
+        "Procure o país e a altitude no rótulo.",
+        "Compare com um café de outra região, se puder."
+      ]
+    },
+    "cafe-torra": {
+      "title": "Torra clara, média e escura",
+      "summary": "O que a torra faz com o grão e como ela muda o que você sente na xícara.",
+      "oneLine": "A torra não é um nível de qualidade. É uma escolha de sabor: mais origem na clara, mais tostado na escura.",
+      "inApp": "Em Perfil, marque a torra que você prefere. Você pode mudar quando quiser.",
+      "body": [
+        "O grão verde quase não tem aroma. É o calor que desenvolve açúcares, ácidos e aromas. Na torra clara, o grão guarda mais da origem: acidez viva, notas florais e de frutas, corpo mais leve. Na média, há equilíbrio entre doçura, acidez e notas de caramelo e chocolate.",
+        "Na torra escura, o açúcar caramelizou e começou a queimar. A acidez cai, o corpo parece maior e o amargor e as notas tostadas dominam. Torras muito escuras escondem as diferenças entre grãos, e por isso cafés especiais costumam ser mais claros.",
+        "Depois da torra, o café libera gás por alguns dias. Esperar de alguns dias a duas semanas costuma deixar a bebida mais estável. Para o melhor sabor, use em até um mês, guardado em pote fechado, longe de luz, calor e umidade."
+      ],
+      "tryToday": [
+        "Veja a data de torra do seu pacote.",
+        "Prove o mesmo café em dois dias diferentes da semana.",
+        "Anote se você prefere mais acidez ou mais amargor."
+      ]
+    },
+    "cafe-moagem": {
+      "title": "Moagem: o tamanho que manda",
+      "summary": "Da extrafina da turca à grossa da prensa francesa, e por que moer na hora faz diferença.",
+      "oneLine": "Quanto menor o pó, mais rápido a água extrai. A moagem certa é a que combina com o tempo do seu método.",
+      "inApp": "Cada cafeteira do Guia tem o seu tempo. A moagem é o que faz esse tempo dar certo.",
+      "body": [
+        "A moagem controla a velocidade da extração. Pó fino tem muita superfície e entrega seus sabores depressa; pó grosso entrega devagar. Por isso, métodos rápidos pedem pó fino e métodos lentos pedem pó grosso.",
+        "Uma referência: extrafina, quase pó de talco, para a cafeteira turca. Fina para o espresso e a moka. Média para coador de pano ou papel, como Melitta e V60, e para a AeroPress, que aceita de fina a média. Grossa, parecida com sal grosso, para a prensa francesa e o café frio.",
+        "O café moído perde aroma rápido, em minutos. Um moedor de discos (de rebarbas) dá um pó mais uniforme que o de lâminas. Se o café sair azedo ou aguado, afine a moagem. Se sair amargo e seco, engrosse."
+      ],
+      "tryToday": [
+        "Procure a moagem indicada para a sua cafeteira.",
+        "Se tiver moedor, ajuste um pouco e prove a diferença.",
+        "Anote o ajuste que deu o melhor resultado."
+      ]
+    },
+    "cafe-proporcao": {
+      "title": "Proporção, água e temperatura",
+      "summary": "Quantos gramas de café para quantos mililitros de água, e a quente que ela deve estar.",
+      "oneLine": "Um bom café começa com uma conta simples: cerca de 60 gramas de café para cada litro de água.",
+      "inApp": "O tempo do copo é o mesmo que você espera na vida real. Use o tempo para preparar sem pressa.",
+      "body": [
+        "A proporção mais usada fica entre 1:15 e 1:17: um grama de café para 15 a 17 gramas de água. Em um coador de 300 ml, isso dá entre 18 e 20 gramas de café. Mais café e menos água dá uma bebida mais forte; o contrário, mais leve. Use uma balança: medir em colheres varia muito.",
+        "A água ideal para a maioria dos métodos está entre 90 e 96 °C, ou seja, logo depois de ferver. Torras claras gostam da temperatura mais alta; escuras, de uma mais baixa, para não amargar. A água que sai da torneira com muito cloro ou calcário atrapalha: prefira água filtrada.",
+        "O tempo de contato também conta: de 2 a 4 minutos em métodos de filtro, cerca de 4 na prensa francesa, 25 a 30 segundos no espresso. Escalde o filtro de papel antes, para tirar o gosto de papel e aquecer a jarra."
+      ],
+      "tryToday": [
+        "Pese o café e a água no próximo preparo.",
+        "Experimente 1:16 e depois 1:14.",
+        "Anote qual proporção você preferiu."
+      ]
+    },
+    "cafe-corpo": {
+      "title": "Corpo, acidez e amargor",
+      "summary": "O vocabulário para descrever o que você sente na boca e como ajustar o preparo.",
+      "oneLine": "Corpo é o peso do café na boca. Acidez é brilho, não azedo. Amargor em excesso é sinal de extração demais.",
+      "inApp": "Em Perfil, você marca corpo, acidez e sabores que gosta. Assim fica fácil lembrar do café que acertou.",
+      "body": [
+        "Corpo é a sensação de peso e textura. Um café leve parece chá; um encorpado parece cremoso, quase xaroposo. Os óleos do café passam para a xícara em métodos com filtro de metal ou de pano, como a prensa, a turca e o coador de pano. O filtro de papel retém esses óleos, e por isso a bebida sai mais limpa e leve.",
+        "Acidez, no café, é frescor, como o de uma fruta cítrica ou de uma maçã. É algo bom. Já o azedo desagradável aparece quando o café foi subextraído: pouca água, pouco tempo ou pó muito grosso. O amargor excessivo e o gosto seco indicam o contrário, superextração.",
+        "Um bom equilíbrio mistura doçura, acidez e amargor suave. Se está azedo, afine a moagem, aumente a temperatura ou o tempo. Se está amargo, engrosse a moagem, abaixe a temperatura ou o tempo. Mude uma coisa de cada vez."
+      ],
+      "tryToday": [
+        "Prove um café e descreva o corpo em uma palavra.",
+        "Depois descreva a acidez: brilhante, suave ou ausente.",
+        "Se estiver azedo ou amargo, ajuste só uma variável."
+      ]
+    },
+    "cafe-metodos": {
+      "title": "Cada método, um caráter",
+      "summary": "Do coador de pano ao sifão: o que cada cafeteira entrega na xícara.",
+      "oneLine": "O mesmo grão muda de caráter conforme o método. Escolher a cafeteira é escolher o café que você quer hoje.",
+      "inApp": "O Guia tem nove cafeteiras. Elas não mudam o ganho de moedas, só o tempo e o clima do copo.",
+      "body": [
+        "Os métodos de coado (V60, Melitta, Chemex e coador de pano) fazem a água passar pelo pó por gravidade. O papel dá uma xícara limpa e brilhante; o pano, mais corpo e doçura, como o café da casa da avó. A Chemex usa um papel mais grosso e dá a bebida mais limpa de todas.",
+        "A prensa francesa deixa pó e água em contato e depois separa com um êmbolo: corpo cheio, sedoso. A AeroPress mistura imersão e pressão, rápida e versátil. A moka usa o vapor da água fervendo para subir o café: forte, intenso, parecido com espresso. A turca ferve o pó muito fino com a água: denso, espesso, servido sem coar.",
+        "O sifão é o mais espetacular: o vapor sobe a água para a câmara de cima, mistura com o pó e, ao esfriar, o café desce filtrado. Dá uma xícara limpa, aromática e um bom show."
+      ],
+      "tryToday": [
+        "Escolha a cafeteira que combina com o seu humor.",
+        "Prepare o mesmo grão em dois métodos, se tiver.",
+        "Anote qual deixou o café mais do seu jeito."
+      ]
+    },
+    "cafe-dicas": {
+      "title": "Dicas para um café melhor",
+      "summary": "Pequenos hábitos que melhoram a xícara sem comprar nada.",
+      "oneLine": "Um café bom vem de grão fresco, água boa, medida certa e equipamento limpo. O resto é prática.",
+      "inApp": "O copo do app lembra que preparar café é um ritual. Deixe o celular de lado enquanto a xícara enche.",
+      "body": [
+        "Compre em pequena quantidade, de torra recente, e moa na hora. Guarde o café em pote opaco e fechado, longe do fogão e da luz. Geladeira e freezer podem trazer umidade e cheiros, então evite. Use balança e anote: o que não é medido não se repete.",
+        "Limpe os equipamentos. Óleos velhos ficam rançosos e estragam o café, em especial na prensa, na moka e no moedor. Enxágue tudo logo depois do uso e lave com sabão neutro de tempos em tempos.",
+        "Prove com atenção. Cheire o pó antes e depois da água. Beba um gole quente e outro morno, porque o sabor muda com a temperatura. Se não gostar, não culpe o café: ajuste moagem, proporção e tempo, uma coisa de cada vez."
+      ],
+      "tryToday": [
+        "Troque o café velho por um mais fresco.",
+        "Lave o equipamento que você mais usa.",
+        "Faça um gole de atenção total, sem tela."
+      ]
+    },
+    // gen:articles:end
   },
   "practices": {
     "tedio": {
