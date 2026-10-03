@@ -1251,6 +1251,166 @@ export const pt: Content = {
         "Anote como o dia começou."
       ]
     },
+    "ritual-trabalho": {
+      "title": "O café como início de foco",
+      "summary": "Usar o preparo do café como o sinal de que o trabalho profundo vai começar.",
+      "oneLine": "Um gesto repetido avisa à cabeça que é hora de se concentrar.",
+      "inApp": "Prepare o café, vire o celular e comece: é o mesmo gesto que o app propõe.",
+      "body": [
+        "Rituais curtos ajudam o cérebro a mudar de modo. O mesmo gesto, repetido antes de uma tarefa, vira um sinal. Moer o café, esperar a água e preparar uma xícara antes de começar a trabalhar cria uma passagem entre o que veio antes e o que vem agora.",
+        "Um ritual de foco pode ser simples: escolher a tarefa mais importante do dia, preparar o café, fechar abas e avisos, virar o celular para baixo e começar. Quanto menos decisões depois do café, melhor: o objetivo é que a primeira coisa a ser feita já esteja pronta.",
+        "Defina também o fim: quando o café acabar, faça uma pausa curta. O ritmo de uma xícara por bloco de trabalho, de 40 a 50 minutos, dá uma estrutura natural. E use o copo do app para marcar o tempo sem olhar para o relógio."
+      ],
+      "tryToday": [
+        "Escolha a tarefa mais importante antes de preparar o café.",
+        "Vire o celular e trabalhe até o fim da xícara.",
+        "Faça uma pausa curta e recomece."
+      ]
+    },
+    "ritual-atencao": {
+      "title": "Atenção plena em uma xícara",
+      "summary": "Um exercício de cinco minutos usando o café como âncora.",
+      "oneLine": "Prestar atenção em uma coisa só já é uma forma de descansar.",
+      "inApp": "O copo do app enche enquanto você pratica: ele é a âncora, e o celular é só um relógio.",
+      "body": [
+        "Atenção plena é notar o que está acontecendo agora, sem julgar. Um café é uma boa âncora, porque tem cheiro, calor, cor e sabor, e dura poucos minutos. Não precisa de incenso nem de silêncio perfeito: precisa só de cinco minutos e da intenção de estar ali.",
+        "O exercício: segure a xícara com as duas mãos e sinta o calor. Cheire devagar. Olhe a cor e o vapor. Dê o primeiro gole e deixe o café ficar um instante na boca antes de engolir. Perceba o gosto mudar e o que fica depois. Quando a mente fugir, e ela vai fugir, volte ao café sem se cobrar.",
+        "Praticar isso uma vez por dia ajuda a perceber a tensão do corpo e os pensamentos que rodam. Não resolve tudo, mas é um treino de voltar ao presente, que serve para o resto do dia. Se aparecerem pensamentos difíceis, é normal; se forem frequentes, converse com um profissional."
+      ],
+      "tryToday": [
+        "Faça o exercício com o café de hoje.",
+        "Volte ao café toda vez que a mente fugir.",
+        "Anote o que você percebeu."
+      ]
+    },
+    "ritual-solitude": {
+      "title": "Café sozinho: solidão boa",
+      "summary": "A diferença entre estar só e estar sozinho, e como o café ajuda.",
+      "oneLine": "Estar a sós consigo mesmo é uma habilidade que se treina.",
+      "inApp": "O copo do app é um café a sós: você, a xícara e o tempo.",
+      "body": [
+        "Solidão e isolamento não são a mesma coisa. Isolamento é estar só sem querer, e pesa. Solitude é escolher estar a sós, e pode ser um descanso. Quem aprende a ficar bem consigo mesmo costuma também se relacionar melhor, porque não busca companhia para fugir do silêncio.",
+        "O café é um bom pretexto para a solitude. Uma mesa de canto, uma xícara e nada mais. Sem celular, sem leitura obrigatória, sem plano. Deixe os pensamentos aparecerem e passarem. Às vezes eles trazem uma ideia boa, às vezes só cansaço, e as duas coisas são úteis.",
+        "Comece com dez minutos, uma vez por semana. Se for desconfortável, é normal: o desconforto costuma diminuir com a prática. Se a solidão for pesada e constante, não a enfrente sozinho: procure pessoas de confiança ou um profissional."
+      ],
+      "tryToday": [
+        "Tome um café a sós, sem celular, por dez minutos.",
+        "Deixe os pensamentos aparecerem sem ir atrás deles.",
+        "Anote como você se sentiu ao final."
+      ]
+    },
+    "ritual-presente": {
+      "title": "Estar no presente: uma xícara de cada vez",
+      "summary": "Por que o tempo só existe agora e o que o café ensina sobre isso.",
+      "oneLine": "A xícara que você tem na mão é a única que existe agora.",
+      "inApp": "O copo do app só avança no presente: cada minuto offline vale um minuto.",
+      "body": [
+        "A maior parte do sofrimento cotidiano vem do passado, que já foi, ou do futuro, que ainda não veio. O presente, o instante em que você respira, é o único em que dá para agir. A tradição estoica e muitas outras repetem essa ideia: o que está em suas mãos é este momento.",
+        "O café ensina isso de forma simples. Uma xícara é feita, bebida e acabada. Não dá para beber a de ontem nem a de amanhã. Quando a gente bebe com atenção, o tempo parece esticar: cinco minutos viram um pequeno intervalo inteiro.",
+        "Para praticar, escolha uma atividade por dia e faça só ela: beber o café, caminhar, ouvir alguém. Se a cabeça for para outro lugar, volte, sem culpa. É um músculo que fortalece pouco a pouco, e que melhora o que você sente do próprio tempo."
+      ],
+      "tryToday": [
+        "Escolha uma atividade do dia para fazer por inteiro.",
+        "Volte a ela sempre que a mente sair.",
+        "Anote quando o tempo pareceu esticar."
+      ]
+    },
+    "ritual-lento": {
+      "title": "Café lento: o prazer de esperar",
+      "summary": "Por que métodos demorados fazem parte do gosto.",
+      "oneLine": "Algumas coisas boas só existem quando não se tem pressa.",
+      "inApp": "O copo do app demora de propósito. A espera é parte do café.",
+      "body": [
+        "Existe um movimento de comida lenta, de moda lenta, e também de café lento. A ideia é simples: escolher métodos que pedem tempo, como o gotejar do phin, o coado de pano ou o cold brew, e aproveitar a espera em vez de tentar encurtá-la. O resultado costuma ser melhor, e o preparo também faz bem.",
+        "A pressa treina a impaciência. Esperar uma água esfriar um pouco, observar o café pingar, não mexer no celular entre uma etapa e outra, tudo isso ensina a tolerar o intervalo. É um treino pequeno de uma habilidade que serve para filas, trânsito e conversas difíceis.",
+        "Você não precisa ser lento o dia todo. Escolha um café por dia para ser lento: o da manhã, o da tarde, o do fim de semana. E use o tempo de espera para olhar pela janela, respirar ou só ficar parado, sem uma tarefa."
+      ],
+      "tryToday": [
+        "Escolha um método lento para o café de hoje.",
+        "Use a espera sem pegar o celular.",
+        "Repare em como o tempo passa."
+      ]
+    },
+    "est-amor-fati": {
+      "title": "Amor fati: querer o que acontece",
+      "summary": "Aceitar o que aconteceu não é se conformar, é parar de brigar com o fato.",
+      "oneLine": "Você não escolhe o que acontece. Escolhe o que faz depois.",
+      "inApp": "Um copo interrompido não é falha: é o que aconteceu, e o app registra para você aprender.",
+      "body": [
+        "Amor fati, ou amor ao destino, é uma expressão que Nietzsche popularizou, mas a ideia está no coração do estoicismo. Epicteto diz para não pedir que os acontecimentos sejam como queremos, e sim querer que sejam como são. Não é resignação passiva: é parar de gastar energia com o que já aconteceu para usá-la no que vem a seguir.",
+        "Na prática, quando algo dá errado, a pergunta muda. Em vez de 'por que isso comigo', pergunta-se 'o que eu posso fazer com isso'. O obstáculo vira o caminho, como diz Marco Aurélio. Isso vale para um café que queimou, um dia perdido e problemas muito maiores.",
+        "Um jeito de treinar é, ao fim do dia, escolher um contratempo e escrever o que ele permitiu: uma pausa, um aprendizado, uma conversa. Nem tudo tem lado bom, e não precisa ter. O objetivo é só reduzir o quanto a gente sofre por uma coisa que não dá para mudar."
+      ],
+      "tryToday": [
+        "Escolha um contratempo de hoje.",
+        "Escreva o que ele permitiu ou ensinou.",
+        "Decida o próximo passo em uma frase."
+      ]
+    },
+    "est-memento": {
+      "title": "Memento mori: lembrar que o tempo acaba",
+      "summary": "Por que pensar na finitude torna a vida mais leve e mais clara.",
+      "oneLine": "Lembrar que o tempo é finito ajuda a escolher melhor o que fazer com ele.",
+      "inApp": "Cada minuto offline que vira moeda é tempo escolhido, não perdido.",
+      "body": [
+        "Memento mori, 'lembra-te de que vais morrer', era uma prática dos estoicos. Não é para entristecer, mas para esclarecer. Sêneca dizia que não temos pouco tempo, e sim que desperdiçamos muito. Marco Aurélio se lembrava de que a vida é curta para não gastá-la com mesquinharia.",
+        "A finitude funciona como filtro. Diante de um prazo, as pequenas preocupações perdem peso e as coisas importantes ficam claras: pessoas, trabalho com sentido, tempo livre. Muita gente relata que, depois de um susto de saúde ou de uma perda, passou a viver com mais atenção.",
+        "Dá para praticar sem drama. Uma vez por semana, pergunte: se este ano fosse o último, o que eu manteria e o que eu largaria? Não é para decidir tudo de uma vez, só para perceber o que já não vale o seu tempo. E depois, tome um café com calma."
+      ],
+      "tryToday": [
+        "Pergunte-se o que manteria e o que largaria.",
+        "Escolha uma coisa pequena para largar esta semana.",
+        "Faça algo que valha o seu tempo hoje."
+      ]
+    },
+    "est-premeditatio": {
+      "title": "Premeditatio malorum: ensaiar o que pode dar errado",
+      "summary": "Imaginar o pior antes ajuda a agir com mais calma.",
+      "oneLine": "Sofremos mais na imaginação. Por isso, vale usar a imaginação a nosso favor.",
+      "inApp": "Antes de começar um copo, pense o que pode te puxar para o celular, e decida o que fazer.",
+      "body": [
+        "Premeditatio malorum, a premeditação dos males, é um exercício estoico: antes de começar algo, imaginar o que pode dar errado. Não é pessimismo nem fixação no pior. É uma preparação. Sêneca dizia que o que foi previsto machuca menos, porque perde o poder da surpresa.",
+        "O exercício tem três passos. Imagine o que pode falhar em um plano, por exemplo, uma reunião difícil, uma viagem, um dia sem celular. Pense no que está ao seu alcance fazer se acontecer. E então siga em frente, sem remoer. O ensaio tira a ansiedade da incerteza.",
+        "No app, você pode usá-lo antes de cada copo: 'o que pode me tirar daqui?'. Notificação, tédio, hábito. Deixe uma resposta pronta: respirar, tomar um gole, olhar pela janela. Quando o impulso vier, você já terá ensaiado o que fazer."
+      ],
+      "tryToday": [
+        "Escolha um plano de amanhã e imagine o que pode falhar.",
+        "Defina uma resposta para cada risco.",
+        "Siga em frente sem remoer."
+      ]
+    },
+    "est-visao-alto": {
+      "title": "A visão de cima",
+      "summary": "Olhar a sua vida de longe para ver as coisas no tamanho certo.",
+      "oneLine": "Do alto, quase todo problema encolhe e quase toda pessoa fica mais próxima.",
+      "inApp": "No Bem-estar, o resumo da semana é uma visão de cima do seu tempo.",
+      "body": [
+        "A visão de cima é um exercício que aparece em Marco Aurélio: imaginar-se subindo e olhando de lá o mundo, as cidades, as pessoas, as épocas. Visto do alto, o problema que parecia imenso vira um ponto minúsculo, e a pessoa que irritava vira apenas mais uma, com seus medos.",
+        "Para praticar, feche os olhos por um minuto. Imagine seu corpo na cadeira, depois o cômodo, o prédio, a rua, a cidade, o país, o planeta. Depois traga de volta a questão que o preocupa e pergunte: daqui, em escala maior, quanto ela pesa? Muitas vezes, menos do que parecia.",
+        "Isso não diminui o que importa: o que é importante continua importante, e o exercício ajuda a distinguir. Uma versão simples é olhar para uma semana inteira de uma vez, em vez de cada dia. O app faz isso por você no Bem-estar."
+      ],
+      "tryToday": [
+        "Faça a visão de cima por um minuto.",
+        "Traga uma preocupação e veja o tamanho dela de lá.",
+        "Olhe a sua semana inteira no Bem-estar."
+      ]
+    },
+    "est-diario": {
+      "title": "Diário estoico: manhã e noite",
+      "summary": "Um registro curto de manhã e de noite, no estilo de Sêneca e de Marco Aurélio.",
+      "oneLine": "Escrever três linhas por dia faz o dia ficar menos solto.",
+      "inApp": "O check-in de energia é um mini-diário: uma resposta por dia, com histórico no Bem-estar.",
+      "body": [
+        "Os estoicos escreviam. Marco Aurélio deixou as 'Meditações', notas para si mesmo. Sêneca descrevia um hábito: à noite, revisar o dia sem se punir, perguntando o que fez bem, em que errou e o que pode melhorar. Escrever dá forma ao que está solto na cabeça, e ver as coisas no papel tira a névoa.",
+        "Um diário simples tem duas partes. De manhã: qual é a minha intenção hoje, e o que pode me tirar do rumo? À noite: o que fiz bem, onde errei e o que farei diferente amanhã? Três linhas bastam. A constância vale mais do que a quantidade.",
+        "Ao longo das semanas, o diário mostra padrões: o que repete, o que melhora, o que cansa. Combine com o café: uma xícara, um caderno e cinco minutos. E leia, de vez em quando, o que você escreveu há um mês: costuma ser instrutivo."
+      ],
+      "tryToday": [
+        "Escreva uma intenção para amanhã de manhã.",
+        "À noite, revise o dia em três linhas.",
+        "Releia as anotações da semana."
+      ]
+    },
     // gen:articles:end
   },
   "practices": {

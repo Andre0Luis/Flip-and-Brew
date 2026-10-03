@@ -68,7 +68,7 @@ export const ARTICLE_BASE: ArticleBase[] = [
   { id: 'taste-descritores', category: 'taste', minutes: 3, related: ['taste-roda', 'taste-cupping'] },
   { id: 'health-cafeina', category: 'health', minutes: 4, related: ['health-meia-vida', 'health-tolerancia'] },
   { id: 'health-meia-vida', category: 'health', minutes: 3, related: ['health-cafeina', 'health-quando'] },
-  { id: 'health-ansiedade', category: 'health', minutes: 3, related: ['health-cafeina', 'health-meia-vida'] },
+  { id: 'health-ansiedade', category: 'health', minutes: 3, related: ['health-cafeina', 'ritual-atencao'] },
   { id: 'health-gestacao', category: 'health', minutes: 3, related: ['health-cafeina', 'health-descafeinado'] },
   { id: 'health-hidratacao', category: 'health', minutes: 3, related: ['health-cafeina', 'health-quando'] },
   { id: 'health-descafeinado', category: 'health', minutes: 3, related: ['health-meia-vida', 'health-gestacao'] },
@@ -80,6 +80,16 @@ export const ARTICLE_BASE: ArticleBase[] = [
   { id: 'ritual-pausa', category: 'ritual', minutes: 3, related: ['ritual-sem-celular', 'ritual-manha'] },
   { id: 'ritual-conversa', category: 'ritual', minutes: 3, related: ['cafe-casas', 'ritual-sem-celular'] },
   { id: 'ritual-manha', category: 'ritual', minutes: 3, related: ['health-quando', 'ritual-sem-celular'] },
+  { id: 'ritual-trabalho', category: 'ritual', minutes: 3, related: ['ritual-pausa', 'ritual-sem-celular'] },
+  { id: 'ritual-atencao', category: 'ritual', minutes: 3, related: ['ritual-presente', 'health-ansiedade'] },
+  { id: 'ritual-solitude', category: 'ritual', minutes: 3, related: ['ritual-atencao', 'ritual-conversa'] },
+  { id: 'ritual-presente', category: 'ritual', minutes: 3, quoteId: 'sq-1', related: ['ritual-atencao', 'est-memento'] },
+  { id: 'ritual-lento', category: 'ritual', minutes: 3, related: ['ritual-presente', 'brew-phin'] },
+  { id: 'est-amor-fati', category: 'stoicism', minutes: 3, quoteId: 'ep-8', related: ['est-premeditatio', 'est-memento'] },
+  { id: 'est-memento', category: 'stoicism', minutes: 3, quoteId: 'sq-brev', related: ['ritual-presente', 'est-amor-fati'] },
+  { id: 'est-premeditatio', category: 'stoicism', minutes: 3, quoteId: 'sq-13', related: ['est-amor-fati', 'est-memento'] },
+  { id: 'est-visao-alto', category: 'stoicism', minutes: 3, quoteId: 'ep-1', related: ['est-memento', 'est-amor-fati'] },
+  { id: 'est-diario', category: 'stoicism', minutes: 3, quoteId: 'sq-1', related: ['ritual-manha', 'est-amor-fati'] },
   // gen:articles:end
 ];
 
