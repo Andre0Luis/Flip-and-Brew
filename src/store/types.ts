@@ -1,4 +1,5 @@
 import type { Quality } from '@/lib/brew';
+import type { PomoConfig } from '@/lib/pomodoro';
 
 export type Session = {
   id: string;
@@ -55,6 +56,8 @@ export type Settings = {
   notifyOnDone: boolean;
   /** modo do botão de começar no Início: café (tempo da cafeteira) ou pomodoro (25 min de foco) */
   focusMode: 'coffee' | 'pomodoro';
+  /** tempos do Pomodoro, ajustáveis em Ajustes */
+  pomodoro: PomoConfig;
   /** escurece a tela enquanto o copo está em andamento (desligado por padrão) */
   dimDuringBrew: boolean;
   /** +1 ou -1 quando o eixo z do acelerômetro aponta para cima; 0 usa o padrão da plataforma */

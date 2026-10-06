@@ -12,10 +12,10 @@ import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
-import { FOCUS_MIN, makeRest, pomodorosToday, type Rest } from '@/lib/pomodoro';
+import { DEFAULT_POMO, makeRest, normalizePomo, pomodorosToday, type Rest } from '@/lib/pomodoro';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, focusMode: 'coffee', faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -143,14 +143,14 @@ export const useApp = create<State>()(
       removeCheckin: (day) => set((st) => ({ checkins: withoutCheckin(st.checkins, day) })),
       setProfile: (patch) => set((st) => ({ profile: cleanProfile({ ...st.profile, ...patch }) })),
       clearProfile: () => set({ profile: {} }),
-      setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s } })),
+      setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s, ...(s.pomodoro ? { pomodoro: normalizePomo(s.pomodoro) } : {}) } })),
 
       start: (now = Date.now()) => {
         const st = get();
         if (st.active) return false;
         const brewer = byId(st.brewerId);
         const pomodoro = st.settings.focusMode === 'pomodoro';
-        const minutes = st.settings.quickBrew && canUseTestTools() ? 1 : pomodoro ? FOCUS_MIN : brewer?.brewMinutes ?? 45;
+        const minutes = st.settings.quickBrew && canUseTestTools() ? 1 : pomodoro ? normalizePomo(st.settings.pomodoro).focusMin : brewer?.brewMinutes ?? 45;
         // Começar um copo encerra a pausa que estivesse correndo.
         set({ rest: null, active: { brewerId: st.brewerId, cupId: st.cupId, packId: st.packId, startedAt: now, targetMs: minutes * 60_000, ...(pomodoro ? { pomodoro: true } : {}) } });
         return true;
@@ -242,7 +242,7 @@ export const useApp = create<State>()(
 
       loadTestUser: () => set({ ...makeTestData(), active: null, lastResultId: null, onboarded: true }),
 
-      startRest: (now = Date.now()) => set((st) => ({ rest: makeRest(pomodorosToday(st.sessions, now), now) })),
+      startRest: (now = Date.now()) => set((st) => ({ rest: makeRest(pomodorosToday(st.sessions, now), now, normalizePomo(st.settings.pomodoro)) })),
       endRest: () => set({ rest: null }),
 
       resetAll: () => set({ ...initial, settings: get().settings, onboarded: true }),

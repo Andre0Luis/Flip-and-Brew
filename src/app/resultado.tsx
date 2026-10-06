@@ -10,7 +10,7 @@ import { useI18n } from '@/i18n';
 import { streak, TRIGGERS } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
 import { useNow } from '@/hooks/useNow';
-import { breakFor, CYCLE, cyclePosition, pomodorosToday } from '@/lib/pomodoro';
+import { breakFor, cyclePosition, normalizePomo, pomodorosToday } from '@/lib/pomodoro';
 import { useTheme } from '@/theme/ThemeProvider';
 
 function useCountUp(target: number, ms = 900) {
@@ -43,6 +43,7 @@ export default function Resultado() {
   const coins = useCountUp(session?.coins ?? 0);
   const startRest = useApp((s) => s.startRest);
   const now = useNow(60_000);
+  const pomo = normalizePomo(useApp((s) => s.settings.pomodoro));
 
   // Voltar equivale a Concluir.
   useEffect(() => {
@@ -101,12 +102,12 @@ export default function Resultado() {
 
       {done && session.pomodoro && (
         <Card style={{ gap: 10 }}>
-          <Txt v="title">{t('pomo.resultTitle', { n: cyclePosition(pomodorosToday(sessions, now)), total: CYCLE })}</Txt>
+          <Txt v="title">{t('pomo.resultTitle', { n: cyclePosition(pomodorosToday(sessions, now), pomo), total: pomo.cycle })}</Txt>
           <Txt v="small" color="muted">
             {t('pomo.resultBody')}
           </Txt>
           <Button
-            label={t('pomo.startBreak', { min: breakFor(pomodorosToday(sessions, now)).minutes })}
+            label={t('pomo.startBreak', { min: breakFor(pomodorosToday(sessions, now), pomo).minutes })}
             onPress={() => {
               startRest();
               router.dismissTo('/');

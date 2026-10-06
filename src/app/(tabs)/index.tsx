@@ -13,7 +13,7 @@ import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
 import { Button, Card, CoinBadge, Screen, Segmented, Txt } from '@/components/ui';
 import { RestCard } from '@/components/RestCard';
-import { CYCLE, FOCUS_MIN, LONG_BREAK_MIN, SHORT_BREAK_MIN } from '@/lib/pomodoro';
+import { normalizePomo } from '@/lib/pomodoro';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
 import { brewers, byId, itemText } from '@/data/catalog';
 import { formatDateLong, useI18n } from '@/i18n';
@@ -57,8 +57,9 @@ export default function Inicio() {
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));
   const testTools = useTestTools();
   const pomodoro = settings.focusMode === 'pomodoro';
+  const pomo = normalizePomo(settings.pomodoro);
   const setSettings = useApp((s) => s.setSettings);
-  const minutes = settings.quickBrew && testTools ? 1 : pomodoro ? FOCUS_MIN : brewer?.brewMinutes ?? 45;
+  const minutes = settings.quickBrew && testTools ? 1 : pomodoro ? pomo.focusMin : brewer?.brewMinutes ?? 45;
 
   const combo = earnBonus(brewerId, cupId, packId);
   // A bancada usa a largura da tela: xícara e pacote maiores nos lados, cafeteira no centro.
@@ -187,9 +188,10 @@ export default function Inicio() {
         )}
         {pomodoro && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-            {t('mode.pomodoroHint', { focus: FOCUS_MIN, rest: SHORT_BREAK_MIN, long: LONG_BREAK_MIN, n: CYCLE })}
+            {t('mode.pomodoroHint', { focus: pomo.focusMin, rest: pomo.breakMin, long: pomo.longBreakMin, n: pomo.cycle })}
           </Txt>
         )}
+        {pomodoro && !active && <Button label={t('pomo.adjust')} tone="quiet" onPress={() => router.push('/ajustes')} style={{ alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 16 }} />}
         <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />
         {settings.autoStart && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>

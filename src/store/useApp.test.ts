@@ -233,3 +233,16 @@ test('no modo café nada muda: o tempo é o da cafeteira e a sessão não é de 
   const id = useApp.getState().finish(t0 + 40 * MIN + 5_000)!;
   assert.equal(useApp.getState().sessions.find((s) => s.id === id)?.pomodoro, undefined);
 });
+
+test('os tempos do Pomodoro vêm das configurações e valores absurdos são saneados', () => {
+  const t0 = 9_000_000;
+  useApp.getState().setSettings({ focusMode: 'pomodoro', pomodoro: { focusMin: 50, breakMin: 10, longBreakMin: 30, cycle: 2 } });
+  useApp.getState().start(t0);
+  assert.equal(useApp.getState().active?.targetMs, 50 * MIN);
+  useApp.getState().finish(t0 + 50 * MIN + 5_000);
+  useApp.getState().startRest(t0 + 51 * MIN);
+  assert.equal(useApp.getState().rest?.targetMs, 10 * MIN);
+
+  useApp.getState().setSettings({ pomodoro: { focusMin: 9999, breakMin: 0, longBreakMin: 30, cycle: 2 } });
+  assert.deepEqual(useApp.getState().settings.pomodoro, { focusMin: 120, breakMin: 1, longBreakMin: 30, cycle: 2 });
+});

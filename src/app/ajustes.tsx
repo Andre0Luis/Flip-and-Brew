@@ -16,6 +16,14 @@ import { presentCustomerCenter, presentPaywall, purchasesConfigured } from '@/li
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
+import { DEFAULT_POMO, normalizePomo, POMO_LIMITS } from '@/lib/pomodoro';
+
+const POMO_FIELDS = [
+  { key: 'focusMin', label: 'pomo.focus' },
+  { key: 'breakMin', label: 'pomo.break' },
+  { key: 'longBreakMin', label: 'pomo.longBreak' },
+  { key: 'cycle', label: 'pomo.cycleLabel' },
+] as const;
 
 
 function Row({ title, hint, value, onChange }: { title: string; hint: string; value: boolean; onChange: (v: boolean) => void }) {
@@ -48,6 +56,7 @@ export default function Ajustes() {
   const [confirmReset, setConfirmReset] = useState(false);
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
   const showDev = useTestTools();
+  const pomo = normalizePomo(settings.pomodoro);
   const setOnboarded = useApp((s) => s.setOnboarded);
   const profile = useApp((s) => s.profile);
   const authUser = useAuth((s) => s.user);
@@ -112,6 +121,34 @@ export default function Ajustes() {
             </Txt>
           )}
         </View>
+      </Card>
+
+      <Card style={{ gap: 12 }}>
+        <Txt v="title">{t('pomo.settingsTitle')}</Txt>
+        <Txt v="small" color="muted">
+          {t('pomo.settingsHint')}
+        </Txt>
+        {POMO_FIELDS.map(({ key, label }) => {
+          const { min, max, step } = POMO_LIMITS[key];
+          const value = pomo[key];
+          const change = (delta: number) => set({ pomodoro: { ...pomo, [key]: Math.min(max, Math.max(min, value + delta)) } });
+          const text = key === 'cycle' ? String(value) : t('pomo.minutes', { n: value });
+          return (
+            <View key={key} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+              <Txt v="body" style={{ flex: 1 }}>
+                {t(label)}
+              </Txt>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Button label="−" tone="quiet" disabled={value <= min} accessibilityLabel={t('pomo.less', { label: t(label) })} onPress={() => change(-step)} style={{ paddingVertical: 8, paddingHorizontal: 16, minWidth: 48 }} />
+                <Txt v="num" style={{ minWidth: 64, textAlign: 'center', fontSize: 18 }}>
+                  {text}
+                </Txt>
+                <Button label="+" tone="quiet" disabled={value >= max} accessibilityLabel={t('pomo.more', { label: t(label) })} onPress={() => change(step)} style={{ paddingVertical: 8, paddingHorizontal: 16, minWidth: 48 }} />
+              </View>
+            </View>
+          );
+        })}
+        <Button label={t('pomo.reset')} tone="quiet" onPress={() => set({ pomodoro: DEFAULT_POMO })} style={{ alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 16 }} />
       </Card>
 
       <Card style={{ gap: 10 }}>
