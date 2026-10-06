@@ -55,6 +55,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Login com Google no iPhone** não está configurado (cliente OAuth iOS e `iosUrlScheme`).
 - [ ] **Workflow `eas-build.yml`** falha por falta do segredo `EXPO_TOKEN` no GitHub.
 - [ ] **Capturas das lojas** (`docs/store/screenshots.md`) são simuladas pela versão web; na aba Coleção em inglês, o rótulo "Achievements" encosta na borda em telas de 360 px.
+- [ ] **Modo Pomodoro** (ADR-0020): foco de 25 min, pausa de 5 (15 a cada 4 focos) e aviso de fim da pausa não foram validados em aparelho.
 - [x] Reinício do projeto, mecânica nova, visual novo.
 - [x] Idiomas pt, en e es com dicionários tipados.
 - [x] Contas, backup, exclusão e servidor falso.

@@ -12,9 +12,10 @@ import { cleanProfile } from '@/lib/profile';
 import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
+import { FOCUS_MIN, makeRest, pomodorosToday, type Rest } from '@/lib/pomodoro';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, focusMode: 'coffee', faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -24,6 +25,8 @@ type State = {
   /** pacote de café em uso; muda as moedas ganhas */
   packId: string;
   active: ActiveBrew | null;
+  /** pausa do Pomodoro em andamento */
+  rest: Rest | null;
   sessions: Session[];
   /** energia diária em xícaras (1 a 5), um registro por dia */
   checkins: Checkin[];
@@ -76,6 +79,9 @@ type State = {
   loadDemo: () => void;
   /** Progresso farto para testes: muitas moedas, todos os itens e 90 dias de histórico. */
   loadTestUser: () => void;
+  /** começa a pausa depois de um pomodoro (curta, ou longa a cada 4 focos) */
+  startRest: (now?: number) => void;
+  endRest: () => void;
   resetAll: () => void;
 };
 
@@ -86,6 +92,7 @@ const initial = {
   cupId: 'paper',
   packId: 'pack-extraforte',
   active: null as ActiveBrew | null,
+  rest: null as Rest | null,
   sessions: [] as Session[],
   checkins: [] as Checkin[],
   lastResultId: null as string | null,
@@ -142,8 +149,10 @@ export const useApp = create<State>()(
         const st = get();
         if (st.active) return false;
         const brewer = byId(st.brewerId);
-        const minutes = st.settings.quickBrew && canUseTestTools() ? 1 : brewer?.brewMinutes ?? 45;
-        set({ active: { brewerId: st.brewerId, cupId: st.cupId, packId: st.packId, startedAt: now, targetMs: minutes * 60_000 } });
+        const pomodoro = st.settings.focusMode === 'pomodoro';
+        const minutes = st.settings.quickBrew && canUseTestTools() ? 1 : pomodoro ? FOCUS_MIN : brewer?.brewMinutes ?? 45;
+        // Começar um copo encerra a pausa que estivesse correndo.
+        set({ rest: null, active: { brewerId: st.brewerId, cupId: st.cupId, packId: st.packId, startedAt: now, targetMs: minutes * 60_000, ...(pomodoro ? { pomodoro: true } : {}) } });
         return true;
       },
 
@@ -166,6 +175,7 @@ export const useApp = create<State>()(
           status: o.status,
           coins: o.coins,
           quality: o.quality,
+          ...(a.pomodoro ? { pomodoro: true } : {}),
         };
         const sessions = [...st.sessions, session];
         // Cafeteiras liberadas por sequência.
@@ -232,6 +242,9 @@ export const useApp = create<State>()(
 
       loadTestUser: () => set({ ...makeTestData(), active: null, lastResultId: null, onboarded: true }),
 
+      startRest: (now = Date.now()) => set((st) => ({ rest: makeRest(pomodorosToday(st.sessions, now), now) })),
+      endRest: () => set({ rest: null }),
+
       resetAll: () => set({ ...initial, settings: get().settings, onboarded: true }),
     }),
     {
@@ -263,6 +276,7 @@ export const useApp = create<State>()(
         cupId: s.cupId,
         packId: s.packId,
         active: s.active,
+        rest: s.rest,
         sessions: s.sessions,
         checkins: s.checkins,
         lastResultId: s.lastResultId,

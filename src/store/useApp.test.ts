@@ -201,3 +201,35 @@ test('dicas de primeira vez: marcar não repete, e quem já tem copos não as v�
   useApp.getState().markTip('coins');
   assert.deepEqual(useApp.getState().seenTips, ['coins']);
 });
+
+test('no modo Pomodoro o copo tem 25 minutos, vira sessão de foco e a pausa vem depois', () => {
+  const t0 = 5_000_000;
+  useApp.getState().setSettings({ focusMode: 'pomodoro' });
+  assert.equal(useApp.getState().start(t0), true);
+  assert.equal(useApp.getState().active?.targetMs, 25 * MIN);
+  assert.equal(useApp.getState().active?.pomodoro, true);
+
+  const id = useApp.getState().finish(t0 + 25 * MIN + 5_000)!;
+  const session = useApp.getState().sessions.find((s) => s.id === id)!;
+  assert.equal(session.pomodoro, true);
+  assert.equal(session.status, 'done');
+
+  // Primeiro foco do dia: pausa curta de 5 minutos.
+  const t1 = t0 + 26 * MIN;
+  useApp.getState().startRest(t1);
+  assert.equal(useApp.getState().rest?.targetMs, 5 * MIN);
+  assert.equal(useApp.getState().rest?.long, false);
+
+  // Começar o próximo foco encerra a pausa.
+  assert.equal(useApp.getState().start(t1 + MIN), true);
+  assert.equal(useApp.getState().rest, null);
+});
+
+test('no modo café nada muda: o tempo é o da cafeteira e a sessão não é de foco', () => {
+  const t0 = 7_000_000;
+  assert.equal(useApp.getState().settings.focusMode, 'coffee');
+  useApp.getState().start(t0);
+  assert.equal(useApp.getState().active?.pomodoro, undefined);
+  const id = useApp.getState().finish(t0 + 40 * MIN + 5_000)!;
+  assert.equal(useApp.getState().sessions.find((s) => s.id === id)?.pomodoro, undefined);
+});

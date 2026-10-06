@@ -11,6 +11,8 @@ export type Session = {
   coins: number;
   quality: Quality;
   trigger?: string; // chave neutra: notification, boredom, work, habit ou other
+  /** copo de foco do modo Pomodoro (25 min) */
+  pomodoro?: boolean;
   mood?: number;
 };
 
@@ -36,7 +38,7 @@ export type Profile = {
   flavors?: string[];
 };
 
-export type ActiveBrew = { brewerId: string; cupId: string; /** ausente em copos iniciados antes dos pacotes de café */ packId?: string; startedAt: number; targetMs: number };
+export type ActiveBrew = { brewerId: string; cupId: string; /** ausente em copos iniciados antes dos pacotes de café */ packId?: string; startedAt: number; targetMs: number; /** copo de foco do modo Pomodoro */ pomodoro?: boolean };
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type Language = 'pt' | 'en' | 'es';
@@ -51,6 +53,8 @@ export type Settings = {
   quickBrew: boolean;
   /** aviso silencioso quando o copo enche */
   notifyOnDone: boolean;
+  /** modo do botão de começar no Início: café (tempo da cafeteira) ou pomodoro (25 min de foco) */
+  focusMode: 'coffee' | 'pomodoro';
   /** escurece a tela enquanto o copo está em andamento (desligado por padrão) */
   dimDuringBrew: boolean;
   /** +1 ou -1 quando o eixo z do acelerômetro aponta para cima; 0 usa o padrão da plataforma */
