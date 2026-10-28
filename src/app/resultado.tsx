@@ -9,6 +9,8 @@ import { itemText } from '@/data/catalog';
 import { useI18n } from '@/i18n';
 import { streak, TRIGGERS } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
+import { useNow } from '@/hooks/useNow';
+import { breakFor, cyclePosition, normalizePomo, pomodorosToday } from '@/lib/pomodoro';
 import { useTheme } from '@/theme/ThemeProvider';
 
 function useCountUp(target: number, ms = 900) {
@@ -39,6 +41,9 @@ export default function Resultado() {
   const markTip = useApp((s) => s.markTip);
   const session = sessions.find((s) => s.id === lastId);
   const coins = useCountUp(session?.coins ?? 0);
+  const startRest = useApp((s) => s.startRest);
+  const now = useNow(60_000);
+  const pomo = normalizePomo(useApp((s) => s.settings.pomodoro));
 
   // Voltar equivale a Concluir.
   useEffect(() => {
@@ -94,6 +99,22 @@ export default function Resultado() {
           {t('result.streak', { n: days, unit: t('unit.day', { n: days }) })}
         </Txt>
       </Card>
+
+      {done && session.pomodoro && (
+        <Card style={{ gap: 10 }}>
+          <Txt v="title">{t('pomo.resultTitle', { n: cyclePosition(pomodorosToday(sessions, now), pomo), total: pomo.cycle })}</Txt>
+          <Txt v="small" color="muted">
+            {t('pomo.resultBody')}
+          </Txt>
+          <Button
+            label={t('pomo.startBreak', { min: breakFor(pomodorosToday(sessions, now), pomo).minutes })}
+            onPress={() => {
+              startRest();
+              router.dismissTo('/');
+            }}
+          />
+        </Card>
+      )}
 
       {!done && (
         <View style={{ gap: 10 }}>

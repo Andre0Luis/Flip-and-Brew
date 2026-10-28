@@ -71,6 +71,25 @@ export function BrewEngine() {
     return useApp.subscribe(sync);
   }, []);
 
+  // Aviso silencioso de fim da pausa do Pomodoro, no mesmo molde.
+  useEffect(() => {
+    let lastRest: number | null = null;
+    const sync = () => {
+      const { rest, settings } = useApp.getState();
+      if (rest && settings.notifyOnDone) {
+        if (lastRest !== rest.startedAt) {
+          lastRest = rest.startedAt;
+          void scheduleBrewDone(rest.startedAt + rest.targetMs, settings.language, 'break');
+        }
+      } else if (lastRest !== null) {
+        lastRest = null;
+        void cancelBrewDone('break');
+      }
+    };
+    sync();
+    return useApp.subscribe(sync);
+  }, []);
+
   useEffect(() => {
     const finishAndLeave = () => {
       const id = useApp.getState().finish(Date.now());

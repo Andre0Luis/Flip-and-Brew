@@ -74,8 +74,11 @@ export function Button({
   tone = 'accent',
   disabled,
   style,
+  accessibilityLabel,
 }: {
   label: string;
+  /** texto para leitor de tela quando o rótulo visível é só um símbolo */
+  accessibilityLabel?: string;
   onPress: () => void;
   tone?: 'accent' | 'dark' | 'quiet' | 'quietOnDark';
   disabled?: boolean;
@@ -88,6 +91,7 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       accessibilityState={{ disabled: !!disabled }}
       disabled={disabled}
       onPress={() => {

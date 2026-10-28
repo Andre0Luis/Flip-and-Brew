@@ -4,7 +4,13 @@ import { translate, type Lang } from '@/i18n';
 
 // Notificação local, silenciosa, avisando que o copo encheu. Só existe no aparelho e só quando a pessoa liga em Ajustes.
 const CHANNEL = 'brew-done';
-const ID = 'brew-done';
+/** Dois avisos silenciosos: copo pronto (ou fim do foco) e fim da pausa do Pomodoro. */
+export type NoticeKind = 'brew' | 'break';
+const IDS: Record<NoticeKind, string> = { brew: 'brew-done', break: 'break-done' };
+const TEXT: Record<NoticeKind, { title: 'notify.title' | 'notify.breakTitle'; body: 'notify.body' | 'notify.breakBody' }> = {
+  brew: { title: 'notify.title', body: 'notify.body' },
+  break: { title: 'notify.breakTitle', body: 'notify.breakBody' },
+};
 
 function mod() {
   // No Expo Go as notificações foram removidas (SDK 53+) e carregar a biblioteca só gera erro.
@@ -30,7 +36,7 @@ export async function ensureNotificationPermission(): Promise<boolean> {
   }
 }
 
-export async function scheduleBrewDone(at: number, lang: Lang): Promise<void> {
+export async function scheduleBrewDone(at: number, lang: Lang, kind: NoticeKind = 'brew'): Promise<void> {
   const N = mod();
   if (!N || at <= Date.now()) return;
   try {
@@ -44,10 +50,10 @@ export async function scheduleBrewDone(at: number, lang: Lang): Promise<void> {
         enableVibrate: false,
       });
     }
-    await N.cancelScheduledNotificationAsync(ID).catch(() => {});
+    await N.cancelScheduledNotificationAsync(IDS[kind]).catch(() => {});
     await N.scheduleNotificationAsync({
-      identifier: ID,
-      content: { title: translate(lang, 'notify.title'), body: translate(lang, 'notify.body'), sound: false },
+      identifier: IDS[kind],
+      content: { title: translate(lang, TEXT[kind].title), body: translate(lang, TEXT[kind].body), sound: false },
       trigger: { type: N.SchedulableTriggerInputTypes.DATE, date: new Date(at), channelId: CHANNEL },
     });
   } catch {
@@ -55,11 +61,11 @@ export async function scheduleBrewDone(at: number, lang: Lang): Promise<void> {
   }
 }
 
-export async function cancelBrewDone(): Promise<void> {
+export async function cancelBrewDone(kind: NoticeKind = 'brew'): Promise<void> {
   const N = mod();
   if (!N) return;
   try {
-    await N.cancelScheduledNotificationAsync(ID);
+    await N.cancelScheduledNotificationAsync(IDS[kind]);
   } catch {
     // nada agendado
   }
