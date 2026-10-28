@@ -31,6 +31,16 @@ function Bar({ percent, width = 220 }: { percent: number; width?: number }) {
   );
 }
 
+/** Mostra a causa quando o widget não consegue montar a tela normal, em vez de ficar em branco. */
+export function WidgetError({ message }: { message: string }) {
+  return (
+    <Shell>
+      <Label text="Flip & Brew" />
+      <TextWidget text={message.slice(0, 160)} maxLines={5} style={{ fontSize: 11, color: FG }} />
+    </Shell>
+  );
+}
+
 /** Só a frase do dia. */
 export function QuoteWidget({ data }: P) {
   return (
