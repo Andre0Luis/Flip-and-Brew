@@ -14,8 +14,11 @@ beforeEach(() => {
   useApp.setState({ ...pristine, settings: { ...DEFAULT_SETTINGS }, sessions: [], active: null, coins: 100, owned: [...pristine.owned] }, true);
 });
 
+/** Meio-dia de hoje, no fuso local. Fixar o horário evita que o teste dependa da hora em que roda (perto da meia-noite o dia virava). */
+const noon = () => new Date(new Date(Date.now()).setHours(12, 0, 0, 0)).getTime();
+
 const fullSession = (daysAgo: number): Session => {
-  const startedAt = Date.now() - daysAgo * DAY - 3 * 60 * MIN;
+  const startedAt = noon() - daysAgo * DAY;
   return { id: `s-${startedAt}`, brewerId: 'v60', cupId: 'cup', startedAt, elapsedMs: 45 * MIN, targetMs: 45 * MIN, status: 'done', coins: 54, quality: 'encorpado' };
 };
 
@@ -153,7 +156,7 @@ test('30 dias de sequência liberam a Chemex ao encerrar um copo', () => {
   const past = Array.from({ length: 29 }, (_, i) => fullSession(i + 1));
   useApp.setState({ sessions: past });
   assert.equal(useApp.getState().owned.includes('chemex'), false);
-  const t0 = Date.now() - 50 * MIN;
+  const t0 = noon();
   useApp.getState().start(t0);
   useApp.getState().finish(t0 + 45 * MIN);
   assert.equal(useApp.getState().owned.includes('chemex'), true);
