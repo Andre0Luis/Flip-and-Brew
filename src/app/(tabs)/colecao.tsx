@@ -95,7 +95,7 @@ export default function Colecao() {
   ];
 
   return (
-    <Screen>
+    <Screen ads>
       <Header title={t('col.title')} right={<Txt v="label" color="muted">{t('col.count', { a: have, b: total })}</Txt>} />
       <Segmented<Tab>
         value={tab}

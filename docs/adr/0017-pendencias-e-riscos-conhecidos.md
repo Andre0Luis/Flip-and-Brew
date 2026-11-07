@@ -1,6 +1,6 @@
 # ADR-0017 · Pendências e riscos conhecidos
 
-**Status:** Aberto (atualize sempre que algo for resolvido ou surgir) · **Última revisão:** 2026-10-02
+**Status:** Aberto (atualize sempre que algo for resolvido ou surgir) · **Última revisão:** 2026-11-07
 
 Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Quando algo for resolvido, risque aqui e, se mudar uma decisão, escreva um ADR novo.
 
@@ -43,6 +43,15 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [x] Seção de café em Aprender, widgets de tela inicial e de bloqueio (docs/WIDGETS.md), comunidade em "em breve" (docs/COMUNIDADE.md) e introdução em três passos feitos.
 - [ ] **Widgets nunca rodaram num aparelho**; precisam de build novo e teste no Android e no iOS.
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
+
+## Anúncios e remoção paga (ADR-0021)
+- [ ] **Conta no AdMob:** criar o app Android e o iOS, os blocos de banner, e trocar os IDs de teste do Google em `app.json` (`androidAppId`, `iosAppId`) pelos reais. Sem isso o banner só mostra anúncio de teste.
+- [ ] Variáveis `EXPO_PUBLIC_ADMOB_BANNER_ANDROID` e `EXPO_PUBLIC_ADMOB_BANNER_IOS` no EAS (`preview` e `production`). Sem elas o build não mostra banner nem a opção de remover.
+- [ ] **Produto `remove_ads`** (não consumível, R$ 19,98) no Play Console e no App Store Connect, entitlement `remove_ads` no RevenueCat. Conferir se o preço existe na grade da Apple.
+- [ ] **Mensagem de consentimento (UMP)** criada no AdMob (Privacidade e mensagens); sem ela o formulário não aparece onde a lei exige.
+- [ ] Play Console: declarar que o app tem anúncios e o **ID de publicidade**; formulário Segurança dos dados; App Store: rótulos de privacidade e, se mudar para anúncios personalizados, ATT.
+- [ ] Banner e compra **nunca rodaram em aparelho**; precisam de build novo (módulo nativo, não roda no Expo Go).
+- [ ] Textos antigos "sem anúncios": a apresentação em JPG (`store-assets/`, só local) precisa ser refeita.
 
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).

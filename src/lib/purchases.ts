@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
-import { NO_PRO, PRO_ENTITLEMENT, coinsOf, proFromCustomerInfo, type ProInfo } from './proRules';
+import { NO_PRO, PRO_ENTITLEMENT, REMOVE_ADS_PRODUCT, coinsOf, proFromCustomerInfo, type ProInfo } from './proRules';
 export { PRO_ENTITLEMENT, type ProInfo };
 
 // No Expo Go não existe a loja nativa e o RevenueCat recusa as chaves de loja (goog_, appl_).
@@ -55,6 +55,31 @@ export async function buyCoinPack(pack: CoinPack): Promise<number | null> {
   try {
     await sdk().purchasePackage(pack.raw as never);
     return pack.coins;
+  } catch {
+    return null; // cancelamento do usuário também cai aqui
+  }
+}
+
+export type RemoveAdsOffer = { price: string; raw: unknown };
+
+/** Preço da compra única "Remover anúncios", direto da loja (não depende do offering do painel). */
+export async function loadRemoveAds(): Promise<RemoveAdsOffer | null> {
+  if (!purchasesConfigured) return null;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PRODUCT_CATEGORY } = require('react-native-purchases') as typeof import('react-native-purchases');
+    const [product] = await sdk().getProducts([REMOVE_ADS_PRODUCT], PRODUCT_CATEGORY.NON_SUBSCRIPTION);
+    return product ? { price: product.priceString, raw: product } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Devolve o estado novo do cliente ou null se foi cancelado ou falhou. */
+export async function buyRemoveAds(offer: RemoveAdsOffer): Promise<ProInfo | null> {
+  try {
+    const r = await sdk().purchaseStoreProduct(offer.raw as never);
+    return proFromCustomerInfo(r.customerInfo);
   } catch {
     return null; // cancelamento do usuário também cai aqui
   }
