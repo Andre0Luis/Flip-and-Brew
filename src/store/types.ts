@@ -54,6 +54,13 @@ export type Settings = {
   quickBrew: boolean;
   /** aviso silencioso quando o copo enche */
   notifyOnDone: boolean;
+  /** notificação de manhã com a frase do dia e a pergunta "como você está se sentindo" */
+  dailyMorning: boolean;
+  /** lembrete de tarde ou à noite para fazer o check-in do dia (não avisa se já foi feito) */
+  dailyCheckin: boolean;
+  /** hora cheia dos dois lembretes (limites em lib/reminders.ts) */
+  morningHour: number;
+  checkinHour: number;
   /** dá moedas pelo tempo com a tela bloqueada, depois do sono mínimo (só Android, com o acesso ao uso) */
   passiveCoins: boolean;
   /** sono mínimo descontado todo dia do tempo bloqueado, em minutos (limites em lib/passive.ts) */

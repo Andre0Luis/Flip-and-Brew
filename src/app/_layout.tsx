@@ -10,6 +10,7 @@ import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { BrewEngine } from '@/engine/BrewEngine';
 import { CloudSync } from '@/engine/CloudSync';
 import { WidgetSync } from '@/engine/WidgetSync';
+import { Reminders } from '@/engine/Reminders';
 import { useApp } from '@/store/useApp';
 import { translate } from '@/i18n';
 import { light } from '@/theme/tokens';
@@ -28,6 +29,7 @@ function Shell() {
       <BrewEngine />
       <CloudSync />
       <WidgetSync />
+      <Reminders />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
         {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
         <Stack.Protected guard={!onboarded}>

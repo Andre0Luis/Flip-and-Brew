@@ -6,7 +6,7 @@
 O humor só era registrado ao fim de um copo, então dias sem copo ficavam sem leitura. A loja tinha poucas cafeteiras e xícaras, com preços baixos para as séries especiais. A pessoa pediu também um perfil com dados pessoais e gosto de café.
 
 ## Decisão
-- **Check-in diário de energia.** Um por dia, de 1 a 5 **xícaras de café** (1 = esgotado, 5 = cheia). Aparece no Início; responder de novo no mesmo dia troca a resposta. O Bem-estar mostra os 7 dias, a média e a comparação com dias de mais e menos tempo offline. Não gera notificação (ADR-0007 e o princípio de não disputar atenção).
+- **Check-in diário de energia.** Um por dia, de 1 a 5 **xícaras de café** (1 = esgotado, 5 = cheia). Aparece no Início; responder de novo no mesmo dia troca a resposta. O Bem-estar mostra os 7 dias, a média e a comparação com dias de mais e menos tempo offline. Não gera notificação por padrão (ADR-0007); o lembrete opcional veio na ADR-0022.
 - **Perfil opcional** (tela `perfil`, em Ajustes, e no cadastro): nome, telefone, idade e preferências de café (café favorito, método preferido, torra, moagem, corpo, acidez, sabores). Tudo facultativo. As preferências são **chaves neutras**, não texto traduzido. Telefone e idade só são salvos quando válidos.
   - O telefone **não é usado para nada** (sem SMS, sem ligação, sem verificação); o texto da tela diz isso. É só um campo.
   - Fica no aparelho; com conta, vai no backup com o progresso (`checkins` e `profile` são campos opcionais do snapshot, então backups antigos continuam válidos). A política de privacidade e a página de exclusão de conta foram atualizadas.
@@ -20,7 +20,7 @@ O humor só era registrado ao fim de um copo, então dias sem copo ficavam sem l
 - A cafeteira do Início ganhou animação leve (flutuar e vapor), desligada com "reduzir movimento".
 
 ## Alternativas descartadas
-- **Notificação diária de lembrete do check-in:** vai contra o princípio do app.
+- **Notificação diária de lembrete do check-in:** vai contra o princípio do app. *(Revisto: o dono pediu e a [ADR-0022](0022-lembretes-diarios.md) a adotou, opcional e silenciosa.)*
 - **Exigir perfil ou telefone no cadastro:** o app nunca exige conta nem dados (ADR-0009). O perfil é opcional também no cadastro.
 - **Desconto em tudo:** tiraria o valor das séries especiais.
 - **Escudos dos clubes na série Torcida:** são marcas registradas. Usamos só as cores; publicar na loja pode exigir licença ou nomes neutros (ADR-0017).

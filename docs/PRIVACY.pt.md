@@ -2,7 +2,7 @@
 
 ## Seus dados ficam no aparelho
 
-O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências ficam só no seu celular, sem servidor nem ferramenta de análise.
+O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências ficam só no seu celular, sem servidor próprio nem ferramenta de análise. Os anúncios são a exceção; veja abaixo.
 
 ## Acesso ao uso (opcional)
 
@@ -14,7 +14,7 @@ O acelerômetro serve só para saber se o celular está virado para baixo. As le
 
 ## Notificações (opcional)
 
-O aviso de copo pronto é uma notificação local, criada no próprio aparelho, e vem desligado.
+Os avisos (copo pronto, frase do dia de manhã e lembrete do check-in) são notificações locais, criadas no próprio aparelho, sem passar por servidor. Cada um liga e desliga em Ajustes.
 
 ## Compras
 
@@ -31,3 +31,7 @@ Você pode criar uma conta com e-mail e senha ou entrar com o Google. Se criar, 
 ## Excluir a conta
 
 Em Conta › Excluir conta, apagamos a sua conta e o backup na nuvem. Os dados do aparelho continuam até você apagá-los em Ajustes.
+
+## Anúncios
+
+O app mostra um banner de anúncio no fim de algumas telas, fornecido pelo Google AdMob. Para exibi-lo, o AdMob pode usar o identificador de publicidade do aparelho e dados como o endereço IP e o modelo do aparelho. Pedimos anúncios sem personalização. Onde a lei exige, o app mostra um formulário de consentimento, que você pode refazer quando quiser. Quem comprar “Remover anúncios” ou assinar o Pro não vê o banner nem carrega o anúncio.

@@ -1,6 +1,6 @@
 # ADR-0017 · Pendências e riscos conhecidos
 
-**Status:** Aberto (atualize sempre que algo for resolvido ou surgir) · **Última revisão:** 2026-10-02
+**Status:** Aberto (atualize sempre que algo for resolvido ou surgir) · **Última revisão:** 2026-11-07
 
 Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Quando algo for resolvido, risque aqui e, se mudar uma decisão, escreva um ADR novo.
 
@@ -45,6 +45,15 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
 - [ ] **Moedas pelo tempo bloqueado** (ADR-0023): o Kotlin de `usage-stats` nunca foi compilado e a conta depende dele; taxa (1 moeda a cada 10 min), teto (60 por dia) e sono padrão (6 h) **não foram testados com pessoas** nem em aparelho. Dia com leitura parcial do Android (primeiro dia após a permissão) pode render a mais, limitado pelo teto.
+- [ ] **Lembretes diários** (ADR-0022): horários, canal silencioso, toque abrindo o Início, reagendamento ao reabrir e depois de reiniciar o celular não foram validados em aparelho. Acima de 14 dias sem abrir o app, os avisos acabam.
+## Anúncios e remoção paga (ADR-0021)
+- [ ] **Conta no AdMob:** criar o app Android e o iOS, os blocos de banner, e trocar os IDs de teste do Google em `app.json` (`androidAppId`, `iosAppId`) pelos reais. Sem isso o banner só mostra anúncio de teste.
+- [ ] Variáveis `EXPO_PUBLIC_ADMOB_BANNER_ANDROID` e `EXPO_PUBLIC_ADMOB_BANNER_IOS` no EAS (`preview` e `production`). Sem elas o build não mostra banner nem a opção de remover.
+- [ ] **Produto `remove_ads`** (não consumível, R$ 19,98) no Play Console e no App Store Connect, entitlement `remove_ads` no RevenueCat. Conferir se o preço existe na grade da Apple.
+- [ ] **Mensagem de consentimento (UMP)** criada no AdMob (Privacidade e mensagens); sem ela o formulário não aparece onde a lei exige.
+- [ ] Play Console: declarar que o app tem anúncios e o **ID de publicidade**; formulário Segurança dos dados; App Store: rótulos de privacidade e, se mudar para anúncios personalizados, ATT.
+- [ ] Banner e compra **nunca rodaram em aparelho**; precisam de build novo (módulo nativo, não roda no Expo Go).
+- [ ] Textos antigos "sem anúncios": a apresentação em JPG (`store-assets/`, só local) precisa ser refeita.
 
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).

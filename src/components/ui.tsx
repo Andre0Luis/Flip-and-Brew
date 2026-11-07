@@ -6,6 +6,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { Coin } from '@/art/Art';
 import { formatNumber, useI18n } from '@/i18n';
 import { Icon } from '@/components/Icon';
+import { AdBanner } from '@/components/AdBanner';
 
 type Variant = 'hero' | 'display' | 'quote' | 'title' | 'body' | 'small' | 'label' | 'num' | 'numBig';
 type ColorKey = 'fg' | 'muted' | 'accent' | 'good' | 'bad' | 'bg' | 'accentFg';
@@ -32,12 +33,15 @@ export function Screen({
   edges = ['top'],
   pad = true,
   bottomPad = 24,
+  ads = false,
 }: {
   children: React.ReactNode;
   scroll?: boolean;
   edges?: ('top' | 'bottom')[];
   pad?: boolean;
   bottomPad?: number;
+  /** banner de anúncio no fim da rolagem (só nas abas) */
+  ads?: boolean;
 }) {
   const { c } = useTheme();
   return (
@@ -45,6 +49,7 @@ export function Screen({
       {scroll ? (
         <ScrollView contentContainerStyle={[{ paddingBottom: bottomPad, gap: 16 }, pad && { paddingHorizontal: 20 }]} showsVerticalScrollIndicator={false}>
           {children}
+          {ads && <AdBanner />}
         </ScrollView>
       ) : (
         <View style={[{ flex: 1 }, pad && { paddingHorizontal: 20 }]}>{children}</View>

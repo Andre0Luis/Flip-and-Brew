@@ -88,7 +88,7 @@ export default function Inicio() {
   };
 
   return (
-    <Screen>
+    <Screen ads>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
         <CoinBadge coins={coins} onPress={() => router.push('/guia')} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
