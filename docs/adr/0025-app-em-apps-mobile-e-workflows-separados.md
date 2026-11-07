@@ -6,8 +6,8 @@
 O repositório tinha o app Expo na raiz e, ao lado, o backend (`apps/api`) e os contratos (`packages/shared`). O dono aprovou mover o app para uma pasta própria e quer que cada área tenha as suas verificações: o app só roda os fluxos do app, e a API só os da API.
 
 ## Decisão
-- **O app foi movido para `apps/mobile/`** com `git mv` (o histórico dos arquivos se preserva): `src/`, `assets/`, `modules/`, `plugins/`, `scripts/`, `index.ts`, `app.json`, `eas.json`, `tsconfig.json`, `eslint.config.js`, `package.json`, `package-lock.json` e `.env.example`.
-- **Ficaram na raiz:** `docs/` (documentação do projeto inteiro), `firebase.json` e `firebase/` (legado; saem no corte do Firebase), `test.bash` (script de credenciais do Google Cloud) e `.github/`.
+- **O app foi movido para `apps/mobile/`** com `git mv` (o histórico dos arquivos se preserva): `src/`, `assets/`, `modules/`, `plugins/`, `scripts/`, `index.ts`, `app.json`, `eas.json`, `tsconfig.json`, `eslint.config.js`, `package.json`, `package-lock.json`, `.env.example` e a configuração do Firebase do app (`firebase.json` e `firebase/firestore.rules`, legado que sai no corte do Firebase). O comando `firebase deploy` agora roda de `apps/mobile/`.
+- **Ficaram na raiz:** `docs/` (documentação do projeto inteiro), `test.bash` (script de credenciais do Google Cloud), `.github/` e os atalhos do `package.json`. **`packages/shared`** continua em `packages/` (pasta padrão de monorepo): hoje só a API o usa, e o app o importará quando houver comunidade e login.
 - **Sem workspaces:** cada pasta (`apps/mobile`, `apps/api`, `packages/shared`) tem o próprio `package-lock.json` e se instala sozinha. Um `package.json` na raiz só traz atalhos (`npm run check` roda o do app e o da API; `npm start`).
 - **Workflows separados** (ficam no `.github/`, que não se move):
   - `ci.yml` ("CI Mobile", job `check-mobile`): só com mudança em `apps/mobile/**`.
