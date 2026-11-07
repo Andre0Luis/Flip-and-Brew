@@ -249,3 +249,33 @@ test('os tempos do Pomodoro vêm das configurações e valores absurdos são san
   useApp.getState().setSettings({ pomodoro: { focusMin: 9999, breakMin: 0, longBreakMin: 30, cycle: 2 } });
   assert.deepEqual(useApp.getState().settings.pomodoro, { focusMin: 120, breakMin: 1, longBreakMin: 30, cycle: 2 });
 });
+
+test('moedas pelo tempo bloqueado: o primeiro uso só marca o início e dias anteriores não rendem', () => {
+  const t = new Date(2026, 10, 10, 9, 0).getTime();
+  const dayStart = (back: number) => new Date(2026, 10, 10 - back).getTime();
+  const usage = (back: number) => ({ dayStart: dayStart(back), unlocks: 30, locks: 30, screenMs: 6 * 3_600_000 });
+  assert.equal(useApp.getState().creditPassive([usage(1), usage(2)], t), 0);
+  assert.equal(useApp.getState().passive.since, '2026-11-10');
+  assert.equal(useApp.getState().coins, 100);
+  // um dia depois, o dia 10 já terminou: 24 h - 6 h de tela - 6 h de sono rendem o teto
+  assert.equal(useApp.getState().creditPassive([usage(0), usage(1)], t + DAY), 60);
+  assert.equal(useApp.getState().coins, 160);
+  assert.deepEqual(useApp.getState().passive.notice, { coins: 60 });
+  // abrir de novo não paga duas vezes
+  assert.equal(useApp.getState().creditPassive([usage(0), usage(1)], t + DAY), 0);
+  assert.equal(useApp.getState().coins, 160);
+  useApp.getState().dismissPassiveNotice();
+  assert.equal(useApp.getState().passive.notice, null);
+});
+
+test('moedas pelo tempo bloqueado: com o ajuste desligado nada acontece, e um sono maior rende menos', () => {
+  const t = new Date(2026, 10, 10, 9, 0).getTime();
+  const day = (back: number) => ({ dayStart: new Date(2026, 10, 10 - back).getTime(), unlocks: 30, locks: 30, screenMs: 14 * 3_600_000 });
+  useApp.getState().setSettings({ passiveCoins: false });
+  assert.equal(useApp.getState().creditPassive([day(0)], t + DAY), 0);
+  assert.equal(useApp.getState().passive.since, null);
+  useApp.getState().setSettings({ passiveCoins: true, sleepMin: 540 });
+  useApp.getState().creditPassive([], t);
+  // 24 h - 14 h de tela = 10 h bloqueadas; com 9 h de sono sobra 1 h = 6 moedas
+  assert.equal(useApp.getState().creditPassive([day(0)], t + DAY), 6);
+});

@@ -10,7 +10,7 @@ export default function Comunidade() {
   const { c } = useTheme();
   const { t } = useI18n();
   return (
-    <Screen>
+    <Screen ads>
       <Header title={t('community.title')} />
       <Card style={{ gap: 14, alignItems: 'center', paddingVertical: 28 }}>
         <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.soft, alignItems: 'center', justifyContent: 'center' }}>

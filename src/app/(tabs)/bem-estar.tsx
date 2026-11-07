@@ -111,7 +111,7 @@ export default function BemEstar() {
   const hrs = hourly(sessions);
 
   return (
-    <Screen>
+    <Screen ads>
       <Header title={t('wb.title')} right={<Txt v="label" color="muted">{t('wb.goalHeader', { time: minutesLabel(goal) })}</Txt>} />
       <Segmented<Tab>
         value={tab}

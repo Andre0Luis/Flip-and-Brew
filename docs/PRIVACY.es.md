@@ -2,11 +2,11 @@
 
 ## Tus datos se quedan en el dispositivo
 
-Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias se quedan solo en tu móvil, sin servidor ni herramienta de analítica.
+Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias se quedan solo en tu móvil, sin servidor propio ni herramienta de analítica. Los anuncios son la excepción; mira abajo.
 
 ## Acceso al uso (opcional)
 
-Si lo permites, la app lee de Android cuántas veces se desbloqueó el móvil y cuánto tiempo estuvo encendida la pantalla. Esos números se quedan en el dispositivo y no muestran qué apps usas. Puedes revocar el permiso en cualquier momento en los ajustes de Android.
+Si lo permites, la app lee de Android cuántas veces se desbloqueó el móvil y cuánto tiempo estuvo encendida la pantalla. Esos números se quedan en el dispositivo y no muestran qué apps usas. Con ellos la app calcula, en el propio dispositivo, las monedas por el tiempo con la pantalla bloqueada. Puedes revocar el permiso en cualquier momento en los ajustes de Android.
 
 ## Sensor de movimiento
 
@@ -14,7 +14,7 @@ El acelerómetro sirve solo para saber si el móvil está boca abajo. Las lectur
 
 ## Notificaciones (opcional)
 
-El aviso de taza lista es una notificación local, creada en el propio dispositivo, y viene desactivado.
+Los avisos (taza lista, frase del día por la mañana y recordatorio del check-in) son notificaciones locales, creadas en el propio dispositivo, sin pasar por un servidor. Activas o desactivas cada uno en Ajustes.
 
 ## Compras
 
@@ -31,3 +31,7 @@ Puedes crear una cuenta con correo y contraseña o entrar con Google. Si lo hace
 ## Eliminar la cuenta
 
 En Cuenta › Eliminar cuenta, borramos tu cuenta y la copia en la nube. Los datos del dispositivo se quedan hasta que los borres en Ajustes.
+
+## Anuncios
+
+La app muestra un banner de anuncio al final de algunas pantallas, proporcionado por Google AdMob. Para mostrarlo, AdMob puede usar el identificador de publicidad del dispositivo y datos como la dirección IP y el modelo del dispositivo. Pedimos anuncios sin personalización. Donde la ley lo exige, la app muestra un formulario de consentimiento, que puedes rehacer cuando quieras. Quien compre “Quitar anuncios” o se suscriba al Pro no ve el banner ni se carga el anuncio.

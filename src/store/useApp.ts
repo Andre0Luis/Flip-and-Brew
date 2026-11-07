@@ -4,7 +4,7 @@ import { appStorage } from './storage';
 import type { ActiveBrew, Checkin, Profile, Session, Settings } from './types';
 import { byId, CATALOG, STARTER_IDS } from '@/data/catalog';
 import { MIN_LOGGED_MS, outcomeOf } from '@/lib/brew';
-import { dayKey, streak } from '@/lib/stats';
+import { dayKey, minutesByDay, streak } from '@/lib/stats';
 import { makeDemoCheckins, makeDemoSessions } from '@/lib/demo';
 import { makeTestData } from '@/lib/testUser';
 import { withCheckin, withoutCheckin } from '@/lib/checkin';
@@ -13,9 +13,12 @@ import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
 import { DEFAULT_POMO, makeRest, normalizePomo, pomodorosToday, type Rest } from '@/lib/pomodoro';
+import { DEFAULT_CHECKIN_HOUR, DEFAULT_MORNING_HOUR } from '@/lib/reminders';
+import { NO_PASSIVE, SLEEP_LIMITS, applyPlan, normalizeSleep, planPassive, type PassiveState } from '@/lib/passive';
+import type { UsageDay } from '@/lib/usage';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, passiveCoins: true, sleepMin: SLEEP_LIMITS.default, dailyMorning: false, dailyCheckin: false, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -37,6 +40,8 @@ type State = {
   missionsDone: number;
   /** dias em que as três missões foram resgatadas */
   missionBonusDays: number;
+  /** moedas pelo tempo com a tela bloqueada: desde quando conta, dias pagos e aviso pendente */
+  passive: PassiveState;
   /** dicas de primeira vez já vistas (chaves como 'coins' e 'early') */
   seenTips: string[];
   /** perfil opcional (dados pessoais e preferências de café) */
@@ -64,6 +69,12 @@ type State = {
   removeCheckin: (day: string) => void;
   /** Resgata a recompensa de uma missão concluída hoje. Devolve as moedas ganhas (0 se não pôde). 'all' resgata o bônus das três. */
   claimMission: (id: string, now?: number) => number;
+  /**
+   * Paga os dias terminados que ainda não renderam moeda pelo tempo com a tela bloqueada (lib/passive.ts). Idempotente.
+   * Na primeira chamada só marca o dia de início: dias anteriores não contam. Devolve as moedas ganhas agora.
+   */
+  creditPassive: (days: UsageDay[], now?: number) => number;
+  dismissPassiveNotice: () => void;
   /** Marca uma dica de primeira vez como vista. */
   markTip: (key: string) => void;
   /** Atualiza o perfil. Passe undefined para limpar um campo. */
@@ -98,6 +109,7 @@ const initial = {
   lastResultId: null as string | null,
   profile: {} as Profile,
   seenTips: [] as string[],
+  passive: NO_PASSIVE,
   missionsClaimed: [] as string[],
   missionsDone: 0,
   missionBonusDays: 0,
@@ -118,6 +130,19 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
+      creditPassive: (days, now = Date.now()) => {
+        const st = get();
+        if (!st.settings.passiveCoins) return 0;
+        if (st.passive.since === null) {
+          set({ passive: { ...st.passive, since: dayKey(now) } });
+          return 0;
+        }
+        const plan = planPassive({ days, now, sleepMin: normalizeSleep(st.settings.sleepMin), cupMinByDay: minutesByDay(st.sessions), since: st.passive.since, credited: st.passive.credited });
+        if (!plan.credits.length) return 0;
+        set({ coins: st.coins + plan.total, passive: applyPlan(st.passive, plan) });
+        return plan.total;
+      },
+      dismissPassiveNotice: () => set((st) => ({ passive: { ...st.passive, notice: null } })),
       markTip: (key) => set((st) => (st.seenTips.includes(key) ? {} : { seenTips: [...st.seenTips, key] })),
       claimMission: (id, now = Date.now()) => {
         const st = get();
@@ -282,6 +307,7 @@ export const useApp = create<State>()(
         lastResultId: s.lastResultId,
         profile: s.profile,
         seenTips: s.seenTips,
+        passive: s.passive,
         missionsClaimed: s.missionsClaimed,
         missionsDone: s.missionsDone,
         missionBonusDays: s.missionBonusDays,

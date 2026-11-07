@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Pressable, View, type LayoutChangeEvent } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -13,6 +13,7 @@ import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
 import { Button, Card, CoinBadge, Screen, Segmented, Txt } from '@/components/ui';
 import { RestCard } from '@/components/RestCard';
+import { PassiveNotice } from '@/components/PassiveNotice';
 import { normalizePomo } from '@/lib/pomodoro';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
 import { brewers, byId, itemText } from '@/data/catalog';
@@ -50,7 +51,12 @@ export default function Inicio() {
   const list = useRef<FlatList>(null);
 
   const today = todayStats(sessions);
-  const usage = useSystemUsage(1);
+  const usage = useSystemUsage(7);
+  const creditPassive = useApp((s) => s.creditPassive);
+  // Os dias de uso do sistema já terminados rendem moeda pelo tempo bloqueado; pagar de novo não faz nada (lib/passive.ts).
+  useEffect(() => {
+    if (usage.permitted && usage.days.length) creditPassive(usage.days);
+  }, [usage.permitted, usage.days, creditPassive]);
   const unlocksToday = usage.permitted ? summarizeUsage(usage.days).today?.unlocks : undefined;
   const days = streak(sessions);
   const brewer = byId(brewerId);
@@ -82,7 +88,7 @@ export default function Inicio() {
   };
 
   return (
-    <Screen>
+    <Screen ads>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
         <CoinBadge coins={coins} onPress={() => router.push('/guia')} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
@@ -174,6 +180,7 @@ export default function Inicio() {
 
 
       <RestCard />
+      <PassiveNotice />
 
       <View style={{ gap: 8 }}>
         {!active && (

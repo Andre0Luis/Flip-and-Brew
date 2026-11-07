@@ -13,6 +13,8 @@ O protótipo mostrava "42 desbloqueios por dia", mas esses números exigem dados
 - Sem a permissão, ou fora do Android, o cartão some ou só pede.
 - O módulo foi recriado a partir do histórico, **corrigindo um erro**: a versão antiga contava "tela ligada" (`SCREEN_INTERACTIVE`) como desbloqueio, o que superestima.
 
+> **Atualização (ADR-0023):** o tempo de tela bloqueada também rende moedas, depois de um sono mínimo configurável. Os números continuam só no aparelho.
+
 ## Alternativas descartadas
 - **Mostrar números de exemplo como se fossem reais:** descartado.
 - **Usar a API de Bem-estar Digital do Google:** não há API pública para isso.

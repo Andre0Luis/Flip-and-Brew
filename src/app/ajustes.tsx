@@ -10,13 +10,17 @@ import { cloudAvailable } from '@/lib/cloud';
 import { hasProfile } from '@/lib/profile';
 import { useTestTools } from '@/lib/admin';
 import { GoalPicker } from '@/components/GoalPicker';
+import { PassiveSettings } from '@/components/PassiveSettings';
 import { useAuth } from '@/store/useAuth';
 import { usePro } from '@/store/usePro';
+import { RemoveAdsCard } from '@/components/RemoveAdsCard';
+import { adsEnabled } from '@/lib/ads';
 import { presentCustomerCenter, presentPaywall, purchasesConfigured } from '@/lib/purchases';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { DEFAULT_POMO, normalizePomo, POMO_LIMITS } from '@/lib/pomodoro';
+import { normalizeHour, REMINDER_HOURS } from '@/lib/reminders';
 
 const POMO_FIELDS = [
   { key: 'focusMin', label: 'pomo.focus' },
@@ -43,6 +47,27 @@ function Row({ title, hint, value, onChange }: { title: string; hint: string; va
   );
 }
 
+function HourRow({ kind, hour, onChange }: { kind: 'morning' | 'checkin'; hour: number; onChange: (h: number) => void }) {
+  const { t } = useI18n();
+  const { min, max } = REMINDER_HOURS[kind];
+  const h = normalizeHour(kind, hour);
+  const btn = { paddingVertical: 8, paddingHorizontal: 16, minWidth: 48 };
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+      <Txt v="body" style={{ flex: 1 }}>
+        {t('daily.at')}
+      </Txt>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Button label="−" tone="quiet" disabled={h <= min} accessibilityLabel={t('daily.earlier')} onPress={() => onChange(h - 1)} style={btn} />
+        <Txt v="num" style={{ minWidth: 64, textAlign: 'center', fontSize: 18 }}>
+          {`${String(h).padStart(2, '0')}:00`}
+        </Txt>
+        <Button label="+" tone="quiet" disabled={h >= max} accessibilityLabel={t('daily.later')} onPress={() => onChange(h + 1)} style={btn} />
+      </View>
+    </View>
+  );
+}
+
 export default function Ajustes() {
   const router = useRouter();
   const { t } = useI18n();
@@ -62,6 +87,15 @@ export default function Ajustes() {
   const authUser = useAuth((s) => s.user);
   const pro = usePro();
   const [proMsg, setProMsg] = useState<string | null>(null);
+
+  const toggleDaily = async (key: 'dailyMorning' | 'dailyCheckin', v: boolean) => {
+    setNotifyMsg(null);
+    if (v && !(await ensureNotificationPermission())) {
+      setNotifyMsg(t('set.notifyDenied'));
+      return;
+    }
+    set({ [key]: v });
+  };
 
   const toggleNotify = async (v: boolean) => {
     setNotifyMsg(null);
@@ -151,6 +185,24 @@ export default function Ajustes() {
         <Button label={t('pomo.reset')} tone="quiet" onPress={() => set({ pomodoro: DEFAULT_POMO })} style={{ alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 16 }} />
       </Card>
 
+      <Card style={{ gap: 12 }}>
+        <Txt v="title">{t('daily.title')}</Txt>
+        <Txt v="small" color="muted">
+          {t('daily.hint')}
+        </Txt>
+        <Row title={t('daily.morning')} hint={t('daily.morningHint')} value={settings.dailyMorning} onChange={(v) => void toggleDaily('dailyMorning', v)} />
+        {settings.dailyMorning && <HourRow kind="morning" hour={settings.morningHour} onChange={(h) => set({ morningHour: h })} />}
+        <Row title={t('daily.checkin')} hint={t('daily.checkinHint')} value={settings.dailyCheckin} onChange={(v) => void toggleDaily('dailyCheckin', v)} />
+        {settings.dailyCheckin && <HourRow kind="checkin" hour={settings.checkinHour} onChange={(h) => set({ checkinHour: h })} />}
+        {notifyMsg && (
+          <Txt v="small" color="bad" accessibilityLiveRegion="polite">
+            {notifyMsg}
+          </Txt>
+        )}
+      </Card>
+
+      <PassiveSettings />
+
       <Card style={{ gap: 10 }}>
         <Row title={t('set.dim')} hint={t('set.dimHint')} value={settings.dimDuringBrew} onChange={(v) => set({ dimDuringBrew: v })} />
         <Row title={t('set.notify')} hint={t('set.notifyHint')} value={settings.notifyOnDone} onChange={toggleNotify} />
@@ -213,6 +265,8 @@ export default function Ajustes() {
           )}
         </Card>
       )}
+
+      {purchasesConfigured && adsEnabled && <RemoveAdsCard />}
 
       {cloudAvailable() && (
         <Card style={{ gap: 10 }}>

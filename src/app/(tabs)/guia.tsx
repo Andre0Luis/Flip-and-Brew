@@ -132,7 +132,7 @@ export default function Guia() {
   );
 
   return (
-    <Screen>
+    <Screen ads>
       <Header title={t('guide.title')} right={<CoinBadge coins={coins} />} />
       <Segmented<Tab>
         value={tab}
