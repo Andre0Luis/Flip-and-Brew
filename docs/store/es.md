@@ -30,7 +30,7 @@ TROPEZAR TAMBIÉN ENSEÑA
 Un mal día no borra tu progreso. El estante se queda, la racha solo se pausa y la app muestra lo que enseñó el día.
 
 TUS DATOS SE QUEDAN CONTIGO
-La app funciona sin cuenta y sin anuncios, y todo se guarda en tu móvil. Si quieres, crea una cuenta (correo o Google) para guardar una copia del progreso en la nube y recuperarla en otro dispositivo. Puedes eliminar la cuenta y la copia cuando quieras, dentro de la app.
+La app funciona sin cuenta, y todo se guarda en tu móvil. Hay un banner de anuncio al final de algunas pantallas, que puedes quitar para siempre con una compra única. Si quieres, crea una cuenta (correo o Google) para guardar una copia del progreso en la nube y recuperarla en otro dispositivo. Puedes eliminar la cuenta y la copia cuando quieras, dentro de la app.
 
 Disponible en portugués, inglés y español.
 

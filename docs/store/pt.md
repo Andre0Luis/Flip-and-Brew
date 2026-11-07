@@ -30,7 +30,7 @@ TROPEÇAR TAMBÉM ENSINA
 Um dia ruim não apaga o seu progresso. A prateleira fica, a sequência só pausa e o app mostra o que o dia ensinou.
 
 SEUS DADOS FICAM COM VOCÊ
-O app funciona sem conta e sem anúncios, e tudo é guardado no seu celular. Se quiser, crie uma conta (e-mail ou Google) para guardar um backup do progresso na nuvem e recuperá-lo em outro aparelho. Você pode excluir a conta e o backup quando quiser, dentro do app.
+O app funciona sem conta, e tudo é guardado no seu celular. Há um banner de anúncio no fim de algumas telas, que você remove para sempre com uma compra única. Se quiser, crie uma conta (e-mail ou Google) para guardar um backup do progresso na nuvem e recuperá-lo em outro aparelho. Você pode excluir a conta e o backup quando quiser, dentro do app.
 
 Disponível em português, inglês e espanhol.
 

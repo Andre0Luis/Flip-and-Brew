@@ -28,7 +28,7 @@ export default function Aprender() {
   const list = getArticles(lang).filter((a) => cat === 'all' || a.category === cat);
 
   return (
-    <Screen>
+    <Screen ads>
       <Header title={t('learn.title')} right={<CoinBadge coins={coins} />} />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
