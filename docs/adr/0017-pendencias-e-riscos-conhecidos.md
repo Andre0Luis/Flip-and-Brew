@@ -62,6 +62,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [x] API de **amizade com aprovação**, bloqueio, busca por apelido e perfil público (`/v1/friend-requests`, `/v1/me/friends`, `/v1/blocks`, `/v1/users`), com testes. **Ainda sem telas no app.**
 - [ ] **Aplicar as migrações no Supabase** (`cd apps/api && npm run db:migrate`, com `MIGRATE_DATABASE_URL` no `.env`). O projeto existe e está vazio; a conexão com TLS verificado foi testada. As migrações `0002` (RLS em todas as tabelas) e `0003` (revoga `anon` e `authenticated`) são o que impede que a chave pública `anon` leia o banco.
 - [ ] **Girar as credenciais do Supabase** (senha do banco, `service_role`, chave secreta e segredo JWT) se o chat ou o log da sessão em que foram coladas puder ser visto por outras pessoas; a API só precisa da senha do banco.
+- [x] **Swagger** (`/docs`, `/openapi.json`) gerado dos esquemas Zod, com teste contra rotas sem documentação. Em produção fica desligado, a menos que `DOCS_ENABLED=true`.
 - [ ] **Domínio próprio** para o e-mail (hoje remetente verificado na Brevo; Gmail pode cair no spam) e para a Cloudflare.
 - [ ] Conta e chave da **Brevo**, remetente verificado e `ADMIN_EMAILS` nas variáveis da Vercel (o e-mail do dono não vai para o repositório).
 - [ ] Fases seguintes: mover o app para `apps/mobile`, amizade com aprovação, posts e imagens, ranking, mensagens, **Supabase Auth**, e-mail de boas-vindas, deploy na Vercel (plano gratuito só para testes), corte do Firebase, textos "sem conta".
