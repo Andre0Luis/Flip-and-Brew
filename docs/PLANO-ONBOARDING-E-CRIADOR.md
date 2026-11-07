@@ -74,14 +74,14 @@ Tenho essa frase tatuada. Não é cartaz de motivação. É uma conta simples: t
 Um fim de ciclo me mostrou quanto tempo e energia eu vinha dando a algo sem futuro. Sou grato por isso. Foi o que tirou a venda e me devolveu o controle do meu próprio relógio.
 
 **O que este app é**
-O Flip & Brew não quer a sua atenção. Não tem truque para te prender nem aviso para te puxar de volta; o único aviso é o de copo pronto, e só se você ligar. Ele existe para o contrário: você larga o celular, o café se faz, e o tempo vai para o que importa fora da tela.
+O Flip & Brew não quer a sua atenção. Não tem truque para te prender. Os avisos são só os que você ligar: copo pronto, a frase da manhã e o lembrete do check-in, sem som e sem vibração. Há um banner discreto no fim de algumas telas, que você remove para sempre com uma compra única. O app existe para o contrário: você larga o celular, o café se faz, e o tempo vai para o que importa fora da tela.
 
 Boa travessia.
 André
 
 Notas de revisão:
 - O fim de relacionamento aparece só como "fim de ciclo", sem detalhe, sem culpa e sem nome. Isso protege a privacidade e mantém o tom (gratidão, não mágoa). Se quiser mais explícito ou mais discreto, é uma frase.
-- "Sem aviso para te puxar de volta" é verdade hoje: a única notificação é o aviso de copo pronto, desligado por padrão (README, "Aviso de copo pronto"). Se surgirem outras notificações, o texto precisa mudar junto.
+- O texto lista os avisos que existem (copo pronto, frase da manhã e lembrete do check-in, todos opcionais, ADR-0022) e o banner de anúncio (ADR-0021). **Se surgirem outros avisos ou anúncios, o texto precisa mudar junto.** A versão original dizia que o único aviso era o de copo pronto.
 - Antifragilidade fica implícita (dor virou método), sem citar Taleb, que já tem espaço em Aprender.
 
 ## 5. Implementação (quando aprovado)
