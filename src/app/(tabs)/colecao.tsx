@@ -9,6 +9,7 @@ import { ARTICLE_COUNT } from '@/data/articles';
 import { recentMissions } from '@/lib/missions';
 import { formatDateShort, useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
+import { equippedFirst } from '@/lib/shelf';
 import { streak } from '@/lib/stats';
 import { minutesLabel } from '@/lib/format';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -146,7 +147,7 @@ export default function Colecao() {
       ) : (
         <>
           <Shelf
-            items={(tab === 'cup' ? cups() : tab === 'beans' ? packs() : brewers()).map((i) => localize(lang, i))}
+            items={equippedFirst((tab === 'cup' ? cups() : tab === 'beans' ? packs() : brewers()).map((i) => localize(lang, i)), tab === 'cup' ? cupId : tab === 'beans' ? packId : brewerId)}
             owned={owned}
             selected={sel[tab]}
             onSelect={(id) => {
