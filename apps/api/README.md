@@ -26,6 +26,13 @@ O e-mail de boas-vindas sai no primeiro `bootstrap`, uma vez só (se o provedor 
 2. **Remetente verificado** (Remetentes e IP) em `MAIL_FROM`. Sem domínio próprio, endereços de provedores gratuitos (Gmail) podem cair no spam ou ser reescritos pela Brevo por causa do DMARC **(confirmar)**; o ideal é um domínio, mesmo barato.
 3. A recuperação de senha e a confirmação de e-mail serão do **Supabase Auth**, que pode usar o SMTP da Brevo (`smtp-relay.brevo.com`) na fase final.
 
+## Documentação da API (Swagger)
+Com a API rodando: **`/docs`** (Swagger UI) e **`/openapi.json`** (OpenAPI 3.1).
+- Em desenvolvimento, gere um token (`npm run dev:token -- seu@email.com`), clique em **Authorize** e cole o token (sem o prefixo `Bearer`); aí dá para chamar as rotas pela página.
+- **Ligada fora de produção; em produção só com `DOCS_ENABLED=true`.** As duas rotas não pedem login, e o conteúdo é só a descrição das rotas.
+- Os corpos de entrada vêm **dos mesmos esquemas Zod** que a API valida (`packages/shared`), então não divergem. A lista de rotas está em `src/openapi.ts`; **um teste falha se uma rota existir sem estar documentada** (ou o contrário). Ao criar uma rota, acrescente a entrada lá.
+- O Swagger UI é carregado da CDN do jsDelivr em **versão fixa** (`SWAGGER_UI_VERSION`); atualize de propósito, com a versão já madura.
+
 ## Testes
 `npm run check` (typecheck + testes). Os testes usam o PGlite em memória e aplicam as migrações de verdade; não precisam de Docker nem de rede.
 
