@@ -20,6 +20,12 @@ curl -X POST localhost:8787/v1/me/bootstrap -H "authorization: Bearer $TOKEN" -H
 curl localhost:8787/v1/admin/overview -H "authorization: Bearer $TOKEN"
 ```
 
+## Banco do Supabase
+- **Variáveis** (em `apps/api/.env`, nunca no git): `DATABASE_URL` (pooler em modo transação, porta 6543, usado pela API) e `MIGRATE_DATABASE_URL` (porta 5432, só para migrar). A API **não usa** a `service_role` nem a chave secreta do Supabase: ela conecta direto ao Postgres.
+- **Migrar:** `npm run db:migrate` (aplica `apps/api/drizzle` numa transação; só avança).
+- **TLS verificado:** o Node não conhece a CA do Supabase, então `src/db/supabase-ca.ts` traz as CAs públicas (intermediária e raiz "2021") e o cliente as usa em hosts `*.supabase.com`/`*.supabase.co`. Nunca desligue a verificação: a senha do banco iria a quem estivesse na frente. A raiz vale até 2031-04.
+- **A chave `anon` é pública**, e o Supabase expõe o esquema `public` por HTTP. Por isso **toda tabela tem RLS ligada sem policies** (migração `0002`) e os papéis `anon`/`authenticated` perdem os privilégios (`0003`). Um teste falha se alguma tabela nova ficar sem RLS (`.enableRLS()` no esquema). Confira também em Supabase › Database › Security Advisor.
+
 ## E-mail (Brevo)
 O e-mail de boas-vindas sai no primeiro `bootstrap`, uma vez só (se o provedor falhar, a próxima abertura tenta de novo; o cadastro nunca falha por isso). Usamos a **Brevo pela API HTTP**, como o backend do Clube Quinze: `POST https://api.brevo.com/v3/smtp/email` com o cabeçalho `api-key`.
 1. Conta em brevo.com, **API key** (SMTP e API › Chaves de API) em `BREVO_API_KEY`.

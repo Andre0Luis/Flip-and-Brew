@@ -21,7 +21,7 @@ export const profiles = pgTable('profiles', {
   lastSeenAt: ts('last_seen_at'),
   bannedAt: ts('banned_at'),
   createdAt: ts('created_at').notNull().defaultNow(),
-});
+}).enableRLS();
 
 const owner = () => uuid('user_id').notNull().references(() => profiles.id, { onDelete: 'cascade' });
 
@@ -30,7 +30,7 @@ export const privacySettings = pgTable('privacy_settings', {
   userId: owner().primaryKey(),
   showInGlobalRanking: boolean('show_in_global_ranking').notNull().default(false),
   showCoffeePrefs: boolean('show_coffee_prefs').notNull().default(false),
-});
+}).enableRLS();
 
 export const coffeePrefs = pgTable('coffee_prefs', {
   userId: owner().primaryKey(),
@@ -38,7 +38,7 @@ export const coffeePrefs = pgTable('coffee_prefs', {
   methods: text('methods').array().notNull().default([]),
   roast: text('roast'),
   flavors: text('flavors').array().notNull().default([]),
-});
+}).enableRLS();
 
 /** O backup do progresso (hoje no Firestore): o servidor guarda o documento e o horário, nada mais. */
 export const userSnapshots = pgTable('user_snapshots', {
@@ -46,7 +46,7 @@ export const userSnapshots = pgTable('user_snapshots', {
   data: jsonb('data').notNull(),
   updatedAt: bigint('updated_at', { mode: 'number' }).notNull(),
   version: integer('version').notNull().default(1),
-});
+}).enableRLS();
 
 /** Café de verdade que a pessoa bebeu (alimenta o ranking de café). */
 export const coffeeLogs = pgTable(
@@ -61,7 +61,7 @@ export const coffeeLogs = pgTable(
     note: text('note'),
   },
   (t) => [index('coffee_logs_user_at').on(t.userId, t.at)],
-);
+).enableRLS();
 
 /** Presença: uma linha de vez em quando (não a cada ping). Retenção curta, limpa por rotina. */
 export const activity = pgTable(
@@ -74,7 +74,7 @@ export const activity = pgTable(
     appVersion: text('app_version').notNull(),
   },
   (t) => [index('activity_at').on(t.at)],
-);
+).enableRLS();
 
 /** Tudo o que administrador e moderador fazem. `actorId` não tem chave estrangeira: o registro sobrevive à exclusão da conta. */
 export const auditLog = pgTable('audit_log', {
@@ -84,7 +84,7 @@ export const auditLog = pgTable('audit_log', {
   target: text('target'),
   meta: jsonb('meta'),
   at: ts('at').notNull().defaultNow(),
-});
+}).enableRLS();
 
 export const friendshipStatusEnum = pgEnum('friendship_status', ['pending', 'accepted']);
 
@@ -107,7 +107,7 @@ export const friendships = pgTable(
     index('friendships_addressee').on(t.addresseeId, t.status),
     index('friendships_requester').on(t.requesterId, t.status),
   ],
-);
+).enableRLS();
 
 /** Quem bloqueou quem. Bloquear desfaz amizade e pedidos, e some dos dois lados (busca, perfil, ranking). */
 export const blocks = pgTable(
@@ -118,6 +118,6 @@ export const blocks = pgTable(
     createdAt: ts('created_at').notNull().defaultNow(),
   },
   (t) => [primaryKey({ columns: [t.blockerId, t.blockedId] }), index('blocks_blocked').on(t.blockedId)],
-);
+).enableRLS();
 
 export type Profile = typeof profiles.$inferSelect;

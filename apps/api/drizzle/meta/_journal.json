@@ -15,6 +15,20 @@
       "when": 1794077237339,
       "tag": "0001_fuzzy_payback",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794077933993,
+      "tag": "0002_white_tempest",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794077949700,
+      "tag": "0003_revoke_supabase_api_roles",
+      "breakpoints": true
     }
   ]
 }

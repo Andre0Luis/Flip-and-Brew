@@ -271,3 +271,26 @@ test('configuração: a chave da Brevo exige um remetente', () => {
   const ok = loadConfig({ AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(20), BREVO_API_KEY: 'k', MAIL_FROM: 'eu@exemplo.com' });
   assert.equal(ok.mailFromName, 'Flip & Brew');
 });
+
+test('segurança do banco: toda tabela do esquema public tem RLS ligada (a chave anon do Supabase é pública)', async () => {
+  const t = await testApp();
+  const raw = t.handle.raw as { query: (q: string) => Promise<{ rows: { relname: string; relrowsecurity: boolean }[] }> };
+  const { rows } = await raw.query(
+    "select c.relname, c.relrowsecurity from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind = 'r' order by 1",
+  );
+  assert.ok(rows.length >= 9, 'esperava as tabelas do esquema');
+  assert.deepEqual(rows.filter((r) => !r.relrowsecurity).map((r) => r.relname), []);
+  await t.close();
+});
+
+test('conexão: banco do Supabase verifica o TLS com as CAs do Supabase; outros bancos não mudam', async () => {
+  const { poolConfig } = await import('./db/client');
+  const sb = poolConfig('postgres://u:p@aws-1-sa-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x');
+  assert.equal(sb.ssl?.rejectUnauthorized, true);
+  assert.match(sb.ssl?.ca ?? '', /BEGIN CERTIFICATE/);
+  assert.doesNotMatch(sb.connectionString, /sslmode/);
+  assert.match(sb.connectionString, /:6543\/postgres/);
+  const local = poolConfig('postgres://flipandbrew:flipandbrew@127.0.0.1:54329/flipandbrew');
+  assert.equal('ssl' in local, false);
+  assert.equal(poolConfig('isto-nao-e-url').connectionString, 'isto-nao-e-url');
+});
