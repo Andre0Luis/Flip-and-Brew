@@ -14,7 +14,7 @@ El acelerómetro sirve solo para saber si el móvil está boca abajo. Las lectur
 
 ## Notificaciones (opcional)
 
-El aviso de taza lista es una notificación local, creada en el propio dispositivo, y viene desactivado.
+Los avisos (taza lista, frase del día por la mañana y recordatorio del check-in) son notificaciones locales, creadas en el propio dispositivo, sin pasar por un servidor. Activas o desactivas cada uno en Ajustes.
 
 ## Compras
 

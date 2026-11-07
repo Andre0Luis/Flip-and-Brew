@@ -44,6 +44,8 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Widgets nunca rodaram num aparelho**; precisam de build novo e teste no Android e no iOS.
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
+- [ ] **Lembretes diários** (ADR-0022): horários, canal silencioso, toque abrindo o Início, reagendamento ao reabrir e depois de reiniciar o celular não foram validados em aparelho. Acima de 14 dias sem abrir o app, os avisos acabam.
+
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).
 - [ ] Testes de interface automatizados no aparelho não existem; só o roteiro manual.

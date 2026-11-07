@@ -29,7 +29,7 @@ export default function Intro() {
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
   const allowNotify = async () => {
     setNotifyMsg(null);
-    if (await ensureNotificationPermission()) setSettings({ notifyOnDone: true });
+    if (await ensureNotificationPermission()) setSettings({ notifyOnDone: true, dailyMorning: true, dailyCheckin: true });
     else setNotifyMsg(t('set.notifyDenied'));
   };
   const setSettings = useApp((s) => s.setSettings);
