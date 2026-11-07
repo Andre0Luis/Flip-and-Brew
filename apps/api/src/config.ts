@@ -19,6 +19,7 @@ const schema = z
     CORS_ORIGINS: z.string().optional(),
     SUPABASE_URL: z.url().optional(),
     SUPABASE_JWT_SECRET: z.string().min(16).optional(),
+    SUPABASE_SERVICE_ROLE_KEY: z.string().min(20).optional(),
     DOCS_ENABLED: z.enum(['true', 'false']).optional(),
     BREVO_API_KEY: z.string().optional(),
     MAIL_FROM: z.email().optional(),
@@ -51,6 +52,8 @@ export type Config = {
   supabaseUrl: string | undefined;
   /** Segredo JWT (HS256) do projeto Supabase; sem ele só valem tokens com chave assimétrica (JWKS). */
   supabaseJwtSecret: string | undefined;
+  /** Chave `service_role` do Supabase: só no servidor. Com ela, excluir a conta também apaga o usuário no Supabase Auth. */
+  supabaseServiceRoleKey?: string;
   adminEmails: string[];
   corsOrigins: string[];
   /** /docs (Swagger UI) e /openapi.json. Padrão: ligado fora de produção; em produção só com DOCS_ENABLED=true. */
@@ -75,6 +78,7 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     devJwtSecret: e.DEV_JWT_SECRET,
     supabaseUrl: e.SUPABASE_URL?.replace(/\/$/, ''),
     supabaseJwtSecret: e.SUPABASE_JWT_SECRET,
+    supabaseServiceRoleKey: e.SUPABASE_SERVICE_ROLE_KEY,
     adminEmails: list(e.ADMIN_EMAILS),
     corsOrigins: list(e.CORS_ORIGINS),
     docsEnabled: e.DOCS_ENABLED ? e.DOCS_ENABLED === 'true' : e.NODE_ENV !== 'production',

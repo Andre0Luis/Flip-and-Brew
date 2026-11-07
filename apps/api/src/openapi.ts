@@ -115,7 +115,7 @@ export const operations: Op[] = [
   { method: 'patch', path: '/v1/me/privacy', tag: 'Conta', summary: 'Atualiza minha privacidade', auth: 'user', body: privacyPatchSchema,
     description: 'O perfil é público e a comunidade é só entre amigos; só há estas duas escolhas.', responses: { 200: { description: 'Ok.', schema: 'PrivacyResult' }, 400: INVALID } },
   { method: 'post', path: '/v1/me/ping', tag: 'Conta', summary: 'Presença (alimenta "ativos agora")', auth: 'user', body: pingSchema, responses: { 204: { description: 'Registrado.' }, 400: INVALID } },
-  { method: 'delete', path: '/v1/me', tag: 'Conta', summary: 'Exclui minha conta e tudo que depende dela', auth: 'user', responses: { 204: { description: 'Conta apagada (cascata).' } } },
+  { method: 'delete', path: '/v1/me', tag: 'Conta', summary: 'Exclui minha conta e tudo que depende dela', auth: 'user', responses: { 204: { description: 'Conta apagada (cascata), inclusive o usuário do login.' }, 502: { description: 'O provedor de login não respondeu; nada foi apagado, tente de novo.' } } },
 
   { method: 'get', path: '/v1/me/snapshot', tag: 'Backup', summary: 'Lê o backup do progresso', auth: 'user', responses: { 200: { description: 'Ok.', schema: 'Snapshot' }, 404: { description: '`no_snapshot`.', schema: 'Error' } } },
   { method: 'put', path: '/v1/me/snapshot', tag: 'Backup', summary: 'Grava o backup do progresso', auth: 'user', body: snapshotPutSchema,
