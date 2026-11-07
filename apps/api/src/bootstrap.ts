@@ -1,4 +1,4 @@
-import { createApp } from './app';
+import { createApp } from './create-app';
 import { devAuth } from './auth/dev';
 import type { AuthProvider } from './auth/provider';
 import { supabaseAuth } from './auth/supabase';
