@@ -510,6 +510,7 @@ export const en: Record<keyof typeof pt, string> = {
   'auth.err.recent-login': 'For security, sign in again before continuing.',
   'auth.err.unavailable': 'This sign-in is not available on this device.',
   'auth.err.config': 'This sign-in is not enabled or set up on the server yet.',
+  'auth.err.unconfirmed': 'Confirm your email to sign in: check your inbox (and spam).',
   'auth.err.unknown': 'Something went wrong. Try again.',
   'auth.err.not-configured': 'Accounts are not set up in this version yet.',
   'backup.title': 'Cloud backup',

@@ -21,6 +21,8 @@ export type AuthErrorCode =
   | 'not-configured'
   | 'config'
   | 'unavailable'
+  /** E-mail ainda não confirmado (o Supabase exige a confirmação antes do primeiro login). */
+  | 'unconfirmed'
   | 'unknown';
 
 export class AuthError extends Error {
@@ -62,9 +64,9 @@ export type SnapshotData = {
 
 export type Snapshot = { v: 1; updatedAt: number; data: SnapshotData };
 
-/** Contrato que o Firebase e o servidor falso implementam. */
+/** Contrato que o Firebase, o nosso backend (`apiBackend`) e o servidor falso implementam. */
 export interface CloudBackend {
-  readonly kind: 'firebase' | 'mock';
+  readonly kind: 'firebase' | 'mock' | 'api';
   /** Chama `cb` com o usuário atual (ou null) agora e a cada mudança. Devolve a função que cancela. */
   onChange(cb: (user: CloudUser | null) => void): () => void;
   googleAvailable(): boolean;

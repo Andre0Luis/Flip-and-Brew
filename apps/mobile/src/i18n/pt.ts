@@ -510,6 +510,7 @@ export const pt = {
   'auth.err.recent-login': 'Por segurança, entre de novo antes de continuar.',
   'auth.err.unavailable': 'Este login não está disponível neste aparelho.',
   'auth.err.config': 'Este login ainda não está ativado ou configurado no servidor.',
+  'auth.err.unconfirmed': 'Confirme o seu e-mail para entrar: veja a caixa de entrada (e o spam).',
   'auth.err.unknown': 'Algo deu errado. Tente de novo.',
   'auth.err.not-configured': 'As contas ainda não estão configuradas nesta versão.',
   'backup.title': 'Backup na nuvem',
