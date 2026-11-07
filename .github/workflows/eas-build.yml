@@ -2,25 +2,16 @@ name: EAS Build
 
 # Depois de um merge na main que MEXA NO APP, dispara no EAS um APK de preview e um AAB de produção (Android).
 # Mudança só no backend (apps/api), no pacote compartilhado, em documentação ou em outros workflows não gasta build nem sobe versão.
-# Quando o app for movido para apps/mobile, troque os caminhos abaixo por apps/mobile/** e packages/shared/**.
+# O app fica em apps/mobile (o EAS roda a partir dessa pasta).
 # Precisa do segredo EXPO_TOKEN no GitHub (Settings > Secrets and variables > Actions).
 # As variáveis EXPO_PUBLIC_* ficam no EAS (eas env), não aqui.
 
 on:
   push:
     branches: [main]
-    # Só o que entra no app. Os padrões sem barra ('package.json') valem para a raiz; o apps/api/package.json não dispara.
+    # Só o que é do app. Mudança em apps/api, packages/shared, docs/ ou outros workflows não dispara.
     paths:
-      - 'src/**'
-      - 'assets/**'
-      - 'modules/**'
-      - 'plugins/**'
-      - 'index.ts'
-      - 'app.json'
-      - 'eas.json'
-      - 'tsconfig.json'
-      - 'package.json'
-      - 'package-lock.json'
+      - 'apps/mobile/**'
       - '.github/workflows/eas-build.yml'
   workflow_dispatch:
 
@@ -32,6 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/mobile
     strategy:
       fail-fast: false
       matrix:
@@ -43,6 +37,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
 
       - uses: expo/expo-github-action@v8
         with:

@@ -21,14 +21,28 @@ Telas: Início (frase do dia, cafeteira, copo), Guia (loja), Bem-estar (equilíb
 
 O **porquê** das escolhas (mecânica, sensor, visual, conta opcional, Firebase, idiomas, processo) está em `docs/adr/`, com o índice em `docs/adr/README.md`. A lista viva do que ainda falta é `docs/adr/0017-pendencias-e-riscos-conhecidos.md`.
 
+## Estrutura do repositório
+
+```
+apps/mobile/      o app Expo (React Native): src/, assets/, modules/, plugins/, app.json, eas.json
+apps/api/         o backend (Node + TypeScript, Hono, Drizzle), ver apps/api/README.md
+packages/shared/  contratos (esquemas Zod e regras puras) usados pela API
+docs/             ADRs, privacidade, loja, validação no aparelho e lançamento
+```
+
+Cada pasta tem as próprias dependências e o próprio `package-lock.json` (não são workspaces). Os caminhos do restante deste README (`src/...`, `modules/...`, `app.json`) são relativos a `apps/mobile/`.
+
 ## Rodar
 
 ```bash
+cd apps/mobile
 npm install
 npx expo run:android      # build de desenvolvimento
 npm run check             # typecheck, lint e testes (o CI roda o mesmo)
 npm test                  # só os testes
 ```
+
+Na raiz, `npm run check` roda o do app **e** o da API (`apps/api`), e `npm start` abre o app.
 
 O app roda também na web (`npm run web`) para ver as telas, mas o sensor de virar o celular só existe no aparelho.
 
@@ -39,7 +53,7 @@ Em **Ajustes** (ícone de engrenagem no Início):
 - "Carregar 4 semanas de dados de exemplo" preenche o Bem-estar, a Coleção e o calendário com dados fictícios.
 - "Calibrar sensor" corrige a detecção de tela para cima ou para baixo se o aparelho se comportar diferente do esperado.
 
-## Estrutura
+## Estrutura do app (`apps/mobile/`)
 
 ```
 src/app/          rotas (expo-router): (tabs), brew, resultado, artigo/[id], frase/[id], ajustes
