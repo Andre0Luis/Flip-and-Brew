@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="O que é o Flip &amp; Brew, para que serve, como funciona e em que pé está.">
+<meta name="robots" content="noindex">
+<title>Identidade do Flip &amp; Brew</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&family=Young+Serif&display=swap">
+<style>
+/* Layout: uma coluna de leitura (coluna única de ~44rem), com blocos de ritmo alternado: texto corrido, xícaras em escala e uma grade de funções.
+   Cores e fontes são as do próprio app (apps/mobile/src/theme/tokens.ts). */
+:root {
+  --bg: #F6EEE1; --surface: #FCF8F1; --soft: #EFE3CF; --fg: #2B1A12; --muted: #7A6455;
+  --line: #E3D3BA; --accent: #B8782E; --accent-fg: #FFF8EA; --good: #5F7A4B; --cup: #6B3F22; --wall: #D8C3A5;
+  --display: 'Young Serif', Georgia, 'Times New Roman', serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1B120D; --surface: #271A12; --soft: #32231A; --fg: #F2E7D5; --muted: #AD967F;
+    --line: #3D2B1F; --accent: #E0B25E; --accent-fg: #1B120D; --good: #8FB076; --cup: #C48A52; --wall: #3A281C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1B120D; --surface: #271A12; --soft: #32231A; --fg: #F2E7D5; --muted: #AD967F;
+  --line: #3D2B1F; --accent: #E0B25E; --accent-fg: #1B120D; --good: #8FB076; --cup: #C48A52; --wall: #3A281C;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 17px/1.6 var(--body); padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 44rem; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.6rem, 9vw, 4rem); line-height: 1.02; }
+h2 { font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.15; margin-bottom: 14px; }
+h3 { font-size: 1.05rem; margin: 0 0 4px; font-weight: 700; }
+p { margin: 0 0 12px; max-width: 62ch; }
+.label { font: 500 0.78rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }
+.lead { font-size: 1.25rem; line-height: 1.5; color: var(--fg); }
+.muted { color: var(--muted); }
+header p.lead { margin-top: 18px; }
+header .tag { margin-top: 22px; display: inline-block; font: 500 0.82rem var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--surface); }
+a { color: var(--accent); }
+
+/* xícaras em escala: cada uma enche conforme os minutos (V60: 45 min) */
+.cups { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: 16px; margin: 22px 0 8px; }
+.cup { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 16px 12px 14px; text-align: center; min-width: 0; }
+.cup svg { width: 76px; height: auto; display: block; margin: 0 auto 8px; }
+.cup .t { font: 500 1.05rem var(--mono); }
+.cup .c { font-size: 0.85rem; color: var(--muted); }
+.note { font: 400 0.85rem/1.5 var(--mono); color: var(--muted); }
+
+.steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; min-width: 0; }
+.steps b { display: block; font-family: var(--display); font-weight: 400; font-size: 1.15rem; margin-bottom: 2px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 14px; }
+.grid article { border-top: 2px solid var(--accent); padding-top: 12px; min-width: 0; }
+.grid article p { font-size: 0.97rem; margin: 0; color: var(--muted); }
+
+.pull { font-family: var(--display); font-size: clamp(1.35rem, 4.5vw, 1.75rem); line-height: 1.3; background: var(--soft); border-radius: 22px; padding: 26px 24px; text-wrap: balance; }
+.pull small { display: block; margin-top: 12px; font: 400 0.9rem var(--body); color: var(--muted); }
+
+.state { width: 100%; border-collapse: collapse; font-size: 0.97rem; }
+.state th, .state td { text-align: left; padding: 10px 8px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.state th { font: 500 0.78rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.pill { display: inline-block; font: 500 0.78rem var(--mono); padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.ok { background: color-mix(in srgb, var(--good) 20%, transparent); color: var(--good); }
+.wip { background: color-mix(in srgb, var(--accent) 20%, transparent); color: var(--accent); }
+.soon { background: var(--soft); color: var(--muted); }
+.table-wrap { overflow-x: auto; }
+.bullets { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.bullets li { position: relative; padding-left: 26px; max-width: 62ch; }
+.bullets li::before { content: ""; position: absolute; left: 4px; top: 0.62em; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+.bullets li strong { font-weight: 700; }
+.resumo { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px 22px 20px; }
+.resumo .label { margin-bottom: 12px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 14px; min-width: 0; }
+.stat .n { font: 400 2rem/1 var(--display); color: var(--accent); }
+.stat .d { font-size: 0.88rem; color: var(--muted); margin-top: 6px; }
+.day { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; border-left: 2px solid var(--line); margin-left: 6px; }
+.day li { padding: 0 0 18px 20px; position: relative; max-width: 62ch; }
+.day li::before { content: ""; position: absolute; left: -7px; top: 0.5em; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.day b { display: block; font-family: var(--display); font-weight: 400; font-size: 1.08rem; }
+details { border-top: 1px solid var(--line); padding: 14px 0; }
+details:last-of-type { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 500 1.2rem var(--mono); color: var(--accent); }
+details[open] summary::after { content: "\2212"; }
+details p { margin: 10px 0 0; color: var(--muted); }
+footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--muted); font-size: 0.95rem; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<style>html{color-scheme:light dark}body{margin:0}</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="label">Flip &amp; Brew</span>
+    <h1>Largue o celular. Deixe o café se fazer.</h1>
+    <p class="lead">Um app de bem-estar digital que troca a culpa pelo tempo de tela por um pequeno ritual: vire o celular para baixo e uma xícara de café vai enchendo, em tempo real.</p>
+    <span class="tag">Documento de identidade · versão 1.0 em preparação</span>
+  </header>
+
+  <section class="resumo">
+    <span class="label">Em resumo</span>
+    <ul class="bullets">
+      <li>Vire o celular para baixo e uma xícara de café enche <strong>em tempo real</strong>.</li>
+      <li>Cada minuto offline vira <strong>uma moeda</strong> para montar uma coleção.</li>
+      <li>Pegou o celular cedo? Você leva o que encheu, <strong>nunca zero</strong>.</li>
+      <li>Funciona <strong>sem conta</strong> e guarda tudo no celular.</li>
+      <li>Em <strong>português, inglês e espanhol</strong>, para Android e iPhone.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="label">O que é</span>
+    <h2>Uma xícara que só enche se você largar o celular</h2>
+    <p>O Flip &amp; Brew mede uma coisa só: quanto tempo você ficou longe do celular. Quando você o vira para baixo, um copo começa a encher numa cafeteira que você escolheu. Quanto mais tempo offline, melhor o café, e cada minuto vira uma moeda para montar uma coleção de cafeteiras, xícaras, canecas e cafés.</p>
+    <p>Por baixo do jogo há uma ideia simples: tirar o celular da mão deve ser agradável, e não um castigo. Por isso o app fala de café, de estoicismo e de antifragilidade, e não de “vício” ou de “meta falhada”.</p>
+  </section>
+
+  <section>
+    <span class="label">Para quem é</span>
+    <h2>Para quem quer uma pausa de verdade</h2>
+    <ul class="bullets">
+      <li>Quem sente que passa tempo demais no celular e já cansou de números e de culpa.</li>
+      <li>Quem gosta de café, de pequenos rituais e de montar coleções.</li>
+      <li>Quem prefere uma pausa curta e concreta, de 30 a 75 minutos, a uma “desintoxicação digital” difícil de cumprir.</li>
+      <li>Quem se interessa por estoicismo, bons hábitos e sono.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="label">Para que serve</span>
+    <h2>Ajudar a largar o celular sem se cobrar por isso</h2>
+    <p>Quase toda ferramenta de tempo de tela mostra um número e faz você se sentir mal. O Flip &amp; Brew faz o oposto: dá uma razão pequena e concreta para parar agora (o copo está enchendo) e uma recompensa visível quando você consegue.</p>
+    <div class="pull">Um dia ruim não apaga o seu progresso. A coleção fica, a sequência só pausa, e o app mostra o que o dia ensinou.<small>É o princípio “tropeçar também ensina”, que orienta o texto e as regras do app.</small></div>
+  </section>
+
+  <section>
+    <span class="label">Como funciona</span>
+    <h2>Quatro passos, e o resto é esperar</h2>
+    <ol class="steps">
+      <li><b>Vire o celular para baixo.</b> O copo começa a encher (ou toque em “Começar a passar”). Cada cafeteira leva um tempo diferente, de 30 a 75 minutos.</li>
+      <li><b>Deixe o café se fazer.</b> A contagem usa o horário, então continua certa com a tela apagada.</li>
+      <li><b>Pegue o celular quando precisar.</b> Isso encerra o copo. Parou cedo? Você leva o que encheu, nunca zero.</li>
+      <li><b>Conte como foi.</b> Se parou cedo, o app pergunta o que interrompeu e como você se sente. Esses registros viram o seu retrato de bem-estar.</li>
+    </ol>
+    <div class="cups" role="img" aria-label="Três xícaras em escala: 10 minutos rendem 10 moedas, 27 minutos rendem 27, e 45 minutos, com o copo cheio, rendem 54 moedas.">
+      <div class="cup">
+        <svg viewBox="0 0 80 90" aria-hidden="true"><defs><clipPath id="c1"><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z"/></clipPath></defs><rect x="0" y="65" width="80" height="14" fill="var(--cup)" clip-path="url(#c1)"/><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z" fill="none" stroke="var(--wall)" stroke-width="3" stroke-linejoin="round"/></svg>
+        <div class="t">10 min</div><div class="c">10 moedas</div>
+      </div>
+      <div class="cup">
+        <svg viewBox="0 0 80 90" aria-hidden="true"><defs><clipPath id="c2"><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z"/></clipPath></defs><rect x="0" y="40" width="80" height="39" fill="var(--cup)" clip-path="url(#c2)"/><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z" fill="none" stroke="var(--wall)" stroke-width="3" stroke-linejoin="round"/></svg>
+        <div class="t">27 min</div><div class="c">27 moedas</div>
+      </div>
+      <div class="cup">
+        <svg viewBox="0 0 80 90" aria-hidden="true"><defs><clipPath id="c3"><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z"/></clipPath></defs><rect x="0" y="14" width="80" height="65" fill="var(--cup)" clip-path="url(#c3)"/><path d="M12 14h56l-5 58a8 8 0 0 1-8 7H25a8 8 0 0 1-8-7z" fill="none" stroke="var(--wall)" stroke-width="3" stroke-linejoin="round"/></svg>
+        <div class="t">45 min</div><div class="c">54 moedas, copo cheio</div>
+      </div>
+    </div>
+    <p class="note">Exemplo com o coado V60, que leva 45 minutos. Uma moeda por minuto offline, mais 20% de bônus quando o copo enche. Os primeiros itens pagos da loja custam a partir de 250 moedas.</p>
+  </section>
+
+  <section>
+    <span class="label">No dia a dia</span>
+    <h2>Um dia com o Flip &amp; Brew</h2>
+    <ol class="day">
+      <li><b>De manhã</b>Uma notificação traz a frase do dia e pergunta como você está. É um aviso local, que você pode desligar.</li>
+      <li><b>Check-in de energia</b>Você marca a energia do dia numa escala de uma a cinco xícaras. Em poucos dias aparece um padrão.</li>
+      <li><b>Quando o celular começar a puxar demais</b>Vire-o para baixo. O copo começa a encher e, com ele, o seu tempo longe da tela.</li>
+      <li><b>Ao pegar o celular</b>O copo termina. Se você parou cedo, conta o que interrompeu e como se sente.</li>
+      <li><b>À noite, se quiser olhar</b>A tela Bem-estar mostra o equilíbrio, a semana e a hora em que você mais consegue largar o celular.</li>
+    </ol>
+  </section>
+
+  <section>
+    <span class="label">O que tem dentro</span>
+    <h2>Além do copo</h2>
+    <div class="grid">
+      <article><h3>Coleção</h3><p>Cafeteiras (Melitta, V60, prensa francesa, moka, Chemex, espresso e mais), xícaras, canecas, copos e cafés. Combinações rendem bônus de moedas, e há séries especiais como Estoica e Montanha.</p></article>
+      <article><h3>Bem-estar</h3><p>Um equilíbrio de 0 a 100 a partir da sua meta diária, dos copos terminados e da sequência. Check-in diário de energia numa escala de xícaras, e o que costuma te interromper.</p></article>
+      <article><h3>Aprender</h3><p>Uma prática curta por dia, sem tela, uma frase do dia com contexto e cem artigos sobre café, estoicismo, antifragilidade, hábitos digitais e sono.</p></article>
+      <article><h3>Widgets</h3><p>Frase do dia, copo em andamento, sequência, meta de hoje e missões, na tela inicial e, no iPhone, também na tela de bloqueio.</p></article>
+      <article><h3>Três idiomas</h3><p>Português, inglês e espanhol, na interface, nas frases, nos artigos e nas práticas.</p></article>
+      <article><h3>Moedas pelo tempo bloqueado</h3><p>No Android, se você permitir, o app lê quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada, e usa isso para dar moedas pelo tempo com a tela bloqueada. Os números ficam no aparelho.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <span class="label">O app em números</span>
+    <h2>O que você encontra lá dentro</h2>
+    <div class="stats">
+      <div class="stat"><div class="n">30–75</div><div class="d">minutos por copo, conforme a cafeteira</div></div>
+      <div class="stat"><div class="n">61</div><div class="d">itens: 14 cafeteiras, 42 xícaras, canecas e copos, 5 cafés</div></div>
+      <div class="stat"><div class="n">7</div><div class="d">coleções especiais, como Estoica, Montanha e Noite</div></div>
+      <div class="stat"><div class="n">100</div><div class="d">artigos sobre café, hábitos digitais, estoicismo e sono</div></div>
+      <div class="stat"><div class="n">5</div><div class="d">widgets para a tela inicial</div></div>
+      <div class="stat"><div class="n">3</div><div class="d">idiomas: português, inglês e espanhol</div></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="label">O que o diferencia</span>
+    <h2>Recompensa em vez de bloqueio</h2>
+    <ul class="bullets">
+      <li><strong>Não tranca nada.</strong> O app não bloqueia outros aplicativos nem faz sermão. Só oferece o café.</li>
+      <li><strong>Sem culpa.</strong> Parar cedo rende o proporcional, a sequência só pausa e a coleção fica.</li>
+      <li><strong>Ritual, não gráfico.</strong> O seu tempo vira um copo que enche, não uma barra vermelha.</li>
+      <li><strong>Conteúdo de verdade.</strong> Uma prática curta por dia, uma frase com contexto e artigos para ler quando você quiser.</li>
+      <li><strong>Privacidade por padrão.</strong> Sem conta, tudo fica só no seu celular.</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="label">Princípios</span>
+    <h2>O que o app promete</h2>
+    <p><strong>Calma, não pressão.</strong> Os únicos avisos são os que você liga: copo pronto, frase do dia de manhã e lembrete do check-in. São notificações locais, criadas no próprio aparelho, e cada uma liga e desliga em Ajustes.</p>
+    <p><strong>Seus dados ficam com você.</strong> O app funciona sem conta e guarda tudo no celular. Criar conta, com e-mail, Google ou Apple, é opcional e serve só para guardar um backup do progresso e recuperá-lo em outro aparelho. Dá para excluir a conta e o backup dentro do app.</p>
+    <p><strong>Usar sem pagar é possível.</strong> Comprar moedas é opcional. Há um banner de anúncio no fim de algumas telas, que se remove para sempre com uma compra única.</p>
+  </section>
+
+  <section>
+    <span class="label">Perguntas frequentes</span>
+    <h2>O que as pessoas costumam perguntar</h2>
+    <details><summary>Preciso criar uma conta?</summary><p>Não. O app funciona inteiro sem conta e guarda tudo no celular. A conta, com e-mail, Google ou Apple, é opcional e serve para guardar um backup do progresso.</p></details>
+    <details><summary>Custa alguma coisa?</summary><p>Dá para usar o app inteiro sem pagar. Comprar moedas é opcional. Há um banner de anúncio no fim de algumas telas, que se remove para sempre com uma compra única.</p></details>
+    <details><summary>Funciona com a tela apagada?</summary><p>A contagem usa o horário, então continua certa com a tela apagada ou o app em segundo plano. Essa parte ainda está sendo validada em aparelhos reais.</p></details>
+    <details><summary>E se eu pegar o celular antes de o copo encher?</summary><p>Você leva o que encheu. Parar cedo rende o proporcional, nunca zero.</p></details>
+    <details><summary>Dá para apagar meus dados?</summary><p>Sim. Em Ajustes dá para apagar tudo o que o app guardou no celular, e quem criou conta pode excluir a conta e o backup dentro do app.</p></details>
+    <details><summary>Em quais celulares funciona?</summary><p>Android e iPhone. A versão para iPhone está em revisão na App Store, e a de Android está em teste.</p></details>
+    <details><summary>Vai ter comunidade?</summary><p>Está nos planos: amigos com aprovação, perfil público e ranking de café. Ainda não existe no app.</p></details>
+  </section>
+
+  <section>
+    <span class="label">Em que pé está</span>
+    <h2>Pronto, em teste e por vir</h2>
+    <div class="table-wrap">
+      <table class="state">
+        <thead><tr><th>Parte</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr><td>Copo, moedas, loja, coleção, bem-estar, aprender, widgets, três idiomas</td><td><span class="pill ok">Feito</span></td></tr>
+          <tr><td>Versão 1.0 para iPhone</td><td><span class="pill wip">Em revisão na App Store</span></td></tr>
+          <tr><td>Versão para Android</td><td><span class="pill wip">Em teste</span></td></tr>
+          <tr><td>Conta e backup na nuvem</td><td><span class="pill wip">Em teste</span></td></tr>
+          <tr><td>Amigos, perfil público e ranking de café</td><td><span class="pill soon">Em breve</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:14px">Sensor de virar o celular, contagem com a tela apagada e widgets ainda estão sendo validados em aparelhos reais. Se algo falhar, a sua dica ajuda.</p>
+  </section>
+
+  <footer>
+    O Flip &amp; Brew é um projeto independente, ainda em construção. Quer testar ou dar opinião? Fale com quem te mandou este documento.
+  </footer>
+</main>
+</body>
+</html>
