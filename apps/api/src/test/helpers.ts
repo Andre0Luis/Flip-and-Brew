@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { createApp } from '../app';
+import { createApp } from '../create-app';
 import { devAuth, signDevToken } from '../auth/dev';
 import type { Config } from '../config';
 import { createDb } from '../db/client';
