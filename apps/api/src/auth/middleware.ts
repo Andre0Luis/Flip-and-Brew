@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import type { MiddlewareHandler } from 'hono';
-import { type Role } from '@flipandbrew/shared';
+import { type Role } from '../shared';
 import type { Db } from '../db/client';
 import { profiles, type Profile } from '../db/schema';
 import { HttpError } from '../lib/errors';

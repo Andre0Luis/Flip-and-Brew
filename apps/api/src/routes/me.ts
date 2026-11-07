@@ -1,6 +1,6 @@
 import { and, eq, isNull } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '@flipandbrew/shared';
+import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Config } from '../config';
 import type { Db } from '../db/client';

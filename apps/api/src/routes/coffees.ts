@@ -1,6 +1,6 @@
 import { and, desc, eq, gte, lt } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { coffeeLogSchema } from '@flipandbrew/shared';
+import { coffeeLogSchema } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Db } from '../db/client';
 import { coffeeLogs } from '../db/schema';

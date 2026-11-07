@@ -20,6 +20,19 @@ curl -X POST localhost:8787/v1/me/bootstrap -H "authorization: Bearer $TOKEN" -H
 curl localhost:8787/v1/admin/overview -H "authorization: Bearer $TOKEN"
 ```
 
+## Deploy na Vercel
+- **Framework Preset: Hono.** Runtime Node 22. Sem Nitro (ele só entraria se usássemos o Workflow SDK). A Vercel procura `src/index.ts`, que exporta o app (`export default app`); o servidor local é `src/local.ts` (não se chama `server.ts` de propósito, porque a Vercel procura esse nome como entrada).
+- **Root Directory: `apps/api`**, com **"Include source files outside of the Root Directory in the Build Step" ligado** (o pacote compartilhado fica em `packages/shared`). O `installCommand` está em `vercel.json`.
+- **Variáveis** (Production e Preview): `DATABASE_URL` (ou `POSTGRES_URL`, que a integração Supabase da Vercel já cria: pooler, porta 6543), `AUTH_PROVIDER=supabase`, `SUPABASE_URL` (`https://<ref>.supabase.co`), `SUPABASE_JWT_SECRET` (segredo, só na Vercel), `ADMIN_EMAILS`, e depois `BREVO_API_KEY`/`MAIL_FROM`. `DOCS_ENABLED=true` liga o `/docs` em produção. **Não coloque** `service_role`, chave secreta nem a senha do banco em lugar nenhum além do campo de variáveis da Vercel.
+- **O login de desenvolvimento é recusado em produção** (a Vercel roda com `NODE_ENV=production`); lá só vale o token do Supabase Auth (`src/auth/supabase.ts`: papel `authenticated`, emissor e audiência conferidos; a chave pública `anon` **não** vale como login).
+- **Migrações não rodam no deploy:** `npm run db:migrate`, com uma URL de conexão direta (porta 5432) em `MIGRATE_DATABASE_URL`.
+- **Verificações antes de promover (Deployment Checks):** `.github/workflows/vercel-checks.yml` roda quando a Vercel avisa que um deploy ficou pronto e devolve o status `Vercel - flip-and-brew: lint-gh`. **Como ligar, na ordem:**
+  1. Mescle este workflow na `main` (o `repository_dispatch` só dispara se o arquivo estiver lá) e resolva o bloqueio de cobrança do GitHub Actions.
+  2. Faça um deploy de produção (um merge na `main`). A Vercel avisa o GitHub (`vercel.deployment.ready`), o workflow roda e grava o status `Vercel - flip-and-brew: lint-gh` **naquele commit**.
+  3. Na Vercel: Settings › Build and Deployment › Deployment Checks › Add Checks › **GitHub**. Se a lista vier vazia ("No configured checks found"), cole o **SHA** (os 7 primeiros caracteres bastam) **desse commit da `main`** em "Enter a GitHub SHA", busque e selecione `Vercel - flip-and-brew: lint-gh`.
+  4. Só então ele passa a bloquear a promoção. **Nunca o marque como obrigatório antes de ter rodado e passado uma vez**, senão nenhum deploy é promovido (a saída de emergência é *Force Promote* na tela do deploy).
+  - Regras da Vercel que já seguimos: o nome do check é único; cada execução grava um status só (por isso só `ready`, e só em produção); mudar o nome do job `lint-gh` exige atualizar o painel; nomes de job não se repetem entre workflows (`check` virou `check-api`).
+
 ## Banco do Supabase
 - **Variáveis** (em `apps/api/.env`, nunca no git): `DATABASE_URL` (pooler em modo transação, porta 6543, usado pela API) e `MIGRATE_DATABASE_URL` (porta 5432, só para migrar). A API **não usa** a `service_role` nem a chave secreta do Supabase: ela conecta direto ao Postgres.
 - **Migrar:** `npm run db:migrate` (aplica `apps/api/drizzle` numa transação; só avança).

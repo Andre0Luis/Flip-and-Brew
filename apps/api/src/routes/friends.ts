@@ -1,6 +1,6 @@
 import { and, count, desc, eq, inArray, or } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { MAX_PENDING_REQUESTS, userIdSchema } from '@flipandbrew/shared';
+import { MAX_PENDING_REQUESTS, userIdSchema } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Db } from '../db/client';
 import { blocks, friendships, profiles } from '../db/schema';

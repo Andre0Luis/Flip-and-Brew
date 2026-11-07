@@ -1,6 +1,6 @@
 import { and, asc, eq, ilike, isNotNull, isNull, ne } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { handleSchema, searchQuerySchema } from '@flipandbrew/shared';
+import { handleSchema, searchQuerySchema } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Db } from '../db/client';
 import { coffeePrefs, privacySettings, profiles } from '../db/schema';

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { loadConfig } from './config';
 import { honoPath, operations, toSchema } from './openapi';
 import { testApp } from './test/helpers';
-import { profilePatchSchema } from '@flipandbrew/shared';
+import { profilePatchSchema } from './shared';
 
 test('toda rota da API está documentada, e toda rota documentada existe (a documentação não envelhece)', async () => {
   const t = await testApp();

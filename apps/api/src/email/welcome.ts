@@ -1,4 +1,4 @@
-import type { Language } from '@flipandbrew/shared';
+import type { Language } from '../shared';
 import type { EmailMessage } from './provider';
 
 const TEXT: Record<Language, { subject: string; title: string; lines: string[]; sign: string }> = {
