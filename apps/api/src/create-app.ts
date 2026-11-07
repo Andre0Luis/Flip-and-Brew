@@ -16,6 +16,7 @@ import { adminRoutes } from './routes/admin.js';
 import { coffeeRoutes } from './routes/coffees.js';
 import { friendRoutes } from './routes/friends.js';
 import { meRoutes } from './routes/me.js';
+import { pagesRoutes } from './routes/pages.js';
 import { snapshotRoutes } from './routes/snapshot.js';
 import { userRoutes } from './routes/users.js';
 
@@ -30,6 +31,8 @@ export function createApp({ db, auth, email, config, authAdmin, rateLimit: rl = 
   app.use(bodyLimit({ maxSize: 1024 * 1024, onError: () => { throw new HttpError(413, 'payload_too_large', 'Corpo grande demais.'); } }));
 
   app.get('/health', (c) => c.json({ ok: true }));
+
+  app.route('/', pagesRoutes(config));
 
   // Documentação (Swagger UI). Fora de /v1, sem login: o corpo é só a descrição das rotas; o "Authorize" da UI recebe o token.
   if (config.docsEnabled) {

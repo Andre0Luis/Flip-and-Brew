@@ -7,7 +7,7 @@ import { profilePatchSchema } from './shared.js';
 
 test('toda rota da API está documentada, e toda rota documentada existe (a documentação não envelhece)', async () => {
   const t = await testApp();
-  const docs = new Set(['GET /docs', 'GET /openapi.json']);
+  const docs = new Set(['GET /docs', 'GET /openapi.json', 'GET /suporte', 'GET /support', 'GET /privacidade', 'GET /privacy', 'GET /excluir-conta', 'GET /delete-account']); // páginas HTML públicas, não fazem parte da API
   // `ALL` são middlewares (login, CORS, limites); só contam as rotas de verdade.
   const real = t.app.routes.filter((r) => r.method !== 'ALL').map((r) => `${r.method} ${r.path}`).filter((r) => !docs.has(r));
   const documented = operations.map((o) => `${o.method.toUpperCase()} ${honoPath(o.path)}`);

@@ -77,6 +77,8 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **`SUPABASE_SERVICE_ROLE_KEY`** (Sensitive) na Vercel: sem ela, excluir a conta apaga os dados mas deixa o usuário no Supabase Auth.
 - [ ] **Vercel Authentication** barra os domínios `*-andre0luis-projects.vercel.app`; só `flip-and-brew.vercel.app` é público. Conferir qual vai no `EXPO_PUBLIC_API_URL`.
 
+- [ ] **Páginas públicas da API** (`/suporte`, `/privacidade`, `/excluir-conta`): definir `SUPPORT_EMAIL` na Vercel e usar essas URLs na App Store Connect e no Play Console. **A política de privacidade ainda diz que o backup fica no Firebase**: antes de ligar o app ao backend próprio, atualizar os textos `privacy.*` (Supabase, Vercel) e rodar `npm run docs:privacy` em `apps/mobile`.
+
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).
 - [ ] Testes de interface automatizados no aparelho não existem; só o roteiro manual.
