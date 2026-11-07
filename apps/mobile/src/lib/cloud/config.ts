@@ -26,6 +26,9 @@ export const apiConfig = {
   supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '',
 };
 
+/** A chave pública do Supabase é um JWT (`eyJ...`) ou uma chave nova (`sb_publishable_...`). Qualquer outra coisa, como um texto de exemplo esquecido, não liga o backend. */
+export const looksLikeSupabaseKey = (k: string) => /^(eyJ[\w-]+\.[\w-]+\.[\w-]+|sb_publishable_[\w-]+)$/.test(k.trim());
+
 export function isApiConfigured(c: typeof apiConfig = apiConfig): boolean {
-  return !!(c.apiUrl && c.supabaseUrl && c.supabaseAnonKey);
+  return !!(c.apiUrl && c.supabaseUrl && looksLikeSupabaseKey(c.supabaseAnonKey));
 }

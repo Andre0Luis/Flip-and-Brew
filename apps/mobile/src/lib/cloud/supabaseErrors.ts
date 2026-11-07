@@ -54,6 +54,8 @@ export function toSupabaseAuthError(e: unknown): AuthError {
   if (x?.name === 'AuthRetryableFetchError') return new AuthError('network', x.message);
   if (typeof x?.code === 'string' && CODES[x.code]) return new AuthError(CODES[x.code], x.code);
   for (const [re, code] of MESSAGES) if (x?.message && re.test(x.message)) return new AuthError(code, x.message);
+  // Resposta sem `code` (por exemplo "Invalid API key", do portão da API do Supabase): a mensagem é o que diagnostica.
+  if (x?.message && typeof x.code !== 'string' && x.code === undefined && x.name !== 'Error') return new AuthError('unknown', x.message);
   // Google e Apple nativos têm códigos próprios; o mapeador do Firebase já cuida deles e guarda o código original no que não conhece.
   const generic = toAuthError(e);
   return generic.code === 'unknown' && typeof x?.code === 'string' ? new AuthError('unknown', x.code) : generic;

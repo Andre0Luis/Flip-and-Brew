@@ -208,3 +208,9 @@ test('senha fraca no passo final volta como weak-password', async () => {
   const { backend } = make(fakeAuth({ updateUser: async () => ({ data: { user: null }, error: Object.assign(new Error('weak'), { code: 'weak_password' }) }) }));
   await assert.rejects(backend.resetPasswordWithLink!('flipandbrew://nova-senha#access_token=a&refresh_token=b', '123'), (e: AuthError) => e.code === 'weak-password');
 });
+
+test('erro do portão do Supabase sem código (chave inválida) mostra a mensagem real, não "undefined"', () => {
+  const e = toSupabaseAuthError(Object.assign(new Error('Invalid API key'), { name: 'AuthApiError', status: 401, code: undefined }));
+  assert.equal(e.code, 'unknown');
+  assert.equal(e.message, 'Invalid API key');
+});
