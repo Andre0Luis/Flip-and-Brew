@@ -1,6 +1,8 @@
 import { Platform } from 'react-native';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 import { translate, type Lang } from '@/i18n';
+import { quoteOfDay } from '@/data/quotes';
+import { REMINDER_PREFIX, type ReminderPlan } from './reminders';
 
 // Notificação local, silenciosa, avisando que o copo encheu. Só existe no aparelho e só quando a pessoa liga em Ajustes.
 const CHANNEL = 'brew-done';
@@ -69,4 +71,55 @@ export async function cancelBrewDone(kind: NoticeKind = 'brew'): Promise<void> {
   } catch {
     // nada agendado
   }
+}
+
+const DAILY_CHANNEL = 'daily-reminders';
+
+/**
+ * Reagenda os lembretes diários: apaga os antigos e agenda o plano de novo. Um aviso por dia, porque cada manhã leva a frase do dia.
+ * Sem permissão ou com o plano vazio, só apaga.
+ */
+export async function syncDailyReminders(plan: ReminderPlan[], lang: Lang): Promise<void> {
+  const N = mod();
+  if (!N) return;
+  try {
+    const old = await N.getAllScheduledNotificationsAsync();
+    await Promise.all(
+      old.filter((n) => n.identifier.startsWith(REMINDER_PREFIX)).map((n) => N.cancelScheduledNotificationAsync(n.identifier).catch(() => {})),
+    );
+    if (!plan.length || !(await N.getPermissionsAsync()).granted) return;
+    if (Platform.OS === 'android') {
+      await N.setNotificationChannelAsync(DAILY_CHANNEL, {
+        name: translate(lang, 'daily.channel'),
+        importance: N.AndroidImportance.DEFAULT,
+        sound: null, // aparece na barra, sem som e sem vibração
+        vibrationPattern: null,
+        enableVibrate: false,
+      });
+    }
+    for (const r of plan) {
+      const q = quoteOfDay(lang, new Date(r.at));
+      const content =
+        r.kind === 'morning'
+          ? { title: translate(lang, 'daily.morningTitle'), body: `“${q.text}” ${q.author}` }
+          : { title: translate(lang, 'daily.checkinTitle'), body: translate(lang, 'daily.checkinBody') };
+      await N.scheduleNotificationAsync({
+        identifier: r.id,
+        content: { ...content, sound: false, data: { daily: r.kind } },
+        trigger: { type: N.SchedulableTriggerInputTypes.DATE, date: new Date(r.at), channelId: DAILY_CHANNEL },
+      });
+    }
+  } catch {
+    // sem lembrete o app segue igual
+  }
+}
+
+/** Chama `cb` quando a pessoa toca num lembrete diário com o app aberto ou em segundo plano. Devolve a função para parar. */
+export function onDailyReminderTap(cb: () => void): () => void {
+  const N = mod();
+  if (!N) return () => {};
+  const sub = N.addNotificationResponseReceivedListener((r) => {
+    if (r.notification.request.content.data?.daily) cb();
+  });
+  return () => sub.remove();
 }

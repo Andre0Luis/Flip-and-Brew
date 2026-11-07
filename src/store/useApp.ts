@@ -13,9 +13,10 @@ import { discountFor, priceOf } from '@/lib/pricing';
 import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
 import { DEFAULT_POMO, makeRest, normalizePomo, pomodorosToday, type Rest } from '@/lib/pomodoro';
+import { DEFAULT_CHECKIN_HOUR, DEFAULT_MORNING_HOUR } from '@/lib/reminders';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, dailyMorning: false, dailyCheckin: false, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
 
 type State = {
   coins: number;

@@ -14,7 +14,7 @@ O acelerômetro serve só para saber se o celular está virado para baixo. As le
 
 ## Notificações (opcional)
 
-O aviso de copo pronto é uma notificação local, criada no próprio aparelho, e vem desligado.
+Os avisos (copo pronto, frase do dia de manhã e lembrete do check-in) são notificações locais, criadas no próprio aparelho, sem passar por servidor. Cada um liga e desliga em Ajustes.
 
 ## Compras
 

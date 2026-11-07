@@ -14,7 +14,7 @@ The accelerometer is used only to know whether the phone is face down. Readings 
 
 ## Notifications (optional)
 
-The cup-ready notice is a local notification created on the device itself, and it is off by default.
+The notices (cup ready, quote of the day in the morning and check-in reminder) are local notifications created on the device itself, without going through a server. You turn each one on or off in Settings.
 
 ## Purchases
 

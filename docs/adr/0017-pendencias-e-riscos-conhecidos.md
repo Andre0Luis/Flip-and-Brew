@@ -44,6 +44,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Widgets nunca rodaram num aparelho**; precisam de build novo e teste no Android e no iOS.
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
+- [ ] **Lembretes diários** (ADR-0022): horários, canal silencioso, toque abrindo o Início, reagendamento ao reabrir e depois de reiniciar o celular não foram validados em aparelho. Acima de 14 dias sem abrir o app, os avisos acabam.
 ## Anúncios e remoção paga (ADR-0021)
 - [ ] **Conta no AdMob:** criar o app Android e o iOS, os blocos de banner, e trocar os IDs de teste do Google em `app.json` (`androidAppId`, `iosAppId`) pelos reais. Sem isso o banner só mostra anúncio de teste.
 - [ ] Variáveis `EXPO_PUBLIC_ADMOB_BANNER_ANDROID` e `EXPO_PUBLIC_ADMOB_BANNER_IOS` no EAS (`preview` e `production`). Sem elas o build não mostra banner nem a opção de remover.
