@@ -10,8 +10,14 @@ updates:
         update-types: ['version-update:semver-major']
       - dependency-name: 'react-native*'
         update-types: ['version-update:semver-major']
+      # O Expo SDK fixa react, react-dom e @types/react em versões exatas (expo-doctor reprova as outras): sobem com o SDK.
       - dependency-name: 'react'
+      - dependency-name: 'react-dom'
+      - dependency-name: '@types/react'
+      # eslint 10 quebra o plugin de React do eslint-config-expo; o config também acompanha o SDK.
+      - dependency-name: 'eslint'
         update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint-config-expo'
     commit-message:
       prefix: 'chore(deps)'
   - package-ecosystem: npm

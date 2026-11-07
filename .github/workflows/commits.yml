@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   conventional-commits:
+    # O Dependabot já escreve `chore(deps): ...` (commit-message no dependabot.yml), mas com o nome do pacote e as versões o título passa de 72 caracteres.
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
