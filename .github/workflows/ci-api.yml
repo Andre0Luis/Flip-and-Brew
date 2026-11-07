@@ -1,6 +1,6 @@
 name: CI API
 
-# Só roda quando o backend ou o pacote compartilhado mudam. O CI do app (ci.yml) segue rodando em todo PR.
+# Só roda quando o backend ou o pacote compartilhado mudam. O CI do app (ci.yml) só roda quando o app muda.
 on:
   push:
     branches: [main]

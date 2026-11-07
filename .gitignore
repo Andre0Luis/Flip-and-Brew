@@ -44,6 +44,8 @@ example
 # generated native folders
 /ios
 /android
+/apps/mobile/ios
+/apps/mobile/android
 
 # chaves de conta de serviço do Google (Play, EAS submit): nunca no git
 *service-account*.json
@@ -56,4 +58,4 @@ dist-web/
 apps/api/.data/
 
 # gerado pelo Gradle ao compilar o módulo nativo
-modules/usage-stats/android/build/
+apps/mobile/modules/usage-stats/android/build/

@@ -4,9 +4,9 @@
 
 **Antes de mudar uma decisão de produto ou de arquitetura, leia `docs/adr/`.** Se a decisão mudar, escreva um ADR novo e marque o antigo como substituído; não apague. Atualize `docs/adr/0017-pendencias-e-riscos-conhecidos.md` quando resolver ou descobrir uma pendência.
 
-App Expo (SDK 56) em português. Leia o README para o funcionamento e a estrutura.
+App Expo (SDK 56) em português. Leia o README para o funcionamento e a estrutura. **O app fica em `apps/mobile/`** (monorepo, ADR-0025): os caminhos `src/...`, `modules/...` e `app.json` deste arquivo e do README são relativos a essa pasta.
 
-- **Antes de codar:** `npm run check` (typecheck, lint e testes). Os testes cobrem `src/lib`, `src/store`, as traduções e o conteúdo.
+- **Antes de codar:** `npm run check` na raiz (app e API) ou, só do app, `cd apps/mobile && npm run check` (typecheck, lint e testes). Os testes cobrem `src/lib`, `src/store`, as traduções e o conteúdo.
 - **React Compiler está ligado:** o lint barra `Date.now()` direto no render. Use `useNow()` ou um inicializador preguiçoso.
 - **Regras de negócio** ficam em `src/lib` como funções puras. Telas só montam e chamam. O estado vive em `src/store/useApp.ts`.
 - **Decisões do motor do copo** (iniciar, encerrar, retomar) ficam em `src/lib/engine.ts`, com testes; `src/engine/BrewEngine.tsx` só liga sensor, relógio e navegação.
@@ -16,5 +16,5 @@ App Expo (SDK 56) em português. Leia o README para o funcionamento e a estrutur
 - **Navegação:** `router.dismissTo('/')` para voltar às abas; `replace('/')` empilha uma segunda cópia.
 - **Textos** curtos e diretos, sem emoji. Nunca escreva texto de interface direto nos componentes: use `const { t, lang } = useI18n()` e acrescente a chave em `src/i18n/pt.ts`, `en.ts` e `es.ts`. Conteúdo longo vai em `src/data/content/<idioma>.ts`. Plural usa `chave.one` e `chave.many`.
 - **Gatilhos de interrupção** são guardados como chave neutra (`notification`, `boredom`, `work`, `habit`, `other`), nunca como texto traduzido.
-- **Backend novo** em `apps/api` (Node + TS, ADR-0024), com contratos em `packages/shared`. O app **ainda não o usa**: o login obrigatório e o corte do Firebase vêm na fase final do plano (`docs/PLANO-BACKEND-E-COMUNIDADE.md`). `npm run check` da raiz **não** cobre o backend; use `cd apps/api && npm run check`.
+- **Backend** em `apps/api` (Node + TS, ADR-0024), com contratos em `packages/shared`. O app **ainda não o usa**: o login obrigatório e o corte do Firebase vêm na fase final do plano (`docs/PLANO-BACKEND-E-COMUNIDADE.md`). `cd apps/api && npm run check` cobre só o backend; o `npm run check` da raiz roda os dois. **Workflows separados:** mudança no app só dispara os do app (`ci.yml`, `eas-build.yml`); mudança na API ou em `packages/shared` só dispara o `ci-api.yml`.
 - **Contas** ficam atrás da interface `CloudBackend` (`src/lib/cloud/types.ts`): o Firebase de verdade e um servidor falso para desenvolvimento. O app nunca pode exigir conta; sem chaves, a Conta some. As variáveis `EXPO_PUBLIC_*` precisam ser escritas por extenso em `config.ts`. Ao mudar o que vai para a nuvem, atualize `snapshot.ts`, os testes e a política de privacidade.

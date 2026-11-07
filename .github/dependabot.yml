@@ -2,7 +2,7 @@ version: 2
 updates:
   # O app: o Expo fixa as versões de cada SDK, então saltos de versão maior ficam por conta de quem atualiza o SDK.
   - package-ecosystem: npm
-    directory: /
+    directory: /apps/mobile
     schedule: { interval: weekly }
     open-pull-requests-limit: 5
     ignore:

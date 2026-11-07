@@ -1,5 +1,8 @@
 # Manual de configuração: contas, acessos e credenciais
 
+> **Depois da ADR-0025 o app fica em `apps/mobile/`:** os comandos e arquivos deste manual (`.env`, `npm run ...`, `eas.json`, `src/...`) são relativos a essa pasta.
+
+
 Este é o guia único para colocar o Flip & Brew no ar. Ele diz **quais contas criar**, **onde pegar cada credencial** e **onde colocá-la** (`.env`, EAS ou Play Console), na ordem certa.
 
 > **Resumo.** O app já funciona sem nenhuma conta externa. Cada item abaixo liga uma parte: contas e backup (Firebase), login com Google (Google Cloud), build e envio (Expo EAS), publicação (Google Play) e compra de moedas (RevenueCat).

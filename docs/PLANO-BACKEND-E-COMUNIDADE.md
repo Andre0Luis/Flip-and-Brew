@@ -229,7 +229,7 @@ A ordem mudou: **o login do Supabase fica por último** (decisão 1), e tudo ant
 | # | Entrega | Depende de |
 |---|---|---|
 | 0 | **Você:** mesclar os PRs abertos (#17 a #22) para o monorepo não gerar conflito; criar as contas (Supabase staging, Vercel, Resend, Sentry) só quando chegar a hora delas | — |
-| 1 | ADR-0024, monorepo (`apps/mobile` por `git mv`, `apps/api`, `packages/shared`), CI por caminho, Dependabot, CodeQL, Gitleaks; teste de um build EAS de preview | 0 |
+| 1 | ADR-0024, monorepo (`apps/mobile` por `git mv`, `apps/api`, `packages/shared`), CI por caminho, Dependabot, CodeQL, Gitleaks; teste de um build EAS de preview (**feito**, menos o build EAS de teste; ADR-0025) | 0 |
 | 2 | API base: Hono, Drizzle, migrações, Postgres local (Docker), `GET /health`, `AuthProvider` com `devAuth`, limite de pedidos, testes com Postgres | 1 |
 | 3 | Perfil, preferências e backup no servidor (`snapshot`), `apiBackend` no app (ainda com login de desenvolvimento); o Firebase continua até o corte | 2 |
 | 4 | **Monitoramento admin:** `ping`, `/admin/overview`, `/admin/users`, tela no app só para admin | 3 |
