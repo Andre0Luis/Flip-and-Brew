@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { snapshotPutSchema } from '@flipandbrew/shared';
+import { snapshotPutSchema } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Db } from '../db/client';
 import { userSnapshots } from '../db/schema';

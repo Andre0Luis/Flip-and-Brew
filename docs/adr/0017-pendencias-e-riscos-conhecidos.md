@@ -60,6 +60,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [x] Base da API (`apps/api`): perfil, bootstrap com admin por e-mail verificado, preferências, privacidade, presença, backup, café de verdade, monitoramento e exclusão de conta, com testes. **Ainda não usada pelo app.**
 - [x] Decididas pelo dono (ADR-0024): idade 18, só ele modera e é o admin, ranking de café "mais" e "menos", e-mail pela **Brevo**, só amizade com aprovação (sem seguir), perfil público e comunidade só entre amigos, mensagens para sempre.
 - [x] API de **amizade com aprovação**, bloqueio, busca por apelido e perfil público (`/v1/friend-requests`, `/v1/me/friends`, `/v1/blocks`, `/v1/users`), com testes. **Ainda sem telas no app.**
+- [x] Entrada da Vercel (`src/index.ts`, preset Hono), login do **Supabase Auth** (`src/auth/supabase.ts`, a chave `anon` não vale como login) e workflow `vercel-checks.yml`. **Falta no painel da Vercel:** projeto ligado ao repositório, Root Directory `apps/api`, variáveis, e só então exigir o check `lint-gh`.
 - [ ] **Domínio próprio** para o e-mail (hoje remetente verificado na Brevo; Gmail pode cair no spam) e para a Cloudflare.
 - [ ] Conta e chave da **Brevo**, remetente verificado e `ADMIN_EMAILS` nas variáveis da Vercel (o e-mail do dono não vai para o repositório).
 - [ ] Fases seguintes: mover o app para `apps/mobile`, amizade com aprovação, posts e imagens, ranking, mensagens, **Supabase Auth**, e-mail de boas-vindas, deploy na Vercel (plano gratuito só para testes), corte do Firebase, textos "sem conta".

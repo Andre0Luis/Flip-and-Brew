@@ -20,6 +20,14 @@ curl -X POST localhost:8787/v1/me/bootstrap -H "authorization: Bearer $TOKEN" -H
 curl localhost:8787/v1/admin/overview -H "authorization: Bearer $TOKEN"
 ```
 
+## Deploy na Vercel
+- **Framework Preset: Hono.** Runtime Node 22. Sem Nitro (ele só entraria se usássemos o Workflow SDK). A Vercel procura `src/index.ts`, que exporta o app (`export default app`); o servidor local é `src/local.ts` (não se chama `server.ts` de propósito, porque a Vercel procura esse nome como entrada).
+- **Root Directory: `apps/api`**, com **"Include source files outside of the Root Directory in the Build Step" ligado** (o pacote compartilhado fica em `packages/shared`). O `installCommand` está em `vercel.json`.
+- **Variáveis** (Production e Preview): `DATABASE_URL` (ou `POSTGRES_URL`, que a integração Supabase da Vercel já cria: pooler, porta 6543), `AUTH_PROVIDER=supabase`, `SUPABASE_URL` (`https://<ref>.supabase.co`), `SUPABASE_JWT_SECRET` (segredo, só na Vercel), `ADMIN_EMAILS`, e depois `BREVO_API_KEY`/`MAIL_FROM`. `DOCS_ENABLED=true` liga o `/docs` em produção. **Não coloque** `service_role`, chave secreta nem a senha do banco em lugar nenhum além do campo de variáveis da Vercel.
+- **O login de desenvolvimento é recusado em produção** (a Vercel roda com `NODE_ENV=production`); lá só vale o token do Supabase Auth (`src/auth/supabase.ts`: papel `authenticated`, emissor e audiência conferidos; a chave pública `anon` **não** vale como login).
+- **Migrações não rodam no deploy:** `npm run db:migrate`, com uma URL de conexão direta (porta 5432) em `MIGRATE_DATABASE_URL`.
+- **Verificações antes de promover (Deployment Checks):** `.github/workflows/vercel-checks.yml` roda quando a Vercel avisa que um deploy ficou pronto e devolve o status `Vercel - flip-and-brew: lint-gh`. **Só marque como obrigatória na Vercel depois de ela ter rodado e passado pelo menos uma vez** (o workflow precisa estar na `main` e o GitHub Actions precisa estar funcionando); senão nenhum deploy pode ser promovido.
+
 ## E-mail (Brevo)
 O e-mail de boas-vindas sai no primeiro `bootstrap`, uma vez só (se o provedor falhar, a próxima abertura tenta de novo; o cadastro nunca falha por isso). Usamos a **Brevo pela API HTTP**, como o backend do Clube Quinze: `POST https://api.brevo.com/v3/smtp/email` com o cabeçalho `api-key`.
 1. Conta em brevo.com, **API key** (SMTP e API › Chaves de API) em `BREVO_API_KEY`.

@@ -1,6 +1,6 @@
 import { count, desc, gte, lt, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { ACTIVE_NOW_MS } from '@flipandbrew/shared';
+import { ACTIVE_NOW_MS } from '../shared';
 import type { Env } from '../auth/middleware';
 import type { Db } from '../db/client';
 import { auditLog, profiles } from '../db/schema';

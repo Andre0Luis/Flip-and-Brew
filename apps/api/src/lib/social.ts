@@ -1,5 +1,5 @@
 import { and, eq, or } from 'drizzle-orm';
-import type { FriendshipRelation } from '@flipandbrew/shared';
+import type { FriendshipRelation } from '../shared';
 import type { Db } from '../db/client';
 import { blocks, friendships } from '../db/schema';
 

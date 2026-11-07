@@ -12,7 +12,7 @@ const SECRET = 'segredo-de-teste-com-mais-de-16-caracteres';
 export async function testApp(over: Partial<Config> = {}) {
   const handle = await createDb('pglite:');
   await runMigrations(handle);
-  const config: Config = { env: 'test', port: 0, databaseUrl: 'pglite:', authProvider: 'dev', devJwtSecret: SECRET, adminEmails: ['dono@exemplo.com'], corsOrigins: [], brevoApiKey: undefined, mailFrom: undefined, mailFromName: 'Flip & Brew', ...over };
+  const config: Config = { env: 'test', port: 0, databaseUrl: 'pglite:', authProvider: 'dev', devJwtSecret: SECRET, supabaseUrl: undefined, supabaseJwtSecret: undefined, adminEmails: ['dono@exemplo.com'], corsOrigins: [], brevoApiKey: undefined, mailFrom: undefined, mailFromName: 'Flip & Brew', ...over };
   /** E-mails "enviados" ficam numa lista; `failNext` simula o provedor fora do ar. */
   const sent: EmailMessage[] = [];
   const mail = { failNext: 0 };
