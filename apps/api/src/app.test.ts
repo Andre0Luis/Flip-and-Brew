@@ -171,6 +171,27 @@ test('conta suspensa não entra, e excluir a conta apaga os dados', async () => 
   await t.close();
 });
 
+test('excluir a conta apaga o usuário do login primeiro; se o login falhar, nada é apagado e dá para tentar de novo', async () => {
+  const deleted: string[] = [];
+  let down = true;
+  const t = await testApp({}, {
+    async deleteUser(id) {
+      if (down) throw new Error('fora do ar');
+      deleted.push(id);
+    },
+  });
+  const u = await t.member();
+  const r = await t.call('/v1/me', { token: u.token, method: 'DELETE' });
+  assert.equal(r.status, 502);
+  assert.equal(r.body.error.code, 'auth_provider_unavailable');
+  assert.equal((await t.handle.db.select().from(profiles)).length, 1);
+  down = false;
+  assert.equal((await t.call('/v1/me', { token: u.token, method: 'DELETE' })).status, 204);
+  assert.deepEqual(deleted, [u.id]);
+  assert.equal((await t.handle.db.select().from(profiles)).length, 0);
+  await t.close();
+});
+
 test('corpo que não é JSON ou é grande demais é recusado', async () => {
   const t = await testApp();
   const u = await t.member();

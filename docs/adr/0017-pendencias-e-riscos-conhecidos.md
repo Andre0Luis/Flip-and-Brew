@@ -57,14 +57,14 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 
 ## Backend e comunidade (ADR-0024)
 - [ ] **GitHub Actions bloqueado por cobrança** ("account is locked due to a billing issue", visto em 2026-11-07): nenhum CI roda, incluindo os novos (`ci-api`, CodeQL, Gitleaks). Resolver em github.com/settings/billing. Até lá, conferir tudo localmente com `npm run check` e `cd apps/api && npm run check`.
-- [x] Base da API (`apps/api`): perfil, bootstrap com admin por e-mail verificado, preferências, privacidade, presença, backup, café de verdade, monitoramento e exclusão de conta, com testes. **Ainda não usada pelo app.**
+- [x] Base da API (`apps/api`): perfil, bootstrap com admin por e-mail verificado, preferências, privacidade, presença, backup, café de verdade, monitoramento e exclusão de conta, com testes. **O app já pode usar a API** quando as 3 variáveis `EXPO_PUBLIC_*` existem (ADR-0027); sem elas segue no Firebase.
 - [x] Decididas pelo dono (ADR-0024): idade 18, só ele modera e é o admin, ranking de café "mais" e "menos", e-mail pela **Brevo**, só amizade com aprovação (sem seguir), perfil público e comunidade só entre amigos, mensagens para sempre.
 - [x] API de **amizade com aprovação**, bloqueio, busca por apelido e perfil público (`/v1/friend-requests`, `/v1/me/friends`, `/v1/blocks`, `/v1/users`), com testes. **Ainda sem telas no app.**
 - [x] Entrada da Vercel (`src/index.ts`, preset Hono), login do **Supabase Auth** (`src/auth/supabase.ts`, a chave `anon` não vale como login) e workflow `vercel-checks.yml`. **Falta no painel da Vercel:** projeto ligado ao repositório, Root Directory `apps/api`, variáveis, e só então exigir o check `lint-gh`.
 - [ ] **Aplicar as migrações no Supabase** (`cd apps/api && npm run db:migrate`, com `MIGRATE_DATABASE_URL` no `.env`). O projeto existe e está vazio; a conexão com TLS verificado foi testada. As migrações `0002` (RLS em todas as tabelas) e `0003` (revoga `anon` e `authenticated`) são o que impede que a chave pública `anon` leia o banco.
 - [ ] **Girar as credenciais do Supabase** (senha do banco, `service_role`, chave secreta e segredo JWT) se o chat ou o log da sessão em que foram coladas puder ser visto por outras pessoas; a API só precisa da senha do banco.
 - [x] **Swagger** (`/docs`, `/openapi.json`) gerado dos esquemas Zod, com teste contra rotas sem documentação. Em produção fica desligado, a menos que `DOCS_ENABLED=true`.
-- [x] Deploy na Vercel, dois erros reais corrigidos com guarda em teste: entrada duplicada (`src/app.ts` vs `src/index.ts`) e `TS2688` (`typeRoots`). **Falta confirmar na Vercel** se o deploy passa e, depois, o check `lint-gh`.
+- [x] Deploy na Vercel, dois erros reais corrigidos com guarda em teste: entrada duplicada (`src/app.ts` vs `src/index.ts`) e `TS2688` (`typeRoots`). Terceiro erro real (imports sem `.js`, ERR_MODULE_NOT_FOUND) corrigido na #66; `flip-and-brew.vercel.app` responde 200 em `/health` e `/docs` desde 2026-11-07. Falta o check `lint-gh`.
 - [x] App movido para `apps/mobile` e workflows separados (ADR-0025). **Falta:** o primeiro **build EAS** depois da mudança (não testado), e mover os arquivos locais ignorados (`.env`, `node_modules`...) para `apps/mobile/`.
 - [ ] **Vulnerabilidade `decode-uri-component` (alta, negação de serviço)**, vinda do `query-string` do `expo-router` 57: a correção é o `expo-router` 58, que é do **Expo SDK 58**. O upgrade do SDK (React, eslint 10 e `eslint-config-expo` 58 vêm juntos) resolve esse e outros avisos de `npm audit` (`expo`/`glob`/`minimatch` indiretos). Enquanto isso o Dependabot ignora o que o SDK fixa.
 - [ ] **Domínio próprio** para o e-mail (hoje remetente verificado na Brevo; Gmail pode cair no spam) e para a Cloudflare.
@@ -72,6 +72,10 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] Fases seguintes: mover o app para `apps/mobile`, amizade com aprovação, posts e imagens, ranking, mensagens, **Supabase Auth**, e-mail de boas-vindas, deploy na Vercel (plano gratuito só para testes), corte do Firebase, textos "sem conta".
 - [ ] **iPhone:** a Family Controls (Apple) não está pedida; pela apuração, o tempo de tela do iPhone não pode ir para servidor, então o ranking "menos celular" fica só no Android.
 - [x] **Kotlin do módulo `usage-stats` compila** (build debug do Android passou em 2026-11-07, `:usage-stats:compileDebugKotlin`). Falta rodar num aparelho ou emulador e ver os números reais.
+
+- [ ] **App com o backend próprio** (ADR-0027): nunca rodou em aparelho. Faltam as 3 variáveis `EXPO_PUBLIC_*` (`apps/mobile/.env` e EAS), configurar o Supabase Auth (e-mail e SMTP da Brevo, Google com "skip nonce check", Apple), **tela de nova senha** para o link de recuperação e revogar o token da Apple na exclusão.
+- [ ] **`SUPABASE_SERVICE_ROLE_KEY`** (Sensitive) na Vercel: sem ela, excluir a conta apaga os dados mas deixa o usuário no Supabase Auth.
+- [ ] **Vercel Authentication** barra os domínios `*-andre0luis-projects.vercel.app`; só `flip-and-brew.vercel.app` é público. Conferir qual vai no `EXPO_PUBLIC_API_URL`.
 
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).

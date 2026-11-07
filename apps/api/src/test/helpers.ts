@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { createApp } from '../create-app.js';
+import type { AuthAdmin } from '../auth/admin.js';
 import { devAuth, signDevToken } from '../auth/dev.js';
 import type { Config } from '../config.js';
 import { createDb } from '../db/client.js';
@@ -9,7 +10,7 @@ import { runMigrations } from '../db/migrate.js';
 const SECRET = 'segredo-de-teste-com-mais-de-16-caracteres';
 
 /** App completo com um Postgres embutido em memória, com as migrações aplicadas. Cada chamada é um banco novo. */
-export async function testApp(over: Partial<Config> = {}) {
+export async function testApp(over: Partial<Config> = {}, authAdmin?: AuthAdmin) {
   const handle = await createDb('pglite:');
   await runMigrations(handle);
   const config: Config = { env: 'test', port: 0, databaseUrl: 'pglite:', authProvider: 'dev', devJwtSecret: SECRET, supabaseUrl: undefined, supabaseJwtSecret: undefined, adminEmails: ['dono@exemplo.com'], corsOrigins: [], docsEnabled: true, brevoApiKey: undefined, mailFrom: undefined, mailFromName: 'Flip & Brew', ...over };
@@ -25,7 +26,7 @@ export async function testApp(over: Partial<Config> = {}) {
       sent.push(m);
     },
   };
-  const app = createApp({ db: handle.db, auth: devAuth(SECRET), email, config, rateLimit: false });
+  const app = createApp({ db: handle.db, auth: devAuth(SECRET), email, config, authAdmin, rateLimit: false });
 
   const user = async (email = `${randomUUID().slice(0, 8)}@exemplo.com`, emailVerified = true) => {
     const id = randomUUID();

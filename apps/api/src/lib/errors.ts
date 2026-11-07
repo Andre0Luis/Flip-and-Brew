@@ -3,7 +3,7 @@ import type { ZodType } from 'zod';
 
 export class HttpError extends Error {
   constructor(
-    public status: 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500 | 501,
+    public status: 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500 | 501 | 502,
     public code: string,
     message?: string,
     public extra?: Record<string, unknown>,

@@ -1,6 +1,7 @@
 import { createApp } from './create-app.js';
 import { devAuth } from './auth/dev.js';
 import type { AuthProvider } from './auth/provider.js';
+import { supabaseAdmin } from './auth/admin.js';
 import { supabaseAuth } from './auth/supabase.js';
 import { loadConfig, type Config } from './config.js';
 import { createDb, type DbHandle } from './db/client.js';
@@ -17,5 +18,6 @@ export async function buildApp(env: Record<string, string | undefined> = process
   const config = loadConfig(env);
   const handle = await createDb(config.databaseUrl);
   const email = config.brevoApiKey && config.mailFrom ? brevoEmail({ apiKey: config.brevoApiKey, fromEmail: config.mailFrom, fromName: config.mailFromName }) : consoleEmail();
-  return { app: createApp({ db: handle.db, auth: authFor(config), email, config }), handle, config };
+  const authAdmin = config.authProvider === 'supabase' && config.supabaseUrl && config.supabaseServiceRoleKey ? supabaseAdmin({ url: config.supabaseUrl, serviceRoleKey: config.supabaseServiceRoleKey }) : undefined;
+  return { app: createApp({ db: handle.db, auth: authFor(config), email, config, authAdmin }), handle, config };
 }

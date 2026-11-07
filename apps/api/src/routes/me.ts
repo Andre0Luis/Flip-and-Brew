@@ -1,6 +1,7 @@
 import { and, eq, isNull } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '../shared.js';
+import type { AuthAdmin } from '../auth/admin.js';
 import type { Env } from '../auth/middleware.js';
 import type { Config } from '../config.js';
 import type { Db } from '../db/client.js';
@@ -30,7 +31,7 @@ const isUnique = (e: unknown): boolean => {
 };
 
 /** Rotas da própria pessoa. `/bootstrap` só exige token; as demais exigem perfil (ver app.ts). */
-export function meRoutes(db: Db, cfg: Config, email: EmailProvider) {
+export function meRoutes(db: Db, cfg: Config, email: EmailProvider, authAdmin?: AuthAdmin) {
   const r = new Hono<Env>();
 
   const load = async (id: string) => (await db.select().from(profiles).where(eq(profiles.id, id)))[0];
@@ -133,9 +134,20 @@ export function meRoutes(db: Db, cfg: Config, email: EmailProvider) {
     return c.body(null, 204);
   });
 
-  /** Exclui a conta e tudo o que depende dela (cascata). O registro de auditoria fica, sem dado pessoal. */
+  /**
+   * Exclui a conta e tudo o que depende dela (cascata). O registro de auditoria fica, sem dado pessoal.
+   * O usuário do provedor de login sai primeiro: se isso falhar, nada foi apagado e a pessoa tenta de novo.
+   */
   r.delete('/me', async (c) => {
     const id = c.get('profile').id;
+    if (authAdmin) {
+      try {
+        await authAdmin.deleteUser(id);
+      } catch (e) {
+        console.error('[me] falha ao apagar o usuário no provedor de login:', (e as Error).message);
+        throw new HttpError(502, 'auth_provider_unavailable', 'Não foi possível excluir agora. Tente de novo em instantes.');
+      }
+    }
     await db.insert(auditLog).values({ actorId: id, action: 'account.delete', target: id });
     await db.delete(profiles).where(eq(profiles.id, id));
     return c.body(null, 204);

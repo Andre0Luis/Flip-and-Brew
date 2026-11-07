@@ -7,6 +7,7 @@ import { requireIdentity, requireProfile, requireRole, type Env } from './auth/m
 import type { AuthProvider } from './auth/provider.js';
 import type { Config } from './config.js';
 import type { Db } from './db/client.js';
+import type { AuthAdmin } from './auth/admin.js';
 import type { EmailProvider } from './email/provider.js';
 import { HttpError } from './lib/errors.js';
 import { rateLimit } from './lib/rate-limit.js';
@@ -18,10 +19,10 @@ import { meRoutes } from './routes/me.js';
 import { snapshotRoutes } from './routes/snapshot.js';
 import { userRoutes } from './routes/users.js';
 
-export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; rateLimit?: { windowMs: number; max: number } | false };
+export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; authAdmin?: AuthAdmin; rateLimit?: { windowMs: number; max: number } | false };
 
 /** Monta a API. Recebe tudo de fora (banco, login, configuração) para rodar igual no servidor local, na Vercel e nos testes. */
-export function createApp({ db, auth, email, config, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
+export function createApp({ db, auth, email, config, authAdmin, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
   const app = new Hono<Env>();
 
   app.use(secureHeaders());
@@ -53,7 +54,7 @@ export function createApp({ db, auth, email, config, rateLimit: rl = { windowMs:
   v1.use('/blocks', withProfile);
   v1.use('/blocks/*', withProfile);
   v1.use('/users/*', withProfile);
-  v1.route('/', meRoutes(db, config, email));
+  v1.route('/', meRoutes(db, config, email, authAdmin));
   v1.route('/', snapshotRoutes(db));
   v1.route('/', coffeeRoutes(db));
   v1.route('/', friendRoutes(db));
