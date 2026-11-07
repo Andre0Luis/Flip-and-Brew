@@ -90,7 +90,7 @@ export default function Inicio() {
   return (
     <Screen ads>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
-        <CoinBadge coins={coins} onPress={() => router.push('/guia')} />
+        <CoinBadge coins={coins} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <Txt v="small" color="muted">
             {t('home.streak')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{days} {t('unit.day', { n: days })}</Txt>

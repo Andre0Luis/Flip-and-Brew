@@ -42,6 +42,7 @@ function Shell() {
           <Stack.Screen name="artigo/[id]" />
           <Stack.Screen name="frase/[id]" />
           <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="moedas" options={{ presentation: 'modal' }} />
           <Stack.Screen name="privacidade" />
           <Stack.Screen name="conta" />
           <Stack.Screen name="perfil" />

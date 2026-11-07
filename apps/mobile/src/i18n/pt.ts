@@ -7,6 +7,8 @@ export const pt = {
   'common.back': 'Voltar',
   'common.coinsA11y.one': '{n} moeda',
   'common.coinsA11y.many': '{n} moedas',
+  'common.coinsHint': 'Abre a compra de moedas',
+  'coinShop.title': 'Comprar moedas',
   'unit.day.one': 'dia',
   'unit.day.many': 'dias',
   'unit.cup.one': 'copo',

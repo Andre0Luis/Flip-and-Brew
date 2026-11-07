@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
+import { CoinShop } from '@/components/CoinShop';
 import { Icon } from '@/components/Icon';
 import { Bar, Button, Card, CoinBadge, Header, Screen, Segmented, Txt } from '@/components/ui';
 import { brewers, COLLECTIONS, cups, localize, packs as coffeePacks, type LocalizedItem } from '@/data/catalog';
@@ -9,7 +10,6 @@ import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
 import { formatNumber, useI18n } from '@/i18n';
 import { discountFor, priceOf } from '@/lib/pricing';
-import { buyCoinPack, loadCoinPacks, purchasesBlockedByExpoGo, purchasesConfigured, type CoinPack } from '@/lib/purchases';
 import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 
@@ -22,18 +22,12 @@ export default function Guia() {
   const { coins, owned, brewerId, cupId, packId, sessions, checkins, settings } = useApp();
   const buy = useApp((s) => s.buy);
   const equip = useApp((s) => s.equip);
-  const addCoins = useApp((s) => s.addCoins);
   const [tab, setTab] = useState<Tab>('brewer');
   const [pending, setPending] = useState<LocalizedItem | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [packs, setPacks] = useState<CoinPack[]>([]);
   const days = streak(sessions);
   const disc = discountFor({ checkins, sessions, goalMin: settings.goalMin });
   const priceNow = (item: LocalizedItem) => priceOf(item, disc.percent);
-
-  useEffect(() => {
-    if (purchasesConfigured) loadCoinPacks().then(setPacks);
-  }, []);
 
   const items = (tab === 'brewer' ? brewers() : tab === 'beans' ? coffeePacks() : cups()).map((i) => localize(lang, i));
   const equipped = tab === 'brewer' ? brewerId : tab === 'beans' ? packId : cupId;
@@ -214,40 +208,7 @@ export default function Guia() {
         ) : null,
       )}
 
-      <Card style={{ gap: 8 }}>
-        <Txt v="title">{t('guide.coinsTitle')}</Txt>
-        {purchasesConfigured ? (
-          packs.length ? (
-            <View style={{ gap: 8 }}>
-              {packs.map((p) => (
-                <Button
-                  key={p.id}
-                  tone="quiet"
-                  label={t('guide.packLine', { n: num(p.coins), price: p.price })}
-                  onPress={async () => {
-                    const got = await buyCoinPack(p);
-                    if (got) {
-                      addCoins(got);
-                      setMessage(t('guide.packAdded', { n: num(got) }));
-                    } else setMessage(t('guide.packCancel'));
-                  }}
-                />
-              ))}
-            </View>
-          ) : (
-            <Txt v="small" color="muted">
-              {t('guide.packsFail')}
-            </Txt>
-          )
-        ) : (
-          <Txt v="small" color="muted">
-            {purchasesBlockedByExpoGo ? t('guide.coinsExpoGo') : t('guide.coinsInfo')}
-          </Txt>
-        )}
-        <Txt v="small" color="muted">
-          {t('guide.coinsHow')}
-        </Txt>
-      </Card>
+      <CoinShop />
     </Screen>
   );
 }
