@@ -39,9 +39,13 @@ O e-mail de boas-vindas sai no primeiro `bootstrap`, uma vez só (se o provedor 
 | `GET/PUT /v1/me/snapshot` | logado | backup do progresso (substitui o Firestore) |
 | `POST/GET/DELETE /v1/me/coffees` | logado | registro de café de verdade |
 | `DELETE /v1/me` | logado | exclui a conta e tudo que depende dela |
+| `POST /v1/friend-requests` (`{userId}`), `GET /v1/me/friend-requests?direction=incoming\|outgoing`, `POST /v1/friend-requests/:id/accept`, `DELETE /v1/friend-requests/:id` | logado | amizade **com aprovação**: pedir, listar, aceitar (só quem recebeu), recusar ou cancelar; pedido de volta vira amizade; até 50 pedidos sem resposta |
+| `GET /v1/me/friends`, `DELETE /v1/friends/:userId` | logado | lista de amigos e desfazer amizade |
+| `POST /v1/blocks`, `DELETE /v1/blocks/:userId`, `GET /v1/me/blocks` | logado | bloquear desfaz a amizade e a pessoa some dos dois lados (busca, perfil, pedidos) |
+| `GET /v1/users/search?q=`, `GET /v1/users/:handle` | logado | busca pelo começo do apelido e **perfil público** (sem e-mail e sem data de nascimento; cafés preferidos só se a pessoa deixou) |
 | `GET /v1/admin/overview`, `GET /v1/admin/users` | admin | monitoramento |
 
-Ainda não existem (próximas fases): amizade com aprovação, posts e imagens (só entre amigos), ranking, mensagens, login do Supabase, deploy na Vercel.
+Ainda não existem (próximas fases): posts e imagens (só entre amigos), ranking, mensagens, login do Supabase, deploy na Vercel.
 
 ## Regras que valem aqui
 - **Toda entrada passa por Zod** (`packages/shared`), e campos desconhecidos são recusados (`.strict()`): o cliente não escolhe a própria `role`.

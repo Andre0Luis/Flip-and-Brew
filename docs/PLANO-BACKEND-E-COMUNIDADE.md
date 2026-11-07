@@ -233,7 +233,7 @@ A ordem mudou: **o login do Supabase fica por último** (decisão 1), e tudo ant
 | 2 | API base: Hono, Drizzle, migrações, Postgres local (Docker), `GET /health`, `AuthProvider` com `devAuth`, limite de pedidos, testes com Postgres | 1 |
 | 3 | Perfil, preferências e backup no servidor (`snapshot`), `apiBackend` no app (ainda com login de desenvolvimento); o Firebase continua até o corte | 2 |
 | 4 | **Monitoramento admin:** `ping`, `/admin/overview`, `/admin/users`, tela no app só para admin | 3 |
-| 5 | Seguir, **pedido de amizade com aprovação**, bloquear, tela de perfil público | 3 |
+| 5 | **Pedido de amizade com aprovação**, bloquear, busca e perfil público (**API pronta**; as telas do app vêm depois do monorepo). Sem "seguir", por decisão do dono | 3 |
 | 6 | Comunidade: posts, comentários, curtidas, **upload de imagem comprimida**, denunciar, moderação do admin | 5 |
 | 7 | **Registro de café de verdade** + `daily_stats` + ranking (amigos; geral só Android) | 5 |
 | 8 | Mensagens (usuário ↔ admin) | 6 |

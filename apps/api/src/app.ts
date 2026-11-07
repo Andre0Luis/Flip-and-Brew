@@ -11,8 +11,10 @@ import { HttpError } from './lib/errors';
 import { rateLimit } from './lib/rate-limit';
 import { adminRoutes } from './routes/admin';
 import { coffeeRoutes } from './routes/coffees';
+import { friendRoutes } from './routes/friends';
 import { meRoutes } from './routes/me';
 import { snapshotRoutes } from './routes/snapshot';
+import { userRoutes } from './routes/users';
 
 export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; rateLimit?: { windowMs: number; max: number } | false };
 
@@ -35,9 +37,18 @@ export function createApp({ db, auth, email, config, rateLimit: rl = { windowMs:
   v1.use('/me', withProfile);
   v1.use('/me/*', async (c, next) => (c.req.path.endsWith('/me/bootstrap') ? next() : withProfile(c, next)));
   v1.use('/admin/*', withProfile, requireRole('admin'));
+  // Amizade, bloqueio e perfis de outras pessoas: todas exigem perfil.
+  v1.use('/friend-requests', withProfile);
+  v1.use('/friend-requests/*', withProfile);
+  v1.use('/friends/*', withProfile);
+  v1.use('/blocks', withProfile);
+  v1.use('/blocks/*', withProfile);
+  v1.use('/users/*', withProfile);
   v1.route('/', meRoutes(db, config, email));
   v1.route('/', snapshotRoutes(db));
   v1.route('/', coffeeRoutes(db));
+  v1.route('/', friendRoutes(db));
+  v1.route('/', userRoutes(db));
   v1.route('/', adminRoutes(db));
   app.route('/v1', v1);
 

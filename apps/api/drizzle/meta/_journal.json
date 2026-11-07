@@ -8,6 +8,13 @@
       "when": 1794076482213,
       "tag": "0000_flaky_stingray",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794077237339,
+      "tag": "0001_fuzzy_payback",
+      "breakpoints": true
     }
   ]
 }
