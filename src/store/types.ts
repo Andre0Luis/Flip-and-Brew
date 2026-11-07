@@ -61,6 +61,10 @@ export type Settings = {
   /** hora cheia dos dois lembretes (limites em lib/reminders.ts) */
   morningHour: number;
   checkinHour: number;
+  /** dá moedas pelo tempo com a tela bloqueada, depois do sono mínimo (só Android, com o acesso ao uso) */
+  passiveCoins: boolean;
+  /** sono mínimo descontado todo dia do tempo bloqueado, em minutos (limites em lib/passive.ts) */
+  sleepMin: number;
   /** modo do botão de começar no Início: café (tempo da cafeteira) ou pomodoro (25 min de foco) */
   focusMode: 'coffee' | 'pomodoro';
   /** tempos do Pomodoro, ajustáveis em Ajustes */

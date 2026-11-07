@@ -10,6 +10,7 @@ import { cloudAvailable } from '@/lib/cloud';
 import { hasProfile } from '@/lib/profile';
 import { useTestTools } from '@/lib/admin';
 import { GoalPicker } from '@/components/GoalPicker';
+import { PassiveSettings } from '@/components/PassiveSettings';
 import { useAuth } from '@/store/useAuth';
 import { usePro } from '@/store/usePro';
 import { RemoveAdsCard } from '@/components/RemoveAdsCard';
@@ -199,6 +200,8 @@ export default function Ajustes() {
           </Txt>
         )}
       </Card>
+
+      <PassiveSettings />
 
       <Card style={{ gap: 10 }}>
         <Row title={t('set.dim')} hint={t('set.dimHint')} value={settings.dimDuringBrew} onChange={(v) => set({ dimDuringBrew: v })} />

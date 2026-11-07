@@ -274,7 +274,7 @@ A Play Store exige uma **URL da política de privacidade** e uma **URL de exclus
    - **Acesso ao app**: tudo funciona sem login; a conta é opcional.
    - **Classificação de conteúdo**: responda o questionário (sem conteúdo sensível).
    - **Segurança dos dados**: use `docs/store/data-safety.md` como base.
-   - **Permissões sensíveis**: `PACKAGE_USAGE_STATS` (Acesso ao uso). Se o Play Console pedir uma declaração, justifique: lê desbloqueios e tempo de tela do dia para o painel de bem-estar, só no aparelho, opcional.
+   - **Permissões sensíveis**: `PACKAGE_USAGE_STATS` (Acesso ao uso). Se o Play Console pedir uma declaração, justifique: lê desbloqueios e tempo de tela do dia para o painel de bem-estar e para dar moedas pelo tempo com a tela bloqueada (ADR-0023), só no aparelho, opcional.
 5. **Enviar o app**. Duas formas:
    - **Manual**: `eas build --platform android --profile production` gera o `.aab`; baixe e envie em Teste › Teste interno › Criar versão.
    - **Automática** (`eas submit`): precisa de uma **conta de serviço** do Google:
