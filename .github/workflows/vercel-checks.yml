@@ -9,8 +9,9 @@ name: Vercel checks
 on:
   repository_dispatch:
     types:
+      # A Vercel manda exigir `ready`: dispara depois que o deploy é criado e antes de os checks rodarem.
+      # `success` (já promovido) ficou de fora: gravaria o mesmo status duas vezes para o mesmo commit.
       - 'vercel.deployment.ready'
-      - 'vercel.deployment.success'
   workflow_dispatch:
 
 concurrency:
@@ -23,6 +24,8 @@ permissions:
 
 jobs:
   lint-gh:
+    # Os Deployment Checks valem para promover a produção; deploys de preview não precisam gastar minutos nem disputar o mesmo status.
+    if: github.event_name != 'repository_dispatch' || github.event.client_payload.environment == 'production'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

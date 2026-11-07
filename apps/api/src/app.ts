@@ -1,3 +1,4 @@
+import { swaggerUI } from '@hono/swagger-ui';
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
@@ -9,6 +10,7 @@ import type { Db } from './db/client';
 import type { EmailProvider } from './email/provider';
 import { HttpError } from './lib/errors';
 import { rateLimit } from './lib/rate-limit';
+import { SWAGGER_UI_VERSION, buildOpenApi } from './openapi';
 import { adminRoutes } from './routes/admin';
 import { coffeeRoutes } from './routes/coffees';
 import { friendRoutes } from './routes/friends';
@@ -27,6 +29,13 @@ export function createApp({ db, auth, email, config, rateLimit: rl = { windowMs:
   app.use(bodyLimit({ maxSize: 1024 * 1024, onError: () => { throw new HttpError(413, 'payload_too_large', 'Corpo grande demais.'); } }));
 
   app.get('/health', (c) => c.json({ ok: true }));
+
+  // Documentação (Swagger UI). Fora de /v1, sem login: o corpo é só a descrição das rotas; o "Authorize" da UI recebe o token.
+  if (config.docsEnabled) {
+    const spec = buildOpenApi();
+    app.get('/openapi.json', (c) => c.json(spec));
+    app.get('/docs', swaggerUI({ url: '/openapi.json', version: SWAGGER_UI_VERSION, persistAuthorization: true }));
+  }
 
   const v1 = new Hono<Env>();
   if (rl) v1.use(rateLimit({ ...rl, key: (c) => c.req.header('authorization')?.slice(-24) ?? c.req.header('x-forwarded-for') ?? 'anon' }));

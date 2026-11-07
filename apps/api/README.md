@@ -26,13 +26,31 @@ curl localhost:8787/v1/admin/overview -H "authorization: Bearer $TOKEN"
 - **Variáveis** (Production e Preview): `DATABASE_URL` (ou `POSTGRES_URL`, que a integração Supabase da Vercel já cria: pooler, porta 6543), `AUTH_PROVIDER=supabase`, `SUPABASE_URL` (`https://<ref>.supabase.co`), `SUPABASE_JWT_SECRET` (segredo, só na Vercel), `ADMIN_EMAILS`, e depois `BREVO_API_KEY`/`MAIL_FROM`. `DOCS_ENABLED=true` liga o `/docs` em produção. **Não coloque** `service_role`, chave secreta nem a senha do banco em lugar nenhum além do campo de variáveis da Vercel.
 - **O login de desenvolvimento é recusado em produção** (a Vercel roda com `NODE_ENV=production`); lá só vale o token do Supabase Auth (`src/auth/supabase.ts`: papel `authenticated`, emissor e audiência conferidos; a chave pública `anon` **não** vale como login).
 - **Migrações não rodam no deploy:** `npm run db:migrate`, com uma URL de conexão direta (porta 5432) em `MIGRATE_DATABASE_URL`.
-- **Verificações antes de promover (Deployment Checks):** `.github/workflows/vercel-checks.yml` roda quando a Vercel avisa que um deploy ficou pronto e devolve o status `Vercel - flip-and-brew: lint-gh`. **Só marque como obrigatória na Vercel depois de ela ter rodado e passado pelo menos uma vez** (o workflow precisa estar na `main` e o GitHub Actions precisa estar funcionando); senão nenhum deploy pode ser promovido.
+- **Verificações antes de promover (Deployment Checks):** `.github/workflows/vercel-checks.yml` roda quando a Vercel avisa que um deploy ficou pronto e devolve o status `Vercel - flip-and-brew: lint-gh`. **Como ligar, na ordem:**
+  1. Mescle este workflow na `main` (o `repository_dispatch` só dispara se o arquivo estiver lá) e resolva o bloqueio de cobrança do GitHub Actions.
+  2. Faça um deploy de produção (um merge na `main`). A Vercel avisa o GitHub (`vercel.deployment.ready`), o workflow roda e grava o status `Vercel - flip-and-brew: lint-gh` **naquele commit**.
+  3. Na Vercel: Settings › Build and Deployment › Deployment Checks › Add Checks › **GitHub**. Se a lista vier vazia ("No configured checks found"), cole o **SHA** (os 7 primeiros caracteres bastam) **desse commit da `main`** em "Enter a GitHub SHA", busque e selecione `Vercel - flip-and-brew: lint-gh`.
+  4. Só então ele passa a bloquear a promoção. **Nunca o marque como obrigatório antes de ter rodado e passado uma vez**, senão nenhum deploy é promovido (a saída de emergência é *Force Promote* na tela do deploy).
+  - Regras da Vercel que já seguimos: o nome do check é único; cada execução grava um status só (por isso só `ready`, e só em produção); mudar o nome do job `lint-gh` exige atualizar o painel; nomes de job não se repetem entre workflows (`check` virou `check-api`).
+
+## Banco do Supabase
+- **Variáveis** (em `apps/api/.env`, nunca no git): `DATABASE_URL` (pooler em modo transação, porta 6543, usado pela API) e `MIGRATE_DATABASE_URL` (porta 5432, só para migrar). A API **não usa** a `service_role` nem a chave secreta do Supabase: ela conecta direto ao Postgres.
+- **Migrar:** `npm run db:migrate` (aplica `apps/api/drizzle` numa transação; só avança).
+- **TLS verificado:** o Node não conhece a CA do Supabase, então `src/db/supabase-ca.ts` traz as CAs públicas (intermediária e raiz "2021") e o cliente as usa em hosts `*.supabase.com`/`*.supabase.co`. Nunca desligue a verificação: a senha do banco iria a quem estivesse na frente. A raiz vale até 2031-04.
+- **A chave `anon` é pública**, e o Supabase expõe o esquema `public` por HTTP. Por isso **toda tabela tem RLS ligada sem policies** (migração `0002`) e os papéis `anon`/`authenticated` perdem os privilégios (`0003`). Um teste falha se alguma tabela nova ficar sem RLS (`.enableRLS()` no esquema). Confira também em Supabase › Database › Security Advisor.
 
 ## E-mail (Brevo)
 O e-mail de boas-vindas sai no primeiro `bootstrap`, uma vez só (se o provedor falhar, a próxima abertura tenta de novo; o cadastro nunca falha por isso). Usamos a **Brevo pela API HTTP**, como o backend do Clube Quinze: `POST https://api.brevo.com/v3/smtp/email` com o cabeçalho `api-key`.
 1. Conta em brevo.com, **API key** (SMTP e API › Chaves de API) em `BREVO_API_KEY`.
 2. **Remetente verificado** (Remetentes e IP) em `MAIL_FROM`. Sem domínio próprio, endereços de provedores gratuitos (Gmail) podem cair no spam ou ser reescritos pela Brevo por causa do DMARC **(confirmar)**; o ideal é um domínio, mesmo barato.
 3. A recuperação de senha e a confirmação de e-mail serão do **Supabase Auth**, que pode usar o SMTP da Brevo (`smtp-relay.brevo.com`) na fase final.
+
+## Documentação da API (Swagger)
+Com a API rodando: **`/docs`** (Swagger UI) e **`/openapi.json`** (OpenAPI 3.1).
+- Em desenvolvimento, gere um token (`npm run dev:token -- seu@email.com`), clique em **Authorize** e cole o token (sem o prefixo `Bearer`); aí dá para chamar as rotas pela página.
+- **Ligada fora de produção; em produção só com `DOCS_ENABLED=true`.** As duas rotas não pedem login, e o conteúdo é só a descrição das rotas.
+- Os corpos de entrada vêm **dos mesmos esquemas Zod** que a API valida (`packages/shared`), então não divergem. A lista de rotas está em `src/openapi.ts`; **um teste falha se uma rota existir sem estar documentada** (ou o contrário). Ao criar uma rota, acrescente a entrada lá.
+- O Swagger UI é carregado da CDN do jsDelivr em **versão fixa** (`SWAGGER_UI_VERSION`); atualize de propósito, com a versão já madura.
 
 ## Testes
 `npm run check` (typecheck + testes). Os testes usam o PGlite em memória e aplicam as migrações de verdade; não precisam de Docker nem de rede.
