@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "hono",
-  "installCommand": "npm ci --prefix ../../packages/shared && npm ci"
+  "installCommand": "npm ci --include=dev --ignore-scripts --prefix ../../packages/shared && npm ci --include=dev --ignore-scripts"
 }
