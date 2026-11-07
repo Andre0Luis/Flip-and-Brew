@@ -66,6 +66,16 @@ export const privacyPatchSchema = z
 /** Corpo do bootstrap. Opcional: o idioma escolhe o texto do e-mail de boas-vindas. */
 export const bootstrapSchema = z.object({ language: z.enum(LANGUAGES).optional() }).strict();
 
+/** Quantos pedidos de amizade enviados e ainda sem resposta uma pessoa pode ter (contra spam). */
+export const MAX_PENDING_REQUESTS = 50;
+
+export const userIdSchema = z.object({ userId: z.uuid() }).strict();
+
+/** Busca por apelido (começo do apelido), no mínimo 2 letras. */
+export const searchQuerySchema = z.string().trim().toLowerCase().regex(/^[a-z0-9_]{2,20}$/, 'busca: 2 a 20 letras minúsculas, números ou _');
+
+export type FriendshipRelation = 'self' | 'none' | 'friends' | 'request_sent' | 'request_received';
+
 export const pingSchema = z.object({ platform: z.enum(PLATFORMS), appVersion: z.string().max(20) }).strict();
 
 /** O backup é o mesmo documento que hoje vai para o Firestore (`SnapshotData`); o servidor só guarda e devolve. */

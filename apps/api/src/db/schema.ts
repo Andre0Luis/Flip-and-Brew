@@ -1,4 +1,5 @@
-import { bigint, boolean, index, integer, jsonb, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { bigint, boolean, index, integer, jsonb, pgEnum, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 export const roleEnum = pgEnum('role', ['user', 'moderator', 'admin']);
 
@@ -84,5 +85,39 @@ export const auditLog = pgTable('audit_log', {
   meta: jsonb('meta'),
   at: ts('at').notNull().defaultNow(),
 });
+
+export const friendshipStatusEnum = pgEnum('friendship_status', ['pending', 'accepted']);
+
+/**
+ * Amizade com aprovação: nasce `pending` (quem pediu = `requesterId`) e vira `accepted` quando a outra pessoa aceita.
+ * Recusar ou cancelar apaga a linha. Só existe uma linha por par, em qualquer direção (índice com least/greatest).
+ */
+export const friendships = pgTable(
+  'friendships',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    requesterId: uuid('requester_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    addresseeId: uuid('addressee_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    status: friendshipStatusEnum('status').notNull().default('pending'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    respondedAt: ts('responded_at'),
+  },
+  (t) => [
+    uniqueIndex('friendships_pair').on(sql`least(${t.requesterId}, ${t.addresseeId})`, sql`greatest(${t.requesterId}, ${t.addresseeId})`),
+    index('friendships_addressee').on(t.addresseeId, t.status),
+    index('friendships_requester').on(t.requesterId, t.status),
+  ],
+);
+
+/** Quem bloqueou quem. Bloquear desfaz amizade e pedidos, e some dos dois lados (busca, perfil, ranking). */
+export const blocks = pgTable(
+  'blocks',
+  {
+    blockerId: uuid('blocker_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    blockedId: uuid('blocked_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.blockerId, t.blockedId] }), index('blocks_blocked').on(t.blockedId)],
+);
 
 export type Profile = typeof profiles.$inferSelect;
