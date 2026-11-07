@@ -1,7 +1,7 @@
 // Servidor local (npm run dev). Na Vercel a entrada é src/index.ts; este arquivo NÃO se chama server.ts de propósito,
 // porque a Vercel procura esse nome como entrada do app.
 import { serve } from '@hono/node-server';
-import { buildApp } from './bootstrap';
+import { buildApp } from './build-app';
 import { runMigrations } from './db/migrate';
 
 const { app, handle, config } = await buildApp();

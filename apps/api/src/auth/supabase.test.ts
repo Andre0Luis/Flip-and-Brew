@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SignJWT, createLocalJWKSet, exportJWK, generateKeyPair } from 'jose';
 import { loadConfig } from '../config';
-import { authFor } from '../bootstrap';
+import { authFor } from '../build-app';
 import { supabaseAuth } from './supabase';
 
 const URL_ = 'https://abcd.supabase.co';

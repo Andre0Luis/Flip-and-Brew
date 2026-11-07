@@ -14,6 +14,11 @@ test('a Vercel acha exatamente uma entrada: src/index.ts (app.ts e server.ts na 
   assert.deepEqual(found, ['src/index.ts']);
 });
 
+test('nenhum módulo do src se chama "bootstrap": é o nome do executável de arranque do ambiente Lambda que a Vercel usa, e import \'./bootstrap\' resolveu para o arquivo errado', () => {
+  const clash = readdirSync(`${root}src`).filter((f) => /^bootstrap(\.|$)/.test(f));
+  assert.deepEqual(clash, []);
+});
+
 test('o tsconfig fixa o typeRoots dentro de apps/api: o builder da Vercel estende o tsconfig a partir de outra pasta e, sem isto, perde o @types/node (TS2688)', () => {
   const { compilerOptions: o } = json('tsconfig.json');
   assert.ok(Array.isArray(o.types) && o.types.includes('node'));

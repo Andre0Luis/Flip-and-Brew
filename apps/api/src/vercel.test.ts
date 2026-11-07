@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildApp } from './bootstrap';
+import { buildApp } from './build-app';
 
 const env = { NODE_ENV: 'test', AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(24), DATABASE_URL: 'pglite:' };
 
