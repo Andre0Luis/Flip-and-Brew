@@ -510,6 +510,7 @@ export const es: Record<keyof typeof pt, string> = {
   'auth.err.recent-login': 'Por seguridad, vuelve a entrar antes de continuar.',
   'auth.err.unavailable': 'Este inicio de sesión no está disponible en este dispositivo.',
   'auth.err.config': 'Este inicio de sesión aún no está activado ni configurado en el servidor.',
+  'auth.err.unconfirmed': 'Confirma tu correo para entrar: revisa la bandeja de entrada (y el spam).',
   'auth.err.unknown': 'Algo salió mal. Inténtalo de nuevo.',
   'auth.err.not-configured': 'Las cuentas aún no están configuradas en esta versión.',
   'backup.title': 'Copia en la nube',

@@ -17,3 +17,15 @@ export const mockRequested = process.env.EXPO_PUBLIC_AUTH_MODE === 'mock';
 export function isFirebaseConfigured(c: typeof firebaseConfig = firebaseConfig): boolean {
   return !!(c.apiKey && c.projectId && c.appId);
 }
+
+// O nosso backend (apps/api) e o Supabase Auth. As três são públicas (a chave `anon` do Supabase vai dentro do app por desenho);
+// a segurança está na RLS do banco e na verificação do token pela API. Cada variável é escrita por extenso (o Expo as troca no build).
+export const apiConfig = {
+  apiUrl: (process.env.EXPO_PUBLIC_API_URL ?? '').replace(/\/+$/, ''),
+  supabaseUrl: (process.env.EXPO_PUBLIC_SUPABASE_URL ?? '').replace(/\/+$/, ''),
+  supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '',
+};
+
+export function isApiConfigured(c: typeof apiConfig = apiConfig): boolean {
+  return !!(c.apiUrl && c.supabaseUrl && c.supabaseAnonKey);
+}
