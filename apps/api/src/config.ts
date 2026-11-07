@@ -24,6 +24,7 @@ const schema = z
     BREVO_API_KEY: z.string().optional(),
     MAIL_FROM: z.email().optional(),
     MAIL_FROM_NAME: z.string().optional(),
+    SUPPORT_EMAIL: z.email().optional(),
   })
   .superRefine((e, ctx) => {
     if (e.NODE_ENV === 'production' && e.AUTH_PROVIDER === 'dev') {
@@ -61,6 +62,8 @@ export type Config = {
   brevoApiKey: string | undefined;
   mailFrom: string | undefined;
   mailFromName: string;
+  /** E-mail público das páginas de suporte e exclusão de conta (as lojas exigem um contato). Vem do ambiente, não do repositório. */
+  supportEmail?: string;
 };
 
 /** Lê e valida o ambiente. Falha cedo, com a lista do que está errado, em vez de subir meio configurado. */
@@ -85,5 +88,6 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     brevoApiKey: e.BREVO_API_KEY,
     mailFrom: e.MAIL_FROM,
     mailFromName: e.MAIL_FROM_NAME ?? 'Flip & Brew',
+    supportEmail: e.SUPPORT_EMAIL,
   };
 }
