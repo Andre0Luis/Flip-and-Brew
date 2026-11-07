@@ -1,7 +1,7 @@
 import { drizzle as drizzlePg } from 'drizzle-orm/node-postgres';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import * as schema from './schema';
-import { SUPABASE_CA } from './supabase-ca';
+import * as schema from './schema.js';
+import { SUPABASE_CA } from './supabase-ca.js';
 
 export type Db = PgDatabase<PgQueryResultHKT, typeof schema>;
 export type DbHandle = { db: Db; close: () => Promise<void>; kind: 'pg' | 'pglite'; raw: unknown };

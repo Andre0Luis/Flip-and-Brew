@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
-import type { AuthProvider, Identity } from './provider';
+import type { AuthProvider, Identity } from './provider.js';
 
 const key = (secret: string) => new TextEncoder().encode(secret);
 

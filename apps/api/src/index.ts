@@ -1,7 +1,7 @@
 // Entrada na Vercel (preset Hono): exporta o app como padrão. O app real depende de conexão com o banco, que é assíncrona,
 // então ele nasce no primeiro pedido e a instância seguinte da função reaproveita (a promessa fica guardada).
 import { Hono } from 'hono';
-import { buildApp } from './build-app';
+import { buildApp } from './build-app.js';
 
 let ready: ReturnType<typeof buildApp> | undefined;
 

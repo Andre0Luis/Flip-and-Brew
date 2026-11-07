@@ -1,11 +1,11 @@
-import { createApp } from './create-app';
-import { devAuth } from './auth/dev';
-import type { AuthProvider } from './auth/provider';
-import { supabaseAuth } from './auth/supabase';
-import { loadConfig, type Config } from './config';
-import { createDb, type DbHandle } from './db/client';
-import { brevoEmail } from './email/brevo';
-import { consoleEmail } from './email/console';
+import { createApp } from './create-app.js';
+import { devAuth } from './auth/dev.js';
+import type { AuthProvider } from './auth/provider.js';
+import { supabaseAuth } from './auth/supabase.js';
+import { loadConfig, type Config } from './config.js';
+import { createDb, type DbHandle } from './db/client.js';
+import { brevoEmail } from './email/brevo.js';
+import { consoleEmail } from './email/console.js';
 
 export function authFor(config: Config): AuthProvider {
   if (config.authProvider === 'supabase') return supabaseAuth({ url: config.supabaseUrl!, jwtSecret: config.supabaseJwtSecret });

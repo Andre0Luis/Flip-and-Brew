@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { snapshotPutSchema } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Db } from '../db/client';
-import { userSnapshots } from '../db/schema';
-import { HttpError, jsonBody, parse } from '../lib/errors';
+import { snapshotPutSchema } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Db } from '../db/client.js';
+import { userSnapshots } from '../db/schema.js';
+import { HttpError, jsonBody, parse } from '../lib/errors.js';
 
 /** Backup do progresso. Mesma ideia do Firestore de hoje: o app decide quem é mais novo; o servidor só impede regravar com dado mais velho. */
 export function snapshotRoutes(db: Db) {

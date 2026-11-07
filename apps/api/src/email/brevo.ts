@@ -1,4 +1,4 @@
-import type { EmailMessage, EmailProvider } from './provider';
+import type { EmailMessage, EmailProvider } from './provider.js';
 
 const ENDPOINT = 'https://api.brevo.com/v3/smtp/email';
 

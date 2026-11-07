@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { loadConfig } from './config';
-import { honoPath, operations, toSchema } from './openapi';
-import { testApp } from './test/helpers';
-import { profilePatchSchema } from './shared';
+import { loadConfig } from './config.js';
+import { honoPath, operations, toSchema } from './openapi.js';
+import { testApp } from './test/helpers.js';
+import { profilePatchSchema } from './shared.js';
 
 test('toda rota da API está documentada, e toda rota documentada existe (a documentação não envelhece)', async () => {
   const t = await testApp();

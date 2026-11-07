@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
-import { loadConfig } from '../config';
-import { createDb, type DbHandle } from './client';
+import { loadConfig } from '../config.js';
+import { createDb, type DbHandle } from './client.js';
 
 const folder = fileURLToPath(new URL('../../drizzle', import.meta.url));
 

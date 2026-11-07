@@ -1,9 +1,9 @@
 import { count, desc, gte, lt, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { ACTIVE_NOW_MS } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Db } from '../db/client';
-import { auditLog, profiles } from '../db/schema';
+import { ACTIVE_NOW_MS } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Db } from '../db/client.js';
+import { auditLog, profiles } from '../db/schema.js';
 
 const DAY = 86_400_000;
 

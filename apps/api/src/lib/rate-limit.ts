@@ -1,5 +1,5 @@
 import type { MiddlewareHandler } from 'hono';
-import { HttpError } from './errors';
+import { HttpError } from './errors.js';
 
 /**
  * Limite de pedidos por chave numa janela de tempo, na memória do processo.

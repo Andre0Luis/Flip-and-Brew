@@ -1,10 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { createApp } from '../create-app';
-import { devAuth, signDevToken } from '../auth/dev';
-import type { Config } from '../config';
-import { createDb } from '../db/client';
-import type { EmailMessage, EmailProvider } from '../email/provider';
-import { runMigrations } from '../db/migrate';
+import { createApp } from '../create-app.js';
+import { devAuth, signDevToken } from '../auth/dev.js';
+import type { Config } from '../config.js';
+import { createDb } from '../db/client.js';
+import type { EmailMessage, EmailProvider } from '../email/provider.js';
+import { runMigrations } from '../db/migrate.js';
 
 const SECRET = 'segredo-de-teste-com-mais-de-16-caracteres';
 

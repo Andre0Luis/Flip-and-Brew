@@ -1,10 +1,10 @@
 import { and, desc, eq, gte, lt } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { coffeeLogSchema } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Db } from '../db/client';
-import { coffeeLogs } from '../db/schema';
-import { HttpError, jsonBody, parse } from '../lib/errors';
+import { coffeeLogSchema } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Db } from '../db/client.js';
+import { coffeeLogs } from '../db/schema.js';
+import { HttpError, jsonBody, parse } from '../lib/errors.js';
 
 const DAY = 86_400_000;
 const MAX_PER_DAY = 50;

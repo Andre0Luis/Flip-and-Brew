@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { eq } from 'drizzle-orm';
-import { blocks, friendships, profiles } from './db/schema';
-import { testApp } from './test/helpers';
+import { blocks, friendships, profiles } from './db/schema.js';
+import { testApp } from './test/helpers.js';
 
 type T = Awaited<ReturnType<typeof testApp>>;
 
