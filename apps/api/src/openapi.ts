@@ -10,7 +10,7 @@ import {
   profilePatchSchema,
   snapshotPutSchema,
   userIdSchema,
-} from '@flipandbrew/shared';
+} from './shared';
 
 /** Versão do Swagger UI carregado da CDN. Fixa e com mais de duas semanas: a UI roda no navegador de quem abre /docs. */
 export const SWAGGER_UI_VERSION = '5.33.3';
