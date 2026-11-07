@@ -1,0 +1,31 @@
+name: Commits
+
+# Conventional Commits (ADR-0026): confere o título do PR e o assunto de cada commit do PR.
+# O título importa porque os PRs entram na main como "Merge pull request"; os commits, porque ficam no histórico.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  conventional-commits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # O título entra por variável de ambiente, nunca interpolado no script (evita injeção de comando por título).
+      - name: Título do PR
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$TITLE" | .github/scripts/conventional-commit.sh
+
+      # Sem os commits de merge ("Merge remote-tracking branch...", "Merge pull request..."), que o git e o GitHub escrevem sozinhos.
+      - name: Commits do PR
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: git log --no-merges --format=%s "$BASE"..HEAD | .github/scripts/conventional-commit.sh

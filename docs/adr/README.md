@@ -35,6 +35,7 @@ Formato de cada ADR: Status · Data · Contexto · Decisão · Alternativas desc
 | [0022](0022-lembretes-diarios.md) | Lembretes diários: frase da manhã e check-in | Aceita |
 | [0023](0023-moedas-pelo-tempo-com-a-tela-bloqueada.md) | Moedas pelo tempo com a tela bloqueada, depois do sono mínimo | Aceita |
 | [0024](0024-backend-comunidade-e-login-obrigatorio.md) | Backend próprio, comunidade, amigos, ranking e login obrigatório | Aceita (em fases) |
+| [0026](0026-conventional-commits.md) | Commits no padrão Conventional Commits | Aceita |
 | [0025](0025-app-em-apps-mobile-e-workflows-separados.md) | App em `apps/mobile` e workflows separados por área | Aceita |
 
 > **Nota de transição.** O ADR-0010 (contas e Firebase), partes do 0011, 0014 e 0015 (usuário de teste, página de exclusão, manual) descrevem o que chega com o **PR #7**. Se o #7 ainda não foi mergeado, esses arquivos de `docs/` e o código de contas ainda não estão no `main`.
