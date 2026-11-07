@@ -1,13 +1,13 @@
 import { and, eq, isNull } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Config } from '../config';
-import type { Db } from '../db/client';
-import { activity, auditLog, coffeePrefs, privacySettings, profiles, type Profile } from '../db/schema';
-import type { EmailProvider } from '../email/provider';
-import { welcomeEmail } from '../email/welcome';
-import { HttpError, jsonBody, parse } from '../lib/errors';
+import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Config } from '../config.js';
+import type { Db } from '../db/client.js';
+import { activity, auditLog, coffeePrefs, privacySettings, profiles, type Profile } from '../db/schema.js';
+import type { EmailProvider } from '../email/provider.js';
+import { welcomeEmail } from '../email/welcome.js';
+import { HttpError, jsonBody, parse } from '../lib/errors.js';
 
 const TEN_MIN = 10 * 60_000;
 

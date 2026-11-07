@@ -1,4 +1,4 @@
-import type { EmailProvider } from './provider';
+import type { EmailProvider } from './provider.js';
 
 /** Para desenvolvimento sem chave: só registra que um e-mail sairia (assunto e destinatário, nunca o corpo). */
 export function consoleEmail(log: (line: string) => void = console.log): EmailProvider {

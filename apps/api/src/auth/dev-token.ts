@@ -1,7 +1,7 @@
 // npm run dev:token -- ana@exemplo.com [--admin]   (imprime um token para testar a API local com curl)
 import { randomUUID } from 'node:crypto';
-import { loadConfig } from '../config';
-import { signDevToken } from './dev';
+import { loadConfig } from '../config.js';
+import { signDevToken } from './dev.js';
 
 const cfg = loadConfig();
 if (cfg.authProvider !== 'dev' || cfg.env === 'production' || !cfg.devJwtSecret) {

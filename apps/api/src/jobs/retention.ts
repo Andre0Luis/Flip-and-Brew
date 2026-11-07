@@ -1,6 +1,6 @@
 import { lt } from 'drizzle-orm';
-import type { Db } from '../db/client';
-import { activity } from '../db/schema';
+import type { Db } from '../db/client.js';
+import { activity } from '../db/schema.js';
 
 /** Presença guarda só 30 dias. Mensagens e posts ficam para sempre (decisão do dono, ADR-0024). */
 export const ACTIVITY_RETENTION_DAYS = 30;

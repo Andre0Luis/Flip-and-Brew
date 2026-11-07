@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { eq } from 'drizzle-orm';
-import { activity, auditLog, profiles } from './db/schema';
-import { loadConfig } from './config';
-import { testApp } from './test/helpers';
-import { brevoEmail } from './email/brevo';
-import { consoleEmail } from './email/console';
-import { welcomeEmail } from './email/welcome';
-import { purgeOldActivity } from './jobs/retention';
+import { activity, auditLog, profiles } from './db/schema.js';
+import { loadConfig } from './config.js';
+import { testApp } from './test/helpers.js';
+import { brevoEmail } from './email/brevo.js';
+import { consoleEmail } from './email/console.js';
+import { welcomeEmail } from './email/welcome.js';
+import { purgeOldActivity } from './jobs/retention.js';
 
 test('saúde responde sem login', async () => {
   const t = await testApp();
@@ -284,7 +284,7 @@ test('segurança do banco: toda tabela do esquema public tem RLS ligada (a chave
 });
 
 test('conexão: banco do Supabase verifica o TLS com as CAs do Supabase; outros bancos não mudam', async () => {
-  const { poolConfig } = await import('./db/client');
+  const { poolConfig } = await import('./db/client.js');
   const sb = poolConfig('postgres://u:p@aws-1-sa-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x');
   assert.equal(sb.ssl?.rejectUnauthorized, true);
   assert.match(sb.ssl?.ca ?? '', /BEGIN CERTIFICATE/);

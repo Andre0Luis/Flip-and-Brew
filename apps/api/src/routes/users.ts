@@ -1,11 +1,11 @@
 import { and, asc, eq, ilike, isNotNull, isNull, ne } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { handleSchema, searchQuerySchema } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Db } from '../db/client';
-import { coffeePrefs, privacySettings, profiles } from '../db/schema';
-import { HttpError, parse } from '../lib/errors';
-import { blockedWith, isBlockedBetween, relationBetween } from '../lib/social';
+import { handleSchema, searchQuerySchema } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Db } from '../db/client.js';
+import { coffeePrefs, privacySettings, profiles } from '../db/schema.js';
+import { HttpError, parse } from '../lib/errors.js';
+import { blockedWith, isBlockedBetween, relationBetween } from '../lib/social.js';
 
 /** Busca e perfil público. O perfil é visível para todo mundo que está logado; só quem bloqueou (ou foi bloqueado) some. */
 export function userRoutes(db: Db) {

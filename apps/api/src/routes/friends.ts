@@ -1,11 +1,11 @@
 import { and, count, desc, eq, inArray, or } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { MAX_PENDING_REQUESTS, userIdSchema } from '../shared';
-import type { Env } from '../auth/middleware';
-import type { Db } from '../db/client';
-import { blocks, friendships, profiles } from '../db/schema';
-import { HttpError, jsonBody, parse } from '../lib/errors';
-import { friendshipBetween, isBlockedBetween } from '../lib/social';
+import { MAX_PENDING_REQUESTS, userIdSchema } from '../shared.js';
+import type { Env } from '../auth/middleware.js';
+import type { Db } from '../db/client.js';
+import { blocks, friendships, profiles } from '../db/schema.js';
+import { HttpError, jsonBody, parse } from '../lib/errors.js';
+import { friendshipBetween, isBlockedBetween } from '../lib/social.js';
 
 const summary = {
   id: profiles.id,

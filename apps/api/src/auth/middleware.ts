@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import type { MiddlewareHandler } from 'hono';
-import { type Role } from '../shared';
-import type { Db } from '../db/client';
-import { profiles, type Profile } from '../db/schema';
-import { HttpError } from '../lib/errors';
-import type { AuthProvider, Identity } from './provider';
+import { type Role } from '../shared.js';
+import type { Db } from '../db/client.js';
+import { profiles, type Profile } from '../db/schema.js';
+import { HttpError } from '../lib/errors.js';
+import type { AuthProvider, Identity } from './provider.js';
 
 export type Env = { Variables: { identity: Identity; profile: Profile } };
 

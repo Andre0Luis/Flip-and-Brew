@@ -1,5 +1,5 @@
 import { createRemoteJWKSet, decodeProtectedHeader, jwtVerify, type JWTVerifyGetKey } from 'jose';
-import type { AuthProvider } from './provider';
+import type { AuthProvider } from './provider.js';
 
 /**
  * Confere o token de acesso do Supabase Auth.

@@ -1,5 +1,5 @@
-import type { Language } from '../shared';
-import type { EmailMessage } from './provider';
+import type { Language } from '../shared.js';
+import type { EmailMessage } from './provider.js';
 
 const TEXT: Record<Language, { subject: string; title: string; lines: string[]; sign: string }> = {
   pt: {
