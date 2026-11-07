@@ -1,7 +1,7 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies
-node_modules/
+node_modules
 
 # Expo
 .expo/
@@ -51,3 +51,9 @@ google-services.json
 *.keystore
 store-assets/
 dist-web/
+
+# backend (apps/api): banco embutido de desenvolvimento e variáveis locais
+apps/api/.data/
+
+# gerado pelo Gradle ao compilar o módulo nativo
+modules/usage-stats/android/build/

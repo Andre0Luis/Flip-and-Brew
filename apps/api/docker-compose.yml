@@ -1,0 +1,14 @@
+# Postgres local para desenvolvimento (npm run db:up). Só para a sua máquina: a senha aqui não vale em lugar nenhum.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: flipandbrew
+      POSTGRES_PASSWORD: flipandbrew
+      POSTGRES_DB: flipandbrew
+    ports:
+      - '127.0.0.1:54329:5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+volumes:
+  dbdata:

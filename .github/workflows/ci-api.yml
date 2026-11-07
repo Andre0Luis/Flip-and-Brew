@@ -1,0 +1,41 @@
+name: CI API
+
+# Só roda quando o backend ou o pacote compartilhado mudam. O CI do app (ci.yml) segue rodando em todo PR.
+on:
+  push:
+    branches: [main]
+    paths: ['apps/api/**', 'packages/shared/**', '.github/workflows/ci-api.yml']
+  pull_request:
+    paths: ['apps/api/**', 'packages/shared/**', '.github/workflows/ci-api.yml']
+
+concurrency:
+  group: ci-api-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependências
+        run: |
+          npm ci --ignore-scripts --prefix packages/shared
+          npm ci --ignore-scripts --prefix apps/api
+
+      # Os testes usam um Postgres embutido (PGlite), sem serviço externo, e aplicam as migrações de verdade.
+      - name: Typecheck e testes
+        working-directory: apps/api
+        run: |
+          npx tsc --noEmit
+          node --import tsx --test "src/**/*.test.ts" "../../packages/shared/src/**/*.test.ts"
+
+      # Se o esquema mudou sem gerar a migração, falha aqui.
+      - name: Migrações em dia
+        working-directory: apps/api
+        run: npx drizzle-kit check
