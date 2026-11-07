@@ -65,7 +65,7 @@ test('configuração: documentação ligada fora de produção e desligada em pr
   const base = { AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(20) };
   assert.equal(loadConfig(base).docsEnabled, true);
   assert.equal(loadConfig({ ...base, DOCS_ENABLED: 'false' }).docsEnabled, false);
-  const prod = { NODE_ENV: 'production', DATABASE_URL: 'postgres://x', AUTH_PROVIDER: 'supabase' };
+  const prod = { NODE_ENV: 'production', DATABASE_URL: 'postgres://x', AUTH_PROVIDER: 'supabase', SUPABASE_URL: 'https://abcd.supabase.co' };
   assert.equal(loadConfig(prod).docsEnabled, false);
   assert.equal(loadConfig({ ...prod, DOCS_ENABLED: 'true' }).docsEnabled, true);
   assert.throws(() => loadConfig({ ...base, DOCS_ENABLED: 'talvez' }));
