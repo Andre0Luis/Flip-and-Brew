@@ -7,6 +7,8 @@ export const es: Record<keyof typeof pt, string> = {
   'common.back': 'Volver',
   'common.coinsA11y.one': '{n} moneda',
   'common.coinsA11y.many': '{n} monedas',
+  'common.coinsHint': 'Abre la compra de monedas',
+  'coinShop.title': 'Comprar monedas',
   'unit.day.one': 'día',
   'unit.day.many': 'días',
   'unit.cup.one': 'taza',

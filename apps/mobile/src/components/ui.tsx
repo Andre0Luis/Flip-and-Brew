@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type TextProps, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Coin } from '@/art/Art';
@@ -162,14 +163,19 @@ export function Chip({ label, on, onPress }: { label: string; on?: boolean; onPr
   );
 }
 
-export function CoinBadge({ coins, onPress }: { coins: number; onPress?: () => void }) {
+/** Tocar no contador abre a venda de moedas (`/moedas`), em qualquer tela. `interactive={false}` na própria tela de moedas. */
+export function CoinBadge({ coins, onPress, interactive = true }: { coins: number; onPress?: () => void; interactive?: boolean }) {
   const { c, r } = useTheme();
   const { lang, t } = useI18n();
+  const router = useRouter();
+  const press = onPress ?? (interactive ? () => router.push('/moedas') : undefined);
   return (
     <Pressable
+      accessibilityRole={press ? 'button' : undefined}
       accessibilityLabel={t('common.coinsA11y', { n: coins })}
-      onPress={onPress}
-      disabled={!onPress}
+      accessibilityHint={press ? t('common.coinsHint') : undefined}
+      onPress={press}
+      disabled={!press}
       style={{ flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: c.surface, borderWidth: 1, borderColor: c.line, borderRadius: r.pill, paddingVertical: 5, paddingLeft: 6, paddingRight: 12 }}
     >
       <Coin size={22} />
