@@ -1,12 +1,13 @@
 import type { GoTrueClient, Session, User } from '@supabase/auth-js';
 import type { ApiClient, Language } from './apiClient';
+import { RECOVERY_REDIRECT, parseRecoveryUrl } from './recoveryLink';
 import { toSupabaseAuthError } from './supabaseErrors';
 import { AuthError, type CloudBackend, type CloudUser, type Provider, type Snapshot } from './types';
 
 /** O pedaço do cliente de login (Supabase Auth) que usamos; permite trocar por um falso nos testes. */
 export type AuthClient = Pick<
   GoTrueClient,
-  'getSession' | 'onAuthStateChange' | 'signUp' | 'signInWithPassword' | 'signInWithIdToken' | 'resend' | 'refreshSession' | 'updateUser' | 'resetPasswordForEmail' | 'signOut'
+  'getSession' | 'onAuthStateChange' | 'signUp' | 'signInWithPassword' | 'signInWithIdToken' | 'resend' | 'refreshSession' | 'updateUser' | 'resetPasswordForEmail' | 'setSession' | 'signOut'
 >;
 
 export type ApiBackendDeps = {
@@ -137,8 +138,17 @@ export function createApiBackend(d: ApiBackendDeps): CloudBackend {
         must(await auth.updateUser({ password: next }));
       }),
 
-    // O link do e-mail leva à página configurada no painel do Supabase (Site URL); a tela de nova senha dentro do app ainda não existe (ADR-0017).
-    sendPasswordReset: (email) => wrap(async () => void must(await auth.resetPasswordForEmail(email))),
+    // O link do e-mail volta ao app em `flipandbrew://nova-senha` (precisa estar em Redirect URLs no painel do Supabase).
+    sendPasswordReset: (email) => wrap(async () => void must(await auth.resetPasswordForEmail(email, { redirectTo: RECOVERY_REDIRECT }))),
+
+    resetPasswordWithLink: (url, next) =>
+      wrap(async () => {
+        const link = parseRecoveryUrl(url);
+        if (!link) throw new AuthError('link-expired');
+        if (link.kind === 'error') throw new AuthError(link.code === 'otp_expired' || link.code === 'access_denied' ? 'link-expired' : 'unknown', link.code);
+        must(await auth.setSession({ access_token: link.accessToken, refresh_token: link.refreshToken }));
+        must(await auth.updateUser({ password: next }));
+      }),
 
     signOut: () =>
       wrap(async () => {

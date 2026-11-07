@@ -14,5 +14,5 @@ O backend (`apps/api`) está no ar na Vercel e o app ainda falava só com o Fire
 
 ## Consequências
 - Firebase e backend próprio coexistem até o corte final; contas de um não aparecem no outro.
-- Limitações conhecidas: não há tela de nova senha no app para o link de recuperação; o token da Apple não é revogado na exclusão; o provedor Google no Supabase precisa de "skip nonce check"; e-mail de confirmação depende do SMTP configurado no Supabase (Brevo).
+- Limitações conhecidas: a tela de nova senha (`/nova-senha`) abre pelo link do e-mail de recuperação (`flipandbrew://nova-senha`, que precisa estar em Redirect URLs no Supabase) e nunca rodou em aparelho; o token da Apple não é revogado na exclusão; o provedor Google no Supabase precisa de "skip nonce check"; e-mail de confirmação depende do SMTP configurado no Supabase (Brevo).
 - Nada disso foi testado em aparelho.

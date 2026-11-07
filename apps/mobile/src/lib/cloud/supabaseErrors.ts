@@ -15,6 +15,8 @@ const CODES: Record<string, AuthErrorCode> = {
   over_email_send_rate_limit: 'too-many',
   over_sms_send_rate_limit: 'too-many',
   email_not_confirmed: 'unconfirmed',
+  otp_expired: 'link-expired',
+  flow_state_expired: 'link-expired',
   validation_failed: 'invalid-email',
   email_address_invalid: 'invalid-email',
   reauthentication_needed: 'recent-login',
