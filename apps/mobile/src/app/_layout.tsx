@@ -31,8 +31,6 @@ function Shell() {
       <WidgetSync />
       <Reminders />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
-        {/* O link do e-mail de recuperação de senha abre aqui, mesmo antes da introdução. */}
-        <Stack.Screen name="nova-senha" />
         {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
         <Stack.Protected guard={!onboarded}>
           <Stack.Screen name="intro" options={{ animation: 'fade' }} />
@@ -50,6 +48,8 @@ function Shell() {
           <Stack.Screen name="perfil" />
           <Stack.Screen name="criador" />
         </Stack.Protected>
+        {/* Fica por último: a primeira rota registrada vira a tela inicial. O link do e-mail de recuperação de senha abre aqui, mesmo antes da introdução. */}
+        <Stack.Screen name="nova-senha" />
       </Stack>
     </NavThemeProvider>
   );
