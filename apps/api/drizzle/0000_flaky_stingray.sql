@@ -1,5 +1,4 @@
 CREATE TYPE "public"."role" AS ENUM('user', 'moderator', 'admin');--> statement-breakpoint
-CREATE TYPE "public"."profile_visibility" AS ENUM('public', 'friends', 'private');--> statement-breakpoint
 CREATE TABLE "activity" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
@@ -37,7 +36,6 @@ CREATE TABLE "coffee_prefs" (
 --> statement-breakpoint
 CREATE TABLE "privacy_settings" (
 	"user_id" uuid PRIMARY KEY NOT NULL,
-	"profile_visibility" "profile_visibility" DEFAULT 'friends' NOT NULL,
 	"show_in_global_ranking" boolean DEFAULT false NOT NULL,
 	"show_coffee_prefs" boolean DEFAULT false NOT NULL
 );

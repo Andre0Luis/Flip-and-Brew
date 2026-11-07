@@ -1,5 +1,5 @@
 {
-  "id": "2d99631e-052e-43a1-84c6-bf1a7028a524",
+  "id": "d3db11dc-3465-41de-9e33-15f977817734",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -293,14 +293,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "profile_visibility": {
-          "name": "profile_visibility",
-          "type": "profile_visibility",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'friends'"
-        },
         "show_in_global_ranking": {
           "name": "show_in_global_ranking",
           "type": "boolean",
@@ -501,15 +493,6 @@
         "user",
         "moderator",
         "admin"
-      ]
-    },
-    "public.profile_visibility": {
-      "name": "profile_visibility",
-      "schema": "public",
-      "values": [
-        "public",
-        "friends",
-        "private"
       ]
     }
   },

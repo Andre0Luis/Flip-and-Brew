@@ -14,8 +14,11 @@ O dono quer: login obrigatório, perfil público com posts e cafés preferidos, 
 - **Roles** (`user`, `moderator`, `admin`) ficam em `profiles.role` e são lidas do banco a cada pedido. Admin nasce de e-mail **verificado** listado em `ADMIN_EMAILS`.
 - **Café de verdade** é registrado pela pessoa (`coffee_logs`); copos do app seguem como tempo offline.
 - **Ranking "menos celular" só no Android** no começo. No iPhone, o tempo de tela exige a entitlement Family Controls e, segundo o que se conseguiu apurar, os dados não podem ser enviados a servidor; o ranking do iPhone usa "mais tempo offline".
-- **Amizade exige aprovação** (`friendships` com `pending`/`accepted`); "seguir" (um sentido) existe à parte para posts públicos.
-- **Idade mínima: 18 anos** (constante `MIN_AGE`), validada pela data de nascimento. Menores de 18 pedem revisão jurídica (LGPD) antes. **Moderação:** só o admin no começo.
+- **Só amizade, com aprovação** (`friendships` com `pending`/`accepted`). **Não há "seguir".** O **perfil é visível para todos**; **posts, imagens e mensagens da comunidade só entre amigos**. Não existe escolha de visibilidade.
+- **Idade mínima: 18 anos** (constante `MIN_AGE`), validada pela data de nascimento. **Moderação: só o dono**, que é também o único admin (o e-mail vem de `ADMIN_EMAILS`, nunca do repositório).
+- **Ranking de café:** as duas competições, **mais café** e **menos café**, só entre amigos.
+- **E-mail: Brevo** pela API HTTP (como o backend do Clube Quinze), sem domínio próprio por enquanto; o remetente é um endereço verificado na Brevo. Boas-vindas saem do `bootstrap`, uma vez.
+- **Retenção:** presença 30 dias; **mensagens e posts para sempre** (até a pessoa excluir a conta).
 - **Admin:** tela de monitoramento dentro do app (ativos agora, quem são, quando entraram); painel web fica para depois.
 - **Monorepo:** `apps/mobile` (o app, movido por `git mv` numa fase própria), `apps/api`, `packages/shared`. **Testes da API usam `node:test`** (como o resto do projeto) e um Postgres embutido (PGlite), em vez do Vitest e do contêiner previstos no plano.
 - **DevOps e segurança:** CI por caminho, CodeQL, Gitleaks e Dependabot (gratuitos em repositório público); deploy a cada merge na `main`.

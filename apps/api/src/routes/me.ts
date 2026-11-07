@@ -1,10 +1,12 @@
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { Hono } from 'hono';
-import { MIN_AGE, ageOn, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '@flipandbrew/shared';
+import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '@flipandbrew/shared';
 import type { Env } from '../auth/middleware';
 import type { Config } from '../config';
 import type { Db } from '../db/client';
 import { activity, auditLog, coffeePrefs, privacySettings, profiles, type Profile } from '../db/schema';
+import type { EmailProvider } from '../email/provider';
+import { welcomeEmail } from '../email/welcome';
 import { HttpError, jsonBody, parse } from '../lib/errors';
 
 const TEN_MIN = 10 * 60_000;
@@ -28,14 +30,33 @@ const isUnique = (e: unknown): boolean => {
 };
 
 /** Rotas da própria pessoa. `/bootstrap` só exige token; as demais exigem perfil (ver app.ts). */
-export function meRoutes(db: Db, cfg: Config) {
+export function meRoutes(db: Db, cfg: Config, email: EmailProvider) {
   const r = new Hono<Env>();
 
   const load = async (id: string) => (await db.select().from(profiles).where(eq(profiles.id, id)))[0];
 
+  /**
+   * Boas-vindas, uma única vez por pessoa. O `welcomedAt` é reservado antes do envio (um UPDATE condicional), então dois pedidos
+   * simultâneos não mandam dois e-mails. Se o provedor falhar, a reserva é desfeita e a próxima abertura tenta de novo; o cadastro nunca falha por isso.
+   */
+  const sendWelcome = async (p: Profile, language: 'pt' | 'en' | 'es' | undefined) => {
+    if (p.welcomedAt) return null;
+    const claimed = await db.update(profiles).set({ welcomedAt: new Date() }).where(and(eq(profiles.id, p.id), isNull(profiles.welcomedAt))).returning({ id: profiles.id });
+    if (!claimed.length) return null;
+    try {
+      await email.send(welcomeEmail(p.email, language));
+    } catch (e) {
+      console.error('[email] boas-vindas falharam, vai tentar de novo na próxima abertura:', (e as Error).message);
+      await db.update(profiles).set({ welcomedAt: null }).where(eq(profiles.id, p.id));
+    }
+    return load(p.id);
+  };
+
   /** Cria o perfil na primeira vez (idempotente). Admin só por e-mail verificado que está em ADMIN_EMAILS. */
   r.post('/me/bootstrap', async (c) => {
     const who = c.get('identity');
+    // O corpo é opcional (só traz o idioma do e-mail de boas-vindas).
+    const body = parse(bootstrapSchema, await c.req.json().catch(() => ({})));
     const wantsAdmin = who.emailVerified && cfg.adminEmails.includes(who.email);
     let p = await load(who.id);
     let created = false;
@@ -52,8 +73,8 @@ export function meRoutes(db: Db, cfg: Config) {
     }
     if (!p) throw new HttpError(500, 'bootstrap_failed');
     if (p.bannedAt) throw new HttpError(403, 'banned', 'Conta suspensa.');
-    // `needsWelcome` é o gancho do e-mail de boas-vindas (Resend, fase final): enviar uma vez e gravar `welcomedAt`.
-    return c.json({ profile: own(p), created, needsWelcome: !p.welcomedAt }, created ? 201 : 200);
+    p = (await sendWelcome(p, body.language)) ?? p;
+    return c.json({ profile: own(p), created }, created ? 201 : 200);
   });
 
   r.get('/me', async (c) => {

@@ -14,6 +14,12 @@ Status: **decisões do dono registradas em 2026-11-07; implementação ainda nã
 | 6 | Idade mínima | **18 anos** no lançamento, como constante fácil de mudar. O dono considera possível baixar para 16; menores de 18 pedem revisão jurídica (LGPD) antes. **Moderação: só o admin no começo** (assumido; confirmar). |
 | 7 | Monorepo | **Mover o app para `apps/mobile`**, depois de mesclar os PRs abertos. |
 | 8 | Admin | Tela **dentro do app** agora, painel web depois. |
+| 9 | Idade | **18 anos**, fechado. |
+| 10 | Moderação e admin | **Só o dono**, que é o único admin (e-mail em `ADMIN_EMAILS`, não no repositório). |
+| 11 | Ranking de café | **Mais café e menos café**, os dois. |
+| 12 | E-mail | **Brevo** pela API HTTP (como no backend do Clube Quinze), sem domínio próprio por enquanto. |
+| 13 | Amizade e visibilidade | **Só amizade com aprovação, sem "seguir"**. **Perfil visível para todos; comunidade (posts, imagens, mensagens) só entre amigos.** |
+| 14 | Retenção | Presença 30 dias; **mensagens e posts para sempre**. |
 
 ## 1. O que você pediu, em uma página
 
@@ -249,12 +255,7 @@ Cada PR atualiza as ADRs, a ADR-0017 (pendências), os textos nos três idiomas 
 
 ## 14. Decisões que ainda estão em aberto
 
-As oito perguntas da primeira versão foram respondidas (seção 0). Ficam:
-1. **Idade mínima: 18 ou 16?** Assumo **18** (constante). Para 16 e 17 anos, revisão jurídica.
-2. **Quem modera** além de você, e em quanto tempo uma denúncia é resolvida (as lojas esperam resposta rápida).
-3. **Café "mais" ou só "menos"** no ranking (6.1)? Premiar "mais café" incentiva beber mais.
-4. **Domínio próprio:** o Resend só envia e-mail de um domínio verificado, e a Cloudflare também pede um. Você tem um (ou quer registrar)? Sem domínio, os e-mails vão de um endereço de teste.
-5. **Quem é o admin:** qual e-mail recebe a role `admin` no primeiro cadastro.
-6. **Amigos e seguidores:** manter "seguir" (um sentido) além da amizade com aprovação, ou só amizade?
-7. **Imagens:** público para qualquer um ver (fotos de posts públicos) ou só amigos, por padrão?
-8. **Retenção:** por quanto tempo guardar presença (30 dias, proposto) e mensagens.
+Quase tudo foi decidido (seção 0). Resta:
+1. **Domínio próprio.** Sem domínio, o e-mail sai de um remetente verificado na Brevo, e endereços Gmail podem ir para o spam. No código do Clube Quinze o remetente padrão usa `clubequinzeapp.cloud`: se esse domínio for seu, dá para reaproveitá-lo (ou um subdomínio) também aqui.
+2. **Apple Family Controls:** pedir só se houver uso local no iPhone (seção 8).
+3. **Plano da Vercel e do Supabase** antes de abrir ao público (hoje só testes).

@@ -6,6 +6,7 @@ import { requireIdentity, requireProfile, requireRole, type Env } from './auth/m
 import type { AuthProvider } from './auth/provider';
 import type { Config } from './config';
 import type { Db } from './db/client';
+import type { EmailProvider } from './email/provider';
 import { HttpError } from './lib/errors';
 import { rateLimit } from './lib/rate-limit';
 import { adminRoutes } from './routes/admin';
@@ -13,10 +14,10 @@ import { coffeeRoutes } from './routes/coffees';
 import { meRoutes } from './routes/me';
 import { snapshotRoutes } from './routes/snapshot';
 
-export type AppDeps = { db: Db; auth: AuthProvider; config: Config; rateLimit?: { windowMs: number; max: number } | false };
+export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; rateLimit?: { windowMs: number; max: number } | false };
 
 /** Monta a API. Recebe tudo de fora (banco, login, configuração) para rodar igual no servidor local, na Vercel e nos testes. */
-export function createApp({ db, auth, config, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
+export function createApp({ db, auth, email, config, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
   const app = new Hono<Env>();
 
   app.use(secureHeaders());
@@ -34,7 +35,7 @@ export function createApp({ db, auth, config, rateLimit: rl = { windowMs: 60_000
   v1.use('/me', withProfile);
   v1.use('/me/*', async (c, next) => (c.req.path.endsWith('/me/bootstrap') ? next() : withProfile(c, next)));
   v1.use('/admin/*', withProfile, requireRole('admin'));
-  v1.route('/', meRoutes(db, config));
+  v1.route('/', meRoutes(db, config, email));
   v1.route('/', snapshotRoutes(db));
   v1.route('/', coffeeRoutes(db));
   v1.route('/', adminRoutes(db));

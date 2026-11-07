@@ -4,6 +4,10 @@ import { eq } from 'drizzle-orm';
 import { activity, auditLog, profiles } from './db/schema';
 import { loadConfig } from './config';
 import { testApp } from './test/helpers';
+import { brevoEmail } from './email/brevo';
+import { consoleEmail } from './email/console';
+import { welcomeEmail } from './email/welcome';
+import { purgeOldActivity } from './jobs/retention';
 
 test('saúde responde sem login', async () => {
   const t = await testApp();
@@ -26,7 +30,7 @@ test('antes do bootstrap não há perfil; depois dele, sim, e repetir não dupli
   const first = await t.call('/v1/me/bootstrap', { token: u.token, method: 'POST', body: {} });
   assert.equal(first.status, 201);
   assert.equal(first.body.profile.role, 'user');
-  assert.equal(first.body.needsWelcome, true);
+  assert.equal(first.body.created, true);
   const again = await t.call('/v1/me/bootstrap', { token: u.token, method: 'POST', body: {} });
   assert.equal(again.status, 200);
   assert.equal(again.body.created, false);
@@ -74,8 +78,9 @@ test('preferências de café e privacidade guardam só o que veio', async () => 
   assert.deepEqual(p.body.prefs.methods, []);
   const q = await t.call('/v1/me/privacy', { token: u.token, method: 'PATCH', body: { showInGlobalRanking: true } });
   assert.equal(q.body.privacy.showInGlobalRanking, true);
-  assert.equal(q.body.privacy.profileVisibility, 'friends');
-  assert.equal((await t.call('/v1/me/privacy', { token: u.token, method: 'PATCH', body: { profileVisibility: 'todos' } })).status, 400);
+  assert.equal(q.body.privacy.showCoffeePrefs, false);
+  // não existe escolha de visibilidade: o perfil é público e a comunidade é só entre amigos
+  assert.equal((await t.call('/v1/me/privacy', { token: u.token, method: 'PATCH', body: { profileVisibility: 'private' } })).status, 400);
   await t.close();
 });
 
@@ -183,4 +188,86 @@ test('configuração: login de desenvolvimento não sobe em produção e faltand
   const ok = loadConfig({ AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(20), ADMIN_EMAILS: ' A@x.com, b@x.com ' });
   assert.deepEqual(ok.adminEmails, ['a@x.com', 'b@x.com']);
   assert.equal(ok.databaseUrl, 'pglite:./.data/dev');
+});
+
+test('boas-vindas: um e-mail só, no idioma pedido, mesmo repetindo o bootstrap', async () => {
+  const t = await testApp();
+  const u = await t.user('ana@exemplo.com');
+  const body = { language: 'es' };
+  const r1 = await t.call('/v1/me/bootstrap', { token: u.token, body });
+  assert.equal(r1.status, 201);
+  assert.ok(r1.body.profile.welcomedAt);
+  await t.call('/v1/me/bootstrap', { token: u.token, body });
+  await t.call('/v1/me/bootstrap', { token: u.token, body });
+  assert.equal(t.sent.length, 1);
+  assert.equal(t.sent[0].to, 'ana@exemplo.com');
+  assert.match(t.sent[0].subject, /Bienvenido/);
+  assert.equal((await t.call('/v1/me/bootstrap', { token: (await t.user()).token, body: { language: 'fr' } })).status, 400);
+  await t.close();
+});
+
+test('boas-vindas: sem idioma vai em português, e dois pedidos simultâneos mandam um e-mail só', async () => {
+  const t = await testApp();
+  const u = await t.user();
+  await Promise.all([t.call('/v1/me/bootstrap', { token: u.token, body: {} }), t.call('/v1/me/bootstrap', { token: u.token, body: {} })]);
+  assert.equal(t.sent.length, 1);
+  assert.match(t.sent[0].subject, /Bem-vindo/);
+  await t.close();
+});
+
+test('boas-vindas: se o provedor falha o cadastro continua, e a próxima abertura tenta de novo', async () => {
+  const t = await testApp();
+  const u = await t.user();
+  t.mail.failNext = 1;
+  const first = await t.call('/v1/me/bootstrap', { token: u.token, body: {} });
+  assert.equal(first.status, 201);
+  assert.equal(first.body.profile.welcomedAt, null);
+  assert.equal(t.sent.length, 0);
+  const again = await t.call('/v1/me/bootstrap', { token: u.token, body: {} });
+  assert.ok(again.body.profile.welcomedAt);
+  assert.equal(t.sent.length, 1);
+  await t.close();
+});
+
+test('o e-mail de boas-vindas é texto fixo e escapado', () => {
+  const m = welcomeEmail('x@y.com', 'en');
+  assert.match(m.html, /Welcome to Flip &amp; Brew/);
+  assert.doesNotMatch(m.html, /Flip & Brew</);
+  assert.match(m.text, /Welcome to Flip & Brew/);
+});
+
+test('Brevo: um POST na API com a chave no cabeçalho, e erro do provedor vira exceção', async () => {
+  const calls: { url: string; init: RequestInit }[] = [];
+  const ok = brevoEmail({ apiKey: 'chave-falsa', fromEmail: 'eu@exemplo.com', fromName: 'Flip & Brew', fetchFn: (async (url: string, init: RequestInit) => { calls.push({ url, init }); return new Response('{}', { status: 201 }); }) as typeof fetch });
+  await ok.send({ to: 'ana@exemplo.com', subject: 'Oi', html: '<p>oi</p>', text: 'oi' });
+  assert.equal(calls[0].url, 'https://api.brevo.com/v3/smtp/email');
+  assert.equal((calls[0].init.headers as Record<string, string>)['api-key'], 'chave-falsa');
+  const payload = JSON.parse(calls[0].init.body as string);
+  assert.deepEqual(payload.to, [{ email: 'ana@exemplo.com' }]);
+  assert.deepEqual(payload.sender, { name: 'Flip & Brew', email: 'eu@exemplo.com' });
+  const bad = brevoEmail({ apiKey: 'k', fromEmail: 'eu@exemplo.com', fromName: 'x', fetchFn: (async () => new Response('no', { status: 401 })) as typeof fetch });
+  await assert.rejects(() => bad.send({ to: 'a@b.com', subject: 's', html: 'h', text: 't' }), /401/);
+});
+
+test('o provedor de console registra só destinatário e assunto, nunca o corpo', async () => {
+  const lines: string[] = [];
+  await consoleEmail((l) => lines.push(l)).send({ to: 'a@b.com', subject: 'Assunto', html: '<p>segredo</p>', text: 'segredo' });
+  assert.equal(lines.length, 1);
+  assert.doesNotMatch(lines[0], /segredo/);
+});
+
+test('retenção: presença com mais de 30 dias sai; o resto fica', async () => {
+  const t = await testApp();
+  const u = await t.member();
+  const old = new Date(Date.now() - 31 * 86_400_000);
+  await t.handle.db.insert(activity).values([{ userId: u.id, at: old, platform: 'android', appVersion: '1' }, { userId: u.id, at: new Date(), platform: 'android', appVersion: '1' }]);
+  assert.equal(await purgeOldActivity(t.handle.db), 1);
+  assert.equal((await t.handle.db.select().from(activity)).length, 1);
+  await t.close();
+});
+
+test('configuração: a chave da Brevo exige um remetente', () => {
+  assert.throws(() => loadConfig({ AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(20), BREVO_API_KEY: 'k' }), /MAIL_FROM/);
+  const ok = loadConfig({ AUTH_PROVIDER: 'dev', DEV_JWT_SECRET: 'x'.repeat(20), BREVO_API_KEY: 'k', MAIL_FROM: 'eu@exemplo.com' });
+  assert.equal(ok.mailFromName, 'Flip & Brew');
 });

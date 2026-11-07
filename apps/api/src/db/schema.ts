@@ -1,7 +1,6 @@
 import { bigint, boolean, index, integer, jsonb, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const roleEnum = pgEnum('role', ['user', 'moderator', 'admin']);
-export const visibilityEnum = pgEnum('profile_visibility', ['public', 'friends', 'private']);
 
 const ts = (name: string) => timestamp(name, { withTimezone: true });
 
@@ -25,9 +24,9 @@ export const profiles = pgTable('profiles', {
 
 const owner = () => uuid('user_id').notNull().references(() => profiles.id, { onDelete: 'cascade' });
 
+/** Perfil visível para todos; comunidade só entre amigos (sem escolha). Aqui só o que é opcional: ranking geral e cafés preferidos. */
 export const privacySettings = pgTable('privacy_settings', {
   userId: owner().primaryKey(),
-  profileVisibility: visibilityEnum('profile_visibility').notNull().default('friends'),
   showInGlobalRanking: boolean('show_in_global_ranking').notNull().default(false),
   showCoffeePrefs: boolean('show_coffee_prefs').notNull().default(false),
 });

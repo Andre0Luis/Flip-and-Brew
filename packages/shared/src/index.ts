@@ -10,7 +10,8 @@ export type Role = (typeof ROLES)[number];
 export const PLATFORMS = ['android', 'ios', 'web'] as const;
 export type Platform = (typeof PLATFORMS)[number];
 
-export const VISIBILITIES = ['public', 'friends', 'private'] as const;
+export const LANGUAGES = ['pt', 'en', 'es'] as const;
+export type Language = (typeof LANGUAGES)[number];
 
 /** "Ativo agora": visto nos últimos 5 minutos. */
 export const ACTIVE_NOW_MS = 5 * 60_000;
@@ -53,14 +54,17 @@ export const coffeePrefsSchema = z
   .partial()
   .strict();
 
+/** O perfil é visível para todos; posts, imagens e mensagens da comunidade só entre amigos (ADR-0024). Só há estas duas escolhas. */
 export const privacyPatchSchema = z
   .object({
-    profileVisibility: z.enum(VISIBILITIES),
     showInGlobalRanking: z.boolean(),
     showCoffeePrefs: z.boolean(),
   })
   .partial()
   .strict();
+
+/** Corpo do bootstrap. Opcional: o idioma escolhe o texto do e-mail de boas-vindas. */
+export const bootstrapSchema = z.object({ language: z.enum(LANGUAGES).optional() }).strict();
 
 export const pingSchema = z.object({ platform: z.enum(PLATFORMS), appVersion: z.string().max(20) }).strict();
 

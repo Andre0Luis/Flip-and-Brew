@@ -15,6 +15,9 @@ const schema = z
     DEV_JWT_SECRET: z.string().min(16).optional(),
     ADMIN_EMAILS: z.string().optional(),
     CORS_ORIGINS: z.string().optional(),
+    BREVO_API_KEY: z.string().optional(),
+    MAIL_FROM: z.email().optional(),
+    MAIL_FROM_NAME: z.string().optional(),
   })
   .superRefine((e, ctx) => {
     if (e.NODE_ENV === 'production' && e.AUTH_PROVIDER === 'dev') {
@@ -22,6 +25,9 @@ const schema = z
     }
     if (e.NODE_ENV === 'production' && !e.DATABASE_URL) {
       ctx.addIssue({ code: 'custom', message: 'DATABASE_URL é obrigatória em produção' });
+    }
+    if (e.BREVO_API_KEY && !e.MAIL_FROM) {
+      ctx.addIssue({ code: 'custom', message: 'MAIL_FROM é obrigatório com BREVO_API_KEY (use um remetente verificado na Brevo)' });
     }
     if (e.AUTH_PROVIDER === 'dev' && !e.DEV_JWT_SECRET) {
       ctx.addIssue({ code: 'custom', message: 'DEV_JWT_SECRET (16+ caracteres) é obrigatória com AUTH_PROVIDER=dev' });
@@ -36,6 +42,9 @@ export type Config = {
   devJwtSecret: string | undefined;
   adminEmails: string[];
   corsOrigins: string[];
+  brevoApiKey: string | undefined;
+  mailFrom: string | undefined;
+  mailFromName: string;
 };
 
 /** Lê e valida o ambiente. Falha cedo, com a lista do que está errado, em vez de subir meio configurado. */
@@ -53,5 +62,8 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     devJwtSecret: e.DEV_JWT_SECRET,
     adminEmails: list(e.ADMIN_EMAILS),
     corsOrigins: list(e.CORS_ORIGINS),
+    brevoApiKey: e.BREVO_API_KEY,
+    mailFrom: e.MAIL_FROM,
+    mailFromName: e.MAIL_FROM_NAME ?? 'Flip & Brew',
   };
 }
