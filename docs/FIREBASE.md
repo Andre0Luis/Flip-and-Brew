@@ -42,9 +42,10 @@ Se o botão do Google abrir e voltar com erro `DEVELOPER_ERROR`, quase sempre o 
    ```bash
    npm install -g firebase-tools
    firebase login
+   cd apps/mobile
    firebase deploy --only firestore:rules --project SEU_PROJECT_ID
    ```
-   As regras estão em `firebase/firestore.rules`. Sem elas o banco fica fechado e o backup falha.
+   As regras estão em `apps/mobile/firebase/firestore.rules` e o `firebase.json` fica ao lado, em `apps/mobile/` (rode o comando dessa pasta). Sem elas o banco fica fechado e o backup falha.
 
 ## 5. Variáveis no build
 - Desenvolvimento local: copie `.env.example` para `.env` e preencha. **Rebuilde** (`npx expo run:android`), porque os valores são embutidos no app. Se mudar o `.env` depois, limpe o cache do Metro (`npx expo start --clear`, ou `--clear` no `expo export`); sem isso o app pode continuar com os valores antigos.
