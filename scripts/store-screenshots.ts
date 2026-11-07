@@ -42,9 +42,30 @@ const MIME: Record<string, string> = { '.html': 'text/html', '.js': 'text/javasc
 /** Servidor estático com volta para o index.html (as rotas do app são resolvidas no cliente). */
 function serve(): Promise<{ url: string; close: () => void }> {
   const server = http.createServer((req, res) => {
-    const clean = decodeURIComponent((req.url ?? '/').split('?')[0]);
-    let file = path.join(DIST, clean);
-    if (!file.startsWith(DIST) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(DIST, 'index.html');
+    const rawPath = (req.url ?? '/').split('?')[0];
+    let clean = '/';
+    try {
+      clean = decodeURIComponent(rawPath);
+    } catch {
+      clean = '/';
+    }
+
+    const rel = clean.replace(/^\/+/, '');
+    const candidate = path.resolve(DIST, rel);
+    const fallback = path.join(DIST, 'index.html');
+
+    let file = fallback;
+    try {
+      const realRoot = fs.realpathSync.native(DIST);
+      const realCandidate = fs.realpathSync.native(candidate);
+      const insideRoot = realCandidate === realRoot || realCandidate.startsWith(realRoot + path.sep);
+      if (insideRoot && fs.existsSync(realCandidate) && fs.statSync(realCandidate).isFile()) {
+        file = realCandidate;
+      }
+    } catch {
+      file = fallback;
+    }
+
     res.setHeader('content-type', MIME[path.extname(file)] ?? 'application/octet-stream');
     fs.createReadStream(file).pipe(res);
   });
