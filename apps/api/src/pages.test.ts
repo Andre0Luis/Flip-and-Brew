@@ -41,7 +41,7 @@ test('o e-mail de suporte vem da configuração, aparece como link e a página a
 
 test('a página escapa HTML e só liga caminhos conhecidos', () => {
   const html = renderPage({ lang: 'pt', path: '/x', page: { title: '<b>t</b>', sections: [{ title: 's', body: ['<script>alert(1)</script> veja /privacidade.'] }] } });
-  assert.doesNotMatch(html, /<script>/);
+  assert.doesNotMatch(html, /<script\b/i);
   assert.match(html, /&lt;script&gt;/);
   assert.match(html, /<a href="\/privacidade">\/privacidade<\/a>\./);
   assert.equal(pickLang('xx', 'fr, en;q=0.8'), 'en');
