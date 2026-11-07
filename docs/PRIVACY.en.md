@@ -2,7 +2,7 @@
 
 ## Your data stays on the device
 
-Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences stay only on your phone, with no server and no analytics tool.
+Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences stay only on your phone, with no server of our own and no analytics tool. Ads are the exception; see below.
 
 ## Usage access (optional)
 
@@ -31,3 +31,7 @@ You can create an account with email and password or sign in with Google. If you
 ## Deleting the account
 
 In Account › Delete account, we delete your account and the cloud backup. Data on the device stays until you erase it in Settings.
+
+## Ads
+
+The app shows an ad banner at the bottom of some screens, provided by Google AdMob. To show it, AdMob may use the device advertising ID and data such as the IP address and device model. We request non-personalized ads. Where the law requires it, the app shows a consent form, which you can redo at any time. If you buy “Remove ads” or subscribe to Pro, the banner is not shown and no ad is loaded.

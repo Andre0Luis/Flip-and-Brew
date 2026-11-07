@@ -230,6 +230,24 @@ Atenção: as moedas e o Pro são lidos no aparelho. Para moedas, não há valid
 
 ---
 
+## 9.1. AdMob: banner e remoção de anúncios (ADR-0021)
+
+O app mostra **um banner no fim das abas**. Quem compra **Remover anúncios** (R$ 19,98, único) ou tem o Pro não vê nada. Sem os IDs abaixo, o build não mostra banner nem a opção de remover.
+
+**O que você faz**
+1. Conta em <https://admob.google.com>. **Apps › Adicionar app**: um Android (`com.andre0luis.FlipAndBrew`) e um iOS (mesmo bundle id). Anote o **ID do app** de cada um (`ca-app-pub-…~…`).
+2. Em cada app, **Blocos de anúncios › Banner**. Anote o **ID do bloco** (`ca-app-pub-…/…`).
+3. **Privacidade e mensagens**: crie a mensagem de **consentimento (GDPR/UMP)** e publique. Sem ela o formulário não aparece onde a lei exige.
+4. Em `app.json`, no plugin `react-native-google-mobile-ads`, troque `androidAppId` e `iosAppId` (hoje são os IDs de exemplo do Google) pelos IDs de app reais. Eles não são segredo.
+5. No EAS, cadastre `EXPO_PUBLIC_ADMOB_BANNER_ANDROID` e `EXPO_PUBLIC_ADMOB_BANNER_IOS` (ambientes `preview` e `production`, sem aspas).
+6. **Produto da remoção:** id `remove_ads`, **não consumível**, R$ 19,98, no Play Console (Produtos no app) e no App Store Connect (confira se o preço existe na grade da Apple). No RevenueCat, importe o produto e anexe a um entitlement chamado `remove_ads`. Mesmo sem o entitlement o app reconhece a compra, mas o entitlement é o caminho certo.
+7. Play Console: declare que o app tem anúncios e o ID de publicidade; atualize Segurança dos dados (`docs/store/data-safety.md`). App Store Connect: rótulos de privacidade.
+8. Rebuild nativo. O módulo de anúncios **não roda no Expo Go**.
+
+**Cuidados:** nunca toque nos seus próprios anúncios em build de release (o AdMob pode suspender a conta). Em desenvolvimento o app usa só o bloco de teste do Google.
+
+---
+
 ## 10. Páginas públicas
 
 A Play Store exige uma **URL da política de privacidade** e uma **URL de exclusão de conta**.
@@ -252,7 +270,7 @@ A Play Store exige uma **URL da política de privacidade** e uma **URL de exclus
 4. **Conteúdo do app** (Política › Conteúdo do app):
    - **Política de privacidade**: a URL da seção 10.
    - **Exclusão de conta**: a URL da seção 10 e a explicação do caminho no app.
-   - **Anúncios**: o app não tem.
+   - **Anúncios**: o app tem (um banner do AdMob). Marque “Sim, o app contém anúncios” e declare o **ID de publicidade** (seção 9.1).
    - **Acesso ao app**: tudo funciona sem login; a conta é opcional.
    - **Classificação de conteúdo**: responda o questionário (sem conteúdo sensível).
    - **Segurança dos dados**: use `docs/store/data-safety.md` como base.
@@ -284,6 +302,7 @@ Copie `.env.example` para `.env`. Para o build no EAS, cadastre as mesmas variá
 | `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` | Firebase › Authentication › Google › ID do cliente da Web | Login com Google | O botão do Google não aparece |
 | `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | RevenueCat › chave pública do SDK (`goog_…`) | Compra de moedas | A loja explica que a compra não está ativa |
 | `EXPO_PUBLIC_REVENUECAT_TEST_KEY` | RevenueCat › Test Store › chave de API (`test_…`) | Testar a compra no Expo Go | Sem ela, a loja explica que no Expo Go a compra não funciona |
+| `EXPO_PUBLIC_ADMOB_BANNER_ANDROID` / `_IOS` | AdMob › app › Blocos de anúncios › ID do bloco de banner (`ca-app-pub-…/…`) | Banner de anúncio e a opção de remover | Sem banner e sem a opção de remover |
 | `EXPO_PUBLIC_REVENUECAT_IOS_KEY` | RevenueCat (`appl_…`) | Compra no iOS | Só importa se for lançar no iOS |
 | `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` | Você escolhe | Só o script `seed:test-user` | O script recusa rodar |
 | `EXPO_PUBLIC_AUTH_MODE=mock` | Você liga | Servidor falso, só em desenvolvimento | Usa o Firebase real, se houver chaves |

@@ -12,6 +12,8 @@ import { useTestTools } from '@/lib/admin';
 import { GoalPicker } from '@/components/GoalPicker';
 import { useAuth } from '@/store/useAuth';
 import { usePro } from '@/store/usePro';
+import { RemoveAdsCard } from '@/components/RemoveAdsCard';
+import { adsEnabled } from '@/lib/ads';
 import { presentCustomerCenter, presentPaywall, purchasesConfigured } from '@/lib/purchases';
 import type { Language, ThemeMode } from '@/store/types';
 import { LANGS, dictionaries, useI18n } from '@/i18n';
@@ -260,6 +262,8 @@ export default function Ajustes() {
           )}
         </Card>
       )}
+
+      {purchasesConfigured && adsEnabled && <RemoveAdsCard />}
 
       {cloudAvailable() && (
         <Card style={{ gap: 10 }}>
