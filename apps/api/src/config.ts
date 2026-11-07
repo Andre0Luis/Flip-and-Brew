@@ -15,6 +15,7 @@ const schema = z
     DEV_JWT_SECRET: z.string().min(16).optional(),
     ADMIN_EMAILS: z.string().optional(),
     CORS_ORIGINS: z.string().optional(),
+    DOCS_ENABLED: z.enum(['true', 'false']).optional(),
     BREVO_API_KEY: z.string().optional(),
     MAIL_FROM: z.email().optional(),
     MAIL_FROM_NAME: z.string().optional(),
@@ -42,6 +43,8 @@ export type Config = {
   devJwtSecret: string | undefined;
   adminEmails: string[];
   corsOrigins: string[];
+  /** /docs (Swagger UI) e /openapi.json. Padrão: ligado fora de produção; em produção só com DOCS_ENABLED=true. */
+  docsEnabled: boolean;
   brevoApiKey: string | undefined;
   mailFrom: string | undefined;
   mailFromName: string;
@@ -62,6 +65,7 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     devJwtSecret: e.DEV_JWT_SECRET,
     adminEmails: list(e.ADMIN_EMAILS),
     corsOrigins: list(e.CORS_ORIGINS),
+    docsEnabled: e.DOCS_ENABLED ? e.DOCS_ENABLED === 'true' : e.NODE_ENV !== 'production',
     brevoApiKey: e.BREVO_API_KEY,
     mailFrom: e.MAIL_FROM,
     mailFromName: e.MAIL_FROM_NAME ?? 'Flip & Brew',
