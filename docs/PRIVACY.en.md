@@ -6,7 +6,7 @@ Flip & Brew works without an account. Without one, cups, coins, items, mood, dai
 
 ## Usage access (optional)
 
-If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. These numbers stay on the device and do not show which apps you use. You can revoke the permission at any time in Android settings.
+If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. These numbers stay on the device and do not show which apps you use. The app uses them, on the device itself, to work out coins for the time the screen stayed locked. You can revoke the permission at any time in Android settings.
 
 ## Motion sensor
 

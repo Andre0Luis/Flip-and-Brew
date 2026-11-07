@@ -6,7 +6,7 @@ O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energi
 
 ## Acesso ao uso (opcional)
 
-Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. Esses números ficam no aparelho e não mostram quais apps você usa. Você pode revogar a permissão a qualquer momento nas configurações do Android.
+Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. Esses números ficam no aparelho e não mostram quais apps você usa. Com eles o app calcula, no próprio aparelho, as moedas pelo tempo com a tela bloqueada. Você pode revogar a permissão a qualquer momento nas configurações do Android.
 
 ## Sensor de movimento
 

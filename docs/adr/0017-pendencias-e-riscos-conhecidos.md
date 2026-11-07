@@ -44,6 +44,8 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Widgets nunca rodaram num aparelho**; precisam de build novo e teste no Android e no iOS.
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
+- [ ] **Moedas pelo tempo bloqueado** (ADR-0023): o Kotlin de `usage-stats` nunca foi compilado e a conta depende dele; taxa (1 moeda a cada 10 min), teto (60 por dia) e sono padrão (6 h) **não foram testados com pessoas** nem em aparelho. Dia com leitura parcial do Android (primeiro dia após a permissão) pode render a mais, limitado pelo teto.
+
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).
 - [ ] Testes de interface automatizados no aparelho não existem; só o roteiro manual.

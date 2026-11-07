@@ -11,6 +11,6 @@ Respostas sugeridas para o formulário “Segurança dos dados”. Confira com o
 | Dados criptografados em trânsito? | **Sim.** | Firebase usa HTTPS/TLS. |
 | O usuário pode pedir a exclusão? | **Sim**, dentro do app (Ajustes › Conta › Excluir conta) e por e-mail. | Ver `docs/ACCOUNT-DELETION.md`. Informe também a URL da página pública. |
 | Compras no app? | Sim, quando ativadas. | Processadas pela Google Play e pelo RevenueCat. Marcar “Informações de compra” e “Identificadores de dispositivo ou outros” se o RevenueCat estiver ativo. |
-| Permissão especial: Acesso ao uso (`PACKAGE_USAGE_STATS`) | Declarar, com justificativa. | Lê desbloqueios e tempo de tela do dia para o painel Bem-estar. Opcional, os números ficam só no aparelho e não são enviados à nuvem. Pode exigir o formulário de permissões sensíveis. |
+| Permissão especial: Acesso ao uso (`PACKAGE_USAGE_STATS`) | Declarar, com justificativa. | Lê desbloqueios e tempo de tela do dia para o painel Bem-estar e para calcular moedas pelo tempo com a tela bloqueada. Opcional, os números ficam só no aparelho e não são enviados à nuvem. Pode exigir o formulário de permissões sensíveis. |
 
 Classificação etária sugerida: livre, sem conteúdo sensível. Se o app for oferecido a menores, revisar as regras de contas para crianças.
