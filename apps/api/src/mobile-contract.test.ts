@@ -79,3 +79,54 @@ test('corpo grande demais volta como 413 com o código do servidor', async () =>
   await assert.rejects(() => api.putSnapshot({ v: 1, updatedAt: 1, data: { x: 'a'.repeat(1_200_000) } }), (e: ApiError) => e.status === 413 && e.code === 'payload_too_large');
   await t.close();
 });
+
+test('comunidade de ponta a ponta: apelido, busca, pedido, aceite, amigos, bloqueio e perfil público', async () => {
+  const t = await testApp();
+  const ua = await t.user('ana@exemplo.com');
+  const ub = await t.user('bia@exemplo.com');
+  const a = (await appClient(t, ua.token)).community;
+  const b = (await appClient(t, ub.token)).community;
+  await (await appClient(t, ua.token)).bootstrap('pt');
+  await (await appClient(t, ub.token)).bootstrap('pt');
+
+  assert.deepEqual(await a.me(), { handle: null, displayName: null });
+  assert.deepEqual(await a.updateMe({ handle: 'ana_cafe', displayName: 'Ana' }), { handle: 'ana_cafe', displayName: 'Ana' });
+  await b.updateMe({ handle: 'bia', displayName: 'Bia' });
+  await assert.rejects(b.updateMe({ handle: 'ana_cafe' }), (e: ApiError) => e.code === 'handle_taken');
+  await assert.rejects(b.updateMe({ handle: 'Bia Maria' }), (e: ApiError) => e.status === 400);
+
+  const found = await b.search('ana');
+  assert.deepEqual(found.map((p) => p.handle), ['ana_cafe']);
+  const ana = await b.user('ana_cafe');
+  assert.equal(ana?.relation, 'none');
+  assert.equal(ana?.profile.displayName, 'Ana');
+  assert.equal(await b.user('ninguem_aqui'), null);
+
+  assert.deepEqual(await b.requestFriend(ana!.profile.id), { accepted: false });
+  assert.equal((await b.user('ana_cafe'))?.relation, 'request_sent');
+  assert.equal((await b.requests('outgoing')).length, 1);
+  const incoming = await a.requests('incoming');
+  assert.deepEqual(incoming.map((r) => r.handle), ['bia']);
+  assert.equal((await a.user('bia'))?.relation, 'request_received');
+
+  await a.accept(incoming[0].requestId);
+  assert.deepEqual((await a.friends()).map((f) => f.handle), ['bia']);
+  assert.equal((await b.user('ana_cafe'))?.relation, 'friends');
+
+  const biaId = (await a.friends())[0].id;
+  await a.unfriend(biaId);
+  assert.equal((await a.friends()).length, 0);
+
+  await a.block(biaId);
+  assert.equal(await b.user('ana_cafe'), null); // com bloqueio, a pessoa some
+  assert.deepEqual(await b.search('ana'), []);
+  await a.unblock(biaId);
+  assert.equal((await b.user('ana_cafe'))?.relation, 'none');
+
+  // Cancelar um pedido enviado.
+  await b.requestFriend(ana!.profile.id);
+  const sent = await b.requests('outgoing');
+  await b.removeRequest(sent[0].requestId);
+  assert.equal((await a.requests('incoming')).length, 0);
+  await t.close();
+});

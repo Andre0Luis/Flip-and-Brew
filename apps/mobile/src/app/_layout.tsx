@@ -47,6 +47,7 @@ function Shell() {
           <Stack.Screen name="conta" />
           <Stack.Screen name="perfil" />
           <Stack.Screen name="criador" />
+          <Stack.Screen name="pessoa/[handle]" />
         </Stack.Protected>
         {/* Fica por último: a primeira rota registrada vira a tela inicial. O link do e-mail de recuperação de senha abre aqui, mesmo antes da introdução. */}
         <Stack.Screen name="nova-senha" />

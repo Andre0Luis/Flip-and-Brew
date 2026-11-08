@@ -1,3 +1,4 @@
+import type { CommunityApi } from './apiClient';
 import type { Checkin, Profile, Session } from '@/store/types';
 
 export type Provider = 'password' | 'google' | 'apple';
@@ -85,6 +86,8 @@ export interface CloudBackend {
   /** Troca a senha de uma conta com e-mail e senha, confirmando a senha atual. */
   changePassword(current: string, next: string): Promise<void>;
   sendPasswordReset(email: string): Promise<void>;
+  /** Amigos, busca e perfil público. Só o backend próprio tem; sem ele a Comunidade mostra "em breve". */
+  community?: CommunityApi;
   /** Define a nova senha a partir do link do e-mail de recuperação (o endereço que abriu o app). Só o backend próprio usa. */
   resetPasswordWithLink?(url: string, newPassword: string): Promise<void>;
   signOut(): Promise<void>;

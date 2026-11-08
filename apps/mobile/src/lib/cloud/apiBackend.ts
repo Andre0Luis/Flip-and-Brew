@@ -89,6 +89,8 @@ export function createApiBackend(d: ApiBackendDeps): CloudBackend {
       return () => data.subscription.unsubscribe();
     },
 
+    community: api.community,
+
     googleAvailable: () => !!d.google?.available(),
     appleAvailable: () => !!d.apple?.available(),
 
