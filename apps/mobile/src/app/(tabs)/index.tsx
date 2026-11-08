@@ -199,7 +199,7 @@ export default function Inicio() {
           </Txt>
         )}
         {pomodoro && !active && <Button label={t('pomo.adjust')} tone="quiet" onPress={() => router.push('/ajustes')} style={{ alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 16 }} />}
-        <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />
+        <Button label={active ? t('home.continueBrew') : pomodoro ? t('pomo.next') : t('home.start')} onPress={begin} />
         {settings.autoStart && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
             {t('home.flipHint')}
