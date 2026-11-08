@@ -145,7 +145,7 @@ async function main() {
 
         for (const [n, route] of [
           ['03-bem-estar', '/bem-estar'],
-          ['04-colecao', '/colecao'],
+          ['04-colecao', '/guia?section=colecao'],
           ['05-loja', '/guia'],
         ] as const) {
           // Recarrega sem copo em andamento para as demais telas ficarem limpas.

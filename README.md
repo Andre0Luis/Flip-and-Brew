@@ -15,7 +15,7 @@ O código anterior (planta, widget do Z Flip, loja antiga) está no histórico d
 
 Idiomas: português (padrão), inglês e espanhol. A troca fica em **Ajustes > Idioma** e vale para a interface, as frases, os artigos e as práticas.
 
-Telas: Início (frase do dia, cafeteira, copo), Guia (loja), Bem-estar (equilíbrio, semana, calendário, padrões), Aprender (prática do dia, artigos sobre antifragilidade, estoicismo, hábitos digitais e sono) e Coleção.
+Telas: Início (frase do dia, cafeteira, copo), Guia (submenu Loja e Coleção; na Coleção o item em uso fica no topo), Bem-estar (equilíbrio, semana, calendário, padrões e Conquistas) e Aprender (prática do dia, artigos sobre antifragilidade, estoicismo, hábitos digitais e sono).
 
 ## Decisões do projeto
 

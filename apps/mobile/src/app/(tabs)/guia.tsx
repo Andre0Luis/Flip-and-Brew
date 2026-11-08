@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
 import { CoinShop } from '@/components/CoinShop';
+import { ColecaoView } from '@/components/ColecaoView';
 import { Icon } from '@/components/Icon';
 import { Bar, Button, Card, CoinBadge, Header, Screen, Segmented, Txt } from '@/components/ui';
 import { brewers, COLLECTIONS, cups, localize, packs as coffeePacks, type LocalizedItem } from '@/data/catalog';
@@ -14,6 +16,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { fonts } from '@/theme/tokens';
 
 type Tab = 'brewer' | 'cup' | 'beans';
+type Section = 'loja' | 'colecao';
 
 export default function Guia() {
   const { c, r } = useTheme();
@@ -23,6 +26,16 @@ export default function Guia() {
   const buy = useApp((s) => s.buy);
   const equip = useApp((s) => s.equip);
   const [tab, setTab] = useState<Tab>('brewer');
+  // Do Início, tocar na xícara ou no pacote abre a Guia já na Coleção (`section=colecao`), na aba pedida.
+  const params = useLocalSearchParams<{ section?: string; tab?: string; t?: string }>();
+  const wantedTab = params.tab === 'cup' || params.tab === 'beans' || params.tab === 'brewer' ? params.tab : null;
+  const request = `${params.section ?? ''}:${params.tab ?? ''}:${params.t ?? ''}`;
+  const [section, setSection] = useState<Section>(params.section === 'colecao' ? 'colecao' : 'loja');
+  const [seenRequest, setSeenRequest] = useState(request);
+  if (seenRequest !== request) {
+    setSeenRequest(request);
+    if (params.section === 'colecao') setSection('colecao');
+  }
   const [pending, setPending] = useState<LocalizedItem | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const days = streak(sessions);
@@ -128,6 +141,18 @@ export default function Guia() {
   return (
     <Screen ads>
       <Header title={t('guide.title')} right={<CoinBadge coins={coins} />} />
+      <Segmented<Section>
+        value={section}
+        onChange={setSection}
+        options={[
+          { value: 'loja', label: t('guide.sectionShop') },
+          { value: 'colecao', label: t('col.title') },
+        ]}
+      />
+      {section === 'colecao' ? (
+        <ColecaoView request={{ tab: wantedTab, key: request }} />
+      ) : (
+        <>
       <Segmented<Tab>
         value={tab}
         onChange={(t) => {
@@ -209,6 +234,8 @@ export default function Guia() {
       )}
 
       <CoinShop />
+        </>
+      )}
     </Screen>
   );
 }
