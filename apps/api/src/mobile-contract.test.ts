@@ -130,3 +130,52 @@ test('comunidade de ponta a ponta: apelido, busca, pedido, aceite, amigos, bloqu
   assert.equal((await a.requests('incoming')).length, 0);
   await t.close();
 });
+
+test('posts pelo cliente do app: fotos, feed, curtida, comentário, avisos e ranking', async () => {
+  const t = await testApp();
+  const ua = await t.user('ana@exemplo.com');
+  const ub = await t.user('bia@exemplo.com');
+  const appA = await appClient(t, ua.token);
+  const appB = await appClient(t, ub.token);
+  await appA.bootstrap('pt');
+  await appB.bootstrap('pt');
+  const a = appA.community;
+  const b = appB.community;
+  await a.updateMe({ handle: 'ana', displayName: 'Ana' });
+  await b.updateMe({ handle: 'bia', displayName: 'Bia' });
+  await b.requestFriend((await b.user('ana'))!.profile.id);
+  await a.accept((await a.requests('incoming'))[0].requestId);
+
+  const slots = await a.uploadSlots(2);
+  assert.equal(slots.length, 2);
+  const post = await a.createPost({ title: 'Meu V60', caption: 'Manhã', images: slots.map((s) => s.path) });
+  assert.equal(post.images.length, 2);
+  assert.equal(post.mine, true);
+
+  const feed = await b.feed();
+  assert.equal(feed.posts[0].title, 'Meu V60');
+  assert.equal(feed.nextBefore, null);
+  await b.like(post.id);
+  await b.comment(post.id, 'Lindo!');
+  assert.equal((await a.comments(post.id))[0].author.handle, 'bia');
+  const n = await a.notifications();
+  assert.equal(n.unread, 2);
+  assert.deepEqual(n.notifications.map((x) => x.kind).sort(), ['comment', 'like']);
+  await a.readNotifications();
+  assert.equal((await a.notifications()).unread, 0);
+  await b.unlike(post.id);
+  assert.equal((await b.feed()).posts[0].likeCount, 0);
+
+  const week = (await import('./shared.js')).isoWeek(Date.now());
+  await a.putWeek({ week, offlineMinutes: 120, cups: 3 });
+  const r = await b.rankings('friends');
+  assert.deepEqual(r.entries.map((e) => [e.person.handle, e.offlineMinutes]), [['ana', 120], ['bia', 0]]);
+  assert.equal(await a.globalRanking(), false);
+  await a.setGlobalRanking(true);
+  assert.equal(await a.globalRanking(), true);
+  assert.equal((await b.rankings('global')).entries[0].person.handle, 'ana');
+
+  await a.deletePost(post.id);
+  assert.equal((await b.feed()).posts.length, 0);
+  await t.close();
+});

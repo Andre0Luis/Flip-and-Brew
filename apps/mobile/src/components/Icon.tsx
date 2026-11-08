@@ -16,6 +16,10 @@ const PATHS = {
   eye: 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
   eyeOff: 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 4l16 16',
   lock: 'M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z',
+  bell: 'M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0',
+  comment: 'M4 5h16v11H9l-5 4z',
+  plus: 'M12 5v14M5 12h14',
+  trash: 'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',
 } as const;
 
 export type IconName = keyof typeof PATHS;
