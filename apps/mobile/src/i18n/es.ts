@@ -50,7 +50,7 @@ export const es: Record<keyof typeof pt, string> = {
   'share.inviteBody': 'Envía tu apodo a quien quieras en tu comunidad.',
   'share.inviteCta': 'Invitar amigos',
   'share.invite': 'Estoy en Flip & Brew, la app que convierte el tiempo lejos del teléfono en café. Búscame en la comunidad: @{handle}',
-  'wb.weekGoal': 'Meta de la semana',
+  'wb.weekGoal': 'Meta de la semana, desde el lunes',
   'wb.weekGoalValue': '{done} de {goal}',
   'community.notifA11y.one': 'Avisos: {n} nuevo',
   'community.notifA11y.many': 'Avisos: {n} nuevos',

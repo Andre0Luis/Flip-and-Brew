@@ -50,7 +50,7 @@ export const pt = {
   'share.inviteBody': 'Mande o seu apelido para quem você quer na sua comunidade.',
   'share.inviteCta': 'Convidar amigos',
   'share.invite': 'Estou no Flip & Brew, o app que transforma tempo longe do celular em café. Me procure na comunidade: @{handle}',
-  'wb.weekGoal': 'Meta da semana',
+  'wb.weekGoal': 'Meta da semana, desde segunda',
   'wb.weekGoalValue': '{done} de {goal}',
   'community.notifA11y.one': 'Avisos: {n} novo',
   'community.notifA11y.many': 'Avisos: {n} novos',
