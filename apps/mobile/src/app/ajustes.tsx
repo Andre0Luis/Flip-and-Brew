@@ -82,6 +82,7 @@ export default function Ajustes() {
   const showDev = useTestTools();
   const pomo = normalizePomo(settings.pomodoro);
   const setOnboarded = useApp((s) => s.setOnboarded);
+  const setTutorialDone = useApp((s) => s.setTutorialDone);
   const authUser = useAuth((s) => s.user);
   const pro = usePro();
   const [proMsg, setProMsg] = useState<string | null>(null);
@@ -280,6 +281,7 @@ export default function Ajustes() {
       <Card style={{ gap: 10 }}>
         <Button label={t('creator.open')} tone="quiet" onPress={() => router.push('/criador')} />
         <Button label={t('set.intro')} tone="quiet" onPress={() => setOnboarded(false)} />
+        <Button label={t('set.tutorial')} tone="quiet" onPress={() => { setTutorialDone(false); router.dismissTo('/'); }} />
         <Button label={t('set.privacy')} tone="quiet" onPress={() => router.push('/privacidade')} />
       </Card>
 

@@ -55,6 +55,8 @@ type State = {
   avatar: Avatar | null;
   /** a introdução já foi vista */
   onboarded: boolean;
+  /** o tutorial do Início (balões passo a passo) já foi visto */
+  tutorialDone: boolean;
   /** a orientação logo após o cadastro (lembretes e moedas pelo tempo bloqueado) já foi vista neste aparelho */
   firstStepsDone: boolean;
   /** Início está na tela e em primeiro plano; usado para iniciar o copo ao virar o celular. */
@@ -65,6 +67,7 @@ type State = {
   setOnboarded: (v: boolean) => void;
   setAvatar: (a: Avatar | null) => void;
   finishFirstSteps: () => void;
+  setTutorialDone: (v: boolean) => void;
   setHomeFocused: (v: boolean) => void;
   setSettings: (s: Partial<Settings>) => void;
   start: (now?: number) => boolean;
@@ -127,6 +130,7 @@ const initial = {
   avatar: null as Avatar | null,
   onboarded: false,
   firstStepsDone: false,
+  tutorialDone: false,
   homeFocused: false,
   lastEndedAt: 0,
 };
@@ -139,6 +143,7 @@ export const useApp = create<State>()(
       setOnboarded: (v) => set({ onboarded: v }),
       setAvatar: (a) => set({ avatar: a ? cleanAvatar(a) : null }),
       finishFirstSteps: () => set({ firstStepsDone: true }),
+      setTutorialDone: (v) => set({ tutorialDone: v }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
       creditPassive: (days, now = Date.now()) => {
@@ -329,6 +334,7 @@ export const useApp = create<State>()(
         onboarded: s.onboarded,
         avatar: s.avatar,
         firstStepsDone: s.firstStepsDone,
+        tutorialDone: s.tutorialDone,
       }),
     },
   ),
