@@ -49,7 +49,7 @@ export const es: Record<keyof typeof pt, string> = {
   'community.loading': 'Cargando…',
   'community.setupTitle': 'Elige tu apodo',
   'community.setupBody': 'Así te encuentran tus amigos en la búsqueda. Puedes cambiarlo después.',
-  'community.name': 'Tu nombre',
+  'community.nameFrom': 'Tu nombre en la comunidad: {name}. Viene de tu cuenta.',
   'community.handle': 'Apodo',
   'community.handleHint': 'De 3 a 20 letras minúsculas, números o _.',
   'community.setupSave': 'Guardar apodo',

@@ -7,7 +7,7 @@ import { PersonRow } from '@/components/PersonRow';
 import { useI18n, type Key } from '@/i18n';
 import { getBackend } from '@/lib/cloud';
 import type { CommunityApi, Friend, FriendRequest, MyCommunityProfile, Person } from '@/lib/cloud/apiClient';
-import { communityErrorKey, isValidHandle, sanitizeHandle, searchTerm, suggestHandle, type CommunityErrorKey } from '@/lib/community';
+import { accountName, communityErrorKey, isValidHandle, sanitizeHandle, searchTerm, suggestHandle, type CommunityErrorKey } from '@/lib/community';
 import { useApp } from '@/store/useApp';
 import { useAuth } from '@/store/useAuth';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -62,6 +62,8 @@ function CommunityHome({ api }: { api: CommunityApi }) {
   const { t } = useI18n();
   const router = useRouter();
   const profileName = useApp((s) => s.profile.name);
+  const user = useAuth((s) => s.user);
+  const name = accountName(profileName, user?.name);
   const [me, setMe] = useState<MyCommunityProfile | null>(null);
   const [incoming, setIncoming] = useState<FriendRequest[]>([]);
   const [outgoing, setOutgoing] = useState<FriendRequest[]>([]);
@@ -72,7 +74,8 @@ function CommunityHome({ api }: { api: CommunityApi }) {
   const load = useCallback(async () => {
     try {
       const [m, inc, out, fr] = await Promise.all([api.me(), api.requests('incoming'), api.requests('outgoing'), api.friends()]);
-      setMe(m);
+      // O nome na comunidade acompanha o da conta: se mudou (ou nunca foi enviado), atualiza no servidor.
+      setMe(m.handle && name && m.displayName !== name ? await api.updateMe({ displayName: name }) : m);
       setIncoming(inc);
       setOutgoing(out);
       setFriends(fr);
@@ -80,7 +83,7 @@ function CommunityHome({ api }: { api: CommunityApi }) {
     } catch (e) {
       setError(communityErrorKey(e));
     }
-  }, [api]);
+  }, [api, name]);
 
   // Recarrega ao voltar para a aba (por exemplo, depois de aceitar um pedido no perfil de alguém).
   useFocusEffect(
@@ -127,7 +130,7 @@ function CommunityHome({ api }: { api: CommunityApi }) {
           </Txt>
         )
       ) : !me.handle ? (
-        <HandleSetup api={api} suggestedName={profileName} onDone={setMe} />
+        <HandleSetup api={api} name={name} email={user?.email ?? null} onDone={setMe} />
       ) : (
         <>
           <SearchCard api={api} onOpen={open} />
@@ -181,10 +184,10 @@ function CommunityHome({ api }: { api: CommunityApi }) {
   );
 }
 
-function HandleSetup({ api, suggestedName, onDone }: { api: CommunityApi; suggestedName?: string; onDone: (m: MyCommunityProfile) => void }) {
+/** Só o apelido: o nome vem da conta. A sugestão sai do nome ou, sem nome, do começo do e-mail. */
+function HandleSetup({ api, name, email, onDone }: { api: CommunityApi; name?: string; email: string | null; onDone: (m: MyCommunityProfile) => void }) {
   const { t } = useI18n();
-  const [name, setName] = useState(suggestedName ?? '');
-  const [handle, setHandle] = useState(() => suggestHandle(suggestedName));
+  const [handle, setHandle] = useState(() => suggestHandle(name) || suggestHandle(email?.split('@')[0]));
   const [error, setError] = useState<CommunityErrorKey | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -193,7 +196,7 @@ function HandleSetup({ api, suggestedName, onDone }: { api: CommunityApi; sugges
     setBusy(true);
     setError(null);
     try {
-      onDone(await api.updateMe({ handle, ...(name.trim() ? { displayName: name.trim() } : {}) }));
+      onDone(await api.updateMe({ handle, ...(name ? { displayName: name } : {}) }));
     } catch (e) {
       setError(communityErrorKey(e));
     } finally {
@@ -207,7 +210,11 @@ function HandleSetup({ api, suggestedName, onDone }: { api: CommunityApi; sugges
       <Txt v="small" color="muted">
         {t('community.setupBody')}
       </Txt>
-      <Field label={t('community.name')} value={name} onChangeText={setName} maxLength={60} autoComplete="name" />
+      {!!name && (
+        <Txt v="small" color="muted">
+          {t('community.nameFrom', { name })}
+        </Txt>
+      )}
       <Field label={t('community.handle')} value={handle} onChangeText={(v) => setHandle(sanitizeHandle(v))} autoCapitalize="none" autoCorrect={false} maxLength={20} returnKeyType="done" onSubmitEditing={() => void save()} />
       <Txt v="small" color="muted">
         {t('community.handleHint')}

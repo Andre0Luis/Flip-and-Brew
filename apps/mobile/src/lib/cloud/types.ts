@@ -8,6 +8,8 @@ export type CloudUser = {
   email: string | null;
   provider: Provider;
   emailVerified: boolean;
+  /** Nome da conta, quando o login informa (o Google manda o nome completo). */
+  name?: string;
 };
 
 export type AuthErrorCode =

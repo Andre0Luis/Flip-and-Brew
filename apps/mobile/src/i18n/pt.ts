@@ -49,7 +49,7 @@ export const pt = {
   'community.loading': 'Carregando…',
   'community.setupTitle': 'Escolha o seu apelido',
   'community.setupBody': 'É assim que os amigos acham você na busca. Dá para trocar depois.',
-  'community.name': 'Seu nome',
+  'community.nameFrom': 'Seu nome na comunidade: {name}. Ele vem da sua conta.',
   'community.handle': 'Apelido',
   'community.handleHint': 'De 3 a 20 letras minúsculas, números ou _.',
   'community.setupSave': 'Salvar apelido',

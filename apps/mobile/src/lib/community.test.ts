@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { communityErrorKey, isValidHandle, personInitial, personName, sanitizeHandle, searchTerm, suggestHandle } from './community';
+import { accountName, communityErrorKey, isValidHandle, personInitial, personName, sanitizeHandle, searchTerm, suggestHandle } from './community';
 
 test('o apelido sai no formato da API: minúsculas, sem acento, espaço vira _', () => {
   assert.equal(sanitizeHandle('João Café!'), 'joao_cafe');
@@ -36,4 +36,12 @@ test('erros da API viram mensagens da tela', () => {
   assert.equal(communityErrorKey({ status: 0, code: 'network' }), 'network');
   assert.equal(communityErrorKey({ status: 429, code: 'too_many_requests' }), 'tooMany');
   assert.equal(communityErrorKey(new Error('x')), 'generic');
+});
+
+test('o nome na comunidade vem da conta: perfil do app primeiro, depois o login', () => {
+  assert.equal(accountName('Ana', 'Ana Souza'), 'Ana');
+  assert.equal(accountName(undefined, 'Ana Souza'), 'Ana Souza');
+  assert.equal(accountName('  ', ' Bia '), 'Bia');
+  assert.equal(accountName(undefined, undefined), undefined);
+  assert.equal(accountName('x'.repeat(80), undefined)?.length, 60);
 });

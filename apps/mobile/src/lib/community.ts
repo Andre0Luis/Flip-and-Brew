@@ -27,6 +27,12 @@ export function searchTerm(raw: string): string | null {
   return q.length >= 2 ? q : null;
 }
 
+/** Nome na comunidade: o do perfil do app, se a pessoa preencheu; senão o da conta (o Google manda). */
+export function accountName(profileName: string | undefined, userName: string | undefined): string | undefined {
+  const n = (profileName?.trim() || userName?.trim() || '').slice(0, 60);
+  return n || undefined;
+}
+
 type Named = { displayName: string | null; handle: string | null };
 
 export function personName(p: Named): string {

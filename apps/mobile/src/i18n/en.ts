@@ -49,7 +49,7 @@ export const en: Record<keyof typeof pt, string> = {
   'community.loading': 'Loading…',
   'community.setupTitle': 'Choose your username',
   'community.setupBody': 'This is how friends find you in search. You can change it later.',
-  'community.name': 'Your name',
+  'community.nameFrom': 'Your name in the community: {name}. It comes from your account.',
   'community.handle': 'Username',
   'community.handleHint': '3 to 20 lowercase letters, numbers or _.',
   'community.setupSave': 'Save username',

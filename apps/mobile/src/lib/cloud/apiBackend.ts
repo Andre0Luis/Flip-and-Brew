@@ -23,7 +23,16 @@ const providerOf = (u: User): Provider => {
   return p === 'google' ? 'google' : p === 'apple' ? 'apple' : 'password';
 };
 
-export const toCloudUser = (u: User): CloudUser => ({ uid: u.id, email: u.email ?? null, provider: providerOf(u), emailVerified: !!u.email_confirmed_at });
+const nameOf = (u: User): string | undefined => {
+  const m = (u.user_metadata ?? {}) as Record<string, unknown>;
+  const n = typeof m.full_name === 'string' ? m.full_name : typeof m.name === 'string' ? m.name : '';
+  return n.trim() || undefined;
+};
+
+export const toCloudUser = (u: User): CloudUser => {
+  const name = nameOf(u);
+  return { uid: u.id, email: u.email ?? null, provider: providerOf(u), emailVerified: !!u.email_confirmed_at, ...(name ? { name } : {}) };
+};
 
 /**
  * O nosso backend atrás da mesma interface do Firebase: login pelo Supabase Auth e backup pela API (apps/api).
