@@ -19,13 +19,16 @@ export function CloudSync() {
       if (!user) {
         lastUid = null;
         void identify(null);
-        useAuth.setState({ status: 'signedOut', user: null, sync: 'idle', ready: false, choice: null, lastBackupAt: null });
+        useAuth.setState({ status: 'signedOut', user: null, role: null, sync: 'idle', ready: false, choice: null, lastBackupAt: null });
         return;
       }
       useAuth.setState({ status: 'signedIn', user });
       if (lastUid !== user.uid) {
         lastUid = user.uid;
         void identify(user.uid);
+        useAuth.setState({ role: null });
+        // O papel (administrador ou não) é decisão do servidor; falha ou demora deixa a pessoa como usuária comum.
+        void backend.getRole?.().then((role) => lastUid === user.uid && useAuth.setState({ role })).catch(() => {});
         void initialSync(user.uid);
       }
     });

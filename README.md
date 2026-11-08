@@ -76,7 +76,7 @@ As cores e fontes seguem o style board da fase de design: Young Serif para frase
 
 - Na primeira abertura o app mostra uma introdução de três passos (promessa e idioma, calibração do sensor, autonomia). Em Ajustes dá para rever, e lá também fica "Por que este app existe", o texto do criador.
 - Sem conta, tudo fica no aparelho, sem servidor nem análise. Com conta, o backup do progresso vai para o Firebase. A política está em Ajustes › Política de privacidade e em `docs/PRIVACY.*.md` (gerada pelos mesmos textos do app: `npm run docs:privacy`).
-- As ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) são **só para administrador**: aparecem em build de desenvolvimento ou para a conta com e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`. Usuários comuns não as veem.
+- As ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas) são **só para administrador**: aparecem só para a conta de e-mail verificado que o **servidor** marca como administradora (a lista `ADMIN_EMAILS` fica na API, na Vercel; o app pergunta o papel depois do login, então o e-mail não vai dentro do app). Usuários comuns não as veem.
 
 ## Widgets
 
