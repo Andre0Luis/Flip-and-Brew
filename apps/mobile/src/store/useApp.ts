@@ -18,7 +18,7 @@ import { NO_PASSIVE, SLEEP_LIMITS, applyPlan, normalizeSleep, planPassive, type 
 import type { UsageDay } from '@/lib/usage';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, passiveCoins: true, sleepMin: SLEEP_LIMITS.default, dailyMorning: false, dailyCheckin: false, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, passiveCoins: true, sleepMin: SLEEP_LIMITS.default, dailyMorning: true, dailyCheckin: true, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -52,12 +52,15 @@ type State = {
   settings: Settings;
   /** a introdução já foi vista */
   onboarded: boolean;
+  /** a orientação logo após o cadastro (lembretes e moedas pelo tempo bloqueado) já foi vista neste aparelho */
+  firstStepsDone: boolean;
   /** Início está na tela e em primeiro plano; usado para iniciar o copo ao virar o celular. */
   homeFocused: boolean;
   /** quando o último copo terminou, para não reiniciar sozinho */
   lastEndedAt: number;
 
   setOnboarded: (v: boolean) => void;
+  finishFirstSteps: () => void;
   setHomeFocused: (v: boolean) => void;
   setSettings: (s: Partial<Settings>) => void;
   start: (now?: number) => boolean;
@@ -118,6 +121,7 @@ const initial = {
   articlesRead: [] as string[],
   settings: DEFAULT_SETTINGS,
   onboarded: false,
+  firstStepsDone: false,
   homeFocused: false,
   lastEndedAt: 0,
 };
@@ -128,6 +132,7 @@ export const useApp = create<State>()(
       ...initial,
 
       setOnboarded: (v) => set({ onboarded: v }),
+      finishFirstSteps: () => set({ firstStepsDone: true }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
       creditPassive: (days, now = Date.now()) => {
@@ -316,6 +321,7 @@ export const useApp = create<State>()(
         articlesRead: s.articlesRead,
         settings: s.settings,
         onboarded: s.onboarded,
+        firstStepsDone: s.firstStepsDone,
       }),
     },
   ),

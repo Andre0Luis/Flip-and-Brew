@@ -1,6 +1,6 @@
 # ADR-0009 · Offline-first: a conta é sempre opcional
 
-**Status:** Aceita; a regra sobre anúncios e publicidade foi substituída pela [ADR-0021](0021-banner-de-anuncio-e-remocao-paga.md) · **Data:** 2026-10
+**Status:** Aceita; a regra sobre anúncios e publicidade foi substituída pela [ADR-0021](0021-banner-de-anuncio-e-remocao-paga.md); a regra "a conta é sempre opcional" foi substituída, para o backend próprio, pela [ADR-0028](0028-login-obrigatorio-com-o-backend-proprio.md) · **Data:** 2026-10
 
 ## Contexto
 Um app cuja ideia é largar o celular não deve exigir cadastro, internet nem servidor para funcionar. O usuário depois pediu cadastro, login e exclusão de conta (ADR-0010).
