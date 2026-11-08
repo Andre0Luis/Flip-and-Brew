@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BackHandler, Pressable, View } from 'react-native';
+import { BackHandler, Pressable, Share, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
@@ -160,6 +160,11 @@ export default function Resultado() {
         </View>
       </View>
 
+      <Button
+        label={t('share.cupCta')}
+        tone="quiet"
+        onPress={() => void Share.share({ message: t('share.cup', { time: minutesLabel(session.elapsedMs / 60_000), cup: cupName }) }).catch(() => {})}
+      />
       <Button label={t('result.finish')} onPress={() => router.dismissTo('/')} />
     </Screen>
   );

@@ -18,6 +18,7 @@ import { useTestTools } from '@/lib/admin';
 import { bestEnergyWeekday, bestWeekday, completionRate, criticalHour, favoriteCombo, longestStreak, weekdayAverages } from '@/lib/patterns';
 import { itemText } from '@/data/catalog';
 import { minutesLabel } from '@/lib/format';
+import { weekGoalProgress } from '@/lib/week';
 import { dictionaries, formatDateShort, useI18n, weekdayInitial } from '@/i18n';
 import { useTheme } from '@/theme/ThemeProvider';
 import { useNow } from '@/hooks/useNow';
@@ -145,6 +146,14 @@ export default function BemEstar() {
         </Card>
       ) : tab === 'resumo' ? (
         <>
+          {(() => {
+            const w = weekGoalProgress(sessions, goal, now);
+            return (
+              <Card style={{ gap: 6 }}>
+                <Meter label={t('wb.weekGoal')} value={t('wb.weekGoalValue', { done: minutesLabel(w.minutes), goal: minutesLabel(w.goal) })} pct={w.pct} />
+              </Card>
+            );
+          })()}
           <Card style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
             {score ? (
               <>
