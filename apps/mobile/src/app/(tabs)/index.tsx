@@ -13,6 +13,7 @@ import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
 import { Button, Card, Screen, Segmented, Txt } from '@/components/ui';
 import { TopStatus } from '@/components/TopStatus';
+import { Tutorial } from '@/components/Tutorial';
 import { RestCard } from '@/components/RestCard';
 import { PassiveNotice } from '@/components/PassiveNotice';
 import { normalizePomo } from '@/lib/pomodoro';
@@ -27,6 +28,7 @@ import { fonts } from '@/theme/tokens';
 
 export default function Inicio() {
   const router = useRouter();
+  const tutorialDone = useApp((s) => s.tutorialDone);
   const { c } = useTheme();
   const { lang, t } = useI18n();
   const { coins, owned, brewerId, cupId, packId, sessions, active, settings } = useApp();
@@ -90,6 +92,7 @@ export default function Inicio() {
 
   return (
     <Screen ads>
+      {!tutorialDone && <Tutorial />}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
         <TopStatus coins={coins} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>

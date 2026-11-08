@@ -24,6 +24,8 @@ export default function Intro() {
   const { t, lang } = useI18n();
   const router = useRouter();
   const canSignUp = !!getBackend();
+  // Com o backend próprio, a conta é obrigatória (ADR-0028): a introdução termina levando ao cadastro.
+  const required = getBackend()?.kind === 'api';
   const usage = useSystemUsage(1);
   const notifyOn = useApp((s) => s.settings.notifyOnDone);
   const [notifyMsg, setNotifyMsg] = useState<string | null>(null);
@@ -173,7 +175,7 @@ export default function Intro() {
               {t('intro.t2')}
             </Txt>
             <Card style={{ gap: 10, alignSelf: 'stretch' }}>
-              {(['intro.l1', 'intro.l2', 'intro.l3'] as const).map((k) => (
+              {(required ? (['intro.req.l1', 'intro.req.l2', 'intro.l3'] as const) : (['intro.l1', 'intro.l2', 'intro.l3'] as const)).map((k) => (
                 <View key={k} style={{ flexDirection: 'row', gap: 10 }}>
                   <Txt v="body" color="accent">
                     •
@@ -184,7 +186,22 @@ export default function Intro() {
                 </View>
               ))}
             </Card>
-            {canSignUp && (
+            {required && (
+              <Card style={{ gap: 10, alignSelf: 'stretch' }}>
+                <Txt v="title">{t('intro.req.accTitle')}</Txt>
+                {(['intro.req.b1', 'intro.req.b2', 'intro.req.b3'] as const).map((k) => (
+                  <View key={k} style={{ flexDirection: 'row', gap: 10 }}>
+                    <Txt v="body" color="accent">
+                      •
+                    </Txt>
+                    <Txt v="body" style={{ flex: 1 }}>
+                      {t(k)}
+                    </Txt>
+                  </View>
+                ))}
+              </Card>
+            )}
+            {canSignUp && !required && (
               <Card style={{ gap: 10, alignSelf: 'stretch' }}>
                 <Txt v="title">{t('intro.acc.title')}</Txt>
                 {(['intro.acc.b1', 'intro.acc.b2', 'intro.acc.b3'] as const).map((k) => (
@@ -210,7 +227,7 @@ export default function Intro() {
         ))}
       </View>
 
-      <Button label={last ? t('intro.start') : step === 1 && !calibrated && cal.available ? t('intro.later') : t('intro.next')} onPress={last ? finish : () => setStep((s) => s + 1)} />
+      <Button label={last ? t(required ? 'intro.req.cta' : 'intro.start') : step === 1 && !calibrated && cal.available ? t('intro.later') : t('intro.next')} onPress={last ? finish : () => setStep((s) => s + 1)} />
     </Screen>
   );
 }
