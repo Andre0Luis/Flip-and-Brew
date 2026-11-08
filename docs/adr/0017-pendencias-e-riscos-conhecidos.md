@@ -73,7 +73,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **iPhone:** a Family Controls (Apple) não está pedida; pela apuração, o tempo de tela do iPhone não pode ir para servidor, então o ranking "menos celular" fica só no Android.
 - [x] **Kotlin do módulo `usage-stats` compila** (build debug do Android passou em 2026-11-07, `:usage-stats:compileDebugKotlin`). Falta rodar num aparelho ou emulador e ver os números reais.
 
-- [ ] **App com o backend próprio** (ADR-0027): nunca rodou em aparelho. Faltam as 3 variáveis `EXPO_PUBLIC_*` (`apps/mobile/.env` e EAS), configurar o Supabase Auth (e-mail e SMTP da Brevo, Google com "skip nonce check", Apple), **tela de nova senha** para o link de recuperação e revogar o token da Apple na exclusão.
+- [ ] **App com o backend próprio** (ADR-0027): nunca rodou em aparelho. Faltam as 3 variáveis `EXPO_PUBLIC_*` (`apps/mobile/.env` e EAS), configurar o Supabase Auth (e-mail e SMTP da Brevo, Google com "skip nonce check", Apple), revogar o token da Apple na exclusão. A **tela de nova senha** existe (`/nova-senha`, ADR-0027), mas exige `flipandbrew://nova-senha` em Redirect URLs no painel do Supabase e nunca rodou em aparelho.
 - [ ] **`SUPABASE_SERVICE_ROLE_KEY`** (Sensitive) na Vercel: sem ela, excluir a conta apaga os dados mas deixa o usuário no Supabase Auth.
 - [ ] **Vercel Authentication** barra os domínios `*-andre0luis-projects.vercel.app`; só `flip-and-brew.vercel.app` é público. Conferir qual vai no `EXPO_PUBLIC_API_URL`.
 

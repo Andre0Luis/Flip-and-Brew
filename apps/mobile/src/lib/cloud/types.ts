@@ -23,6 +23,8 @@ export type AuthErrorCode =
   | 'unavailable'
   /** E-mail ainda não confirmado (o Supabase exige a confirmação antes do primeiro login). */
   | 'unconfirmed'
+  /** O link de recuperação de senha venceu, já foi usado ou veio incompleto. */
+  | 'link-expired'
   | 'unknown';
 
 export class AuthError extends Error {
@@ -83,6 +85,8 @@ export interface CloudBackend {
   /** Troca a senha de uma conta com e-mail e senha, confirmando a senha atual. */
   changePassword(current: string, next: string): Promise<void>;
   sendPasswordReset(email: string): Promise<void>;
+  /** Define a nova senha a partir do link do e-mail de recuperação (o endereço que abriu o app). Só o backend próprio usa. */
+  resetPasswordWithLink?(url: string, newPassword: string): Promise<void>;
   signOut(): Promise<void>;
   /** Confirma a identidade antes de apagar. Com senha para e-mail, sem argumento para Google e Apple. */
   reauthenticate(password?: string): Promise<void>;

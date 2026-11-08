@@ -33,6 +33,7 @@ function fakeAuth(over: Partial<Record<keyof AuthClient, unknown>> = {}) {
     refreshSession: rec('refreshSession', async () => ok({ user: user(), session: {} })),
     updateUser: rec('updateUser', async () => ok({ user: user() })),
     resetPasswordForEmail: rec('resetPasswordForEmail', async () => ({ data: {}, error: null })),
+    setSession: rec('setSession', async () => ok({ user: user(), session: {} })),
     signOut: rec('signOut', async () => ({ error: null })),
     ...Object.fromEntries(Object.entries(over).map(([k, v]) => [k, rec(k, v as (...a: any[]) => unknown)])),
   } as unknown as AuthClient;
@@ -180,4 +181,36 @@ test('erro desconhecido guarda o código original; erro de login nativo continua
   assert.equal(toSupabaseAuthError(new ApiError(0, 'network')).code, 'network');
   const same = new AuthError('too-many');
   assert.equal(toSupabaseAuthError(same), same);
+});
+
+test('recuperação de senha: o e-mail volta ao app e o link define a nova senha', async () => {
+  const args: unknown[][] = [];
+  const a = fakeAuth({ resetPasswordForEmail: async (...x: unknown[]) => (args.push(x), { data: {}, error: null }), updateUser: async (...x: unknown[]) => (args.push(x), ok({ user: user() })), setSession: async (...x: unknown[]) => (args.push(x), ok({ user: user(), session: {} })) });
+  const { backend } = make(a);
+  await backend.sendPasswordReset('ana@exemplo.com');
+  assert.deepEqual(args[0], ['ana@exemplo.com', { redirectTo: 'flipandbrew://nova-senha' }]);
+  await backend.resetPasswordWithLink!('flipandbrew://nova-senha#access_token=aa&refresh_token=rr&type=recovery', 'SenhaNova123');
+  assert.deepEqual(args[1], [{ access_token: 'aa', refresh_token: 'rr' }]);
+  assert.deepEqual(args[2], [{ password: 'SenhaNova123' }]);
+  assert.deepEqual(a.calls.filter((c) => c === 'setSession' || c === 'updateUser'), ['setSession', 'updateUser']);
+});
+
+test('link vencido, usado ou sem dados vira "link-expired" e não mexe na sessão', async () => {
+  const a = fakeAuth();
+  const { backend } = make(a);
+  for (const url of ['flipandbrew://nova-senha#error=access_denied&error_code=otp_expired', 'flipandbrew://nova-senha', '']) {
+    await assert.rejects(backend.resetPasswordWithLink!(url, 'SenhaNova123'), (e: AuthError) => e.code === 'link-expired');
+  }
+  assert.equal(a.calls.includes('setSession'), false);
+});
+
+test('senha fraca no passo final volta como weak-password', async () => {
+  const { backend } = make(fakeAuth({ updateUser: async () => ({ data: { user: null }, error: Object.assign(new Error('weak'), { code: 'weak_password' }) }) }));
+  await assert.rejects(backend.resetPasswordWithLink!('flipandbrew://nova-senha#access_token=a&refresh_token=b', '123'), (e: AuthError) => e.code === 'weak-password');
+});
+
+test('erro do portão do Supabase sem código (chave inválida) mostra a mensagem real, não "undefined"', () => {
+  const e = toSupabaseAuthError(Object.assign(new Error('Invalid API key'), { name: 'AuthApiError', status: 401, code: undefined }));
+  assert.equal(e.code, 'unknown');
+  assert.equal(e.message, 'Invalid API key');
 });
