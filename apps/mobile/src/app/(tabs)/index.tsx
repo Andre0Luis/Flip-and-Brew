@@ -193,18 +193,19 @@ export default function Inicio() {
             ]}
           />
         )}
-        {pomodoro && !active && (
-          <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-            {t('mode.pomodoroHint', { focus: pomo.focusMin, rest: pomo.breakMin, long: pomo.longBreakMin, n: pomo.cycle })}
-          </Txt>
-        )}
-        {pomodoro && !active && <Button label={t('pomo.adjust')} tone="quiet" onPress={() => router.push('/ajustes')} style={{ alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 16 }} />}
+        {/* O botão principal vem logo abaixo da escolha do modo: no Pomodoro, a explicação e o ajuste empurravam ele para trás da barra de abas. */}
         <Button label={active ? t('home.continueBrew') : pomodoro ? t('pomo.next') : t('home.start')} onPress={begin} />
         {settings.autoStart && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
             {t('home.flipHint')}
           </Txt>
         )}
+        {pomodoro && !active && (
+          <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
+            {t('mode.pomodoroHint', { focus: pomo.focusMin, rest: pomo.breakMin, long: pomo.longBreakMin, n: pomo.cycle })}
+          </Txt>
+        )}
+        {pomodoro && !active && <Button label={t('pomo.adjust')} tone="quiet" onPress={() => router.push('/ajustes')} style={{ alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 16 }} />}
       </View>
 
       <CheckinCard />
