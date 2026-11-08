@@ -64,6 +64,7 @@ function Shell() {
             <Stack.Screen name="conta" />
             <Stack.Screen name="perfil" />
             <Stack.Screen name="criador" />
+            <Stack.Screen name="pessoa/[handle]" />
           </Stack.Protected>
           {/* Ficam por último e sem trava: a primeira rota registrada vira a tela inicial. A política de privacidade precisa abrir antes do cadastro, e o link do e-mail de recuperação de senha também. */}
           <Stack.Screen name="privacidade" />

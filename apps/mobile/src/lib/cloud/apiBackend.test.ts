@@ -58,6 +58,10 @@ const tick = () => new Promise((r) => setTimeout(r, 5));
 test('o usuário do Supabase vira CloudUser: provedor, e-mail e confirmação', () => {
   assert.deepEqual(toCloudUser(user()), { uid: 'u1', email: 'ana@exemplo.com', provider: 'password', emailVerified: true });
   assert.equal(toCloudUser(user({ app_metadata: { provider: 'google' } })).provider, 'google');
+  // O Google manda o nome completo nos metadados da conta.
+  assert.equal(toCloudUser(user({ user_metadata: { full_name: ' Ana Souza ' } })).name, 'Ana Souza');
+  assert.equal(toCloudUser(user({ user_metadata: { name: 'Bia' } })).name, 'Bia');
+  assert.equal('name' in toCloudUser(user({ user_metadata: {} })), false);
   assert.equal(toCloudUser(user({ app_metadata: { provider: 'apple' } })).provider, 'apple');
   assert.equal(toCloudUser(user({ email_confirmed_at: undefined })).emailVerified, false);
   assert.equal(toCloudUser(user({ email: undefined })).email, null);
