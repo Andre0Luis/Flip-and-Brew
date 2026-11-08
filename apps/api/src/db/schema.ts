@@ -120,4 +120,79 @@ export const blocks = pgTable(
   (t) => [primaryKey({ columns: [t.blockerId, t.blockedId] }), index('blocks_blocked').on(t.blockedId)],
 ).enableRLS();
 
+/** Post da comunidade: título, legenda e até 3 fotos. Só o autor e os amigos dele veem (ADR-0024). */
+export const posts = pgTable(
+  'posts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    authorId: uuid('author_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    caption: text('caption'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [index('posts_author_at').on(t.authorId, t.createdAt)],
+).enableRLS();
+
+/** As fotos de um post, na ordem. O arquivo fica no armazenamento privado (`path`); a leitura é por link assinado. */
+export const postImages = pgTable(
+  'post_images',
+  {
+    postId: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
+    position: integer('position').notNull(),
+    path: text('path').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.postId, t.position] })],
+).enableRLS();
+
+export const postLikes = pgTable(
+  'post_likes',
+  {
+    postId: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
+    userId: uuid('user_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.postId, t.userId] })],
+).enableRLS();
+
+export const postComments = pgTable(
+  'post_comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    postId: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
+    authorId: uuid('author_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    body: text('body').notNull(),
+    createdAt: ts('created_at').notNull().defaultNow(),
+  },
+  (t) => [index('post_comments_post_at').on(t.postId, t.createdAt)],
+).enableRLS();
+
+export const notificationKindEnum = pgEnum('notification_kind', ['like', 'comment']);
+/** Avisos dentro do app: quem curtiu ou comentou um post meu. */
+export const notifications = pgTable(
+  'notifications',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    actorId: uuid('actor_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    kind: notificationKindEnum('kind').notNull(),
+    postId: uuid('post_id').references(() => posts.id, { onDelete: 'cascade' }),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    readAt: ts('read_at'),
+  },
+  (t) => [index('notifications_user_at').on(t.userId, t.createdAt)],
+).enableRLS();
+
+/** Totais da semana (ISO, "2026-W45") enviados pelo app, para o ranking. */
+export const weeklyStats = pgTable(
+  'weekly_stats',
+  {
+    userId: uuid('user_id').notNull().references(() => profiles.id, { onDelete: 'cascade' }),
+    week: text('week').notNull(),
+    offlineMinutes: integer('offline_minutes').notNull(),
+    cups: integer('cups').notNull(),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.week] }), index('weekly_stats_week').on(t.week, t.offlineMinutes)],
+).enableRLS();
+
 export type Profile = typeof profiles.$inferSelect;

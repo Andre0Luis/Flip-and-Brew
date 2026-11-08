@@ -2,10 +2,11 @@ import { and, eq, isNull } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { MIN_AGE, ageOn, bootstrapSchema, coffeePrefsSchema, pingSchema, privacyPatchSchema, profilePatchSchema } from '../shared.js';
 import type { AuthAdmin } from '../auth/admin.js';
+import type { StorageProvider } from '../storage/provider.js';
 import type { Env } from '../auth/middleware.js';
 import type { Config } from '../config.js';
 import type { Db } from '../db/client.js';
-import { activity, auditLog, coffeePrefs, privacySettings, profiles, type Profile } from '../db/schema.js';
+import { activity, auditLog, coffeePrefs, postImages, posts, privacySettings, profiles, type Profile } from '../db/schema.js';
 import type { EmailProvider } from '../email/provider.js';
 import { welcomeEmail } from '../email/welcome.js';
 import { HttpError, jsonBody, parse } from '../lib/errors.js';
@@ -31,7 +32,7 @@ const isUnique = (e: unknown): boolean => {
 };
 
 /** Rotas da própria pessoa. `/bootstrap` só exige token; as demais exigem perfil (ver app.ts). */
-export function meRoutes(db: Db, cfg: Config, email: EmailProvider, authAdmin?: AuthAdmin) {
+export function meRoutes(db: Db, cfg: Config, email: EmailProvider, authAdmin?: AuthAdmin, storage?: StorageProvider) {
   const r = new Hono<Env>();
 
   const load = async (id: string) => (await db.select().from(profiles).where(eq(profiles.id, id)))[0];
@@ -149,7 +150,10 @@ export function meRoutes(db: Db, cfg: Config, email: EmailProvider, authAdmin?: 
       }
     }
     await db.insert(auditLog).values({ actorId: id, action: 'account.delete', target: id });
+    // As fotos dos posts ficam no armazenamento, fora do banco: apaga depois que a cascata levar os posts.
+    const photos = await db.select({ path: postImages.path }).from(postImages).innerJoin(posts, eq(posts.id, postImages.postId)).where(eq(posts.authorId, id));
     await db.delete(profiles).where(eq(profiles.id, id));
+    if (storage && photos.length) await storage.remove(photos.map((x) => x.path)).catch(() => {});
     return c.body(null, 204);
   });
 

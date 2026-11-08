@@ -29,6 +29,13 @@
       "when": 1794077949700,
       "tag": "0003_revoke_supabase_api_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794103377012,
+      "tag": "0004_posts_likes_comments_ranking",
+      "breakpoints": true
     }
   ]
 }

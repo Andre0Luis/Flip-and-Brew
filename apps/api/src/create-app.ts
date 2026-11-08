@@ -17,13 +17,16 @@ import { coffeeRoutes } from './routes/coffees.js';
 import { friendRoutes } from './routes/friends.js';
 import { meRoutes } from './routes/me.js';
 import { pagesRoutes } from './routes/pages.js';
+import { postRoutes } from './routes/posts.js';
+import { rankingRoutes } from './routes/rankings.js';
 import { snapshotRoutes } from './routes/snapshot.js';
+import type { StorageProvider } from './storage/provider.js';
 import { userRoutes } from './routes/users.js';
 
-export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; authAdmin?: AuthAdmin; rateLimit?: { windowMs: number; max: number } | false };
+export type AppDeps = { db: Db; auth: AuthProvider; email: EmailProvider; config: Config; authAdmin?: AuthAdmin; storage?: StorageProvider; rateLimit?: { windowMs: number; max: number } | false };
 
 /** Monta a API. Recebe tudo de fora (banco, login, configuração) para rodar igual no servidor local, na Vercel e nos testes. */
-export function createApp({ db, auth, email, config, authAdmin, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
+export function createApp({ db, auth, email, config, authAdmin, storage, rateLimit: rl = { windowMs: 60_000, max: 120 } }: AppDeps) {
   const app = new Hono<Env>();
 
   app.use(secureHeaders());
@@ -57,12 +60,20 @@ export function createApp({ db, auth, email, config, authAdmin, rateLimit: rl = 
   v1.use('/blocks', withProfile);
   v1.use('/blocks/*', withProfile);
   v1.use('/users/*', withProfile);
-  v1.route('/', meRoutes(db, config, email, authAdmin));
+  // Posts, comentários e ranking.
+  v1.use('/posts', withProfile);
+  v1.use('/posts/*', withProfile);
+  v1.use('/comments/*', withProfile);
+  v1.use('/feed', withProfile);
+  v1.use('/rankings', withProfile);
+  v1.route('/', meRoutes(db, config, email, authAdmin, storage));
   v1.route('/', snapshotRoutes(db));
   v1.route('/', coffeeRoutes(db));
   v1.route('/', friendRoutes(db));
   v1.route('/', userRoutes(db));
   v1.route('/', adminRoutes(db));
+  v1.route('/', postRoutes(db, storage));
+  v1.route('/', rankingRoutes(db));
   app.route('/v1', v1);
 
   app.notFound((c) => c.json({ error: { code: 'not_found', message: 'Rota não encontrada.' } }, 404));

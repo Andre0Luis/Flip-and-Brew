@@ -32,3 +32,12 @@ test('o backup exige versão, horário e dados', () => {
   assert.equal(snapshotPutSchema.safeParse({ v: 2, updatedAt: 1, data: {} }).success, false);
   assert.equal(snapshotPutSchema.safeParse({ v: 1, updatedAt: 0, data: {} }).success, false);
 });
+
+test('semana ISO: segunda a domingo, e a virada de ano vai para a semana certa', async () => {
+  const { isoWeek } = await import('./index');
+  assert.equal(isoWeek(Date.UTC(2026, 10, 9)), '2026-W46'); // segunda
+  assert.equal(isoWeek(Date.UTC(2026, 10, 15, 23)), '2026-W46'); // domingo à noite
+  assert.equal(isoWeek(Date.UTC(2026, 10, 16)), '2026-W47');
+  assert.equal(isoWeek(Date.UTC(2027, 0, 1)), '2026-W53'); // 1º de janeiro de 2027 é sexta: ainda semana 53 de 2026
+  assert.equal(isoWeek(Date.UTC(2024, 11, 30)), '2025-W01');
+});
