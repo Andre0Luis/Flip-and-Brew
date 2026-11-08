@@ -204,6 +204,14 @@
           "androidAppId": "ca-app-pub-3940256099942544~3347511713",
           "iosAppId": "ca-app-pub-3940256099942544~1458002511"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O Flip & Brew usa a sua galeria só para você escolher a foto do perfil.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
       ]
     ],
     "experiments": {

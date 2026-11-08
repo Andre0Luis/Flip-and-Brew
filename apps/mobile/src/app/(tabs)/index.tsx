@@ -11,7 +11,8 @@ import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
-import { Button, Card, CoinBadge, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Screen, Segmented, Txt } from '@/components/ui';
+import { TopStatus } from '@/components/TopStatus';
 import { RestCard } from '@/components/RestCard';
 import { PassiveNotice } from '@/components/PassiveNotice';
 import { normalizePomo } from '@/lib/pomodoro';
@@ -90,7 +91,7 @@ export default function Inicio() {
   return (
     <Screen ads>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
-        <CoinBadge coins={coins} />
+        <TopStatus coins={coins} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <Txt v="small" color="muted">
             {t('home.streak')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{days} {t('unit.day', { n: days })}</Txt>
