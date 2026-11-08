@@ -42,6 +42,9 @@ const delay = () => new Promise((r) => setTimeout(r, 250));
 export const mockBackend: CloudBackend = {
   kind: 'mock',
 
+  /** O servidor falso só existe em desenvolvimento: quem testa lá vê as ferramentas de teste. */
+  getRole: async () => 'admin',
+
   onChange(cb) {
     listeners.add(cb);
     const a = current(load());

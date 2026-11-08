@@ -34,13 +34,19 @@ test('iniciar usa o tempo da cafeteira, ou 1 minuto no modo de teste', () => {
   useApp.getState().start(t0);
   assert.equal(useApp.getState().active?.targetMs, 40 * MIN);
 
-  process.env.EXPO_PUBLIC_ADMIN_EMAILS = 'admin@flipandbrew.app';
-  useAuth.setState({ user: { uid: 'u1', email: 'admin@flipandbrew.app', provider: 'google', emailVerified: true } });
+  // Conta comum, mesmo logada e verificada, continua sem o modo de 1 minuto.
+  const user = { uid: 'u1', email: 'ana@exemplo.com', provider: 'google' as const, emailVerified: true };
+  useAuth.setState({ user, role: 'user' });
+  useApp.setState({ active: null });
+  useApp.getState().start(t0);
+  assert.equal(useApp.getState().active?.targetMs, 40 * MIN);
+
+  // O papel de administrador vem do servidor.
+  useAuth.setState({ user, role: 'admin' });
   useApp.setState({ active: null });
   useApp.getState().start(t0);
   assert.equal(useApp.getState().active?.targetMs, MIN);
-  useAuth.setState({ user: null });
-  delete process.env.EXPO_PUBLIC_ADMIN_EMAILS;
+  useAuth.setState({ user: null, role: null });
 });
 
 test('encerrar um copo cheio registra a sessão e soma as moedas com bônus', () => {

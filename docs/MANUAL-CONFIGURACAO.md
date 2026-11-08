@@ -50,7 +50,7 @@ Os passos 4 a 7 podem esperar: o app roda sem eles. Comece pelo 1, 2 e 6.
 Você não precisa de Firebase para ver as telas de conta e o app cheio.
 
 ### Usuário de teste no app (qualquer build de desenvolvimento)
-1. Abra **Ajustes** (engrenagem no Início). Em build de desenvolvimento as ferramentas de teste já aparecem; em outro build, só aparecem para a conta de administrador (e-mail verificado listado em `EXPO_PUBLIC_ADMIN_EMAILS`).
+1. Abra **Ajustes** (engrenagem no Início). As ferramentas de teste só aparecem para a conta de administrador: a conta cujo e-mail verificado está em `ADMIN_EMAILS` na Vercel (o servidor devolve o papel `admin` depois do login).
 2. Toque em **Carregar usuário de teste**. Você ganha:
    - **50.000 moedas**
    - **todas** as cafeteiras e xícaras (Chemex e Coleção Estoica incluídas)
