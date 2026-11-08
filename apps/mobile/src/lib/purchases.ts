@@ -44,7 +44,8 @@ export async function loadCoinPacks(): Promise<CoinPack[]> {
     const packages = offerings.current?.availablePackages ?? [];
     return packages
       .map((p) => ({ id: p.identifier, coins: coinsOf(p.product.identifier), price: p.product.priceString, raw: p }))
-      .filter((p) => p.coins > 0);
+      .filter((p) => p.coins > 0)
+      .sort((x, y) => x.coins - y.coins); // a loja devolve em qualquer ordem
   } catch {
     return [];
   }
