@@ -7,7 +7,6 @@ import { useApp } from '@/store/useApp';
 import { useCalibrate } from '@/engine/useCalibrate';
 import { ensureNotificationPermission } from '@/lib/notifications';
 import { cloudAvailable } from '@/lib/cloud';
-import { hasProfile } from '@/lib/profile';
 import { useTestTools } from '@/lib/admin';
 import { GoalPicker } from '@/components/GoalPicker';
 import { PassiveSettings } from '@/components/PassiveSettings';
@@ -83,7 +82,6 @@ export default function Ajustes() {
   const showDev = useTestTools();
   const pomo = normalizePomo(settings.pomodoro);
   const setOnboarded = useApp((s) => s.setOnboarded);
-  const profile = useApp((s) => s.profile);
   const authUser = useAuth((s) => s.user);
   const pro = usePro();
   const [proMsg, setProMsg] = useState<string | null>(null);
@@ -278,14 +276,6 @@ export default function Ajustes() {
           {authUser && <Button label={t('delete.start')} tone="quiet" onPress={() => router.push({ pathname: '/conta', params: { excluir: '1' } })} />}
         </Card>
       )}
-
-      <Card style={{ gap: 10 }}>
-        <Txt v="title">{t('profile.title')}</Txt>
-        <Txt v="small" color="muted">
-          {profile.name ? t('profile.cardFilled', { name: profile.name }) : hasProfile(profile) ? t('profile.cardFilledNoName') : t('profile.cardBody')}
-        </Txt>
-        <Button label={t('profile.open')} tone="quiet" onPress={() => router.push('/perfil')} />
-      </Card>
 
       <Card style={{ gap: 10 }}>
         <Button label={t('creator.open')} tone="quiet" onPress={() => router.push('/criador')} />

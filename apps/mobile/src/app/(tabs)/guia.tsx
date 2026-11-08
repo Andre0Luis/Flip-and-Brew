@@ -6,7 +6,8 @@ import { Art, Coin } from '@/art/Art';
 import { CoinShop } from '@/components/CoinShop';
 import { ColecaoView } from '@/components/ColecaoView';
 import { Icon } from '@/components/Icon';
-import { Bar, Button, Card, CoinBadge, Header, Screen, Segmented, Txt } from '@/components/ui';
+import { Bar, Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
+import { TopStatus } from '@/components/TopStatus';
 import { brewers, COLLECTIONS, cups, localize, packs as coffeePacks, type LocalizedItem } from '@/data/catalog';
 import { useApp } from '@/store/useApp';
 import { streak } from '@/lib/stats';
@@ -140,7 +141,7 @@ export default function Guia() {
 
   return (
     <Screen ads>
-      <Header title={t('guide.title')} right={<CoinBadge coins={coins} />} />
+      <Header title={t('guide.title')} right={<TopStatus coins={coins} />} />
       <Segmented<Section>
         value={section}
         onChange={setSection}
