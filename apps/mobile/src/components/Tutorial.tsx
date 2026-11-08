@@ -9,7 +9,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 /** Balões passo a passo no Início, na primeira vez: perfil e moedas, cafeteira, começar o copo e as abas. */
 export function Tutorial() {
-  const { c, r } = useTheme();
+  const { c, r, isDark } = useTheme();
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const done = useApp((s) => s.setTutorialDone);
@@ -40,7 +40,7 @@ export function Tutorial() {
   return (
     <Modal transparent animationType="fade" visible onRequestClose={() => done(true)} statusBarTranslucent>
       <View style={{ flex: 1 }}>
-        <View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: c.fg, opacity: 0.45 }} />
+        <View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: isDark ? c.bg : c.fg, opacity: isDark ? 0.7 : 0.45 }} />
         <View style={{ position: 'absolute', left: 20, right: 20, ...pos[step.place] }}>
           {arrow === 'up' && <View style={tri('up')} />}
           <Card style={{ gap: 10, borderRadius: r.lg }}>
