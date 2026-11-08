@@ -93,6 +93,39 @@ export const coffeeLogSchema = z
   })
   .strict();
 
+/** Fotos por post (pedido do dono). O app reduz e compacta antes de enviar. */
+export const MAX_POST_IMAGES = 3;
+/** Caminho de uma foto no armazenamento: `<id de quem postou>/<uuid>.jpg`. */
+export const postImagePathSchema = z.string().regex(/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.jpg$/, 'imagem: caminho inválido');
+export const uploadRequestSchema = z.object({ count: z.number().int().min(1).max(MAX_POST_IMAGES) }).strict();
+export const postCreateSchema = z
+  .object({
+    title: z.string().trim().min(1).max(80),
+    caption: z.string().trim().max(500).optional(),
+    images: z.array(postImagePathSchema).max(MAX_POST_IMAGES).optional(),
+  })
+  .strict();
+export const commentCreateSchema = z.object({ body: z.string().trim().min(1).max(500) }).strict();
+/** Totais da semana que o app envia para o ranking (minutos offline e copos terminados). */
+export const weekStatsSchema = z
+  .object({
+    week: z.string().regex(/^\d{4}-W\d{2}$/, 'semana: AAAA-Wnn'),
+    offlineMinutes: z.number().int().min(0).max(7 * 24 * 60),
+    cups: z.number().int().min(0).max(1000),
+  })
+  .strict();
+
+/** Semana ISO 8601 (segunda a domingo) de um instante, em UTC: "2026-W45". */
+export function isoWeek(ms: number): string {
+  const d = new Date(ms);
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const start = Date.UTC(t.getUTCFullYear(), 0, 1);
+  const week = Math.ceil(((t.getTime() - start) / 86_400_000 + 1) / 7);
+  return `${t.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
+}
+
 export type ProfilePatch = z.infer<typeof profilePatchSchema>;
 export type CoffeePrefs = z.infer<typeof coffeePrefsSchema>;
 export type PrivacyPatch = z.infer<typeof privacyPatchSchema>;

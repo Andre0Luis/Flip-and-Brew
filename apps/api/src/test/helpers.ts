@@ -6,6 +6,7 @@ import type { Config } from '../config.js';
 import { createDb } from '../db/client.js';
 import type { EmailMessage, EmailProvider } from '../email/provider.js';
 import { runMigrations } from '../db/migrate.js';
+import { memoryStorage } from '../storage/memory.js';
 
 const SECRET = 'segredo-de-teste-com-mais-de-16-caracteres';
 
@@ -26,7 +27,8 @@ export async function testApp(over: Partial<Config> = {}, authAdmin?: AuthAdmin)
       sent.push(m);
     },
   };
-  const app = createApp({ db: handle.db, auth: devAuth(SECRET), email, config, authAdmin, rateLimit: false });
+  const storage = memoryStorage();
+  const app = createApp({ db: handle.db, auth: devAuth(SECRET), email, config, authAdmin, storage, rateLimit: false });
 
   const user = async (email = `${randomUUID().slice(0, 8)}@exemplo.com`, emailVerified = true) => {
     const id = randomUUID();
@@ -47,5 +49,5 @@ export async function testApp(over: Partial<Config> = {}, authAdmin?: AuthAdmin)
     const r = await call('/v1/me/bootstrap', { token: u.token, method: 'POST', body: {} });
     return { ...u, bootstrap: r };
   };
-  return { app, handle, call, user, member, sent, mail, close: () => handle.close() };
+  return { app, handle, call, user, member, sent, mail, storage, close: () => handle.close() };
 }
