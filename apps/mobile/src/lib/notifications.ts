@@ -25,6 +25,17 @@ function mod() {
   }
 }
 
+/** Só olha se as notificações já estão permitidas; não abre o pedido do sistema. */
+export async function notificationsGranted(): Promise<boolean> {
+  const N = mod();
+  if (!N) return false;
+  try {
+    return (await N.getPermissionsAsync()).granted;
+  } catch {
+    return false;
+  }
+}
+
 export async function ensureNotificationPermission(): Promise<boolean> {
   const N = mod();
   if (!N) return false;

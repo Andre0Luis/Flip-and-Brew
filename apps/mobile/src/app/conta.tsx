@@ -69,7 +69,8 @@ function ErrorLine({ error }: { error: AuthError | string | null }) {
   );
 }
 
-function SignedOut() {
+/** O formulário de entrar e criar conta. No portão de login (`required`) o texto diz que a conta é necessária. */
+export function SignedOut({ required = false }: { required?: boolean }) {
   const router = useRouter();
   const { c } = useTheme();
   const { t } = useI18n();
@@ -160,7 +161,7 @@ function SignedOut() {
   return (
     <View style={{ gap: 16 }}>
       <Txt v="body" color="muted">
-        {t('account.optional')}
+        {t(required ? 'gate.body' : 'account.optional')}
       </Txt>
       {backend?.kind === 'mock' && (
         <Card style={{ gap: 8, backgroundColor: c.soft }}>

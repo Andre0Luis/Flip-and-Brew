@@ -285,3 +285,8 @@ test('moedas pelo tempo bloqueado: com o ajuste desligado nada acontece, e um so
   // 24 h - 14 h de tela = 10 h bloqueadas; com 9 h de sono sobra 1 h = 6 moedas
   assert.equal(useApp.getState().creditPassive([day(0)], t + DAY), 6);
 });
+
+test('os lembretes diários (frase da manhã e check-in) vêm ligados em quem instala agora', () => {
+  assert.equal(DEFAULT_SETTINGS.dailyMorning, true);
+  assert.equal(DEFAULT_SETTINGS.dailyCheckin, true);
+});
