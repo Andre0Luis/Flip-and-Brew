@@ -1,0 +1,2 @@
+# Falso positivo: JWT de exemplo (role anon, assinatura falsa) num teste, removido do código no commit seguinte.
+26a3eb6aed13596280d1ab7d27ef70e13ad4da14:apps/mobile/src/lib/cloud/config.test.ts:jwt:5
