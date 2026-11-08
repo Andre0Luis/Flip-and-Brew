@@ -130,7 +130,7 @@ function CommunityHome({ api }: { api: CommunityApi }) {
       />
       {/* O apelido fica embaixo do título: ao lado, um apelido longo quebrava o cabeçalho. */}
       {!!me?.handle && (
-        <Txt v="label" color="muted" numberOfLines={1} style={{ marginTop: -8 }}>
+        <Txt v="small" color="muted" numberOfLines={1} style={{ marginTop: -8 }}>
           {`@${me.handle}`}
         </Txt>
       )}

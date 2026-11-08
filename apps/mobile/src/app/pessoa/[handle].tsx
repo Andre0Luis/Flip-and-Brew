@@ -99,7 +99,7 @@ export default function Pessoa() {
               {personName(p)}
             </Txt>
             {!!p.handle && !!p.displayName && (
-              <Txt v="label" color="muted">
+              <Txt v="small" color="muted">
                 {`@${p.handle}`}
               </Txt>
             )}
