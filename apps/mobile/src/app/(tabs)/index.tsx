@@ -75,7 +75,7 @@ export default function Inicio() {
   const brewerIds = ownedBrewers.map((b) => b.id);
   const brewerIndex = Math.max(0, brewerIds.indexOf(brewerId));
   // O parâmetro t muda a cada toque, para a Coleção reagir mesmo quando já está aberta na mesma aba.
-  const openCollection = (tab: 'cup' | 'beans') => router.push({ pathname: '/colecao', params: { tab, t: String(Date.now()) } });
+  const openCollection = (tab: 'cup' | 'beans') => router.push({ pathname: '/guia', params: { section: 'colecao', tab, t: String(Date.now()) } });
   const goBrewer = (to: number) => {
     const id = brewerIds[to];
     if (!id) return;

@@ -27,7 +27,6 @@ export const pt = {
   'tab.guide': 'Guia',
   'tab.wellbeing': 'Bem-estar',
   'tab.learn': 'Aprender',
-  'tab.collection': 'Coleção',
   'widget.quote': 'Frase do dia',
   'widget.brew': 'Copo em andamento',
   'widget.idle': 'Nenhum copo agora',
@@ -179,6 +178,7 @@ export const pt = {
   'result.finish': 'Concluir',
 
   'guide.title': 'Guia',
+  'guide.sectionShop': 'Loja',
   'guide.brewers': 'Cafeteiras',
   'guide.cups': 'Xícaras',
   'guide.buyQ': 'Comprar {name}?',

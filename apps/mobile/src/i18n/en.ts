@@ -27,7 +27,6 @@ export const en: Record<keyof typeof pt, string> = {
   'tab.guide': 'Guide',
   'tab.wellbeing': 'Wellbeing',
   'tab.learn': 'Learn',
-  'tab.collection': 'Collection',
   'widget.quote': 'Quote of the day',
   'widget.brew': 'Cup in progress',
   'widget.idle': 'No cup right now',
@@ -179,6 +178,7 @@ export const en: Record<keyof typeof pt, string> = {
   'result.finish': 'Done',
 
   'guide.title': 'Guide',
+  'guide.sectionShop': 'Shop',
   'guide.brewers': 'Brewers',
   'guide.cups': 'Cups',
   'guide.buyQ': 'Buy {name}?',

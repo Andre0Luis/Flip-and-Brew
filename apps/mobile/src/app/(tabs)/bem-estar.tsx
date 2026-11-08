@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Button, Bar, Card, Header, Insight, Screen, Segmented, Txt } from '@/components/ui';
 import { HourBars, WeekBars } from '@/components/Charts';
 import { Ring } from '@/components/BrewViz';
+import { ConquistasView } from '@/components/ConquistasView';
 import { GoalPicker } from '@/components/GoalPicker';
 import { MissionsCard } from '@/components/MissionsCard';
 import { MonthCalendar } from '@/components/MonthCalendar';
@@ -23,7 +24,7 @@ import { useNow } from '@/hooks/useNow';
 import { fonts } from '@/theme/tokens';
 import type { Key } from '@/i18n';
 
-type Tab = 'resumo' | 'padroes';
+type Tab = 'resumo' | 'padroes' | 'conquistas';
 
 function Kpi({ label, value, note, good }: { label: string; value: string; note?: string; good?: boolean }) {
   return (
@@ -119,6 +120,7 @@ export default function BemEstar() {
         options={[
           { value: 'resumo', label: t('wb.tabSummary') },
           { value: 'padroes', label: t('wb.tabPatterns') },
+          { value: 'conquistas', label: t('col.tabAchievements') },
         ]}
       />
 
@@ -200,6 +202,8 @@ export default function BemEstar() {
             <Insight tag={t('wb.tagAntifragile')}>{t('wb.insightDefault')}</Insight>
           )}
         </>
+      ) : tab === 'conquistas' ? (
+        <ConquistasView />
       ) : (
         <>
           <Card style={{ gap: 12 }}>
