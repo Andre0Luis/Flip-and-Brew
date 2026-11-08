@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable, Switch, View } from 'react-native';
+import { Pressable, Share, Switch, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Button, Card, Field, Header, Screen, Segmented, Txt } from '@/components/ui';
 import { PostCard } from '@/components/PostCard';
@@ -162,6 +162,13 @@ function CommunityHome({ api }: { api: CommunityApi }) {
           {tab === 'ranking' && <RankingTab api={api} onOpen={open} />}
           {tab === 'friends' && (
         <>
+          <Card style={{ gap: 8 }}>
+            <Txt v="title">{t('share.inviteTitle')}</Txt>
+            <Txt v="small" color="muted">
+              {t('share.inviteBody')}
+            </Txt>
+            <Button label={t('share.inviteCta')} tone="quiet" onPress={() => void Share.share({ message: t('share.invite', { handle: me.handle ?? '' }) }).catch(() => {})} />
+          </Card>
           <SearchCard api={api} onOpen={open} />
 
           {incoming.length > 0 && (

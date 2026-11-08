@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isoWeekOf, weekStart, weekTotals } from './week';
+import { isoWeekOf, weekGoalProgress, weekStart, weekTotals } from './week';
 
 const at = (y: number, m: number, d: number, h = 12) => new Date(y, m - 1, d, h).getTime();
 
@@ -26,4 +26,12 @@ test('totais: só desde segunda, minutos de todos os copos e só os cheios conta
   ];
   assert.deepEqual(weekTotals(sessions, now), { week: '2026-W46', offlineMinutes: 105, cups: 2 });
   assert.deepEqual(weekTotals([], now), { week: '2026-W46', offlineMinutes: 0, cups: 0 });
+});
+
+test('meta da semana: meta diária vezes 7, e o progresso para em 100%', () => {
+  const now = at(2026, 11, 12, 20);
+  const s = [{ startedAt: at(2026, 11, 10, 9), elapsedMs: 210 * 60_000, status: 'done' }];
+  assert.deepEqual(weekGoalProgress(s, 120, now), { minutes: 210, goal: 840, pct: 0.25 });
+  assert.equal(weekGoalProgress([{ startedAt: at(2026, 11, 10, 9), elapsedMs: 2000 * 60_000, status: 'done' }], 120, now).pct, 1);
+  assert.equal(weekGoalProgress([], 0, now).goal, 1); // meta zerada não divide por zero
 });

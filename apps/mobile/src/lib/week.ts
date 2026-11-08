@@ -29,3 +29,10 @@ export function weekTotals(sessions: S[], now: number): { week: string; offlineM
   const minutes = Math.round(list.reduce((a, s) => a + Math.max(0, s.elapsedMs), 0) / 60_000);
   return { week: isoWeekOf(now), offlineMinutes: Math.min(7 * 24 * 60, minutes), cups: Math.min(1000, list.filter((s) => s.status === 'done').length) };
 }
+
+/** Progresso da semana contra a meta diária vezes 7 (minutos desde segunda). */
+export function weekGoalProgress(sessions: S[], goalMinPerDay: number, now: number): { minutes: number; goal: number; pct: number } {
+  const { offlineMinutes } = weekTotals(sessions, now);
+  const goal = Math.max(1, goalMinPerDay * 7);
+  return { minutes: offlineMinutes, goal, pct: Math.min(1, offlineMinutes / goal) };
+}
