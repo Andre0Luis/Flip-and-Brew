@@ -12,6 +12,9 @@ import { CloudSync } from '@/engine/CloudSync';
 import { WidgetSync } from '@/engine/WidgetSync';
 import { Reminders } from '@/engine/Reminders';
 import { useApp } from '@/store/useApp';
+import { useAuth } from '@/store/useAuth';
+import { getBackend } from '@/lib/cloud';
+import { gateScreen } from '@/lib/loginGate';
 import { translate } from '@/i18n';
 import { light } from '@/theme/tokens';
 import { Pressable, Text, View } from 'react-native';
@@ -21,6 +24,11 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 function Shell() {
   const { c, isDark } = useTheme();
   const onboarded = useApp((s) => s.onboarded);
+  const firstStepsDone = useApp((s) => s.firstStepsDone);
+  const status = useAuth((s) => s.status);
+  // Com o backend próprio ligado o login é obrigatório; com o Firebase (builds da loja de hoje) a conta continua opcional.
+  const required = getBackend()?.kind === 'api';
+  const screen = gateScreen({ required, onboarded, status, firstStepsDone });
   const base = isDark ? DarkTheme : DefaultTheme;
   const navTheme = { ...base, colors: { ...base.colors, background: c.bg, card: c.surface, text: c.fg, border: c.line, primary: c.accent } };
   return (
@@ -30,28 +38,39 @@ function Shell() {
       <CloudSync />
       <WidgetSync />
       <Reminders />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
-        {/* Na primeira abertura só a introdução existe; ao concluí-la, o app segue para as abas. */}
-        <Stack.Protected guard={!onboarded}>
-          <Stack.Screen name="intro" options={{ animation: 'fade' }} />
-        </Stack.Protected>
-        <Stack.Protected guard={onboarded}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="brew" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
-          <Stack.Screen name="resultado" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
-          <Stack.Screen name="artigo/[id]" />
-          <Stack.Screen name="frase/[id]" />
-          <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="moedas" options={{ presentation: 'modal' }} />
+      {screen === 'loading' ? (
+        // Espera o login guardado ser lido, para quem já entrou não ver a tela de entrar por um instante.
+        <View style={{ flex: 1, backgroundColor: c.bg }} />
+      ) : (
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}>
+          {/* Uma tela por vez: introdução, entrar (login obrigatório), primeiros passos e, por fim, o app. */}
+          <Stack.Protected guard={screen === 'intro'}>
+            <Stack.Screen name="intro" options={{ animation: 'fade' }} />
+          </Stack.Protected>
+          <Stack.Protected guard={screen === 'login'}>
+            <Stack.Screen name="entrar" options={{ animation: 'fade' }} />
+          </Stack.Protected>
+          <Stack.Protected guard={screen === 'firstSteps'}>
+            <Stack.Screen name="primeiros-passos" options={{ animation: 'fade' }} />
+          </Stack.Protected>
+          <Stack.Protected guard={screen === 'app'}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="brew" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+            <Stack.Screen name="resultado" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+            <Stack.Screen name="artigo/[id]" />
+            <Stack.Screen name="frase/[id]" />
+            <Stack.Screen name="ajustes" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="moedas" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="conta" />
+            <Stack.Screen name="perfil" />
+            <Stack.Screen name="criador" />
+            <Stack.Screen name="pessoa/[handle]" />
+          </Stack.Protected>
+          {/* Ficam por último e sem trava: a primeira rota registrada vira a tela inicial. A política de privacidade precisa abrir antes do cadastro, e o link do e-mail de recuperação de senha também. */}
           <Stack.Screen name="privacidade" />
-          <Stack.Screen name="conta" />
-          <Stack.Screen name="perfil" />
-          <Stack.Screen name="criador" />
-          <Stack.Screen name="pessoa/[handle]" />
-        </Stack.Protected>
-        {/* Fica por último: a primeira rota registrada vira a tela inicial. O link do e-mail de recuperação de senha abre aqui, mesmo antes da introdução. */}
-        <Stack.Screen name="nova-senha" />
-      </Stack>
+          <Stack.Screen name="nova-senha" />
+        </Stack>
+      )}
     </NavThemeProvider>
   );
 }

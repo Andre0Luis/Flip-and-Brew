@@ -2,7 +2,7 @@ import type { GoTrueClient, Session, User } from '@supabase/auth-js';
 import type { ApiClient, Language } from './apiClient';
 import { RECOVERY_REDIRECT, parseRecoveryUrl } from './recoveryLink';
 import { toSupabaseAuthError } from './supabaseErrors';
-import { AuthError, type CloudBackend, type CloudUser, type Provider, type Snapshot } from './types';
+import { AuthError, type CloudBackend, type CloudUser, type Provider, type Role, type Snapshot } from './types';
 
 /** O pedaço do cliente de login (Supabase Auth) que usamos; permite trocar por um falso nos testes. */
 export type AuthClient = Pick<
@@ -40,7 +40,7 @@ export const toCloudUser = (u: User): CloudUser => {
  */
 export function createApiBackend(d: ApiBackendDeps): CloudBackend {
   const { auth, api } = d;
-  const profiles = new Map<string, Promise<unknown>>();
+  const profiles = new Map<string, Promise<Awaited<ReturnType<ApiClient['bootstrap']>>>>();
 
   const ensureProfile = (uid: string) => {
     let p = profiles.get(uid);
@@ -99,6 +99,11 @@ export function createApiBackend(d: ApiBackendDeps): CloudBackend {
     },
 
     community: api.community,
+    getRole: () =>
+      wrap(async (): Promise<Role> => {
+        const { profile } = await ensureProfile((await sessionUser()).id);
+        return profile.role === 'admin' ? 'admin' : 'user';
+      }),
 
     googleAvailable: () => !!d.google?.available(),
     appleAvailable: () => !!d.apple?.available(),
