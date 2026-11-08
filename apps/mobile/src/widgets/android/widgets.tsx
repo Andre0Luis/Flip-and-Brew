@@ -1,3 +1,6 @@
+// O React Compiler põe hooks nos componentes, e o react-native-android-widget só desenha funções puras: sem isso o widget fica em branco.
+'use no memo';
+
 import React from 'react';
 import { FlexWidget, TextWidget } from 'react-native-android-widget';
 import type { WidgetData } from '@/lib/widgetData';
