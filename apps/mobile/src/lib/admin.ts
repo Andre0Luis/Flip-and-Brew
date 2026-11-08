@@ -1,34 +1,27 @@
 import { useAuth } from '@/store/useAuth';
+import type { Role } from '@/lib/cloud/types';
 
 /**
- * Ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas grátis) são só para administrador:
- * build de desenvolvimento, ou conta com e-mail verificado que esteja em EXPO_PUBLIC_ADMIN_EMAILS (separados por vírgula).
- * É uma trava de interface, não de segurança: as ferramentas só mexem nos dados do próprio aparelho.
- * Atenção: variáveis EXPO_PUBLIC_* vão dentro do app, então o e-mail do administrador fica visível para quem abrir o pacote.
+ * Ferramentas de teste (copos de 1 minuto, dados de exemplo, moedas grátis) são só para administrador.
+ * Quem é administrador o servidor decide (a lista ADMIN_EMAILS fica na API, na Vercel): o app só pergunta o papel depois do login.
+ * Assim o e-mail do administrador não vai dentro do app nem do repositório. Ainda é uma trava de interface:
+ * as ferramentas só mexem nos dados do próprio aparelho.
  */
-export function parseAdminEmails(raw: string | undefined): string[] {
-  return (raw ?? '')
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
+type AdminUser = { emailVerified: boolean } | null;
+
+export function isAdminUser(user: AdminUser, role: Role | null): boolean {
+  return !!user?.emailVerified && role === 'admin';
 }
-
-type AdminUser = { email: string | null; emailVerified: boolean } | null;
-
-export function isAdminUser(user: AdminUser, emails: string[] = parseAdminEmails(process.env.EXPO_PUBLIC_ADMIN_EMAILS)): boolean {
-  if (!user?.email || !user.emailVerified) return false;
-  return emails.includes(user.email.trim().toLowerCase());
-}
-
-const isDevBuild = () => typeof __DEV__ !== 'undefined' && __DEV__;
 
 /** Para regras fora de componentes (por exemplo, iniciar o copo). */
 export function canUseTestTools(): boolean {
-  return isDevBuild() || isAdminUser(useAuth.getState().user);
+  const { user, role } = useAuth.getState();
+  return isAdminUser(user, role);
 }
 
 /** Para telas: reage ao login e à saída da conta. */
 export function useTestTools(): boolean {
   const user = useAuth((s) => s.user);
-  return isDevBuild() || isAdminUser(user);
+  const role = useAuth((s) => s.role);
+  return isAdminUser(user, role);
 }

@@ -2,6 +2,9 @@ import type { Checkin, Profile, Session } from '@/store/types';
 
 export type Provider = 'password' | 'google' | 'apple';
 
+/** Papel na conta, decidido pelo servidor (nunca pelo app). */
+export type Role = 'user' | 'admin';
+
 export type CloudUser = {
   uid: string;
   email: string | null;
@@ -85,6 +88,8 @@ export interface CloudBackend {
   /** Troca a senha de uma conta com e-mail e senha, confirmando a senha atual. */
   changePassword(current: string, next: string): Promise<void>;
   sendPasswordReset(email: string): Promise<void>;
+  /** Papel da conta logada, perguntado ao servidor. Só o backend próprio sabe; sem este método ninguém é administrador. */
+  getRole?(): Promise<Role>;
   /** Define a nova senha a partir do link do e-mail de recuperação (o endereço que abriu o app). Só o backend próprio usa. */
   resetPasswordWithLink?(url: string, newPassword: string): Promise<void>;
   signOut(): Promise<void>;

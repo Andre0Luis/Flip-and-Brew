@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { Art } from '@/art/Art';
 import { Button, Card, Segmented, Txt } from '@/components/ui';
 import { CATALOG, brewers, byId, cups, localize, packs, type CatalogItem } from '@/data/catalog';
-import { useI18n } from '@/i18n';
+import { useI18n, type Key } from '@/i18n';
 import { useApp } from '@/store/useApp';
 import { equippedFirst } from '@/lib/shelf';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -74,11 +74,48 @@ export function ColecaoView({ request }: { request: CollectionRequest }) {
   const equipped = detail && (detail.kind === 'cup' ? cupId : detail.kind === 'beans' ? packId : brewerId) === detail.id;
   const hasDetail = detail && owned.includes(detail.id);
 
+  const inUse: { kind: Tab; id: string; label: Key }[] = [
+    { kind: 'brewer', id: brewerId, label: 'col.inUseBrewer' },
+    { kind: 'cup', id: cupId, label: 'col.inUseCup' },
+    { kind: 'beans', id: packId, label: 'col.inUsePack' },
+  ];
+
   return (
     <>
       <Txt v="label" color="muted">
         {t('col.count', { a: have, b: total })}
       </Txt>
+
+      <Card style={{ gap: 12 }}>
+        <Txt v="title">{t('col.inUseTitle')}</Txt>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          {inUse.map(({ kind, id, label }) => {
+            const item = byId(id);
+            return (
+              <Pressable
+                key={kind}
+                accessibilityRole="button"
+                accessibilityLabel={`${t(label)}: ${item ? localize(lang, item).name : ''}`}
+                onPress={() => {
+                  Haptics.selectionAsync().catch(() => {});
+                  setTab(kind);
+                  setSel((v) => ({ ...v, [kind]: id }));
+                }}
+                style={{ flex: 1, minWidth: 0, alignItems: 'center', gap: 4 }}
+              >
+                <Art id={id} size={64} />
+                <Txt v="label" color="muted" style={{ textAlign: 'center' }}>
+                  {t(label)}
+                </Txt>
+                <Txt v="small" style={{ textAlign: 'center' }} numberOfLines={2}>
+                  {item ? localize(lang, item).name : ''}
+                </Txt>
+              </Pressable>
+            );
+          })}
+        </View>
+      </Card>
+
       <Segmented<Tab>
         value={tab}
         onChange={setTab}
@@ -87,6 +124,15 @@ export function ColecaoView({ request }: { request: CollectionRequest }) {
           { value: 'brewer', label: t('col.tabBrewers') },
           { value: 'beans', label: t('col.tabPacks') },
         ]}
+      />
+      <Shelf
+        items={equippedFirst((tab === 'cup' ? cups() : tab === 'beans' ? packs() : brewers()).map((i) => localize(lang, i)), tab === 'cup' ? cupId : tab === 'beans' ? packId : brewerId)}
+        owned={owned}
+        selected={sel[tab]}
+        onSelect={(id) => {
+          Haptics.selectionAsync().catch(() => {});
+          setSel((v) => ({ ...v, [tab]: id }));
+        }}
       />
       {detail && (
         <Card style={{ flexDirection: 'row', gap: 14, alignItems: 'center' }}>
@@ -99,15 +145,6 @@ export function ColecaoView({ request }: { request: CollectionRequest }) {
             {hasDetail && (
               <Button label={equipped ? t('col.inUse') : t('col.use')} disabled={!!equipped} tone="dark" onPress={() => equip(detail.id)} style={{ paddingVertical: 9, marginTop: 6 }} />
             )}
-      <Shelf
-        items={equippedFirst((tab === 'cup' ? cups() : tab === 'beans' ? packs() : brewers()).map((i) => localize(lang, i)), tab === 'cup' ? cupId : tab === 'beans' ? packId : brewerId)}
-        owned={owned}
-        selected={sel[tab]}
-        onSelect={(id) => {
-          Haptics.selectionAsync().catch(() => {});
-          setSel((s) => ({ ...s, [tab]: id }));
-        }}
-      />
           </View>
         </Card>
       )}

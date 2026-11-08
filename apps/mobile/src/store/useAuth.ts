@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { CloudUser, Snapshot } from '@/lib/cloud/types';
+import type { CloudUser, Role, Snapshot } from '@/lib/cloud/types';
 
 export type AuthStatus = 'loading' | 'signedOut' | 'signedIn';
 export type SyncState = 'idle' | 'syncing' | 'ok' | 'error';
@@ -8,6 +8,8 @@ export type SyncState = 'idle' | 'syncing' | 'ok' | 'error';
 type AuthState = {
   status: AuthStatus;
   user: CloudUser | null;
+  /** papel dado pelo servidor; null até ele responder (ou sem servidor) */
+  role: Role | null;
   sync: SyncState;
   lastBackupAt: number | null;
   /** o primeiro cruzamento entre aparelho e nuvem já foi resolvido; só então o backup automático liga */
@@ -19,6 +21,7 @@ type AuthState = {
 export const useAuth = create<AuthState>()(() => ({
   status: 'loading',
   user: null,
+  role: null,
   sync: 'idle',
   lastBackupAt: null,
   ready: false,
