@@ -1,12 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { Pressable, Switch, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { Button, Card, Field, Header, Screen, Txt } from '@/components/ui';
+import { Button, Card, Field, Header, Screen, Segmented, Txt } from '@/components/ui';
+import { PostCard } from '@/components/PostCard';
 import { Icon } from '@/components/Icon';
 import { PersonRow } from '@/components/PersonRow';
 import { useI18n, type Key } from '@/i18n';
 import { getBackend } from '@/lib/cloud';
-import type { CommunityApi, Friend, FriendRequest, MyCommunityProfile, Person } from '@/lib/cloud/apiClient';
+import type { CommunityApi, Friend, FriendRequest, MyCommunityProfile, Person, PostCard as Post, Ranking } from '@/lib/cloud/apiClient';
+import { minutesLabel } from '@/lib/format';
+import { weekTotals } from '@/lib/week';
 import { accountName, communityErrorKey, isValidHandle, sanitizeHandle, searchTerm, suggestHandle, type CommunityErrorKey } from '@/lib/community';
 import { useApp } from '@/store/useApp';
 import { useAuth } from '@/store/useAuth';
@@ -70,8 +73,15 @@ function CommunityHome({ api }: { api: CommunityApi }) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [error, setError] = useState<CommunityErrorKey | null>(null);
   const [busy, setBusy] = useState(false);
+  const [tab, setTab] = useState<'feed' | 'friends' | 'ranking'>('feed');
+  const [unread, setUnread] = useState(0);
 
   const load = useCallback(async () => {
+    // Avisos à parte: se falharem, o resto da comunidade continua.
+    void api
+      .notifications()
+      .then((n) => setUnread(n.unread))
+      .catch(() => {});
     try {
       const [m, inc, out, fr] = await Promise.all([api.me(), api.requests('incoming'), api.requests('outgoing'), api.friends()]);
       // O nome na comunidade acompanha o da conta: se mudou (ou nunca foi enviado), atualiza no servidor.
@@ -108,7 +118,16 @@ function CommunityHome({ api }: { api: CommunityApi }) {
 
   return (
     <Screen ads>
-      <Header title={t('community.title')} />
+      <Header
+        title={t('community.title')}
+        right={
+          me?.handle ? (
+            <Pressable accessibilityRole="button" accessibilityLabel={t('community.notifA11y', { n: unread })} onPress={() => router.push('/avisos')} hitSlop={10} style={{ padding: 4 }}>
+              <BellIcon unread={unread} />
+            </Pressable>
+          ) : undefined
+        }
+      />
       {/* O apelido fica embaixo do título: ao lado, um apelido longo quebrava o cabeçalho. */}
       {!!me?.handle && (
         <Txt v="label" color="muted" numberOfLines={1} style={{ marginTop: -8 }}>
@@ -129,6 +148,19 @@ function CommunityHome({ api }: { api: CommunityApi }) {
       ) : !me.handle ? (
         <HandleSetup api={api} name={name} email={user?.email ?? null} onDone={setMe} />
       ) : (
+        <>
+          <Segmented<'feed' | 'friends' | 'ranking'>
+            value={tab}
+            onChange={setTab}
+            options={[
+              { value: 'feed', label: t('community.tabFeed') },
+              { value: 'friends', label: t('community.tabFriends') },
+              { value: 'ranking', label: t('community.tabRanking') },
+            ]}
+          />
+          {tab === 'feed' && <FeedTab api={api} />}
+          {tab === 'ranking' && <RankingTab api={api} onOpen={open} />}
+          {tab === 'friends' && (
         <>
           <SearchCard api={api} onOpen={open} />
 
@@ -174,6 +206,8 @@ function CommunityHome({ api }: { api: CommunityApi }) {
                 />
               ))}
             </Card>
+          )}
+        </>
           )}
         </>
       )}
@@ -266,5 +300,216 @@ function SearchCard({ api, onOpen }: { api: CommunityApi; onOpen: (p: Person) =>
           </Txt>
         ))}
     </Card>
+  );
+}
+
+function BellIcon({ unread }: { unread: number }) {
+  const { c } = useTheme();
+  return (
+    <View>
+      <Icon name="bell" color={c.fg} />
+      {unread > 0 && (
+        <View style={{ position: 'absolute', right: -6, top: -4, minWidth: 16, height: 16, borderRadius: 8, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 }}>
+          <Txt v="small" color="accentFg" style={{ fontSize: 10, lineHeight: 12 }}>
+            {unread > 9 ? '9+' : String(unread)}
+          </Txt>
+        </View>
+      )}
+    </View>
+  );
+}
+
+/** Meus posts e os dos amigos. Curtir é otimista: muda na hora e desfaz se o servidor recusar. */
+function FeedTab({ api }: { api: CommunityApi }) {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [next, setNext] = useState<string | null>(null);
+  const [error, setError] = useState<CommunityErrorKey | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      const f = await api.feed();
+      setPosts(f.posts);
+      setNext(f.nextBefore);
+      setError(null);
+    } catch (e) {
+      setError(communityErrorKey(e));
+    }
+  }, [api]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
+
+  const more = async () => {
+    if (!next) return;
+    try {
+      const f = await api.feed(next);
+      setPosts((p) => [...(p ?? []), ...f.posts]);
+      setNext(f.nextBefore);
+    } catch (e) {
+      setError(communityErrorKey(e));
+    }
+  };
+
+  const toggleLike = async (post: Post) => {
+    const flip = (p: Post): Post => (p.id === post.id ? { ...p, likedByMe: !p.likedByMe, likeCount: p.likeCount + (p.likedByMe ? -1 : 1) } : p);
+    setPosts((list) => list?.map(flip) ?? null);
+    try {
+      await (post.likedByMe ? api.unlike(post.id) : api.like(post.id));
+    } catch (e) {
+      setPosts((list) => list?.map(flip) ?? null);
+      setError(communityErrorKey(e));
+    }
+  };
+
+  const remove = async (post: Post) => {
+    try {
+      await api.deletePost(post.id);
+      setPosts((list) => list?.filter((p) => p.id !== post.id) ?? null);
+    } catch (e) {
+      setError(communityErrorKey(e));
+    }
+  };
+
+  return (
+    <>
+      <Button label={t('feed.new')} onPress={() => router.push('/post/novo')} />
+      {error && (
+        <Txt v="small" color="bad" accessibilityLiveRegion="polite">
+          {t(`community.err.${error}` as Key)}
+        </Txt>
+      )}
+      {posts === null ? (
+        !error && (
+          <Txt v="body" color="muted">
+            {t('community.loading')}
+          </Txt>
+        )
+      ) : posts.length === 0 ? (
+        <Card>
+          <Txt v="body" color="muted">
+            {t('feed.empty')}
+          </Txt>
+        </Card>
+      ) : (
+        posts.map((p) => (
+          <PostCard
+            key={p.id}
+            post={p}
+            onLike={() => void toggleLike(p)}
+            onComments={() => router.push({ pathname: '/post/[id]', params: { id: p.id, title: p.title, mine: p.mine ? '1' : '0' } })}
+            onDelete={p.mine ? () => void remove(p) : undefined}
+          />
+        ))
+      )}
+      {!!next && <Button label={t('feed.more')} tone="quiet" onPress={() => void more()} />}
+    </>
+  );
+}
+
+/** Ranking da semana: manda os meus totais e mostra amigos ou o geral. */
+function RankingTab({ api, onOpen }: { api: CommunityApi; onOpen: (p: Person) => void }) {
+  const { c } = useTheme();
+  const { t } = useI18n();
+  const sessions = useApp((s) => s.sessions);
+  const [scope, setScope] = useState<'friends' | 'global'>('friends');
+  const [data, setData] = useState<Ranking | null>(null);
+  const [global, setGlobal] = useState<boolean | null>(null);
+  const [error, setError] = useState<CommunityErrorKey | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      await api.putWeek(weekTotals(sessions, Date.now())).catch(() => {});
+      const [r, g] = await Promise.all([api.rankings(scope), api.globalRanking()]);
+      setData(r);
+      setGlobal(g);
+      setError(null);
+    } catch (e) {
+      setError(communityErrorKey(e));
+    }
+  }, [api, scope, sessions]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
+
+  const toggleGlobal = async (on: boolean) => {
+    setGlobal(on);
+    try {
+      await api.setGlobalRanking(on);
+      if (scope === 'global') void load();
+    } catch (e) {
+      setGlobal(!on);
+      setError(communityErrorKey(e));
+    }
+  };
+
+  return (
+    <>
+      <Card style={{ gap: 10 }}>
+        <Txt v="title">{t('ranking.title')}</Txt>
+        <Txt v="small" color="muted">
+          {t('ranking.hint')}
+        </Txt>
+        <Segmented<'friends' | 'global'>
+          value={scope}
+          onChange={setScope}
+          options={[
+            { value: 'friends', label: t('ranking.friends') },
+            { value: 'global', label: t('ranking.global') },
+          ]}
+        />
+      </Card>
+      {error && (
+        <Txt v="small" color="bad" accessibilityLiveRegion="polite">
+          {t(`community.err.${error}` as Key)}
+        </Txt>
+      )}
+      {data && (
+        <Card style={{ gap: 2 }}>
+          {data.entries.length === 0 ? (
+            <Txt v="small" color="muted">
+              {t('ranking.empty')}
+            </Txt>
+          ) : (
+            data.entries.map((e) => (
+              <View key={e.person.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: e.me ? c.soft : 'transparent', borderRadius: 12, paddingHorizontal: 8 }}>
+                <Txt v="num" color={e.rank <= 3 ? 'accent' : 'muted'} style={{ width: 26, textAlign: 'center' }}>
+                  {String(e.rank)}
+                </Txt>
+                <View style={{ flex: 1, minWidth: 0 }}>
+                  <PersonRow person={e.person} onPress={e.me ? undefined : () => onOpen(e.person)} />
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                  <Txt v="body">{minutesLabel(e.offlineMinutes)}</Txt>
+                  <Txt v="small" color="muted">
+                    {t('ranking.cups', { n: e.cups })}
+                  </Txt>
+                </View>
+              </View>
+            ))
+          )}
+        </Card>
+      )}
+      {global !== null && (
+        <Card style={{ gap: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Txt v="title" style={{ flex: 1, fontSize: 15 }}>
+              {t('ranking.globalToggle')}
+            </Txt>
+            <Switch value={global} onValueChange={(v) => void toggleGlobal(v)} trackColor={{ true: c.accent, false: c.line }} thumbColor={c.surface} accessibilityLabel={t('ranking.globalToggle')} />
+          </View>
+          <Txt v="small" color="muted">
+            {t('ranking.globalHint')}
+          </Txt>
+        </Card>
+      )}
+    </>
   );
 }

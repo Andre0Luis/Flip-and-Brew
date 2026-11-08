@@ -31,7 +31,25 @@ export type PublicProfile = {
 /** O que a comunidade precisa do meu perfil no servidor: o apelido (sem ele ninguém me acha) e o nome. */
 export type MyCommunityProfile = { handle: string | null; displayName: string | null };
 
-/** Amizade com aprovação, bloqueio e perfil público (ADR-0024). */
+export type PostCard = {
+  id: string;
+  title: string;
+  caption: string | null;
+  createdAt: string;
+  author: Person | null;
+  /** links assinados que vencem em 1 hora */
+  images: { url: string }[];
+  likeCount: number;
+  likedByMe: boolean;
+  commentCount: number;
+  mine: boolean;
+};
+export type PostComment = { id: string; body: string; createdAt: string; author: Person; mine: boolean };
+export type AppNotification = { id: string; kind: 'like' | 'comment'; postId: string | null; postTitle: string | null; createdAt: string; read: boolean; actor: Person };
+export type RankingEntry = { rank: number; person: Person; offlineMinutes: number; cups: number; me: boolean };
+export type Ranking = { week: string; scope: 'friends' | 'global'; entries: RankingEntry[] };
+
+/** Amizade com aprovação, bloqueio, perfil público, posts e ranking (ADR-0024). */
 export type CommunityApi = {
   me(): Promise<MyCommunityProfile>;
   /** Erros: `handle_taken` (apelido em uso) e `invalid_input` (formato). */
@@ -50,6 +68,23 @@ export type CommunityApi = {
   unfriend(userId: string): Promise<void>;
   block(userId: string): Promise<void>;
   unblock(userId: string): Promise<void>;
+  /** Links para enviar as fotos (PUT, image/jpeg). Erro `storage_unavailable` se o servidor não tem armazenamento. */
+  uploadSlots(count: number): Promise<{ path: string; url: string }[]>;
+  createPost(post: { title: string; caption?: string; images?: string[] }): Promise<PostCard>;
+  feed(before?: string): Promise<{ posts: PostCard[]; nextBefore: string | null }>;
+  deletePost(id: string): Promise<void>;
+  like(postId: string): Promise<void>;
+  unlike(postId: string): Promise<void>;
+  comments(postId: string): Promise<PostComment[]>;
+  comment(postId: string, body: string): Promise<void>;
+  deleteComment(id: string): Promise<void>;
+  notifications(): Promise<{ notifications: AppNotification[]; unread: number }>;
+  readNotifications(): Promise<void>;
+  putWeek(stats: { week: string; offlineMinutes: number; cups: number }): Promise<void>;
+  rankings(scope: 'friends' | 'global'): Promise<Ranking>;
+  /** Se aparece no ranking geral (o de amigos vale sempre). */
+  globalRanking(): Promise<boolean>;
+  setGlobalRanking(on: boolean): Promise<void>;
 };
 
 export type ApiClient = {
@@ -125,6 +160,27 @@ export function createApiClient(o: {
     unfriend: async (userId) => void ok(await call('DELETE', `/v1/friends/${id(userId)}`)),
     block: async (userId) => void ok(await call('POST', '/v1/blocks', { userId })),
     unblock: async (userId) => void ok(await call('DELETE', `/v1/blocks/${id(userId)}`)),
+    uploadSlots: async (n) => ok(await call('POST', '/v1/posts/uploads', { count: n })).uploads,
+    createPost: async (post) => ok(await call('POST', '/v1/posts', post)).post as PostCard,
+    async feed(before) {
+      const j = ok(await call('GET', `/v1/feed${before ? `?before=${id(before)}` : ''}`));
+      return { posts: j.posts as PostCard[], nextBefore: j.nextBefore ?? null };
+    },
+    deletePost: async (postId) => void ok(await call('DELETE', `/v1/posts/${id(postId)}`)),
+    like: async (postId) => void ok(await call('POST', `/v1/posts/${id(postId)}/like`)),
+    unlike: async (postId) => void ok(await call('DELETE', `/v1/posts/${id(postId)}/like`)),
+    comments: async (postId) => ok(await call('GET', `/v1/posts/${id(postId)}/comments`)).comments as PostComment[],
+    comment: async (postId, body) => void ok(await call('POST', `/v1/posts/${id(postId)}/comments`, { body })),
+    deleteComment: async (commentId) => void ok(await call('DELETE', `/v1/comments/${id(commentId)}`)),
+    async notifications() {
+      const j = ok(await call('GET', '/v1/me/notifications'));
+      return { notifications: j.notifications as AppNotification[], unread: j.unread ?? 0 };
+    },
+    readNotifications: async () => void ok(await call('POST', '/v1/me/notifications/read')),
+    putWeek: async (stats) => void ok(await call('PUT', '/v1/me/week', stats)),
+    rankings: async (scope) => ok(await call('GET', `/v1/rankings?scope=${scope}`)) as Ranking,
+    globalRanking: async () => !!ok(await call('GET', '/v1/me')).privacy?.showInGlobalRanking,
+    setGlobalRanking: async (on) => void ok(await call('PATCH', '/v1/me/privacy', { showInGlobalRanking: on })),
   };
 
   return {
