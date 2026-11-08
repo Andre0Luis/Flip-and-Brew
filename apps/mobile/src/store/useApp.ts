@@ -14,11 +14,12 @@ import { earnBonus } from '@/lib/earnings';
 import { canUseTestTools } from '@/lib/admin';
 import { DEFAULT_POMO, makeRest, normalizePomo, pomodorosToday, type Rest } from '@/lib/pomodoro';
 import { DEFAULT_CHECKIN_HOUR, DEFAULT_MORNING_HOUR } from '@/lib/reminders';
+import { cleanAvatar, type Avatar } from '@/lib/avatar';
 import { NO_PASSIVE, SLEEP_LIMITS, applyPlan, normalizeSleep, planPassive, type PassiveState } from '@/lib/passive';
 import type { UsageDay } from '@/lib/usage';
 import { ALL_BONUS, allClaimed, bonusClaimed, claimKey, missionsFor, pruneClaims } from '@/lib/missions';
 
-export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, passiveCoins: true, sleepMin: SLEEP_LIMITS.default, dailyMorning: false, dailyCheckin: false, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
+export const DEFAULT_SETTINGS: Settings = { language: 'pt', goalMin: 120, themeMode: 'system', autoStart: true, quickBrew: false, notifyOnDone: false, passiveCoins: true, sleepMin: SLEEP_LIMITS.default, dailyMorning: true, dailyCheckin: true, morningHour: DEFAULT_MORNING_HOUR, checkinHour: DEFAULT_CHECKIN_HOUR, dimDuringBrew: false, focusMode: 'coffee', pomodoro: DEFAULT_POMO, faceUpSign: 0 };
 
 type State = {
   coins: number;
@@ -50,14 +51,20 @@ type State = {
   practicesDone: string[]; // dayKeys
   articlesRead: string[];
   settings: Settings;
+  /** foto ou desenho do perfil; só no aparelho, fora do backup */
+  avatar: Avatar | null;
   /** a introdução já foi vista */
   onboarded: boolean;
+  /** a orientação logo após o cadastro (lembretes e moedas pelo tempo bloqueado) já foi vista neste aparelho */
+  firstStepsDone: boolean;
   /** Início está na tela e em primeiro plano; usado para iniciar o copo ao virar o celular. */
   homeFocused: boolean;
   /** quando o último copo terminou, para não reiniciar sozinho */
   lastEndedAt: number;
 
   setOnboarded: (v: boolean) => void;
+  setAvatar: (a: Avatar | null) => void;
+  finishFirstSteps: () => void;
   setHomeFocused: (v: boolean) => void;
   setSettings: (s: Partial<Settings>) => void;
   start: (now?: number) => boolean;
@@ -117,7 +124,9 @@ const initial = {
   practicesDone: [] as string[],
   articlesRead: [] as string[],
   settings: DEFAULT_SETTINGS,
+  avatar: null as Avatar | null,
   onboarded: false,
+  firstStepsDone: false,
   homeFocused: false,
   lastEndedAt: 0,
 };
@@ -128,6 +137,8 @@ export const useApp = create<State>()(
       ...initial,
 
       setOnboarded: (v) => set({ onboarded: v }),
+      setAvatar: (a) => set({ avatar: a ? cleanAvatar(a) : null }),
+      finishFirstSteps: () => set({ firstStepsDone: true }),
       setHomeFocused: (v) => set({ homeFocused: v }),
       setCheckin: (energy, now = Date.now()) => set((st) => ({ checkins: withCheckin(st.checkins, energy, now) })),
       creditPassive: (days, now = Date.now()) => {
@@ -167,7 +178,7 @@ export const useApp = create<State>()(
       },
       removeCheckin: (day) => set((st) => ({ checkins: withoutCheckin(st.checkins, day) })),
       setProfile: (patch) => set((st) => ({ profile: cleanProfile({ ...st.profile, ...patch }) })),
-      clearProfile: () => set({ profile: {} }),
+      clearProfile: () => set({ profile: {}, avatar: null }),
       setSettings: (s) => set((st) => ({ settings: { ...st.settings, ...s, ...(s.pomodoro ? { pomodoro: normalizePomo(s.pomodoro) } : {}) } })),
 
       start: (now = Date.now()) => {
@@ -316,6 +327,8 @@ export const useApp = create<State>()(
         articlesRead: s.articlesRead,
         settings: s.settings,
         onboarded: s.onboarded,
+        avatar: s.avatar,
+        firstStepsDone: s.firstStepsDone,
       }),
     },
   ),

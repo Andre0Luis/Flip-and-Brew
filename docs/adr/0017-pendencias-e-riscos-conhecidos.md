@@ -79,6 +79,9 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 
 - [ ] **Páginas públicas da API** (`/suporte`, `/privacidade`, `/excluir-conta`): definir `SUPPORT_EMAIL` na Vercel e usar essas URLs na App Store Connect e no Play Console. **A política de privacidade ainda diz que o backup fica no Firebase**: antes de ligar o app ao backend próprio, atualizar os textos `privacy.*` (Supabase, Vercel) e rodar `npm run docs:privacy` em `apps/mobile`.
 
+- [ ] **Login obrigatório** (ADR-0028): implementado, nunca rodou em aparelho com o portão completo. Antes de ligar o backend no `production` do EAS: textos "sem conta" nas lojas e na política de privacidade (que ainda cita só o Firebase), **conta de teste para os revisores**, e "Entrar com a Apple" no iPhone. Confirmação de e-mail do Supabase ficou desligada de propósito.
+- [ ] **Lembretes ligados por padrão** só em instalações novas; a permissão de notificações é pedida nos primeiros passos.
+
 ## Dívidas técnicas
 - [ ] O histórico de uso do sistema é curto (o Android guarda poucos dias).
 - [ ] Testes de interface automatizados no aparelho não existem; só o roteiro manual.

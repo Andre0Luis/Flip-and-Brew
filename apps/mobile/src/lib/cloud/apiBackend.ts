@@ -2,7 +2,7 @@ import type { GoTrueClient, Session, User } from '@supabase/auth-js';
 import type { ApiClient, Language } from './apiClient';
 import { RECOVERY_REDIRECT, parseRecoveryUrl } from './recoveryLink';
 import { toSupabaseAuthError } from './supabaseErrors';
-import { AuthError, type CloudBackend, type CloudUser, type Provider, type Snapshot } from './types';
+import { AuthError, type CloudBackend, type CloudUser, type Provider, type Role, type Snapshot } from './types';
 
 /** O pedaço do cliente de login (Supabase Auth) que usamos; permite trocar por um falso nos testes. */
 export type AuthClient = Pick<
@@ -23,7 +23,16 @@ const providerOf = (u: User): Provider => {
   return p === 'google' ? 'google' : p === 'apple' ? 'apple' : 'password';
 };
 
-export const toCloudUser = (u: User): CloudUser => ({ uid: u.id, email: u.email ?? null, provider: providerOf(u), emailVerified: !!u.email_confirmed_at });
+const nameOf = (u: User): string | undefined => {
+  const m = (u.user_metadata ?? {}) as Record<string, unknown>;
+  const n = typeof m.full_name === 'string' ? m.full_name : typeof m.name === 'string' ? m.name : '';
+  return n.trim() || undefined;
+};
+
+export const toCloudUser = (u: User): CloudUser => {
+  const name = nameOf(u);
+  return { uid: u.id, email: u.email ?? null, provider: providerOf(u), emailVerified: !!u.email_confirmed_at, ...(name ? { name } : {}) };
+};
 
 /**
  * O nosso backend atrás da mesma interface do Firebase: login pelo Supabase Auth e backup pela API (apps/api).
@@ -31,7 +40,7 @@ export const toCloudUser = (u: User): CloudUser => ({ uid: u.id, email: u.email 
  */
 export function createApiBackend(d: ApiBackendDeps): CloudBackend {
   const { auth, api } = d;
-  const profiles = new Map<string, Promise<unknown>>();
+  const profiles = new Map<string, Promise<Awaited<ReturnType<ApiClient['bootstrap']>>>>();
 
   const ensureProfile = (uid: string) => {
     let p = profiles.get(uid);
@@ -88,6 +97,13 @@ export function createApiBackend(d: ApiBackendDeps): CloudBackend {
       const { data } = auth.onAuthStateChange((_event, session) => emit(session ? toCloudUser(session.user) : null));
       return () => data.subscription.unsubscribe();
     },
+
+    community: api.community,
+    getRole: () =>
+      wrap(async (): Promise<Role> => {
+        const { profile } = await ensureProfile((await sessionUser()).id);
+        return profile.role === 'admin' ? 'admin' : 'user';
+      }),
 
     googleAvailable: () => !!d.google?.available(),
     appleAvailable: () => !!d.apple?.available(),

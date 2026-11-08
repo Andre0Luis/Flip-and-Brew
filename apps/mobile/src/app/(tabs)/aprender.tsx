@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { Button, Card, Chip, CoinBadge, Header, Screen, Txt } from '@/components/ui';
+import { Button, Card, Chip, Header, Screen, Txt } from '@/components/ui';
+import { TopStatus } from '@/components/TopStatus';
 import { CATEGORIES, getArticles, practiceOfDay, type Category } from '@/data/articles';
 import { useI18n } from '@/i18n';
 import { useApp } from '@/store/useApp';
@@ -29,7 +30,7 @@ export default function Aprender() {
 
   return (
     <Screen ads>
-      <Header title={t('learn.title')} right={<CoinBadge coins={coins} />} />
+      <Header title={t('learn.title')} right={<TopStatus coins={coins} />} />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} style={{ flexGrow: 0 }}>
         {(['all', ...CATEGORIES] as const).map((x) => (

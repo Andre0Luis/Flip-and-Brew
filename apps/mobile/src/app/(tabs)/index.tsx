@@ -11,7 +11,8 @@ import { CheckinCard } from '@/components/CheckinCard';
 import { useSystemUsage } from '@/hooks/useSystemUsage';
 import { summarizeUsage } from '@/lib/usage';
 import { Icon } from '@/components/Icon';
-import { Button, Card, CoinBadge, Screen, Segmented, Txt } from '@/components/ui';
+import { Button, Card, Screen, Segmented, Txt } from '@/components/ui';
+import { TopStatus } from '@/components/TopStatus';
 import { RestCard } from '@/components/RestCard';
 import { PassiveNotice } from '@/components/PassiveNotice';
 import { normalizePomo } from '@/lib/pomodoro';
@@ -90,7 +91,7 @@ export default function Inicio() {
   return (
     <Screen ads>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8 }}>
-        <CoinBadge coins={coins} />
+        <TopStatus coins={coins} />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <Txt v="small" color="muted">
             {t('home.streak')} <Txt v="small" style={{ fontFamily: fonts.bodyBold }}>{days} {t('unit.day', { n: days })}</Txt>
@@ -193,18 +194,19 @@ export default function Inicio() {
             ]}
           />
         )}
+        {/* O botão principal vem logo abaixo da escolha do modo: no Pomodoro, a explicação e o ajuste empurravam ele para trás da barra de abas. */}
+        <Button label={active ? t('home.continueBrew') : pomodoro ? t('pomo.next') : t('home.start')} onPress={begin} />
+        {settings.autoStart && !active && (
+          <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
+            {t('home.flipHint')}
+          </Txt>
+        )}
         {pomodoro && !active && (
           <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
             {t('mode.pomodoroHint', { focus: pomo.focusMin, rest: pomo.breakMin, long: pomo.longBreakMin, n: pomo.cycle })}
           </Txt>
         )}
         {pomodoro && !active && <Button label={t('pomo.adjust')} tone="quiet" onPress={() => router.push('/ajustes')} style={{ alignSelf: 'center', paddingVertical: 8, paddingHorizontal: 16 }} />}
-        <Button label={active ? t('home.continueBrew') : t('home.start')} onPress={begin} />
-        {settings.autoStart && !active && (
-          <Txt v="small" color="muted" style={{ textAlign: 'center' }}>
-            {t('home.flipHint')}
-          </Txt>
-        )}
       </View>
 
       <CheckinCard />
