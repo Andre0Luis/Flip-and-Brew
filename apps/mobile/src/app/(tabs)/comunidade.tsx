@@ -108,16 +108,13 @@ function CommunityHome({ api }: { api: CommunityApi }) {
 
   return (
     <Screen ads>
-      <Header
-        title={t('community.title')}
-        right={
-          me?.handle ? (
-            <Txt v="label" color="muted">
-              {`@${me.handle}`}
-            </Txt>
-          ) : undefined
-        }
-      />
+      <Header title={t('community.title')} />
+      {/* O apelido fica embaixo do título: ao lado, um apelido longo quebrava o cabeçalho. */}
+      {!!me?.handle && (
+        <Txt v="label" color="muted" numberOfLines={1} style={{ marginTop: -8 }}>
+          {`@${me.handle}`}
+        </Txt>
+      )}
       {error && (
         <Txt v="small" color="bad" accessibilityLiveRegion="polite">
           {t(`community.err.${error}` as Key)}
