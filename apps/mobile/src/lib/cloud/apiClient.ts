@@ -86,7 +86,12 @@ export type CommunityApi = {
   /** Se aparece no ranking geral (o de amigos vale sempre). */
   globalRanking(): Promise<boolean>;
   setGlobalRanking(on: boolean): Promise<void>;
+  /** Frases do dia ativas, na ordem do rodízio (o admin alimenta por `PUT /v1/admin/quotes`). */
+  quotes(): Promise<RemoteQuote[]>;
 };
+
+/** Frase do dia vinda do servidor: o texto de cada idioma (`context` e `tryToday` podem faltar). */
+export type RemoteQuote = { id: string; content: Record<'pt' | 'en' | 'es', { text: string; author: string; source?: string; context?: string; tryToday?: string[] }> };
 
 export type ApiClient = {
   /** Cria o perfil na primeira vez (idempotente) e dispara o e-mail de boas-vindas, uma vez só. */
@@ -180,6 +185,7 @@ export function createApiClient(o: {
     readNotifications: async () => void ok(await call('POST', '/v1/me/notifications/read')),
     putWeek: async (stats) => void ok(await call('PUT', '/v1/me/week', stats)),
     rankings: async (scope, week) => ok(await call('GET', `/v1/rankings?scope=${scope}${week ? `&week=${encodeURIComponent(week)}` : ''}`)) as Ranking,
+    quotes: async () => (ok(await call('GET', '/v1/quotes')).quotes ?? []) as RemoteQuote[],
     globalRanking: async () => !!ok(await call('GET', '/v1/me')).privacy?.showInGlobalRanking,
     setGlobalRanking: async (on) => void ok(await call('PATCH', '/v1/me/privacy', { showInGlobalRanking: on })),
   };
