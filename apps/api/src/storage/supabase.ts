@@ -11,6 +11,12 @@ export function supabaseStorage(o: { url: string; serviceRoleKey: string; bucket
   const headers = { apikey: o.serviceRoleKey, authorization: `Bearer ${o.serviceRoleKey}`, 'content-type': 'application/json' };
   let ready: Promise<void> | undefined;
 
+  /** Erro com o status e o começo da resposta do Supabase, sem chave nenhuma: é o que aparece no log e na resposta da API. */
+  const fail = async (what: string, r: Response) => {
+    const body = (await r.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160);
+    return new Error(`storage ${what} ${r.status}${body ? `: ${body}` : ''}`);
+  };
+
   const ensureBucket = () =>
     (ready ??= doFetch(`${base}/bucket`, {
       method: 'POST',
@@ -20,7 +26,7 @@ export function supabaseStorage(o: { url: string; serviceRoleKey: string; bucket
       // 200 criado; 400/409 "already exists" também serve.
       if (!r.ok && r.status !== 400 && r.status !== 409) {
         ready = undefined;
-        throw new Error(`storage bucket ${r.status}`);
+        throw await fail('bucket', r);
       }
     }));
 
@@ -28,7 +34,7 @@ export function supabaseStorage(o: { url: string; serviceRoleKey: string; bucket
     async signUpload(path) {
       await ensureBucket();
       const r = await doFetch(`${base}/object/upload/sign/${bucket}/${path}`, { method: 'POST', headers });
-      if (!r.ok) throw new Error(`storage sign upload ${r.status}`);
+      if (!r.ok) throw await fail('sign upload', r);
       const j = (await r.json()) as { url?: string };
       if (!j.url) throw new Error('storage sign upload sem url');
       return `${base}${j.url}`;

@@ -154,3 +154,18 @@ test('ranking: entre amigos todos aparecem; o geral só com quem ligou; só a se
   assert.deepEqual(g.entries.map((e: { person: { handle: string } }) => e.person.handle), ['caio', 'ana']);
   await t.close();
 });
+
+test('fotos: falha do armazenamento vira 502 com o status e o texto do Supabase, sem chave', async () => {
+  const { supabaseStorage } = await import('./storage/supabase.js');
+  const calls: string[] = [];
+  const storage = supabaseStorage({
+    url: 'https://x.supabase.co',
+    serviceRoleKey: 'chave-secreta-de-teste-0123456789',
+    fetchFn: (async (u: string) => {
+      calls.push(String(u));
+      return new Response(JSON.stringify({ statusCode: '403', error: 'Unauthorized', message: 'new row violates row-level security policy' }), { status: 403 });
+    }) as unknown as typeof fetch,
+  });
+  await assert.rejects(storage.signUpload('a/b.jpg'), (e: Error) => /^storage bucket 403: .*Unauthorized/.test(e.message) && !e.message.includes('chave-secreta'));
+  assert.equal(calls.length, 1);
+});
