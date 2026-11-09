@@ -21,6 +21,8 @@ export type WidgetData = {
     quote: string;
     brew: string;
     idle: string;
+    idleHint: string;
+    endsAt: string;
     remaining: string;
     streak: string;
     days: string;
@@ -76,6 +78,8 @@ export function buildWidgetData(src: WidgetSource, now = Date.now()): WidgetData
       quote: t('widget.quote'),
       brew: t('widget.brew'),
       idle: t('widget.idle'),
+      idleHint: t('widget.idleHint'),
+      endsAt: t('widget.endsAt'),
       remaining: t('widget.remaining'),
       streak: t('widget.streak'),
       days: t('widget.days'),

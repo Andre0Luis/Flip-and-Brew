@@ -14,15 +14,23 @@ const TRACK = '#3A2A22';
 
 type P = { data: WidgetData };
 
-function Shell({ children }: { children: React.ReactNode }) {
+/** Horário local no formato 14:35, sem depender do Intl. */
+const clock = (ms: number) => {
+  const d = new Date(ms);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
+
+function Shell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <FlexWidget clickAction="OPEN_APP" style={{ height: 'match_parent', width: 'match_parent', backgroundColor: BG, borderRadius: 24, padding: 16, flexDirection: 'column', justifyContent: 'space-between' }}>
+      <FlexWidget style={{ flexDirection: 'row', width: 'match_parent', alignItems: 'center', justifyContent: 'space-between' }}>
+        <TextWidget text="FLIP & BREW" style={{ fontSize: 11, color: ACCENT, fontWeight: 'bold', letterSpacing: 1.6 }} />
+        <TextWidget text={label.toUpperCase()} maxLines={1} truncate="END" style={{ fontSize: 10, color: MUTED, letterSpacing: 1 }} />
+      </FlexWidget>
       {children}
     </FlexWidget>
   );
 }
-
-const Label = ({ text }: { text: string }) => <TextWidget text={text.toUpperCase()} style={{ fontSize: 11, color: MUTED, letterSpacing: 1.2 }} />;
 
 /** Barra de progresso: duas caixas lado a lado, uma preenchida e outra vazia. */
 function Bar({ percent, width = 220 }: { percent: number; width?: number }) {
@@ -37,8 +45,7 @@ function Bar({ percent, width = 220 }: { percent: number; width?: number }) {
 /** Mostra a causa quando o widget não consegue montar a tela normal, em vez de ficar em branco. */
 export function WidgetError({ message }: { message: string }) {
   return (
-    <Shell>
-      <Label text="Flip & Brew" />
+    <Shell label="Flip & Brew">
       <TextWidget text={message.slice(0, 160)} maxLines={5} style={{ fontSize: 11, color: FG }} />
     </Shell>
   );
@@ -47,8 +54,7 @@ export function WidgetError({ message }: { message: string }) {
 /** Só a frase do dia. */
 export function QuoteWidget({ data }: P) {
   return (
-    <Shell>
-      <Label text={data.labels.quote} />
+    <Shell label={data.labels.quote}>
       <TextWidget text={data.quote.text} maxLines={6} style={{ fontSize: 18, color: FG, fontFamily: 'serif' }} />
       <TextWidget text={data.quote.author} maxLines={1} truncate="END" style={{ fontSize: 11, color: MUTED }} />
     </Shell>
@@ -59,15 +65,18 @@ export function QuoteWidget({ data }: P) {
 export function BrewWidget({ data }: P) {
   const b = data.brew;
   return (
-    <Shell>
-      <Label text={data.labels.brew} />
+    <Shell label={data.labels.brew}>
       {b.active ? (
         <FlexWidget style={{ flexDirection: 'column' }}>
           <TextWidget text={`${b.percent}%`} style={{ fontSize: 34, color: FG, fontWeight: 'bold' }} />
           <TextWidget text={`${b.name} · ${b.remainingMin} ${data.labels.remaining}`} maxLines={1} truncate="END" style={{ fontSize: 12, color: MUTED }} />
+          <TextWidget text={`${data.labels.endsAt} ${clock(b.startedAt + b.targetMs)}`} maxLines={1} style={{ fontSize: 12, color: ACCENT }} />
         </FlexWidget>
       ) : (
-        <TextWidget text={data.labels.idle} style={{ fontSize: 18, color: FG }} />
+        <FlexWidget style={{ flexDirection: 'column' }}>
+          <TextWidget text={data.labels.idle} style={{ fontSize: 18, color: FG }} />
+          <TextWidget text={data.labels.idleHint} maxLines={2} style={{ fontSize: 12, color: MUTED }} />
+        </FlexWidget>
       )}
       <Bar percent={b.percent} />
     </Shell>
@@ -77,8 +86,7 @@ export function BrewWidget({ data }: P) {
 /** Sequência de dias e moedas. */
 export function StreakWidget({ data }: P) {
   return (
-    <Shell>
-      <Label text={data.labels.streak} />
+    <Shell label={data.labels.streak}>
       <FlexWidget style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <FlexWidget style={{ flexDirection: 'column' }}>
           <TextWidget text={String(data.streak)} style={{ fontSize: 40, color: FG, fontWeight: 'bold' }} />
@@ -97,8 +105,7 @@ export function StreakWidget({ data }: P) {
 export function GoalWidget({ data }: P) {
   const t = data.today;
   return (
-    <Shell>
-      <Label text={data.labels.goal} />
+    <Shell label={data.labels.goal}>
       <FlexWidget style={{ flexDirection: 'column' }}>
         <TextWidget text={`${t.minutes} / ${t.goal} ${data.labels.minutes}`} style={{ fontSize: 24, color: FG, fontWeight: 'bold' }} />
         <TextWidget text={`${t.percent}%`} style={{ fontSize: 12, color: MUTED }} />
@@ -112,8 +119,7 @@ export function GoalWidget({ data }: P) {
 export function MissionsWidget({ data }: P) {
   const m = data.missions;
   return (
-    <Shell>
-      <Label text={data.labels.missions} />
+    <Shell label={data.labels.missions}>
       <TextWidget text={`${m.done} / ${m.total}`} style={{ fontSize: 40, color: FG, fontWeight: 'bold' }} />
       <Bar percent={m.total ? (m.done / m.total) * 100 : 0} />
     </Shell>
