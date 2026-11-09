@@ -33,7 +33,8 @@ export function supabaseStorage(o: { url: string; serviceRoleKey: string; bucket
   return {
     async signUpload(path) {
       await ensureBucket();
-      const r = await doFetch(`${base}/object/upload/sign/${bucket}/${path}`, { method: 'POST', headers });
+      // O Supabase recusa POST com content-type json e corpo vazio (400 "Body cannot be empty"): vai um objeto vazio.
+      const r = await doFetch(`${base}/object/upload/sign/${bucket}/${path}`, { method: 'POST', headers, body: '{}' });
       if (!r.ok) throw await fail('sign upload', r);
       const j = (await r.json()) as { url?: string };
       if (!j.url) throw new Error('storage sign upload sem url');
