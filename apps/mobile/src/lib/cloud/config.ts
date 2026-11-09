@@ -10,6 +10,8 @@ export const firebaseConfig = {
 };
 
 export const googleWebClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '';
+/** Cliente OAuth iOS do Google (público, como o do Android). O iPhone precisa dele no seletor de contas; o `iosUrlScheme` do `app.json` é este ID invertido. */
+export const googleIosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? '281468064554-kfe8a2a2kk35eob3h1101blt8126maeu.apps.googleusercontent.com';
 
 /** Só em desenvolvimento: troca o Firebase por um servidor falso na memória, para testar as telas sem chaves. */
 export const mockRequested = process.env.EXPO_PUBLIC_AUTH_MODE === 'mock';
