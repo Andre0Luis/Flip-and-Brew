@@ -91,7 +91,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 ## Já resolvido (para memória)
 - [ ] **Escurecer a tela durante o copo** (`src/lib/brightness.ts`, ajuste opcional, desligado por padrão): não validado em aparelho. No iPhone muda o brilho do sistema e o valor anterior fica guardado em disco para restaurar após fechamento forçado.
 - [ ] **Compras no iPhone** (RevenueCat): falta o `.p8` de In-App Purchase no painel, os produtos `coins_*` no App Store Connect e o primeiro build de iOS pelo EAS.
-- [ ] **Login com Google no iPhone** não está configurado (cliente OAuth iOS e `iosUrlScheme`).
+- [ ] **Login com Google no iPhone:** cliente OAuth iOS criado e `iosUrlScheme` no `app.json` (2026-11-09); falta testar num iPhone e, no Supabase, pôr o ID iOS em Client IDs e ligar "Skip nonce check".
 - [ ] **Workflow `eas-build.yml`** falha por falta do segredo `EXPO_TOKEN` no GitHub.
 - [ ] **Capturas das lojas** (`docs/store/screenshots.md`) são simuladas pela versão web; na aba Coleção em inglês, o rótulo "Achievements" encosta na borda em telas de 360 px.
 - [ ] **Modo Pomodoro** (ADR-0020): foco de 25 min, pausa de 5 (15 a cada 4 focos) e aviso de fim da pausa não foram validados em aparelho.

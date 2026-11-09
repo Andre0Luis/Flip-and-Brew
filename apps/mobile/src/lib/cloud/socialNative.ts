@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { googleWebClientId } from './config';
+import { googleIosClientId, googleWebClientId } from './config';
 import { AuthError } from './types';
 
 // Login nativo com o Google e a Apple, usado pelo apiBackend. (O firebaseBackend tem a própria cópia, que some no corte do Firebase.)
@@ -29,7 +29,7 @@ export const googleAvailable = () => Platform.OS !== 'web' && !!googleWebClientI
 export async function googleIdToken(): Promise<string> {
   const g = google();
   if (!g || !googleWebClientId) throw new AuthError('unavailable');
-  g.GoogleSignin.configure({ webClientId: googleWebClientId });
+  g.GoogleSignin.configure({ webClientId: googleWebClientId, ...(Platform.OS === 'ios' ? { iosClientId: googleIosClientId } : {}) });
   await g.GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   const res = await g.GoogleSignin.signIn();
   if (!g.isSuccessResponse(res)) throw new AuthError('cancelled');

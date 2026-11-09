@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import { appStorage } from '@/store/storage';
-import { firebaseConfig, googleWebClientId } from './config';
+import { firebaseConfig, googleIosClientId, googleWebClientId } from './config';
 import { parseSnapshot } from './snapshot';
 import { AuthError, type CloudBackend, type CloudUser, type Provider, type Snapshot } from './types';
 import { toAuthError } from './errors';
@@ -69,7 +69,7 @@ function google() {
 async function googleIdToken(): Promise<string> {
   const g = google();
   if (!g || !googleWebClientId) throw new AuthError('unavailable');
-  g.GoogleSignin.configure({ webClientId: googleWebClientId });
+  g.GoogleSignin.configure({ webClientId: googleWebClientId, ...(Platform.OS === 'ios' ? { iosClientId: googleIosClientId } : {}) });
   await g.GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   const res = await g.GoogleSignin.signIn();
   if (!g.isSuccessResponse(res)) throw new AuthError('cancelled');
