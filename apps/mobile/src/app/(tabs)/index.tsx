@@ -17,6 +17,7 @@ import { Tutorial } from '@/components/Tutorial';
 import { RestCard } from '@/components/RestCard';
 import { PassiveNotice } from '@/components/PassiveNotice';
 import { normalizePomo } from '@/lib/pomodoro';
+import { sessionRoute } from '@/lib/sessionRoute';
 import { getQuotes, quoteOfDay } from '@/data/quotes';
 import { brewers, byId, itemText } from '@/data/catalog';
 import { formatDateLong, useI18n } from '@/i18n';
@@ -88,7 +89,8 @@ export default function Inicio() {
   };
 
   const begin = () => {
-    if (active || start()) router.push('/brew');
+    if (active) router.push(sessionRoute(active));
+    else if (start()) router.push(sessionRoute(useApp.getState().active));
   };
 
   return (

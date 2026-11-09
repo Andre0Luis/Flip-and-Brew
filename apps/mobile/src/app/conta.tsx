@@ -84,16 +84,24 @@ export function SignedOut({ required = false }: { required?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AuthError | string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [socialFailed, setSocialFailed] = useState(false);
 
-  const run = async (fn: () => Promise<unknown>) => {
+  /** `social`: login com Google ou Apple. Se falhar (e não foi a pessoa que fechou o seletor), leva para o cadastro por e-mail e senha. */
+  const run = async (fn: () => Promise<unknown>, social = false) => {
     setBusy(true);
     setError(null);
     setInfo(null);
+    setSocialFailed(false);
     try {
       await fn();
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     } catch (e) {
-      setError(toAuthError(e));
+      const err = toAuthError(e);
+      setError(err);
+      if (social && !(err instanceof AuthError && err.code === 'cancelled')) {
+        setSocialFailed(true);
+        setMode('up');
+      }
     } finally {
       setBusy(false);
     }
@@ -211,6 +219,11 @@ export function SignedOut({ required = false }: { required?: boolean }) {
       )}
 
       <ErrorLine error={error} />
+      {socialFailed && (
+        <Txt v="small" color="accent" accessibilityLiveRegion="polite">
+          {t('auth.socialFallback')}
+        </Txt>
+      )}
       {info && (
         <Txt v="small" color="good" accessibilityLiveRegion="polite">
           {info}
@@ -227,7 +240,7 @@ export function SignedOut({ required = false }: { required?: boolean }) {
       )}
 
       {backend?.appleAvailable() && (
-        <AppleButton onPress={() => run(() => backend.signInApple())} disabled={busy} />
+        <AppleButton onPress={() => run(() => backend.signInApple(), true)} disabled={busy} />
       )}
 
       {backend?.googleAvailable() && (
@@ -239,7 +252,7 @@ export function SignedOut({ required = false }: { required?: boolean }) {
             </Txt>
             <View style={{ flex: 1, height: 1, backgroundColor: '#8884' }} />
           </View>
-          <Button label={t('auth.google')} tone="quiet" onPress={() => run(() => backend.signInGoogle())} disabled={busy} />
+          <Button label={t('auth.google')} tone="quiet" onPress={() => run(() => backend.signInGoogle(), true)} disabled={busy} />
         </>
       )}
 

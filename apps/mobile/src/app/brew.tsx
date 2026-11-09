@@ -40,9 +40,10 @@ export default function Brew() {
   const hadActive = useRef(!!active);
   useEffect(() => {
     if (!active && !hadActive.current) router.dismissTo('/');
+    else if (active?.pomodoro) router.replace('/pomodoro'); // o foco do Pomodoro tem tela própria
   }, [active, router]);
 
-  if (!active) return <Screen scroll={false}><View /></Screen>;
+  if (!active || active.pomodoro) return <Screen scroll={false}><View /></Screen>;
 
   const elapsed = Math.max(0, Math.min(now - active.startedAt, active.targetMs));
   const progress = elapsed / active.targetMs;
