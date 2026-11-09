@@ -60,7 +60,8 @@ export default function Inicio() {
   useEffect(() => {
     if (usage.permitted && usage.days.length) creditPassive(usage.days);
   }, [usage.permitted, usage.days, creditPassive]);
-  const unlocksToday = usage.permitted ? summarizeUsage(usage.days).today?.unlocks : undefined;
+  // No iPhone não há contagem de desbloqueios (ADR-0029).
+  const unlocksToday = usage.permitted && usage.countsUnlocks ? summarizeUsage(usage.days).today?.unlocks : undefined;
   const days = streak(sessions);
   const brewer = byId(brewerId);
   const ownedBrewers = brewers().filter((b) => owned.includes(b.id));

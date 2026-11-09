@@ -65,3 +65,14 @@ test('dia que rendeu zero também é anotado, mas não gera aviso', () => {
   assert.equal(state.credited.length, 1);
   assert.equal(state.notice, null);
 });
+
+test('iPhone: dia acompanhado sem tela rende, dia que o monitor não acompanhou não', () => {
+  // O iPhone não conta desbloqueios: só o tempo de tela estimado e se o monitor acompanhou o dia.
+  const iphone = (daysAgo: number, screenH: number, tracked: boolean): UsageDay => ({ dayStart: start(daysAgo), unlocks: 0, locks: 0, screenMs: screenH * HOUR, tracked });
+  const plan = planPassive({ ...base, days: [iphone(3, 0, false), iphone(2, 0, true), iphone(1, 6, true)] });
+  assert.deepEqual(
+    plan.credits.map((c) => c.day),
+    [dayKey(start(2)), dayKey(start(1))],
+  );
+  assert.equal(plan.credits[0].coins, PASSIVE_MAX_COINS_PER_DAY);
+});

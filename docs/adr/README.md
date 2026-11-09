@@ -38,6 +38,7 @@ Formato de cada ADR: Status · Data · Contexto · Decisão · Alternativas desc
 | [0026](0026-conventional-commits.md) | Commits no padrão Conventional Commits | Aceita |
 | [0027](0027-app-liga-ao-backend-proprio.md) | App liga ao backend próprio (API e Supabase Auth) | Aceita |
 | [0028](0028-login-obrigatorio-com-o-backend-proprio.md) | Login obrigatório com o backend próprio | Aceita |
+| [0029](0029-tempo-de-tela-no-iphone.md) | Tempo de tela no iPhone pelo Tempo de Uso | Aceita |
 | [0025](0025-app-em-apps-mobile-e-workflows-separados.md) | App em `apps/mobile` e workflows separados por área | Aceita |
 
 > **Nota de transição.** O ADR-0010 (contas e Firebase), partes do 0011, 0014 e 0015 (usuário de teste, página de exclusão, manual) descrevem o que chega com o **PR #7**. Se o #7 ainda não foi mergeado, esses arquivos de `docs/` e o código de contas ainda não estão no `main`.

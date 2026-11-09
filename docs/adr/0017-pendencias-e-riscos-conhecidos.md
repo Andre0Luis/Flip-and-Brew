@@ -45,6 +45,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Dados de saúde** (Health Connect e Apple Saúde) no widget e no Bem-estar: ainda não existem.
 
 - [ ] **Moedas pelo tempo bloqueado** (ADR-0023): o Kotlin de `usage-stats` nunca foi compilado e a conta depende dele; taxa (1 moeda a cada 10 min), teto (60 por dia) e sono padrão (6 h) **não foram testados com pessoas** nem em aparelho. Dia com leitura parcial do Android (primeiro dia após a permissão) pode render a mais, limitado pelo teto.
+- [ ] **Tempo de tela no iPhone** (ADR-0029): o Swift do módulo `usage-stats` e a extensão `ScreenTimeMonitor` compilam, mas **nunca rodaram num iPhone** (o simulador não tem Tempo de Uso). Falta ver se os limites disparam, se o primeiro dia sai certo e se o EAS habilita a Family Controls no identificador da extensão sozinho; se não, habilitar à mão em Certificates, Identifiers & Profiles.
 - [ ] **Lembretes diários** (ADR-0022): horários, canal silencioso, toque abrindo o Início, reagendamento ao reabrir e depois de reiniciar o celular não foram validados em aparelho. Acima de 14 dias sem abrir o app, os avisos acabam.
 ## Anúncios e remoção paga (ADR-0021)
 - [ ] **Conta no AdMob:** criar o app Android e o iOS, os blocos de banner, e trocar os IDs de teste do Google em `app.json` (`androidAppId`, `iosAppId`) pelos reais. Sem isso o banner só mostra anúncio de teste.
@@ -70,7 +71,7 @@ Este arquivo é a **lista viva do que ainda não está pronto ou verificado**. Q
 - [ ] **Domínio próprio** para o e-mail (hoje remetente verificado na Brevo; Gmail pode cair no spam) e para a Cloudflare.
 - [ ] Conta e chave da **Brevo**, remetente verificado e `ADMIN_EMAILS` nas variáveis da Vercel (o e-mail do dono não vai para o repositório).
 - [ ] Fases seguintes: mover o app para `apps/mobile`, amizade com aprovação, posts e imagens, ranking, mensagens, **Supabase Auth**, e-mail de boas-vindas, deploy na Vercel (plano gratuito só para testes), corte do Firebase, textos "sem conta".
-- [ ] **iPhone:** a Family Controls (Apple) não está pedida; pela apuração, o tempo de tela do iPhone não pode ir para servidor, então o ranking "menos celular" fica só no Android.
+- [ ] **iPhone:** a Family Controls (Distribution) foi aprovada em 2026-11-08 e o tempo de tela estimado já existe no aparelho (ADR-0029), mas ele não pode ir para servidor; o ranking "menos celular" continua só no Android.
 - [x] **Kotlin do módulo `usage-stats` compila** (build debug do Android passou em 2026-11-07, `:usage-stats:compileDebugKotlin`). Falta rodar num aparelho ou emulador e ver os números reais.
 
 - [ ] **App com o backend próprio** (ADR-0027): nunca rodou em aparelho. Faltam as 3 variáveis `EXPO_PUBLIC_*` (`apps/mobile/.env` e EAS), configurar o Supabase Auth (e-mail e SMTP da Brevo, Google com "skip nonce check", Apple), revogar o token da Apple na exclusão. A **tela de nova senha** existe (`/nova-senha`, ADR-0027), mas exige `flipandbrew://nova-senha` em Redirect URLs no painel do Supabase e nunca rodou em aparelho.

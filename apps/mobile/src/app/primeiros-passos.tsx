@@ -59,9 +59,9 @@ export default function PrimeirosPassos() {
             <Card style={{ gap: 8 }}>
               <Txt v="title">{t('steps.coins.title')}</Txt>
               <Txt v="small" color="muted">
-                {t('steps.coins.body')}
+                {t(usage.ios ? 'steps.coins.body.ios' : 'steps.coins.body')}
               </Txt>
-              {(['steps.coins.s1', 'steps.coins.s2', 'steps.coins.s3'] as const).map((k) => (
+              {(usage.ios ? (['steps.coins.s1.ios', 'steps.coins.s2.ios', 'steps.coins.s3.ios'] as const) : (['steps.coins.s1', 'steps.coins.s2', 'steps.coins.s3'] as const)).map((k) => (
                 <Txt key={k} v="small">
                   {t(k)}
                 </Txt>

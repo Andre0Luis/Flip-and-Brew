@@ -1,9 +1,14 @@
-import UsageStatsModule, { type NativeDailyUsage } from './src/UsageStatsModule';
+import { Platform } from 'react-native';
+import UsageStatsModule, { type NativeDailyUsage, type PickerLabels } from './src/UsageStatsModule';
 
 export type DailyUsage = NativeDailyUsage;
+export type { PickerLabels };
 
-/** true só no Android com o módulo nativo compilado no app. */
+/** true no Android e no iPhone com o módulo nativo compilado no app. */
 export const isUsageStatsAvailable = !!UsageStatsModule;
+
+/** false no iPhone: o Tempo de Uso só dá uma estimativa do tempo de tela, sem desbloqueios nem bloqueios. */
+export const countsUnlocks = UsageStatsModule?.countsUnlocks ?? true;
 
 export function hasUsageStatsPermission(): boolean {
   try {
@@ -13,11 +18,13 @@ export function hasUsageStatsPermission(): boolean {
   }
 }
 
-export function requestUsageStatsPermission(): void {
+/** Android abre a tela do sistema; iPhone pede o Tempo de Uso e espera a pessoa escolher os apps. */
+export async function requestUsageStatsPermission(labels: PickerLabels): Promise<void> {
   try {
-    UsageStatsModule?.requestUsageStatsPermission();
+    if (Platform.OS === 'ios') await UsageStatsModule?.requestUsageStatsPermission(labels);
+    else UsageStatsModule?.requestUsageStatsPermission();
   } catch {
-    // sem a tela de ajustes do sistema, não há o que fazer
+    // sem a tela do sistema, não há o que fazer
   }
 }
 

@@ -153,16 +153,16 @@ export default function Intro() {
             </Card>
             {usage.available && (
               <Card style={{ gap: 8 }}>
-                <Txt v="title">{t('wb.usagePermTitle')}</Txt>
+                <Txt v="title">{t(usage.ios ? 'wb.usagePermTitle.ios' : 'wb.usagePermTitle')}</Txt>
                 <Txt v="small" color="muted">
-                  {t('wb.usagePermBody')}
+                  {t(usage.ios ? 'wb.usagePermBody.ios' : 'wb.usagePermBody')}
                 </Txt>
                 {usage.permitted ? (
                   <Txt v="label" color="good">
                     {t('intro.perm.done')}
                   </Txt>
                 ) : (
-                  <Button label={t('wb.usagePermCta')} tone="quiet" onPress={usage.request} />
+                  <Button label={t(usage.ios ? 'wb.usagePermCta.ios' : 'wb.usagePermCta')} tone="quiet" onPress={() => void usage.request()} />
                 )}
               </Card>
             )}

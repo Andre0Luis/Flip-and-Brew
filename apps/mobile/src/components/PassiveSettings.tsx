@@ -10,7 +10,7 @@ import { summarizeUsage } from '@/lib/usage';
 import { useApp } from '@/store/useApp';
 import { useTheme } from '@/theme/ThemeProvider';
 
-/** Ajustes das moedas pelo tempo bloqueado. Só existe no Android (precisa do acesso ao uso). */
+/** Ajustes das moedas pelo tempo bloqueado. Precisa do acesso ao uso (Android) ou do Tempo de Uso (iPhone). */
 export function PassiveSettings() {
   const { t } = useI18n();
   const { c } = useTheme();
@@ -35,9 +35,9 @@ export function PassiveSettings() {
       {!usage.permitted ? (
         <>
           <Txt v="small" color="muted">
-            {t('passive.need')}
+            {t(usage.ios ? 'passive.need.ios' : 'passive.need')}
           </Txt>
-          <Button label={t('wb.usagePermCta')} tone="quiet" onPress={usage.request} />
+          <Button label={t(usage.ios ? 'wb.usagePermCta.ios' : 'wb.usagePermCta')} tone="quiet" onPress={() => void usage.request()} />
         </>
       ) : (
         <>

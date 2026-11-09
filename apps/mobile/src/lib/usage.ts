@@ -1,11 +1,19 @@
 import type { DayBar } from './stats';
 
 /** Um dia de uso do sistema, como o módulo nativo devolve. */
-export type UsageDay = { dayStart: number; unlocks: number; /** vezes que a tela apagou ou foi bloqueada */ locks: number; screenMs: number };
+export type UsageDay = {
+  dayStart: number;
+  unlocks: number;
+  /** vezes que a tela apagou ou foi bloqueada */
+  locks: number;
+  screenMs: number;
+  /** iPhone: o monitor do Tempo de Uso acompanhou o dia, mesmo sem nenhum minuto de tela registrado */
+  tracked?: boolean;
+};
 
 const sameDay = (a: number, b: number) => new Date(a).toDateString() === new Date(b).toDateString();
 
-export const hasData = (d: UsageDay) => d.unlocks > 0 || d.locks > 0 || d.screenMs > 0;
+export const hasData = (d: UsageDay) => !!d.tracked || d.unlocks > 0 || d.locks > 0 || d.screenMs > 0;
 
 const DAY_MS = 86_400_000;
 
