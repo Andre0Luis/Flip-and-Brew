@@ -22,10 +22,19 @@
       "android": {
         "buildType": "app-bundle"
       }
+    },
+    "store": {
+      "extends": "production",
+      "environment": "preview"
     }
   },
   "submit": {
     "production": {
+      "ios": {
+        "ascAppId": "6818783993"
+      }
+    },
+    "store": {
       "ios": {
         "ascAppId": "6818783993"
       }

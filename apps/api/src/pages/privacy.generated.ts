@@ -8,7 +8,7 @@ export const privacy: Record<PageLang, Page> = {
       {
         "title": "Seus dados ficam no aparelho",
         "body": [
-          "O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências ficam só no seu celular, sem servidor próprio nem ferramenta de análise. Os anúncios são a exceção; veja abaixo."
+          "O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências ficam só no seu celular, sem servidor próprio nem ferramenta de análise. Os anúncios são a exceção; veja abaixo. Nas versões com cadastro obrigatório, a conta é necessária para usar o app; veja “Conta e backup”."
         ]
       },
       {
@@ -42,21 +42,33 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Conta e backup (opcional)",
+        "title": "Conta e backup",
         "body": [
-          "Você pode criar uma conta com e-mail e senha ou entrar com o Google. Se criar, guardamos o seu e-mail e uma cópia do seu progresso (copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências) no Firebase, serviço do Google, para você recuperar em outro aparelho. Só você acessa essa cópia. O login com o Google compartilha apenas o seu nome e e-mail do perfil."
+          "Nas versões com conta própria, o cadastro é necessário para usar o app: você cria a conta com e-mail e senha ou entra com o Google ou a Apple. Guardamos o seu e-mail, o nome e o apelido que você escolher, e uma cópia do seu progresso (copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências) para você recuperar em outro aparelho. Só você acessa essa cópia. O login com o Google ou com a Apple compartilha apenas o nome e o e-mail do perfil. Versões mais antigas guardavam essa cópia no Firebase, serviço do Google, e continuam assim até serem atualizadas."
         ]
       },
       {
         "title": "Excluir a conta",
         "body": [
-          "Em Conta › Excluir conta, apagamos a sua conta e o backup na nuvem. Os dados do aparelho continuam até você apagá-los em Ajustes."
+          "Em Conta › Excluir conta, apagamos a sua conta, o backup, os posts, as fotos, os comentários, as curtidas, as amizades e os números do ranking. Também dá para pedir pela página de exclusão de conta do app, sem precisar abri-lo. Os dados do aparelho continuam até você apagá-los em Ajustes."
         ]
       },
       {
         "title": "Anúncios",
         "body": [
           "O app mostra um banner de anúncio no fim de algumas telas, fornecido pelo Google AdMob. Para exibi-lo, o AdMob pode usar o identificador de publicidade do aparelho e dados como o endereço IP e o modelo do aparelho. Pedimos anúncios sem personalização. Onde a lei exige, o app mostra um formulário de consentimento, que você pode refazer quando quiser. Quem comprar “Remover anúncios” ou assinar o Pro não vê o banner nem carrega o anúncio."
+        ]
+      },
+      {
+        "title": "Comunidade, fotos e ranking",
+        "body": [
+          "Na Comunidade você escolhe um apelido, adiciona amigos e publica posts com título, legenda e até 3 fotos. As fotos são reduzidas e compactadas no seu aparelho antes do envio e ficam num armazenamento privado: só você e os seus amigos as veem, por links que vencem em uma hora. Você pode apagar os seus posts e comentários quando quiser. O ranking da semana usa o seu tempo offline e o número de copos da semana; entre amigos ele aparece sempre, e no ranking geral só se você ligar essa opção. Você pode bloquear alguém, e quem você bloqueia deixa de ver o que você publica."
+        ]
+      },
+      {
+        "title": "Onde os dados ficam",
+        "body": [
+          "A conta, o backup e a comunidade usam a nossa API, hospedada na Vercel, e o Supabase (banco de dados, login e armazenamento das fotos). O e-mail de boas-vindas sai pelo Brevo. Não vendemos dados e não usamos ferramenta de análise. Para pedir ajuda ou tirar dúvidas, use a página de suporte do app."
         ]
       }
     ]
@@ -67,7 +79,7 @@ export const privacy: Record<PageLang, Page> = {
       {
         "title": "Your data stays on the device",
         "body": [
-          "Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences stay only on your phone, with no server of our own and no analytics tool. Ads are the exception; see below."
+          "Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences stay only on your phone, with no server of our own and no analytics tool. Ads are the exception; see below. In versions with mandatory sign-up, an account is required to use the app; see “Account and backup”."
         ]
       },
       {
@@ -101,21 +113,33 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Account and backup (optional)",
+        "title": "Account and backup",
         "body": [
-          "You can create an account with email and password or sign in with Google. If you do, we store your email and a copy of your progress (cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences) in Firebase, a Google service, so you can recover it on another device. Only you can access that copy. Google sign-in shares only your profile name and email."
+          "In versions with our own account, signing up is required to use the app: you create an account with email and password or sign in with Google or Apple. We store your email, the name and handle you choose, and a copy of your progress (cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences) so you can restore it on another device. Only you can access that copy. Signing in with Google or Apple shares only the name and email of your profile. Older versions kept this copy on Firebase, a Google service, and keep doing so until they are updated."
         ]
       },
       {
         "title": "Deleting the account",
         "body": [
-          "In Account › Delete account, we delete your account and the cloud backup. Data on the device stays until you erase it in Settings."
+          "In Account › Delete account, we delete your account, backup, posts, photos, comments, likes, friendships and ranking numbers. You can also ask through the app’s account deletion page, without opening the app. Data on the device stays until you delete it in Settings."
         ]
       },
       {
         "title": "Ads",
         "body": [
           "The app shows an ad banner at the bottom of some screens, provided by Google AdMob. To show it, AdMob may use the device advertising ID and data such as the IP address and device model. We request non-personalized ads. Where the law requires it, the app shows a consent form, which you can redo at any time. If you buy “Remove ads” or subscribe to Pro, the banner is not shown and no ad is loaded."
+        ]
+      },
+      {
+        "title": "Community, photos and ranking",
+        "body": [
+          "In Community you choose a handle, add friends and publish posts with a title, caption and up to 3 photos. Photos are resized and compressed on your device before upload and are kept in private storage: only you and your friends see them, through links that expire after an hour. You can delete your posts and comments at any time. The weekly ranking uses your offline time and the number of cups for the week; among friends it always shows, and in the global ranking only if you turn that option on. You can block someone, and people you block can no longer see what you publish."
+        ]
+      },
+      {
+        "title": "Where the data lives",
+        "body": [
+          "The account, backup and community use our API, hosted on Vercel, and Supabase (database, sign-in and photo storage). The welcome email is sent through Brevo. We do not sell data and do not use analytics tools. For help or questions, use the app’s support page."
         ]
       }
     ]
@@ -126,7 +150,7 @@ export const privacy: Record<PageLang, Page> = {
       {
         "title": "Tus datos se quedan en el dispositivo",
         "body": [
-          "Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias se quedan solo en tu móvil, sin servidor propio ni herramienta de analítica. Los anuncios son la excepción; mira abajo."
+          "Flip & Brew funciona sin cuenta. Sin ella, tazas, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias se quedan solo en tu móvil, sin servidor propio ni herramienta de analítica. Los anuncios son la excepción; mira abajo. En las versiones con registro obligatorio, la cuenta es necesaria para usar la app; consulta «Cuenta y copia de seguridad»."
         ]
       },
       {
@@ -160,21 +184,33 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Cuenta y copia (opcional)",
+        "title": "Cuenta y copia de seguridad",
         "body": [
-          "Puedes crear una cuenta con correo y contraseña o entrar con Google. Si lo haces, guardamos tu correo y una copia de tu progreso (tazas, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias) en Firebase, un servicio de Google, para que lo recuperes en otro dispositivo. Solo tú accedes a esa copia. El acceso con Google comparte solo tu nombre y correo del perfil."
+          "En las versiones con cuenta propia, registrarse es necesario para usar la app: creas la cuenta con correo y contraseña o entras con Google o Apple. Guardamos tu correo, el nombre y el apodo que elijas, y una copia de tu progreso (vasos, monedas, objetos, ánimo, energía diaria, el perfil que completes (nombre, teléfono, edad y gusto de café) y preferencias) para que la recuperes en otro dispositivo. Solo tú accedes a esa copia. El acceso con Google o Apple comparte solo el nombre y el correo del perfil. Las versiones anteriores guardaban esa copia en Firebase, un servicio de Google, y siguen así hasta que se actualicen."
         ]
       },
       {
         "title": "Eliminar la cuenta",
         "body": [
-          "En Cuenta › Eliminar cuenta, borramos tu cuenta y la copia en la nube. Los datos del dispositivo se quedan hasta que los borres en Ajustes."
+          "En Cuenta › Eliminar cuenta, borramos tu cuenta, la copia de seguridad, las publicaciones, las fotos, los comentarios, los me gusta, las amistades y los números del ranking. También puedes pedirlo en la página de eliminación de cuenta de la app, sin abrirla. Los datos del dispositivo siguen hasta que los borres en Ajustes."
         ]
       },
       {
         "title": "Anuncios",
         "body": [
           "La app muestra un banner de anuncio al final de algunas pantallas, proporcionado por Google AdMob. Para mostrarlo, AdMob puede usar el identificador de publicidad del dispositivo y datos como la dirección IP y el modelo del dispositivo. Pedimos anuncios sin personalización. Donde la ley lo exige, la app muestra un formulario de consentimiento, que puedes rehacer cuando quieras. Quien compre “Quitar anuncios” o se suscriba al Pro no ve el banner ni se carga el anuncio."
+        ]
+      },
+      {
+        "title": "Comunidad, fotos y ranking",
+        "body": [
+          "En la Comunidad eliges un apodo, añades amigos y publicas entradas con título, descripción y hasta 3 fotos. Las fotos se reducen y comprimen en tu dispositivo antes de enviarlas y se guardan en un almacenamiento privado: solo tú y tus amigos las ven, mediante enlaces que caducan en una hora. Puedes borrar tus publicaciones y comentarios cuando quieras. El ranking semanal usa tu tiempo sin móvil y el número de vasos de la semana; entre amigos aparece siempre, y en el ranking general solo si activas esa opción. Puedes bloquear a alguien, y quien bloqueas deja de ver lo que publicas."
+        ]
+      },
+      {
+        "title": "Dónde están los datos",
+        "body": [
+          "La cuenta, la copia de seguridad y la comunidad usan nuestra API, alojada en Vercel, y Supabase (base de datos, acceso y almacenamiento de fotos). El correo de bienvenida se envía por Brevo. No vendemos datos ni usamos herramientas de analítica. Para pedir ayuda o resolver dudas, usa la página de soporte de la app."
         ]
       }
     ]
