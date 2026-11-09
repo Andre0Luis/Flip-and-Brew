@@ -14,6 +14,7 @@
     "check": "npm run typecheck && npm test",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file-if-exists=.env src/db/migrate.ts",
+    "db:seed-quotes": "tsx --env-file-if-exists=.env src/db/seed-quotes.ts",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
     "dev:token": "tsx --env-file-if-exists=.env src/auth/dev-token.ts"

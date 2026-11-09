@@ -106,6 +106,26 @@ export const postCreateSchema = z
   })
   .strict();
 export const commentCreateSchema = z.object({ body: z.string().trim().min(1).max(500) }).strict();
+/** Frases do dia: o texto de cada idioma. `context` e `tryToday` são opcionais (a tela da frase esconde o que faltar). */
+export const quoteTextSchema = z
+  .object({
+    text: z.string().trim().min(3).max(600),
+    author: z.string().trim().min(1).max(80),
+    source: z.string().trim().max(160).default(''),
+    context: z.string().trim().max(1200).optional(),
+    tryToday: z.array(z.string().trim().min(1).max(240)).max(4).optional(),
+  })
+  .strict();
+export const quoteInputSchema = z
+  .object({
+    id: z.string().regex(/^[a-z0-9][a-z0-9-]{1,39}$/, 'id: minúsculas, números e hífen'),
+    position: z.number().int().min(0).max(100_000).optional(),
+    active: z.boolean().optional(),
+    content: z.object({ pt: quoteTextSchema, en: quoteTextSchema, es: quoteTextSchema }).strict(),
+  })
+  .strict();
+export const quotesPutSchema = z.object({ quotes: z.array(quoteInputSchema).min(1).max(200) }).strict();
+
 /** Totais da semana que o app envia para o ranking (minutos offline e copos terminados). */
 export const weekStatsSchema = z
   .object({
@@ -126,6 +146,7 @@ export function isoWeek(ms: number): string {
   return `${t.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
+export type QuoteInput = z.infer<typeof quoteInputSchema>;
 export type ProfilePatch = z.infer<typeof profilePatchSchema>;
 export type CoffeePrefs = z.infer<typeof coffeePrefsSchema>;
 export type PrivacyPatch = z.infer<typeof privacyPatchSchema>;

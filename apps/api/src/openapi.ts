@@ -7,6 +7,7 @@ import {
   commentCreateSchema,
   MAX_POST_IMAGES,
   postCreateSchema,
+  quotesPutSchema,
   uploadRequestSchema,
   weekStatsSchema,
   coffeePrefsSchema,
@@ -79,6 +80,11 @@ const schemas: Record<string, Json> = {
     signupsByDay: { type: 'array', items: obj({ day: str, n: { type: 'integer' } }) },
     at: { type: 'integer' },
   }),
+  QuoteText: obj({ text: str, author: str, source: str, context: str, tryToday: { type: 'array', items: str } }),
+  QuoteContent: obj({ pt: { $ref: '#/components/schemas/QuoteText' }, en: { $ref: '#/components/schemas/QuoteText' }, es: { $ref: '#/components/schemas/QuoteText' } }),
+  QuoteList: obj({ quotes: { type: 'array', items: obj({ id: str, content: { $ref: '#/components/schemas/QuoteContent' } }) }, updatedAt: { type: 'integer' } }),
+  AdminQuoteList: obj({ quotes: { type: 'array', items: obj({ id: str, position: { type: 'integer' }, active: { type: 'boolean' }, content: { $ref: '#/components/schemas/QuoteContent' }, updatedAt: dateTime }) } }),
+  QuotesSaved: obj({ saved: { type: 'integer' }, total: { type: 'integer' } }),
   AdminUser: obj({ id: uuid, email: str, displayName: maybe(str), handle: maybe(str), role: str, createdAt: dateTime, lastSeenAt: maybe(dateTime), bannedAt: maybe(dateTime), activeNow: { type: 'boolean' } }),
 };
 
@@ -178,6 +184,16 @@ export const operations: Op[] = [
   { method: 'get', path: '/v1/users/{handle}', tag: 'Pessoas', summary: 'Perfil público', auth: 'user', query: [{ name: 'handle', description: 'Apelido.', schema: str }],
     description: 'Sem e-mail e sem data de nascimento. Os cafés preferidos só aparecem se a pessoa ativou.', responses: { 200: { description: 'Ok.', schema: 'PublicProfile' }, 400: INVALID, 404: NOT_FOUND } },
 
+  // ---- Frases do dia ----
+  { method: 'get', path: '/v1/quotes', tag: 'Frases', summary: 'Frases do dia ativas, na ordem do rodízio', auth: 'user',
+    description: 'O app guarda a lista no aparelho e escolhe a frase de hoje pela posição. Cada frase traz o texto em `pt`, `en` e `es`; `context` e `tryToday` podem faltar.',
+    responses: { 200: { description: 'Ok.', schema: 'QuoteList' } } },
+  { method: 'get', path: '/v1/admin/quotes', tag: 'Admin', summary: 'Todas as frases do dia, inclusive as desativadas', auth: 'admin', responses: { 200: { description: 'Ok.', schema: 'AdminQuoteList' } } },
+  { method: 'put', path: '/v1/admin/quotes', tag: 'Admin', summary: 'Cria ou corrige frases do dia (até 200 por pedido)', auth: 'admin', body: quotesPutSchema,
+    description: 'Pelo `id`: se já existe, o texto é substituído; se não, a frase entra no fim do rodízio (ou na `position` dada). `active: false` tira do rodízio sem apagar.',
+    responses: { 200: { description: 'Salvo.', schema: 'QuotesSaved' }, 400: INVALID } },
+  { method: 'delete', path: '/v1/admin/quotes/{id}', tag: 'Admin', summary: 'Apaga uma frase do dia', auth: 'admin', query: [{ name: 'id', description: 'Id da frase (ex.: `q001`).', schema: str }],
+    responses: { 204: { description: 'Apagada.' }, 404: NOT_FOUND } },
   { method: 'get', path: '/v1/admin/overview', tag: 'Admin', summary: 'Monitoramento: ativos agora e cadastros', auth: 'admin', responses: { 200: { description: 'Ok.', schema: 'Overview' } } },
   { method: 'get', path: '/v1/admin/users', tag: 'Admin', summary: 'Lista de usuários (registra a consulta na auditoria)', auth: 'admin',
     query: [{ name: 'limit', description: '1 a 100 (padrão 50).', schema: { type: 'integer' } }, { name: 'before', description: 'Cursor: `nextBefore` da página anterior (ms).', schema: { type: 'integer' } }],
@@ -220,7 +236,8 @@ const TAGS: Record<string, string> = {
   Café: 'Registro de café de verdade.',
   Amigos: 'Amizade com aprovação e bloqueio. Não existe "seguir".',
   Pessoas: 'Busca e perfil público (visível para qualquer pessoa logada).',
-  Admin: 'Monitoramento. Só `admin`; a role é conferida no banco a cada pedido.',
+  Frases: 'Frases do dia (leitura para o app; a edição fica em Admin).',
+  Admin: 'Monitoramento e frases do dia. Só `admin`; a role é conferida no banco a cada pedido.',
 };
 
 /** JSON Schema do Zod, limpo para o OpenAPI (sem `$schema` e sem os limites de inteiro seguro que o Zod acrescenta). */

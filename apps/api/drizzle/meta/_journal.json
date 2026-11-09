@@ -36,6 +36,13 @@
       "when": 1794103377012,
       "tag": "0004_posts_likes_comments_ranking",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794185510435,
+      "tag": "0005_frases_do_dia",
+      "breakpoints": true
     }
   ]
 }

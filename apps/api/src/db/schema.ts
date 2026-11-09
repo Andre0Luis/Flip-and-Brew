@@ -195,4 +195,21 @@ export const weeklyStats = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.week] }), index('weekly_stats_week').on(t.week, t.offlineMinutes)],
 ).enableRLS();
 
+/**
+ * Frases do dia, mantidas por quem administra (`PUT /v1/admin/quotes`). O texto de cada idioma fica junto em `content`
+ * (`{ pt, en, es }`, cada um com `text`, `author`, `source` e, se houver, `context` e `tryToday`). `position` é a ordem do rodízio.
+ */
+export const dailyQuotes = pgTable(
+  'daily_quotes',
+  {
+    id: text('id').primaryKey(),
+    position: integer('position').notNull(),
+    active: boolean('active').notNull().default(true),
+    content: jsonb('content').notNull(),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+  },
+  (t) => [index('daily_quotes_position').on(t.position)],
+).enableRLS();
+
 export type Profile = typeof profiles.$inferSelect;

@@ -18,6 +18,7 @@ import { friendRoutes } from './routes/friends.js';
 import { meRoutes } from './routes/me.js';
 import { pagesRoutes } from './routes/pages.js';
 import { postRoutes } from './routes/posts.js';
+import { quoteRoutes } from './routes/quotes.js';
 import { rankingRoutes } from './routes/rankings.js';
 import { snapshotRoutes } from './routes/snapshot.js';
 import type { StorageProvider } from './storage/provider.js';
@@ -74,6 +75,7 @@ export function createApp({ db, auth, email, config, authAdmin, storage, rateLim
   v1.route('/', adminRoutes(db));
   v1.route('/', postRoutes(db, storage));
   v1.route('/', rankingRoutes(db));
+  v1.route('/', quoteRoutes(db));
   app.route('/v1', v1);
 
   app.notFound((c) => c.json({ error: { code: 'not_found', message: 'Rota não encontrada.' } }, 404));
