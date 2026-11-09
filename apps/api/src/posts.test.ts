@@ -169,3 +169,19 @@ test('fotos: falha do armazenamento vira 502 com o status e o texto do Supabase,
   await assert.rejects(storage.signUpload('a/b.jpg'), (e: Error) => /^storage bucket 403: .*Unauthorized/.test(e.message) && !e.message.includes('chave-secreta'));
   assert.equal(calls.length, 1);
 });
+
+test('fotos: o pedido do link de envio leva corpo (o Supabase recusa json com corpo vazio)', async () => {
+  const { supabaseStorage } = await import('./storage/supabase.js');
+  const bodies: Record<string, unknown> = {};
+  const storage = supabaseStorage({
+    url: 'https://x.supabase.co',
+    serviceRoleKey: 'chave-secreta-de-teste-0123456789',
+    fetchFn: (async (u: string, init?: RequestInit) => {
+      bodies[String(u)] = init?.body;
+      if (String(u).endsWith('/bucket')) return new Response('{}', { status: 200 });
+      return new Response(JSON.stringify({ url: '/object/upload/sign/posts/a/b.jpg?token=t' }), { status: 200 });
+    }) as unknown as typeof fetch,
+  });
+  assert.equal(await storage.signUpload('a/b.jpg'), 'https://x.supabase.co/storage/v1/object/upload/sign/posts/a/b.jpg?token=t');
+  assert.equal(bodies['https://x.supabase.co/storage/v1/object/upload/sign/posts/a/b.jpg'], '{}');
+});
