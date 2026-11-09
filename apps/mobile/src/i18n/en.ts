@@ -30,6 +30,8 @@ export const en: Record<keyof typeof pt, string> = {
   'widget.quote': 'Quote of the day',
   'widget.brew': 'Cup in progress',
   'widget.idle': 'No cup right now',
+  'widget.idleHint': 'Flip your phone to start',
+  'widget.endsAt': 'ends at',
   'widget.remaining': 'min left',
   'widget.streak': 'Streak',
   'widget.days': 'days',

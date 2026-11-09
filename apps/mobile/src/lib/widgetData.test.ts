@@ -55,3 +55,11 @@ test('o copo é recalculado na hora de desenhar e termina em 100%', () => {
   assert.equal(end.brew.percent, 100);
   assert.equal(withLiveBrew(buildWidgetData(base, NOW), NOW).brew.active, false);
 });
+
+test('o widget do copo tem o texto do horário de término e a dica do estado ocioso nos três idiomas', () => {
+  for (const language of ['pt', 'en', 'es'] as const) {
+    const d = buildWidgetData({ ...base, language }, NOW);
+    assert.ok(d.labels.endsAt.length > 0);
+    assert.ok(d.labels.idleHint.length > 0);
+  }
+});

@@ -30,6 +30,8 @@ export const pt = {
   'widget.quote': 'Frase do dia',
   'widget.brew': 'Copo em andamento',
   'widget.idle': 'Nenhum copo agora',
+  'widget.idleHint': 'Vire o celular para começar',
+  'widget.endsAt': 'termina às',
   'widget.remaining': 'min restantes',
   'widget.streak': 'Sequência',
   'widget.days': 'dias',
