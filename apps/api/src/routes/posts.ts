@@ -72,7 +72,12 @@ export function postRoutes(db: Db, storage: StorageProvider | undefined) {
     const uploads = [];
     for (let i = 0; i < n; i++) {
       const path = `${me}/${randomUUID()}.jpg`;
-      uploads.push({ path, url: await storage.signUpload(path) });
+      try {
+        uploads.push({ path, url: await storage.signUpload(path) });
+      } catch (e) {
+        console.error(e);
+        throw new HttpError(502, 'storage_failed', e instanceof Error ? e.message : 'O armazenamento de fotos não respondeu.');
+      }
     }
     return c.json({ uploads });
   });
