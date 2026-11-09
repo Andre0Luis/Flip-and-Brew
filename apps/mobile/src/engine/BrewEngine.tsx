@@ -5,6 +5,7 @@ import { Accelerometer } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
 import { useApp } from '@/store/useApp';
 import { decide, onReopen, type Pose } from '@/lib/engine';
+import { sessionRoute } from '@/lib/sessionRoute';
 import { dimScreen, restoreScreen } from '@/lib/brightness';
 import { cancelBrewDone, scheduleBrewDone } from '@/lib/notifications';
 import { poseOf, sensorAvailable } from './sensor';
@@ -106,7 +107,7 @@ export function BrewEngine() {
     const resolveOnOpen = () => {
       const action = onReopen(useApp.getState().active, Date.now());
       if (action === 'finish') finishAndLeave();
-      else if (action === 'show') router.replace('/brew');
+      else if (action === 'show') router.replace(sessionRoute(useApp.getState().active));
     };
 
     // Reabrir o app ou destravar a tela com um copo em andamento conta como pegar o celular.
@@ -134,7 +135,7 @@ export function BrewEngine() {
       if (action === 'finish') finishAndLeave();
       else if (action === 'start' && st.start(now)) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-        router.push('/brew');
+        router.push(sessionRoute(useApp.getState().active));
       }
     }, 1000);
 
