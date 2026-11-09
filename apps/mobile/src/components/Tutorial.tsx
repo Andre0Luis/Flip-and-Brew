@@ -38,7 +38,7 @@ export function Tutorial() {
   });
 
   return (
-    <Modal transparent animationType="fade" visible onRequestClose={() => done(true)} statusBarTranslucent>
+    <Modal transparent animationType="fade" visible onRequestClose={() => i > 0 && setI(i - 1)} statusBarTranslucent>
       <View style={{ flex: 1 }}>
         <View style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: isDark ? c.bg : c.fg, opacity: isDark ? 0.7 : 0.45 }} />
         <View style={{ position: 'absolute', left: 20, right: 20, ...pos[step.place] }}>
@@ -52,7 +52,6 @@ export function Tutorial() {
               {t(`tutorial.${step.id}.body` as Key)}
             </Txt>
             <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'flex-end' }}>
-              {!last && <Button label={t('tutorial.skip')} tone="quiet" onPress={() => done(true)} style={{ paddingVertical: 8, paddingHorizontal: 14 }} />}
               <Button label={last ? t('tutorial.finish') : t('tutorial.next')} onPress={() => (last ? done(true) : setI(i + 1))} style={{ paddingVertical: 8, paddingHorizontal: 18 }} />
             </View>
           </Card>

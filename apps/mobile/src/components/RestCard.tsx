@@ -29,7 +29,7 @@ export function RestCard() {
   if (!rest) return null;
 
   const next = () => {
-    if (start()) router.push('/brew');
+    if (start()) router.push('/pomodoro');
   };
 
   return (

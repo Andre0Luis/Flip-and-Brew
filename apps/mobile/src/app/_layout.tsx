@@ -58,6 +58,7 @@ function Shell() {
           <Stack.Protected guard={screen === 'app'}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="brew" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
+            <Stack.Screen name="pomodoro" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
             <Stack.Screen name="resultado" options={{ presentation: 'fullScreenModal', animation: 'fade', gestureEnabled: false }} />
             <Stack.Screen name="artigo/[id]" />
             <Stack.Screen name="frase/[id]" />

@@ -17,7 +17,8 @@ const STEPS = 5;
 
 /**
  * Primeira abertura, em cinco passos: a promessa, a ação central (aprender fazendo), por que o app existe, as permissões opcionais e a autonomia.
- * Nenhuma tela bloqueia: dá para pular em qualquer ponto. O resto (moedas, tropeços) aparece como dica na primeira vez.
+ * Não tem "Pular": quem instala vê a apresentação inteira, libera o que quiser e só então cria a conta. As permissões continuam opcionais (negar é um direito), mas a tela delas não é atalho.
+ * O resto (moedas, tropeços) aparece como dica na primeira vez.
  */
 export default function Intro() {
   const { c } = useTheme();
@@ -62,7 +63,6 @@ export default function Intro() {
         <Txt v="label" color="muted">
           {t('intro.step', { a: step + 1, b: STEPS })}
         </Txt>
-        {!last && <Button label={t('intro.skip')} tone="quiet" onPress={finish} style={{ paddingVertical: 8, paddingHorizontal: 16 }} />}
       </View>
 
       <View style={{ alignItems: 'center', gap: 20, paddingTop: 12 }}>
