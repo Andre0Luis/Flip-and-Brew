@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { getDailyUsage, hasUsageStatsPermission, isUsageStatsAvailable, requestUsageStatsPermission } from '../../modules/usage-stats';
+import { countsUnlocks, getDailyUsage, hasUsageStatsPermission, isUsageStatsAvailable, requestUsageStatsPermission } from '../../modules/usage-stats';
+import { useI18n } from '@/i18n';
 import type { UsageDay } from '@/lib/usage';
 
-/** Uso do sistema (desbloqueios e tempo de tela). Só existe no Android, depois que a pessoa autoriza. */
+/**
+ * Uso do sistema, depois que a pessoa autoriza. No Android: desbloqueios, bloqueios e tempo de tela.
+ * No iPhone (`ios`): só o tempo de tela estimado pelo Tempo de Uso (ADR-0029).
+ */
 export function useSystemUsage(days = 7) {
+  const { t } = useI18n();
   const [permitted, setPermitted] = useState(false);
   const [data, setData] = useState<UsageDay[]>([]);
 
@@ -24,5 +29,10 @@ export function useSystemUsage(days = 7) {
     return () => sub.remove();
   }, [refresh]);
 
-  return { available: isUsageStatsAvailable, permitted, days: data, refresh, request: requestUsageStatsPermission };
+  const request = useCallback(async () => {
+    await requestUsageStatsPermission({ title: t('usage.picker.title'), done: t('usage.picker.done'), cancel: t('usage.picker.cancel') });
+    refresh();
+  }, [refresh, t]);
+
+  return { available: isUsageStatsAvailable, permitted, days: data, refresh, request, countsUnlocks, ios: Platform.OS === 'ios' };
 }

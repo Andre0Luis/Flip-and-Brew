@@ -48,3 +48,11 @@ test('a média de bloqueios e de tela bloqueada usa só dias completos', () => {
   assert.equal(s.avgLocks, 40);
   assert.equal(s.avgLockedMin / 60, 21.5); // (22 h + 21 h) / 2
 });
+
+test('iPhone: dia acompanhado pelo Tempo de Uso conta como dado mesmo sem minutos de tela', () => {
+  const iphone = (back: number, screenMin: number, tracked: boolean): UsageDay => ({ ...day(back, 0, screenMin), tracked });
+  const s = summarizeUsage([iphone(3, 0, false), iphone(2, 0, true), iphone(1, 240, true), iphone(0, 60, true)], NOW);
+  assert.equal(s.fullDays, 2);
+  assert.equal(s.avgScreenMin, 120);
+  assert.equal(s.avgUnlocks, 0);
+});

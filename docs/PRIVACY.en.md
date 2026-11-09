@@ -4,9 +4,9 @@
 
 Flip & Brew works without an account. Without one, cups, coins, items, mood, daily energy, the profile you fill in (name, phone, age and coffee taste) and preferences stay only on your phone, with no server of our own and no analytics tool. Ads are the exception; see below.
 
-## Usage access (optional)
+## Usage access and Screen Time (optional)
 
-If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. These numbers stay on the device and do not show which apps you use. The app uses them, on the device itself, to work out coins for the time the screen stayed locked. You can revoke the permission at any time in Android settings.
+If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. On iPhone, with Screen Time access, the app only gets an estimate of each day's screen time, in 15-minute steps, which an extension of the app itself saves on the device. These numbers stay on the device and do not show which apps you use. The app uses them, on the device itself, to work out coins for the time the screen stayed locked. You can revoke the permission at any time in Android settings or, on iPhone, in Settings › Screen Time.
 
 ## Motion sensor
 

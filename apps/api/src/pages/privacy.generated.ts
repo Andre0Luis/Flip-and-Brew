@@ -12,9 +12,9 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Acesso ao uso (opcional)",
+        "title": "Acesso ao uso e Tempo de Uso (opcional)",
         "body": [
-          "Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. Esses números ficam no aparelho e não mostram quais apps você usa. Com eles o app calcula, no próprio aparelho, as moedas pelo tempo com a tela bloqueada. Você pode revogar a permissão a qualquer momento nas configurações do Android."
+          "Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. No iPhone, com a autorização do Tempo de Uso, o app recebe só uma estimativa do tempo de tela de cada dia, de 15 em 15 minutos, que uma extensão do próprio app grava no aparelho. Esses números ficam no aparelho e não mostram quais apps você usa. Com eles o app calcula, no próprio aparelho, as moedas pelo tempo com a tela bloqueada. Você pode revogar a permissão a qualquer momento nas configurações do Android ou, no iPhone, em Ajustes › Tempo de Uso."
         ]
       },
       {
@@ -71,9 +71,9 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Usage access (optional)",
+        "title": "Usage access and Screen Time (optional)",
         "body": [
-          "If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. These numbers stay on the device and do not show which apps you use. The app uses them, on the device itself, to work out coins for the time the screen stayed locked. You can revoke the permission at any time in Android settings."
+          "If you allow it, the app reads from Android how many times the phone was unlocked and how long the screen was on. On iPhone, with Screen Time access, the app only gets an estimate of each day's screen time, in 15-minute steps, which an extension of the app itself saves on the device. These numbers stay on the device and do not show which apps you use. The app uses them, on the device itself, to work out coins for the time the screen stayed locked. You can revoke the permission at any time in Android settings or, on iPhone, in Settings › Screen Time."
         ]
       },
       {
@@ -130,9 +130,9 @@ export const privacy: Record<PageLang, Page> = {
         ]
       },
       {
-        "title": "Acceso al uso (opcional)",
+        "title": "Acceso al uso y Tiempo de uso (opcional)",
         "body": [
-          "Si lo permites, la app lee de Android cuántas veces se desbloqueó el móvil y cuánto tiempo estuvo encendida la pantalla. Esos números se quedan en el dispositivo y no muestran qué apps usas. Con ellos la app calcula, en el propio dispositivo, las monedas por el tiempo con la pantalla bloqueada. Puedes revocar el permiso en cualquier momento en los ajustes de Android."
+          "Si lo permites, la app lee de Android cuántas veces se desbloqueó el móvil y cuánto tiempo estuvo encendida la pantalla. En el iPhone, con la autorización de Tiempo de uso, la app solo recibe una estimación del tiempo de pantalla de cada día, de 15 en 15 minutos, que una extensión de la propia app guarda en el dispositivo. Esos números se quedan en el dispositivo y no muestran qué apps usas. Con ellos la app calcula, en el propio dispositivo, las monedas por el tiempo con la pantalla bloqueada. Puedes revocar el permiso en cualquier momento en los ajustes de Android o, en el iPhone, en Ajustes › Tiempo de uso."
         ]
       },
       {

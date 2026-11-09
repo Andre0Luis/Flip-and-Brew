@@ -4,9 +4,9 @@
 
 O Flip & Brew funciona sem conta. Sem conta, copos, moedas, itens, humor, energia diária, o perfil que você preencher (nome, telefone, idade e gosto de café) e preferências ficam só no seu celular, sem servidor próprio nem ferramenta de análise. Os anúncios são a exceção; veja abaixo.
 
-## Acesso ao uso (opcional)
+## Acesso ao uso e Tempo de Uso (opcional)
 
-Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. Esses números ficam no aparelho e não mostram quais apps você usa. Com eles o app calcula, no próprio aparelho, as moedas pelo tempo com a tela bloqueada. Você pode revogar a permissão a qualquer momento nas configurações do Android.
+Se você permitir, o app lê do Android quantas vezes o celular foi desbloqueado e por quanto tempo a tela ficou ligada. No iPhone, com a autorização do Tempo de Uso, o app recebe só uma estimativa do tempo de tela de cada dia, de 15 em 15 minutos, que uma extensão do próprio app grava no aparelho. Esses números ficam no aparelho e não mostram quais apps você usa. Com eles o app calcula, no próprio aparelho, as moedas pelo tempo com a tela bloqueada. Você pode revogar a permissão a qualquer momento nas configurações do Android ou, no iPhone, em Ajustes › Tempo de Uso.
 
 ## Sensor de movimento
 
