@@ -23,6 +23,9 @@ const SYNERGIES: [string, string][] = [
   ['drip', 'bot-esmaltada'],
 ];
 
+/** Itens que combinam com `id` (cafeteira com xícara, ou o contrário) e dão o bônus de combinação. */
+export const synergyPartners = (id: string): string[] => SYNERGIES.flatMap(([b, c]) => (b === id ? [c] : c === id ? [b] : []));
+
 export type EarnBonus = { brewer: number; cup: number; pack: number; synergy: number; total: number };
 
 /** Bônus de moedas da combinação cafeteira + xícara + pacote de café, em porcentagem. */

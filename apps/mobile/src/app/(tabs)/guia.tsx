@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Art, Coin } from '@/art/Art';
+import { BuyModal } from '@/components/BuyModal';
 import { CoinShop } from '@/components/CoinShop';
 import { ColecaoView } from '@/components/ColecaoView';
 import { Icon } from '@/components/Icon';
-import { Bar, Button, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
+import { Bar, Card, Header, Screen, Segmented, Txt } from '@/components/ui';
 import { TopStatus } from '@/components/TopStatus';
 import { brewers, COLLECTIONS, cups, localize, packs as coffeePacks, type LocalizedItem } from '@/data/catalog';
 import { useApp } from '@/store/useApp';
@@ -14,7 +15,6 @@ import { streak } from '@/lib/stats';
 import { formatNumber, useI18n } from '@/i18n';
 import { discountFor, priceOf } from '@/lib/pricing';
 import { useTheme } from '@/theme/ThemeProvider';
-import { fonts } from '@/theme/tokens';
 
 type Tab = 'brewer' | 'cup' | 'beans';
 type Section = 'loja' | 'colecao';
@@ -22,6 +22,7 @@ type Section = 'loja' | 'colecao';
 export default function Guia() {
   const { c, r } = useTheme();
   const { lang, t } = useI18n();
+  const router = useRouter();
   const num = (n: number) => formatNumber(lang, n);
   const { coins, owned, brewerId, cupId, packId, sessions, checkins, settings } = useApp();
   const buy = useApp((s) => s.buy);
@@ -38,7 +39,6 @@ export default function Guia() {
     if (params.section === 'colecao') setSection('colecao');
   }
   const [pending, setPending] = useState<LocalizedItem | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
   const days = streak(sessions);
   const disc = discountFor({ checkins, sessions, goalMin: settings.goalMin });
   const priceNow = (item: LocalizedItem) => priceOf(item, disc.percent);
@@ -47,7 +47,6 @@ export default function Guia() {
   const equipped = tab === 'brewer' ? brewerId : tab === 'beans' ? packId : cupId;
 
   const onItem = (item: LocalizedItem) => {
-    setMessage(null);
     if (owned.includes(item.id)) {
       equip(item.id);
       Haptics.selectionAsync().catch(() => {});
@@ -55,18 +54,12 @@ export default function Guia() {
     } else if (!item.streakUnlock) setPending(item);
   };
 
-  const confirm = () => {
-    if (!pending) return;
+  /** Compra o item pendente; o que já veio é usado na hora. Quem mostra o resultado é a modal. */
+  const purchase = () => {
+    if (!pending) return 'locked' as const;
     const res = buy(pending.id);
-    if (res === 'ok') {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-      equip(pending.id);
-      setMessage(t('guide.bought', { name: pending.name }));
-    } else if (res === 'poor') {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-      setMessage(t('guide.missing', { n: num(priceNow(pending) - coins), name: pending.name }));
-    }
-    setPending(null);
+    if (res === 'ok') equip(pending.id);
+    return res;
   };
 
   const renderGrid = (list: LocalizedItem[]) => (
@@ -168,34 +161,19 @@ export default function Guia() {
       />
 
       {pending && (
-        <Card inverse style={{ gap: 10 }}>
-          <Txt v="title" color="bg">
-            {t('guide.buyQ', { name: pending.name })}
-          </Txt>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <Coin size={22} />
-            <Txt v="num" color="bg">
-              {num(priceNow(pending))}
-            </Txt>
-            {priceNow(pending) < pending.price && (
-              <Txt v="small" color="bg" style={{ opacity: 0.7, textDecorationLine: 'line-through' }}>
-                {num(pending.price)}
-              </Txt>
-            )}
-            <Txt v="small" color="bg" style={{ opacity: 0.7 }}>
-              {t('guide.haveCoins', { n: num(coins) })}
-            </Txt>
-          </View>
-          <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Button label={t('guide.buy')} onPress={confirm} style={{ flex: 1 }} />
-            <Button label={t('guide.cancel')} tone="quietOnDark" onPress={() => setPending(null)} style={{ flex: 1 }} />
-          </View>
-        </Card>
-      )}
-      {message && (
-        <Txt v="small" color="accent" accessibilityLiveRegion="polite" style={{ fontFamily: fonts.bodySemi }}>
-          {message}
-        </Txt>
+        <BuyModal
+          key={pending.id}
+          item={pending}
+          price={priceNow(pending)}
+          discountPercent={disc.percent}
+          coins={coins}
+          onBuy={purchase}
+          onClose={() => setPending(null)}
+          onGetCoins={() => {
+            setPending(null);
+            router.push('/moedas');
+          }}
+        />
       )}
 
       {tab === 'brewer' && (
