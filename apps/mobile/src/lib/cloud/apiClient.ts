@@ -81,7 +81,8 @@ export type CommunityApi = {
   notifications(): Promise<{ notifications: AppNotification[]; unread: number }>;
   readNotifications(): Promise<void>;
   putWeek(stats: { week: string; offlineMinutes: number; cups: number }): Promise<void>;
-  rankings(scope: 'friends' | 'global'): Promise<Ranking>;
+  /** `week` é a semana ISO do aparelho (a mesma que `putWeek` manda): o servidor conta em UTC e viraria a semana antes, à noite no Brasil. */
+  rankings(scope: 'friends' | 'global', week?: string): Promise<Ranking>;
   /** Se aparece no ranking geral (o de amigos vale sempre). */
   globalRanking(): Promise<boolean>;
   setGlobalRanking(on: boolean): Promise<void>;
@@ -178,7 +179,7 @@ export function createApiClient(o: {
     },
     readNotifications: async () => void ok(await call('POST', '/v1/me/notifications/read')),
     putWeek: async (stats) => void ok(await call('PUT', '/v1/me/week', stats)),
-    rankings: async (scope) => ok(await call('GET', `/v1/rankings?scope=${scope}`)) as Ranking,
+    rankings: async (scope, week) => ok(await call('GET', `/v1/rankings?scope=${scope}${week ? `&week=${encodeURIComponent(week)}` : ''}`)) as Ranking,
     globalRanking: async () => !!ok(await call('GET', '/v1/me')).privacy?.showInGlobalRanking,
     setGlobalRanking: async (on) => void ok(await call('PATCH', '/v1/me/privacy', { showInGlobalRanking: on })),
   };

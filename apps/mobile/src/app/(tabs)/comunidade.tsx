@@ -9,7 +9,7 @@ import { useI18n, type Key } from '@/i18n';
 import { getBackend } from '@/lib/cloud';
 import type { CommunityApi, Friend, FriendRequest, MyCommunityProfile, Person, PostCard as Post, Ranking } from '@/lib/cloud/apiClient';
 import { minutesLabel } from '@/lib/format';
-import { weekTotals } from '@/lib/week';
+import { isoWeekOf, weekTotals } from '@/lib/week';
 import { accountName, communityErrorKey, isValidHandle, sanitizeHandle, searchTerm, suggestHandle, type CommunityErrorKey } from '@/lib/community';
 import { useApp } from '@/store/useApp';
 import { useAuth } from '@/store/useAuth';
@@ -431,7 +431,7 @@ function RankingTab({ api, onOpen }: { api: CommunityApi; onOpen: (p: Person) =>
   const load = useCallback(async () => {
     try {
       await api.putWeek(weekTotals(sessions, Date.now())).catch(() => {});
-      const [r, g] = await Promise.all([api.rankings(scope), api.globalRanking()]);
+      const [r, g] = await Promise.all([api.rankings(scope, isoWeekOf(Date.now())), api.globalRanking()]);
       setData(r);
       setGlobal(g);
       setError(null);
