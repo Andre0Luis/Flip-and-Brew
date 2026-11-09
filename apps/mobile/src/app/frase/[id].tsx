@@ -27,12 +27,16 @@ export default function Frase() {
   return (
     <Reading eyebrow={t('quote.eyebrow')}>
       <QuoteBlock text={q.text} by={`${q.author} · ${q.source}`} />
-      <Block label={t('quote.context')}>
-        <Txt v="body">{q.context}</Txt>
-      </Block>
-      <Block label={t('article.tryToday')}>
-        <Bullets items={q.tryToday} />
-      </Block>
+      {!!q.context && (
+        <Block label={t('quote.context')}>
+          <Txt v="body">{q.context}</Txt>
+        </Block>
+      )}
+      {q.tryToday.length > 0 && (
+        <Block label={t('article.tryToday')}>
+          <Bullets items={q.tryToday} />
+        </Block>
+      )}
       <Callout label={t('quote.freeTranslation')}>{t('quote.freeTranslationNote')}</Callout>
       {article && <Button tone="dark" label={t('quote.readArticle', { title: article.title })} onPress={() => router.push({ pathname: '/artigo/[id]', params: { id: article.id } })} />}
       <Button tone="quiet" label={t('quote.next')} onPress={() => router.replace({ pathname: '/frase/[id]', params: { id: next.id } })} />

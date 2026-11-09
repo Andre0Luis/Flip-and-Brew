@@ -9,6 +9,7 @@ import { DMMono_400Regular, DMMono_500Medium } from '@expo-google-fonts/dm-mono'
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 import { BrewEngine } from '@/engine/BrewEngine';
 import { CloudSync } from '@/engine/CloudSync';
+import { QuoteSync } from '@/engine/QuoteSync';
 import { WidgetSync } from '@/engine/WidgetSync';
 import { Reminders } from '@/engine/Reminders';
 import { useApp } from '@/store/useApp';
@@ -37,6 +38,7 @@ function Shell() {
       <BrewEngine />
       <CloudSync />
       <WidgetSync />
+      <QuoteSync />
       <Reminders />
       {screen === 'loading' ? (
         // Espera o login guardado ser lido, para quem já entrou não ver a tela de entrar por um instante.

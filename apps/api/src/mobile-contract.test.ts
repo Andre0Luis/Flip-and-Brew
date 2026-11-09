@@ -166,6 +166,9 @@ test('posts pelo cliente do app: fotos, feed, curtida, comentário, avisos e ran
   await b.unlike(post.id);
   assert.equal((await b.feed()).posts[0].likeCount, 0);
 
+  // Frases do dia: o cliente do app lê a lista ativa (aqui o banco de teste ainda está vazio).
+  assert.deepEqual(await a.quotes(), []);
+
   const week = (await import('./shared.js')).isoWeek(Date.now());
   await a.putWeek({ week, offlineMinutes: 120, cups: 3 });
   const r = await b.rankings('friends');
