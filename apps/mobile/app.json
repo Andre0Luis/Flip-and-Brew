@@ -221,7 +221,17 @@
           "microphonePermission": false
         }
       ],
-      "@bacons/apple-targets"
+      "@bacons/apple-targets",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "# Provedores dos widgets e módulo nativo próprio: achados por nome, então ficam fora da ofuscação.\n-keep class com.reactnativeandroidwidget.** { *; }\n-keep class expo.modules.usagestats.** { *; }\n-keep class com.andre0luis.FlipAndBrew.widget.** { *; }\n"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
