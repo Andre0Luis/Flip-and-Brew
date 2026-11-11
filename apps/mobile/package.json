@@ -31,7 +31,7 @@
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-android-widget": "^0.26.0",
-    "react-native-gesture-handler": "~2.32.0",
+    "react-native-gesture-handler": "~2.33.1",
     "react-native-google-mobile-ads": "^17.4.0",
     "react-native-mmkv": "^4.3.2",
     "react-native-purchases": "^10.11.0",
