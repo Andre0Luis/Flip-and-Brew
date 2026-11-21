@@ -20,7 +20,7 @@
     "dev:token": "tsx --env-file-if-exists=.env src/auth/dev-token.ts"
   },
   "dependencies": {
-    "@hono/node-server": "^2.1.6",
+    "@hono/node-server": "^2.1.9",
     "@hono/swagger-ui": "^0.6.2",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.17",
